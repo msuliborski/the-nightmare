@@ -12,8 +12,8 @@ public class PlayerMovement : NetworkBehaviour {
 
     void Start () {
 
-        mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
-        mainCamera.transform.SetParent(gameObject.transform, false);        
+//        mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
+//        mainCamera.transform.SetParent(gameObject.transform, false);        
         rb = GetComponent<Rigidbody>();
     }
 
