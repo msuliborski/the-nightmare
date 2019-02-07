@@ -13,7 +13,7 @@ public class PlayerMovement : NetworkBehaviour {
     void Start () {
 
         if (!isLocalPlayer){
-            mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
+            mainCamera = gameObject.transform.GetChild(0).gameObject.GetComponent<Camera>();
             mainCamera.gameObject.SetActive(false);
         }
         
