@@ -9,9 +9,13 @@ public class PlayerMovement : NetworkBehaviour {
     private Rigidbody rb;
 
     private Camera mainCamera;
+    private Camera temp;
 
-    void Start () {
+    void Start ()
+    {
 
+        temp = GameObject.Find("TempCamera").GetComponent<Camera>();
+        temp.enabled = false;
         if (!isLocalPlayer){
             mainCamera = gameObject.transform.GetChild(0).gameObject.GetComponent<Camera>();
             mainCamera.gameObject.SetActive(false);
