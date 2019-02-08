@@ -45,12 +45,12 @@ public class NetworkTransform : NetworkBehaviour {
     {
         if(hasAuthority)
         {
-            if (Vector3.Distance(myTransform.position, lastPos) > posThreshold || Quaternion.Angle(myTransform.rotation, lastRot) > rotThreshold)
+            if (Vector3.Distance(myTransform.localPosition, lastPos) > posThreshold || Quaternion.Angle(myTransform.localRotation, lastRot) > rotThreshold)
             {
-                Cmd_ProvidePositionToServer(myTransform.position, myTransform.localEulerAngles.y);
+                Cmd_ProvidePositionToServer(myTransform.localPosition, myTransform.localEulerAngles.y);
  
-                lastPos = myTransform.position;
-                lastRot = myTransform.rotation;
+                lastPos = myTransform.localPosition;
+                lastRot = myTransform.localRotation;
             }
         }
     }
@@ -59,10 +59,10 @@ public class NetworkTransform : NetworkBehaviour {
     {
         if (!hasAuthority)
         {
-            myTransform.position = Vector3.Lerp(myTransform.transform.position, syncPos, Time.deltaTime * lerpRate);
+            myTransform.localPosition = Vector3.Lerp(myTransform.transform.localPosition, syncPos, Time.deltaTime * lerpRate);
  
             Vector3 newRot = new Vector3(0, syncYRot, 0);
-            myTransform.rotation = Quaternion.Lerp(myTransform.rotation, Quaternion.Euler(newRot), Time.deltaTime * lerpRate);
+            myTransform.localRotation = Quaternion.Lerp(myTransform.localRotation, Quaternion.Euler(newRot), Time.deltaTime * lerpRate);
         }
     }
 }

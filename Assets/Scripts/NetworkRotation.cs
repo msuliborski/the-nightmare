@@ -47,22 +47,18 @@ public class NetworkRotation : NetworkBehaviour {
     [ClientCallback]
     void TransmitMotion()
     {
-        if(hasAuthority)
-        {
-            if (Quaternion.Angle(myTransform.rotation, lastRot) > rotThreshold)
-            {
-                Cmd_ProvidePositionToServer(myTransform.position, myTransform.localEulerAngles.y);
-                lastRot = myTransform.rotation;
-            }
-        }
+
+          
+            Cmd_ProvidePositionToServer(myTransform.position, myTransform.localEulerAngles.y);
+            
+        
     }
  
     void LerpMotion()
     {
-        if (!hasAuthority)
-        {
+   
             Vector3 newRot = new Vector3(0, syncYRot, 0);
             myTransform.rotation = Quaternion.Lerp(myTransform.rotation, Quaternion.Euler(newRot), Time.deltaTime * lerpRate);
-        }
+        
     }
 }

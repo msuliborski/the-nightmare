@@ -213,6 +213,7 @@ GameObject:
   - component: {fileID: 4960175130331679311}
   - component: {fileID: 4960175130331679305}
   - component: {fileID: 53848443255759948}
+  - component: {fileID: 504335271984708469}
   m_Layer: 0
   m_Name: SpokoPlayer
   m_TagString: Untagged
@@ -325,6 +326,21 @@ MonoBehaviour:
     i15: 0
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 1
+--- !u!114 &504335271984708469
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4960175130331679348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c94e0ff8e5a6204ebe4b61eb9d45499, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lerpRate: 10
+  posThreshold: 0.5
+  rotThreshold: 5
 --- !u!1 &4960175130596148364
 GameObject:
   m_ObjectHideFlags: 0
@@ -429,6 +445,7 @@ GameObject:
   - component: {fileID: 4960175131242675519}
   - component: {fileID: 4960175131242675512}
   - component: {fileID: 8815927457690449207}
+  - component: {fileID: 3714406975246736088}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -534,3 +551,18 @@ MonoBehaviour:
     i15: 0
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 1
+--- !u!114 &3714406975246736088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4960175131242675514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c94e0ff8e5a6204ebe4b61eb9d45499, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lerpRate: 10
+  posThreshold: 0.5
+  rotThreshold: 5
