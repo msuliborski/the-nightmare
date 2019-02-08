@@ -1,14 +1,24 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 
 [RequireComponent(typeof(PlayerMotor))]
-public class PlayerController : MonoBehaviour
+public class PlayerController : NetworkBehaviour
 {
     [SerializeField] private float _speed = 5f;
     [SerializeField] private float _lookSensitivity = 3f;
     private PlayerMotor _motor;
+    
+    
 
     void Start()
     {
+        Camera temp = GameObject.Find("TempCamera").GetComponent<Camera>();
+        temp.enabled = false;
+        if (!isLocalPlayer)
+        {
+            Camera cam = gameObject.transform.GetChild(1).gameObject.GetComponent<Camera>();
+            cam.gameObject.SetActive(false);
+        }
         _motor = GetComponent<PlayerMotor>();
         Cursor.visible = false;
     }
