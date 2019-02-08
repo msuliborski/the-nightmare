@@ -32,13 +32,7 @@ public class NetworkTransform : NetworkBehaviour {
         TransmitMotion();
         LerpMotion();
     }
- 
-    [Command]
-    void Cmd_ProvidePositionToServer(Vector3 pos, float rot)
-    {
-        syncPos = pos;
-        syncYRot = rot;
-    }
+
  
     [ClientCallback]
     void TransmitMotion()
@@ -47,8 +41,10 @@ public class NetworkTransform : NetworkBehaviour {
         {
             if (Vector3.Distance(myTransform.localPosition, lastPos) > posThreshold || Quaternion.Angle(myTransform.localRotation, lastRot) > rotThreshold)
             {
-                Cmd_ProvidePositionToServer(myTransform.localPosition, myTransform.localEulerAngles.y);
  
+                syncPos = myTransform.localPosition;
+                syncYRot = myTransform.localEulerAngles.y;
+                
                 lastPos = myTransform.localPosition;
                 lastRot = myTransform.localRotation;
             }
