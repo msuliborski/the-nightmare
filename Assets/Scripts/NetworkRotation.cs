@@ -44,6 +44,7 @@ public class NetworkRotation : NetworkBehaviour {
         {
             if (Quaternion.Angle(myTransform.rotation, lastRot) > rotThreshold)
             {
+                Cmd_ProvidePositionToServer(myTransform.position, myTransform.localEulerAngles.y);
                 lastRot = myTransform.rotation;
             }
         }
