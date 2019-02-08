@@ -7,7 +7,7 @@ public class PlayerSetup : NetworkBehaviour
 {
     [SerializeField] private Behaviour[] toDisable;
 
-    private Camera tempCamera;
+    public Camera tempCamera;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,7 +21,6 @@ public class PlayerSetup : NetworkBehaviour
         }
         else
         {
-            tempCamera = Camera.main;
             if (tempCamera != null)
             {
                 tempCamera.gameObject.SetActive(false);
