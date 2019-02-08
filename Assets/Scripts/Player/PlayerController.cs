@@ -16,7 +16,7 @@ public class PlayerController : NetworkBehaviour
         temp.enabled = false;
         if (!isLocalPlayer) gameObject.transform.GetChild(1).gameObject.GetComponent<Camera>().enabled = false;
         _motor = GetComponent<PlayerMotor>();
-        Cursor.lockState = CursorLockMode.Locked;
+//        Cursor.lockState = CursorLockMode.Locked;
     }
 
 
