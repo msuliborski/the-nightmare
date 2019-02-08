@@ -30,8 +30,8 @@ public class NetworkRotation : NetworkBehaviour {
         if (!isLocalPlayer)
         {
             TransmitMotion();
+            LerpMotion();
         }
-        LerpMotion();
     }
  
     [Command]
