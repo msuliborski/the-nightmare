@@ -9,8 +9,10 @@ public class PlayerMotor : NetworkBehaviour
 
     private Vector3 _velocity = Vector3.zero;
     private Vector3 _rotation = Vector3.zero;
-    private Vector3 _cameraRotation = Vector3.zero;
+    private float _cameraRotationX = 0f;
+    private float currentCameraRotationX = 0f;
     private Rigidbody _rb;
+    [SerializeField] private float cameraRotationLimit = 85f;
 
     void Start()
     {
@@ -42,11 +44,17 @@ public class PlayerMotor : NetworkBehaviour
     void PerformRotation()
     {
         _rb.MoveRotation(_rb.rotation * Quaternion.Euler(_rotation));
-        if (_cam != null) _cam.transform.Rotate(-_cameraRotation);
+        if (_cam != null)
+        {
+            currentCameraRotationX -= _cameraRotationX;
+            currentCameraRotationX = Mathf.Clamp(currentCameraRotationX, -cameraRotationLimit, cameraRotationLimit);
+            
+            _cam.transform.localEulerAngles = new Vector3(currentCameraRotationX, 0f, 0f);
+        }
     }
 
-    public void RotateCamera(Vector3 cameraRotation)
+    public void RotateCamera(float cameraRotation)
     {
-        _cameraRotation = cameraRotation;
+        _cameraRotationX = cameraRotation;
     }
 }

@@ -39,9 +39,9 @@ public class PlayerController : NetworkBehaviour
 
         float xRot = Input.GetAxis("Mouse Y");
 
-        Vector3 cameraRotation = new Vector3(xRot, 0f, 0f) * _lookSensitivity;
+        float cameraRotationX = xRot * _lookSensitivity;
 
-        _motor.RotateCamera(cameraRotation);
+        _motor.RotateCamera(cameraRotationX);
 
         //float yRot = Input.GetAxisRaw("Mouse Y");
     }
