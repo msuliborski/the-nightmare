@@ -211,10 +211,11 @@ GameObject:
   - component: {fileID: 4960175130331679307}
   - component: {fileID: 4960175130331679304}
   - component: {fileID: 4960175130331679311}
+  - component: {fileID: 2670036183318756252}
   - component: {fileID: 4960175130331679305}
   - component: {fileID: 53848443255759948}
-  - component: {fileID: 504335271984708469}
   - component: {fileID: 3985917085229370795}
+  - component: {fileID: 5399463936603347090}
   m_Layer: 0
   m_Name: SpokoPlayer
   m_TagString: Untagged
@@ -281,6 +282,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 5
   _lookSensitivity: 5
+--- !u!114 &2670036183318756252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4960175130331679348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7ce8701781cebdd7b198a7805188a70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  toDisable:
+  - {fileID: 4960175130331679305}
+  - {fileID: 4960175130331679311}
+  - {fileID: 4960175131242675519}
+  - {fileID: 4960175131242675512}
 --- !u!114 &4960175130331679305
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -327,21 +345,6 @@ MonoBehaviour:
     i15: 0
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 1
---- !u!114 &504335271984708469
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4960175130331679348}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c94e0ff8e5a6204ebe4b61eb9d45499, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lerpRate: 10
-  posThreshold: 0.5
-  rotThreshold: 5
 --- !u!114 &3985917085229370795
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -364,6 +367,26 @@ MonoBehaviour:
   m_SnapThreshold: 5
   m_InterpolateRotation: 10
   m_InterpolateMovement: 1
+--- !u!114 &5399463936603347090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4960175130331679348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1267208747, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Target: {fileID: 4960175131242675513}
+  m_ChildIndex: 0
+  m_SendInterval: 0.1
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_MovementThreshold: 0.001
+  m_InterpolateRotation: 0.5
+  m_InterpolateMovement: 0
 --- !u!1 &4960175130596148364
 GameObject:
   m_ObjectHideFlags: 0
@@ -467,8 +490,6 @@ GameObject:
   - component: {fileID: 4960175131242675513}
   - component: {fileID: 4960175131242675519}
   - component: {fileID: 4960175131242675512}
-  - component: {fileID: 8815927457690449207}
-  - component: {fileID: 5843896749532690546}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -541,50 +562,3 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4960175131242675514}
   m_Enabled: 1
---- !u!114 &8815927457690449207
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4960175131242675514}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SceneId:
-    m_Value: 0
-  m_AssetId:
-    i0: 0
-    i1: 0
-    i2: 0
-    i3: 0
-    i4: 0
-    i5: 0
-    i6: 0
-    i7: 0
-    i8: 0
-    i9: 0
-    i10: 0
-    i11: 0
-    i12: 0
-    i13: 0
-    i14: 0
-    i15: 0
-  m_ServerOnly: 0
-  m_LocalPlayerAuthority: 1
---- !u!114 &5843896749532690546
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4960175131242675514}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5135177595607ff4095b04c957b8b532, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lerpRate: 10
-  rotThreshold: 5

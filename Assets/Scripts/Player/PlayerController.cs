@@ -6,15 +6,14 @@ public class PlayerController : NetworkBehaviour
 {
     [SerializeField] private float _speed = 5f;
     [SerializeField] private float _lookSensitivity = 3f;
+    
     private PlayerMotor _motor;
     
     
 
     void Start()
     {
-        Camera temp = GameObject.Find("TempCamera").GetComponent<Camera>();
-        temp.enabled = false;
-        if (!isLocalPlayer) gameObject.transform.GetChild(1).gameObject.GetComponent<Camera>().enabled = false;
+
         _motor = GetComponent<PlayerMotor>();
 //        Cursor.lockState = CursorLockMode.Locked;
     }
