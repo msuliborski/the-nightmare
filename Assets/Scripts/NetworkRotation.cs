@@ -27,9 +27,13 @@ public class NetworkRotation : NetworkBehaviour {
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (!isLocalPlayer)
+        if (isLocalPlayer)
         {
             TransmitMotion();
+//            LerpMotion();
+        }
+        else
+        {   
             LerpMotion();
         }
     }
