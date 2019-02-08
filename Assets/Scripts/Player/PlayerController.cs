@@ -14,11 +14,7 @@ public class PlayerController : NetworkBehaviour
     {
         Camera temp = GameObject.Find("TempCamera").GetComponent<Camera>();
         temp.enabled = false;
-        if (!isLocalPlayer)
-        {
-            Camera cam = gameObject.transform.GetChild(1).gameObject.GetComponent<Camera>();
-            cam.gameObject.SetActive(false);
-        }
+        if (!isLocalPlayer) gameObject.transform.GetChild(1).gameObject.GetComponent<Camera>().enabled = false;
         _motor = GetComponent<PlayerMotor>();
         Cursor.visible = false;
     }
