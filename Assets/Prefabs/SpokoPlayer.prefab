@@ -231,6 +231,7 @@ GameObject:
   - component: {fileID: 765762329074817546}
   - component: {fileID: 8465617328014938249}
   - component: {fileID: 4510548579021621391}
+  - component: {fileID: 2025409408943410400}
   m_Layer: 0
   m_Name: SpokoPlayer
   m_TagString: Untagged
@@ -328,6 +329,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _cam: {fileID: 6301112561902178324}
+  cameraRotationLimit: 85
 --- !u!114 &765762329074817546
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -403,6 +405,22 @@ MonoBehaviour:
   m_MovementThreshold: 0.001
   m_InterpolateRotation: 0.3
   m_InterpolateMovement: 0
+--- !u!114 &2025409408943410400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6475263247515610976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74ccc6a7997c8c5b0aa470753a83b221, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 6301112561902178324}
+  mask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!1 &7302503194647417728
 GameObject:
   m_ObjectHideFlags: 0
