@@ -13,9 +13,9 @@ public class PlayerController : NetworkBehaviour
 
     void Start()
     {
-
+        
         _motor = GetComponent<PlayerMotor>();
-//        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
 
