@@ -7,34 +7,26 @@ public class PlayerSetup : NetworkBehaviour
 {
     [SerializeField] private Behaviour[] toDisable;
 
-    public Camera tempCamera;
+    public Camera sceneCamera;
     // Start is called before the first frame update
     void Start()
     {
-        
         if (!isLocalPlayer)
         {
             for (int i = 0; i < toDisable.Length; i++)
-            {
                 toDisable[i].enabled = false;
-            }
         }
         else
         {
-            if (tempCamera != null)
-            {
-                tempCamera.gameObject.SetActive(false);
-            }
-            transform.position = new Vector3(transform.position.x, 0.55f, transform.position.z);
+           sceneCamera = Camera.main;
+           if (sceneCamera != null)
+                sceneCamera.gameObject.SetActive(false);
         }
     }
 
     private void OnDisable()
     {
-        if (tempCamera != null)
-        {
-            tempCamera.gameObject.SetActive(true);
-        }
-        
-    }
+        if (sceneCamera != null)
+            sceneCamera.gameObject.SetActive(true);
+     }
 }
