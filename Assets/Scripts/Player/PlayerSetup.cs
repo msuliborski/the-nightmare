@@ -25,6 +25,7 @@ public class PlayerSetup : NetworkBehaviour
             {
                 tempCamera.gameObject.SetActive(false);
             }
+            transform.position = new Vector3(transform.position.x, 0.55f, transform.position.z);
         }
     }
 
