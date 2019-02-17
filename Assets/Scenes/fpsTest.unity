@@ -194,7 +194,7 @@ GameObject:
   - component: {fileID: 187808563}
   m_Layer: 0
   m_Name: SceneCamera
-  m_TagString: Main Camera
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
