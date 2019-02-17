@@ -315,7 +315,7 @@ MonoBehaviour:
   - {fileID: 8477095747254972382}
   - {fileID: 6301112561902178324}
   - {fileID: 223288598620326824}
-  tempCamera: {fileID: 0}
+  sceneCamera: {fileID: 0}
 --- !u!114 &2263230545982906824
 MonoBehaviour:
   m_ObjectHideFlags: 0
