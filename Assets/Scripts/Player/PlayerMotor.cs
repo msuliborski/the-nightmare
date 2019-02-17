@@ -4,15 +4,13 @@ using UnityEngine.Networking;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerMotor : NetworkBehaviour
 {
-
     [SerializeField] private Camera _cam;
-
     private Vector3 _velocity = Vector3.zero;
     private Vector3 _rotation = Vector3.zero;
     private float _cameraRotationX = 0f;
     private float currentCameraRotationX = 0f;
     private Rigidbody _rb;
-    [SerializeField] private float cameraRotationLimit = 85f;
+    [SerializeField] private float _cameraRotationLimit = 85f;
 
     void Start()
     {
@@ -47,7 +45,7 @@ public class PlayerMotor : NetworkBehaviour
         if (_cam != null)
         {
             currentCameraRotationX -= _cameraRotationX;
-            currentCameraRotationX = Mathf.Clamp(currentCameraRotationX, -cameraRotationLimit, cameraRotationLimit);
+            currentCameraRotationX = Mathf.Clamp(currentCameraRotationX, -_cameraRotationLimit, _cameraRotationLimit);
             
             _cam.transform.localEulerAngles = new Vector3(currentCameraRotationX, 0f, 0f);
         }

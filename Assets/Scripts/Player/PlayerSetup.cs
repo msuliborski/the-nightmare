@@ -5,28 +5,40 @@ using UnityEngine.Networking;
 
 public class PlayerSetup : NetworkBehaviour
 {
-    [SerializeField] private Behaviour[] toDisable;
-
-    public Camera sceneCamera;
+    [SerializeField] private Behaviour[] _toDisable;
+    [SerializeField] private Camera _sceneCamera;
+    
+    
     // Start is called before the first frame update
     void Start()
     {
         if (!isLocalPlayer)
         {
-            for (int i = 0; i < toDisable.Length; i++)
-                toDisable[i].enabled = false;
+            DisableComponents();
+            AssignRemoteLayer();
         }
         else
         {
-           sceneCamera = Camera.main;
-           if (sceneCamera != null)
-                sceneCamera.gameObject.SetActive(false);
+           _sceneCamera = Camera.main;
+           if (_sceneCamera != null)
+                _sceneCamera.gameObject.SetActive(false);
         }
+    }
+
+    private void AssignRemoteLayer()
+    {
+        gameObject.layer = LayerMask.NameToLayer("RemotePlayer");
+    }
+
+    private void DisableComponents()
+    {
+        for (int i = 0; i < _toDisable.Length; i++)
+            _toDisable[i].enabled = false;
     }
 
     private void OnDisable()
     {
-        if (sceneCamera != null)
-            sceneCamera.gameObject.SetActive(true);
+        if (_sceneCamera != null)
+            _sceneCamera.gameObject.SetActive(true);
      }
 }
