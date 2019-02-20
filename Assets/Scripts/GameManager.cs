@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
         player.transform.name = playerId;
     }
 
-    public static void UnegisterPlayer(string playerId)
+    public static void UnregisterPlayer(string playerId)
     {
         _players.Remove(playerId);
     }
