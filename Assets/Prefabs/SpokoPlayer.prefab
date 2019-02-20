@@ -232,6 +232,7 @@ GameObject:
   - component: {fileID: 8465617328014938249}
   - component: {fileID: 4510548579021621391}
   - component: {fileID: 2025409408943410400}
+  - component: {fileID: 7727666438969219261}
   m_Layer: 9
   m_Name: SpokoPlayer
   m_TagString: Player
@@ -423,6 +424,18 @@ MonoBehaviour:
   _mask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &7727666438969219261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6475263247515610976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d96ef400e604554eb38cea1c75299c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7302503194647417728
 GameObject:
   m_ObjectHideFlags: 0
