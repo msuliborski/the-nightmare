@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
         return _players[playerId];
     }
 
-    private void OnGUI()
+    void OnGUI()
     {
         GUILayout.BeginArea(new Rect(200, 200, 200, 500));
         GUILayout.BeginVertical();
