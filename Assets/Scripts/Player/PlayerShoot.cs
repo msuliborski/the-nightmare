@@ -6,37 +6,30 @@ using UnityEngine.Networking;
 
 public class PlayerShoot : NetworkBehaviour
 {
-    [SerializeField] private GameObject _weaponObjectPrefab;
-    private AudioSource _weaponSound;
-    private PlayerWeapon _weapon;
-    [SerializeField] private Camera _cam;
+    
+    public AudioSource WeaponSound { get; set; }
+    public PlayerWeapon Weapon { get; set; }
+    public Camera Cam { get; set; }
+
     [SerializeField] private LayerMask _mask;
     
     // Start is called before the first frame update
     void Start()
     {
-        if (_cam == null) enabled = false;
-        else
-        {
-            GameObject weaponObject = Instantiate(_weaponObjectPrefab, _cam.transform);
-            _weapon = weaponObject.GetComponent<PlayerWeapon>();
-            _weaponSound = weaponObject.GetComponent<AudioSource>();
-        }
+        if (Cam == null) enabled = false;
     }
 
     void Update()
     {
         if (Input.GetButtonDown("Fire1"))
-        {
             Shoot();
-        }
     }
 
     void Shoot()
     {
-        _weaponSound.Play();
+        WeaponSound.Play();
         RaycastHit hit;
-        if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out hit, _weapon.Range, _mask))
+        if (Physics.Raycast(Cam.transform.position, Cam.transform.forward, out hit, Weapon.Range, _mask))
         {
             Debug.Log("We hit " + hit.collider.name);
             if (hit.collider.tag == "Player")

@@ -8,13 +8,17 @@ public class PlayerSetup : NetworkBehaviour
 {
     [SerializeField] private Behaviour[] _toDisable;
     [SerializeField] private Camera _sceneCamera;
-    
-    
+    [SerializeField] private Camera _cam;
+    [SerializeField] private GameObject _weaponObjectPrefab;
+    private PlayerShoot _shoot;
+
     // Start is called before the first frame update
     void Start()
     {
+        EquipWeapon();
+
         if (!isLocalPlayer)
-        {
+        {Debug.Log("co tu sie odkurwia");
             DisableComponents();
             AssignRemoteLayer();
         }
@@ -24,11 +28,16 @@ public class PlayerSetup : NetworkBehaviour
            if (_sceneCamera != null)
                 _sceneCamera.gameObject.SetActive(false);
         }
-
-        
-
     }
 
+    void EquipWeapon()
+    {
+        GameObject weaponObject = Instantiate(_weaponObjectPrefab, _cam.transform);
+        _shoot = GetComponent<PlayerShoot>();
+        _shoot.Weapon = weaponObject.GetComponent<PlayerWeapon>();
+        _shoot.WeaponSound = weaponObject.GetComponent<AudioSource>();
+        _shoot.Cam = _cam;
+    }
 
     public override void OnStartClient()
     {

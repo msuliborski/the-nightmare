@@ -120,8 +120,8 @@ GameObject:
   - component: {fileID: 7835937638224658570}
   - component: {fileID: 4095351451058445110}
   m_Layer: 9
-  m_Name: Main Camera
-  m_TagString: MainCamera
+  m_Name: Player Camera
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -294,6 +294,9 @@ MonoBehaviour:
   - {fileID: 7835937638224658570}
   - {fileID: 4095351451058445110}
   _sceneCamera: {fileID: 0}
+  _cam: {fileID: 7835937638224658570}
+  _weaponObjectPrefab: {fileID: 7510527661228352801, guid: cbf7c81b06649f94aaa50f67562075cf,
+    type: 3}
 --- !u!114 &2640313959836496214
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -395,9 +398,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74ccc6a7997c8c5b0aa470753a83b221, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _weaponObjectPrefab: {fileID: 7510527661228352801, guid: cbf7c81b06649f94aaa50f67562075cf,
-    type: 3}
-  _cam: {fileID: 7835937638224658570}
   _mask:
     serializedVersion: 2
     m_Bits: 4294967295
