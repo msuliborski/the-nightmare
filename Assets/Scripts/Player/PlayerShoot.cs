@@ -6,16 +6,21 @@ using UnityEngine.Networking;
 
 public class PlayerShoot : NetworkBehaviour
 {
-    [SerializeField] private PlayerWeapon _weapon;
+    [SerializeField] private GameObject _weaponObjectPrefab;
+    private AudioSource _weaponSound;
+    private PlayerWeapon _weapon;
     [SerializeField] private Camera _cam;
     [SerializeField] private LayerMask _mask;
     
     // Start is called before the first frame update
     void Start()
     {
-        if (_cam == null)
+        if (_cam == null) enabled = false;
+        else
         {
-            this.enabled = false;
+            GameObject weaponObject = Instantiate(_weaponObjectPrefab, _cam.transform);
+            _weapon = weaponObject.GetComponent<PlayerWeapon>();
+            _weaponSound = weaponObject.GetComponent<AudioSource>();
         }
     }
 
@@ -29,6 +34,7 @@ public class PlayerShoot : NetworkBehaviour
 
     void Shoot()
     {
+        _weaponSound.Play();
         RaycastHit hit;
         if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out hit, _weapon.Range, _mask))
         {
