@@ -16,7 +16,6 @@ public class PlayerManager : NetworkBehaviour
     [SerializeField] private Behaviour[] _disableOnDeath;
     private bool[] _wasEnabled;
 
-    private Collider[] _colliders; 
 
     public void Setup()
     {
@@ -24,7 +23,8 @@ public class PlayerManager : NetworkBehaviour
 
         for (int i = 0; i < _wasEnabled.Length; i++) _wasEnabled[i] = _disableOnDeath[i].enabled;
 
-        _colliders = transform.GetChild(0).GetComponentsInChildren<Collider>();
+       _currentHealth = _maxHealth;
+
     }
 
     public void SetDefaults()
@@ -36,8 +36,8 @@ public class PlayerManager : NetworkBehaviour
         for (int i = 0; i < _disableOnDeath.Length; i++)
             _disableOnDeath[i].enabled = _wasEnabled[i];
 
-        foreach (Collider col in _colliders)
-            col.enabled = true;
+        transform.GetChild(0).gameObject.SetActive(true);
+        transform.GetChild(1).gameObject.SetActive(true);
         
     }
 
@@ -60,8 +60,8 @@ public class PlayerManager : NetworkBehaviour
         foreach (Behaviour behaviour in _disableOnDeath)
             behaviour.enabled = false;
 
-        foreach (Collider col in _colliders)
-            col.enabled = false;
+        transform.GetChild(0).gameObject.SetActive(false);
+        transform.GetChild(1).gameObject.SetActive(false);
 
         StartCoroutine(Respawn());
     }
