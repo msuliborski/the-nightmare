@@ -37,7 +37,8 @@ public class PlayerShoot : NetworkBehaviour
         {
             Debug.Log("We hit " + hit.collider.name);
             if (hit.collider.tag == "Player")
-                CmdPlayerShoot(hit.collider.transform.parent.transform.parent.name, Equipment.Weapon.Damage);
+                CmdPlayerShoot(hit.collider.GetComponentInParent<PlayerManager>().transform.name, Equipment.Weapon.Damage);
+            
         }
     }
 
