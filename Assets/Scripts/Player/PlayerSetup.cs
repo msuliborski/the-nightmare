@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Networking;
 
 [RequireComponent(typeof(PlayerManager))]
@@ -17,7 +15,7 @@ public class PlayerSetup : NetworkBehaviour
         EquipWeapon();
 
         if (!isLocalPlayer)
-        {Debug.Log("co tu sie odkurwia");
+        {
             DisableComponents();
             AssignRemoteLayer();
         }
@@ -65,5 +63,5 @@ public class PlayerSetup : NetworkBehaviour
             _sceneCamera.gameObject.SetActive(true);
 
         GameManager.UnregisterPlayer(transform.name);
-     }
+    }
 }

@@ -59,5 +59,17 @@ public class PlayerManager : NetworkBehaviour
 
         Collider col = GetComponent<Collider>();
         if (col != null) col.enabled = false;
+
+        StartCoroutine(Respawn());
+    }
+
+
+    private IEnumerator Respawn()
+    {
+        yield return new WaitForSeconds(3f);
+        SetDefaults();
+        Transform spawnPoint = NetworkManager.singleton.GetStartPosition();
+        transform.position = spawnPoint.position;
+        transform.rotation = spawnPoint.rotation;
     }
 }
