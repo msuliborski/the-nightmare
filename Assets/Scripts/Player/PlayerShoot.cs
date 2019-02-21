@@ -30,7 +30,7 @@ public class PlayerShoot : NetworkBehaviour
     void Shoot()
     {
         Equipment.WeaponSound.Play();
-        if (isServer) CmdPlayerShooting(transform.name, connectionToClient.connectionId.ToString());
+        if (isServer) CmdPlayerShooting(transform.name, "-1");
         else CmdPlayerShooting(transform.name, connectionToServer.connectionId.ToString());
         RaycastHit hit;
         Debug.Log(Equipment.Weapon.Range);

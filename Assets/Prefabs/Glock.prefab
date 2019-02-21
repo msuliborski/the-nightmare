@@ -263,7 +263,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _name: Glock
-  _damage: 50
+  _damage: 10
   _range: 100
 --- !u!82 &2047915764187048823
 AudioSource:
