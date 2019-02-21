@@ -27,6 +27,8 @@ public class PlayerSetup : NetworkBehaviour
            if (_sceneCamera != null)
                 _sceneCamera.gameObject.SetActive(false);
         }
+
+        GetComponent<PlayerManager>().Setup();
     }
 
     void EquipWeapon()
