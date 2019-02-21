@@ -7,9 +7,11 @@ using UnityEngine.Networking;
 public class PlayerShoot : NetworkBehaviour
 {
     
-    public AudioSource WeaponSound { get; set; }
-    public PlayerWeapon Weapon { get; set; }
+    
     public Camera Cam { get; set; }
+
+    public PlayerEquipment Equipment { get; set; }
+
 
     [SerializeField] private LayerMask _mask;
     
@@ -27,9 +29,9 @@ public class PlayerShoot : NetworkBehaviour
 
     void Shoot()
     {
-        WeaponSound.Play();
+        CmdPlayerShooting(transform.name);
         RaycastHit hit;
-        if (Physics.Raycast(Cam.transform.position, Cam.transform.forward, out hit, Weapon.Range, _mask))
+        if (Physics.Raycast(Cam.transform.position, Cam.transform.forward, out hit, Equipment.Weapon.Range, _mask))
         {
             Debug.Log("We hit " + hit.collider.name);
             if (hit.collider.tag == "Player")
@@ -37,9 +39,18 @@ public class PlayerShoot : NetworkBehaviour
         }
     }
 
+
     [Command]
-    void CmdPlayerShoot(string playerId)
+    void CmdPlayerShooting(string shootingPlayerId)
     {
-        Debug.Log(playerId + " has been shoot");
+        GameManager.GetPlayer(shootingPlayerId).GetComponent<PlayerEquipment>().RpcPlayerShooting();
+    }
+
+    
+
+    [Command]
+    void CmdPlayerShoot(string shootPlayerId)
+    {
+        Debug.Log(shootPlayerId + " has been shoot");
     }
 }

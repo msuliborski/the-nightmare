@@ -10,8 +10,7 @@ public class PlayerSetup : NetworkBehaviour
     [SerializeField] private Camera _sceneCamera;
     [SerializeField] private Camera _cam;
     [SerializeField] private GameObject _weaponObjectPrefab;
-    private PlayerShoot _shoot;
-
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -33,10 +32,12 @@ public class PlayerSetup : NetworkBehaviour
     void EquipWeapon()
     {
         GameObject weaponObject = Instantiate(_weaponObjectPrefab, _cam.transform);
-        _shoot = GetComponent<PlayerShoot>();
-        _shoot.Weapon = weaponObject.GetComponent<PlayerWeapon>();
-        _shoot.WeaponSound = weaponObject.GetComponent<AudioSource>();
-        _shoot.Cam = _cam;
+        PlayerShoot shoot = GetComponent<PlayerShoot>();
+        shoot.Cam = _cam;
+        PlayerEquipment equipment = GetComponent<PlayerEquipment>();
+        equipment.Weapon = weaponObject.GetComponent<PlayerWeapon>();
+        equipment.WeaponSound = weaponObject.GetComponent<AudioSource>();
+        shoot.Equipment = equipment;
     }
 
     public override void OnStartClient()

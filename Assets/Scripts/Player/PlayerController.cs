@@ -39,6 +39,7 @@ public class PlayerController : NetworkBehaviour
 
         float xRot = Input.GetAxis("Mouse Y");
 
+
         float cameraRotationX = xRot * _lookSensitivity;
 
         _motor.RotateCamera(cameraRotationX);
