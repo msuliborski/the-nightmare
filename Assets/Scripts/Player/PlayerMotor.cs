@@ -40,13 +40,6 @@ public class PlayerMotor : NetworkBehaviour
         else _anim.SetBool("running", false);
     }
 
-
-    [ClientRpc]
-    private void RpcSetRunningAnim(bool set)
-    {
-
-    }
-
     public void Rotate(Vector3 rotation)
     {
         _rotation = rotation;

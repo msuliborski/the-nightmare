@@ -30,7 +30,7 @@ public class PlayerShoot : NetworkBehaviour
     void Shoot()
     {
         Equipment.PlayerShooting();
-        CmdPlayerShooting(transform.name);
+        CmdPlayerShooting();
         RaycastHit hit;
         Debug.Log(Equipment.Weapon.Range);
         if (Physics.Raycast(Cam.transform.position, Cam.transform.forward, out hit, Equipment.Weapon.Range, _mask))
@@ -38,15 +38,23 @@ public class PlayerShoot : NetworkBehaviour
             Debug.Log("We hit " + hit.collider.name);
             if (hit.collider.tag == "Player")
                 CmdPlayerShoot(hit.collider.GetComponentInParent<PlayerManager>().transform.name, Equipment.Weapon.Damage);
-            
+
+            Equipment.DoHitEffect(hit.point, hit.normal);
+            CmdOnHit(hit.point, hit.normal);
         }
     }
 
 
     [Command]
-    void CmdPlayerShooting(string shootingPlayerId)
+    void CmdPlayerShooting()
     {
-        GameManager.GetPlayer(shootingPlayerId).GetComponent<PlayerEquipment>().RpcPlayerShooting();
+        Equipment.RpcPlayerShooting();
+    }
+
+    [Command]
+    void CmdOnHit(Vector3 hitPoint, Vector3 normal)
+    {
+        Equipment.RpcDoHitEffect(hitPoint, normal);
     }
 
     

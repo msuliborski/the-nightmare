@@ -12,7 +12,8 @@ public class PlayerWeapon : NetworkBehaviour
 
     public ParticleSystem Flash { get; set; }
     public ParticleSystem Smoke { get; set; }
-    public GameObject HitEffect { get; set; }
+    [SerializeField] private GameObject _hitEffect;
+    public GameObject HitEffect { get { return _hitEffect; } set { _hitEffect = value; } }
 
     void Start()
     {

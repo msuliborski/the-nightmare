@@ -27,4 +27,21 @@ public class PlayerEquipment : NetworkBehaviour
         }
 
     }
+
+    public void DoHitEffect(Vector3 hitPoint, Vector3 normal)
+    {
+        GameObject hitEffect = Instantiate(Weapon.HitEffect, hitPoint, Quaternion.LookRotation(normal));
+        Destroy(hitEffect, 2f);
+    }
+
+
+    [ClientRpc]
+    public void RpcDoHitEffect(Vector3 hitPoint, Vector3 normal)
+    {
+        if (!isLocalPlayer)
+        {
+            GameObject hitEffect = Instantiate(Weapon.HitEffect, hitPoint, Quaternion.LookRotation(normal));
+            Destroy(hitEffect, 2f);
+        }
+    }
 }
