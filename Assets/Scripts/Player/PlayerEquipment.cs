@@ -18,7 +18,8 @@ public class PlayerEquipment : NetworkBehaviour
         }
         else if (connectionToClient.connectionId.ToString() != connectionId) { Debug.Log("3");  WeaponSound.Play(); }*/
 
-        if (!isLocalPlayer) WeaponSound.Play();
+        //if (!isLocalPlayer)
+            WeaponSound.Play();
 
         Debug.Log(transform.name + " is shooting");
     }
