@@ -8,10 +8,14 @@ public class PlayerEquipment : NetworkBehaviour
     public PlayerWeapon Weapon { get; set; }
     
     [ClientRpc]
-    public void RpcPlayerShooting(string connectionToServerId)
+    public void RpcPlayerShooting(string connectionId)
     {
-        if (connectionToServer == null) Debug.Log("moooo");
-        if (connectionToServer.connectionId.ToString() != connectionToServerId) WeaponSound.Play();
+        if (!isServer)
+        {
+            if (connectionToServer.connectionId.ToString() != connectionId) WeaponSound.Play();
+        }
+        else if (connectionToClient.connectionId.ToString() != connectionId) WeaponSound.Play();
+
         Debug.Log(transform.name + " is shooting");
     }
 }

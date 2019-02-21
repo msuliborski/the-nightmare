@@ -30,7 +30,8 @@ public class PlayerShoot : NetworkBehaviour
     void Shoot()
     {
         Equipment.WeaponSound.Play();
-        CmdPlayerShooting(transform.name, connectionToServer.connectionId.ToString());
+        if (isServer) CmdPlayerShooting(transform.name, connectionToClient.connectionId.ToString());
+        else CmdPlayerShooting(transform.name, connectionToServer.connectionId.ToString());
         RaycastHit hit;
         Debug.Log(Equipment.Weapon.Range);
         if (Physics.Raycast(Cam.transform.position, Cam.transform.forward, out hit, Equipment.Weapon.Range, _mask))
@@ -43,9 +44,9 @@ public class PlayerShoot : NetworkBehaviour
 
 
     [Command]
-    void CmdPlayerShooting(string shootingPlayerId, string connectionToServerId)
+    void CmdPlayerShooting(string shootingPlayerId, string connectionId)
     {
-        GameManager.GetPlayer(shootingPlayerId).GetComponent<PlayerEquipment>().RpcPlayerShooting(connectionToServerId);
+        GameManager.GetPlayer(shootingPlayerId).GetComponent<PlayerEquipment>().RpcPlayerShooting(connectionId);
     }
 
     
