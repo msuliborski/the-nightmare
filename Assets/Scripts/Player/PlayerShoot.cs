@@ -31,11 +31,12 @@ public class PlayerShoot : NetworkBehaviour
     {
         CmdPlayerShooting(transform.name);
         RaycastHit hit;
+        Debug.Log(Equipment.Weapon.Range);
         if (Physics.Raycast(Cam.transform.position, Cam.transform.forward, out hit, Equipment.Weapon.Range, _mask))
         {
             Debug.Log("We hit " + hit.collider.name);
             if (hit.collider.tag == "Player")
-                CmdPlayerShoot(hit.collider.name);
+                CmdPlayerShoot(hit.collider.name, Equipment.Weapon.Damage);
         }
     }
 
@@ -49,8 +50,9 @@ public class PlayerShoot : NetworkBehaviour
     
 
     [Command]
-    void CmdPlayerShoot(string shootPlayerId)
+    void CmdPlayerShoot(string shootPlayerId, int damage)
     {
         Debug.Log(shootPlayerId + " has been shoot");
+        GameManager.GetPlayer(shootPlayerId).TakeDamage(damage);
     }
 }

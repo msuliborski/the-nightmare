@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
         return _players[playerId];
     }
 
-    void OnGUI()
+    /*void OnGUI()
     {
         GUILayout.BeginArea(new Rect(200, 200, 200, 500));
         GUILayout.BeginVertical();
@@ -33,5 +33,5 @@ public class GameManager : MonoBehaviour
             GUILayout.Label(playerId + " - " + _players[playerId].transform.name);
         GUILayout.EndVertical();
         GUILayout.EndArea();
-    }
+    }*/
 }
