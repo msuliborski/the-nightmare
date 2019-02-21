@@ -10,10 +10,12 @@ public class PlayerMotor : NetworkBehaviour
     private float _cameraRotationX = 0f;
     private float currentCameraRotationX = 0f;
     private Rigidbody _rb;
+    private Animator _anim;
     [SerializeField] private float _cameraRotationLimit = 85f;
 
     void Start()
     {
+        _anim = transform.GetChild(0).GetChild(0).GetComponent<Animator>();
         _rb = GetComponent<Rigidbody>();
     }
 
@@ -31,7 +33,11 @@ public class PlayerMotor : NetworkBehaviour
     private void PerformMovement()
     {
         if (_velocity != Vector3.zero)
+        {
             _rb.MovePosition(_rb.position + _velocity * Time.fixedDeltaTime);
+            _anim.SetBool("running", true);
+        }
+        else _anim.SetBool("running", false);
     }
 
     public void Rotate(Vector3 rotation)
