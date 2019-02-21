@@ -11,5 +11,6 @@ public class PlayerEquipment : NetworkBehaviour
     public void RpcPlayerShooting()
     {
         WeaponSound.Play();
+        Debug.Log(transform.name + " is shooting");
     }
 }
