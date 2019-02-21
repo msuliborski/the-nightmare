@@ -10,6 +10,6 @@ public class PlayerEquipment : NetworkBehaviour
     [ClientRpc]
     public void RpcPlayerShooting()
     {
-        WeaponSound.Play();
+        if (!isLocalPlayer) WeaponSound.Play();
     }
 }

@@ -29,6 +29,7 @@ public class PlayerShoot : NetworkBehaviour
 
     void Shoot()
     {
+        Equipment.WeaponSound.Play();
         CmdPlayerShooting(transform.name);
         RaycastHit hit;
         Debug.Log(Equipment.Weapon.Range);
