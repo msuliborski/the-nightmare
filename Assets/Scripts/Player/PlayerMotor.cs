@@ -12,6 +12,7 @@ public class PlayerMotor : NetworkBehaviour
     private Rigidbody _rb;
     private Animator _anim;
     [SerializeField] private float _cameraRotationLimit = 85f;
+    [SyncVar] private bool _isRunning = false; 
 
     void Start()
     {
@@ -28,6 +29,7 @@ public class PlayerMotor : NetworkBehaviour
     {
         PerformMovement();
         PerformRotation();
+        _anim.SetBool("running", _isRunning);
     }
 
     private void PerformMovement()
@@ -35,9 +37,16 @@ public class PlayerMotor : NetworkBehaviour
         if (_velocity != Vector3.zero)
         {
             _rb.MovePosition(_rb.position + _velocity * Time.fixedDeltaTime);
-            _anim.SetBool("running", true);
+            _isRunning = true;
         }
-        else _anim.SetBool("running", false);
+        else _isRunning = false;
+    }
+
+
+    [ClientRpc]
+    private void RpcSetRunningAnim(bool set)
+    {
+
     }
 
     public void Rotate(Vector3 rotation)
