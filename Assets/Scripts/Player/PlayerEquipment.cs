@@ -8,7 +8,7 @@ public class PlayerEquipment : NetworkBehaviour
     public PlayerWeapon Weapon { get; set; }
     
     [ClientRpc]
-    public void RpcPlayerShooting(string connectionId)
+    public void RpcPlayerShooting()
     {
         /*Debug.Log("1");
         if (connectionToClient == null)
