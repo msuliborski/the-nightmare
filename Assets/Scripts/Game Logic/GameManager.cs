@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     [SerializeField] private MatchSettings _matchSettings;
-    public MatchSettings MatchSettings { get { return _matchSettings } set { _matchSettings = value; } }
+    public MatchSettings MatchSettings { get { return _matchSettings; } set { _matchSettings = value; } }
 
 
     void Awake()
