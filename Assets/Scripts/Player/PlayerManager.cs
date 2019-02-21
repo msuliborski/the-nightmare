@@ -66,8 +66,8 @@ public class PlayerManager : NetworkBehaviour
 
     private IEnumerator Respawn()
     {
-        yield return new WaitForSeconds(3f);
-        SetDefaults();
+        yield return new WaitForSeconds(GameManager.Instance.MatchSettings.RespawnTime);
+        SetDefaults();s
         Transform spawnPoint = NetworkManager.singleton.GetStartPosition();
         transform.position = spawnPoint.position;
         transform.rotation = spawnPoint.rotation;
