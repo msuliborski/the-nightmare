@@ -12,6 +12,7 @@ public class PlayerEquipment : NetworkBehaviour
     {
         if (!isServer)
         {
+            Debug.Log("chujowo");
             if (connectionToServer.connectionId.ToString() != connectionId) WeaponSound.Play();
         }
         else if (connectionToClient.connectionId.ToString() != connectionId) WeaponSound.Play();
