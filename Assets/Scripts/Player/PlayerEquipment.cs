@@ -10,7 +10,7 @@ public class PlayerEquipment : NetworkBehaviour
     [ClientRpc]
     public void RpcPlayerShooting(string connectionToServerId)
     {
-        if (connectionToClient.connectionId.ToString() != connectionToServerId) WeaponSound.Play();
+        if (connectionToServer.connectionId.ToString() != connectionToServerId) WeaponSound.Play();
         Debug.Log(transform.name + " is shooting");
     }
 }
