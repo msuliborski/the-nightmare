@@ -168,7 +168,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9001549871963986359}
-  - component: {fileID: 944475149906233437}
   - component: {fileID: 3270923338611126580}
   - component: {fileID: 917736756212613217}
   - component: {fileID: 3464368295461608135}
@@ -204,19 +203,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &944475149906233437
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2361017057787199711}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &3270923338611126580
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -451,8 +437,8 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.01250143
-  m_Center: {x: -0.0000003487379, y: 0.064458795, z: 0.001164332}
+  m_Radius: 0.012494856
+  m_Center: {x: -0.00000034845795, y: 0.0644588, z: 0.008597788}
 --- !u!136 &2294467539951617640
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -463,10 +449,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.007630668
-  m_Height: 0.028078388
+  m_Radius: 0.00974665
+  m_Height: 0.029574977
   m_Direction: 1
-  m_Center: {x: -0.0000013560284, y: 0.016849648, z: -0.0006941514}
+  m_Center: {x: -0.001227709, y: 0.017597944, z: 0.0070639793}
 --- !u!136 &2015832598143012303
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -588,10 +574,6 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 63a2fa0f61dbccb40bf332e555f34c66, type: 2}
-    - target: {fileID: 13700002, guid: 2cc7df5de8dd2514cb167f9cdc94fdfe, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 63a2fa0f61dbccb40bf332e555f34c66, type: 2}
     - target: {fileID: 13700004, guid: 2cc7df5de8dd2514cb167f9cdc94fdfe, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -633,6 +615,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2100000, guid: 63a2fa0f61dbccb40bf332e555f34c66, type: 2}
     - target: {fileID: 13700026, guid: 2cc7df5de8dd2514cb167f9cdc94fdfe, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 63a2fa0f61dbccb40bf332e555f34c66, type: 2}
+    - target: {fileID: 13700002, guid: 2cc7df5de8dd2514cb167f9cdc94fdfe, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 63a2fa0f61dbccb40bf332e555f34c66, type: 2}

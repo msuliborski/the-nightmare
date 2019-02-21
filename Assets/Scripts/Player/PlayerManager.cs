@@ -16,13 +16,15 @@ public class PlayerManager : NetworkBehaviour
     [SerializeField] private Behaviour[] _disableOnDeath;
     private bool[] _wasEnabled;
 
+    private Collider[] _colliders; 
+
     public void Setup()
     {
         _wasEnabled = new bool[_disableOnDeath.Length];
 
         for (int i = 0; i < _wasEnabled.Length; i++) _wasEnabled[i] = _disableOnDeath[i].enabled;
-        
-        SetDefaults();
+
+        _colliders = transform.GetChild(0).GetComponentsInChildren<Collider>();
     }
 
     public void SetDefaults()
@@ -34,8 +36,9 @@ public class PlayerManager : NetworkBehaviour
         for (int i = 0; i < _disableOnDeath.Length; i++)
             _disableOnDeath[i].enabled = _wasEnabled[i];
 
-        Collider col = GetComponent<Collider>();
-        if (col != null) col.enabled = true; 
+        foreach (Collider col in _colliders)
+            col.enabled = true;
+        
     }
 
     [ClientRpc]
@@ -57,8 +60,8 @@ public class PlayerManager : NetworkBehaviour
         foreach (Behaviour behaviour in _disableOnDeath)
             behaviour.enabled = false;
 
-        Collider col = GetComponent<Collider>();
-        if (col != null) col.enabled = false;
+        foreach (Collider col in _colliders)
+            col.enabled = false;
 
         StartCoroutine(Respawn());
     }
