@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -9,9 +8,9 @@ public class PlayerManager : NetworkBehaviour
     [SyncVar] private bool _isDead = false;
     public bool IsDead { get { return _isDead; }  protected set { _isDead = value; } }
 
-    [SerializeField] private int _maxHealth = 100;
+    [SerializeField] private float _maxHealth = 100;
 
-    [SyncVar] private int _currentHealth;
+    [SyncVar] private float _currentHealth;
 
     [SerializeField] private Behaviour[] _disableOnDeath;
     private bool[] _wasEnabled;
@@ -42,13 +41,13 @@ public class PlayerManager : NetworkBehaviour
     }
 
     [ClientRpc]
-    public void RpcTakeDamage(int damage)
+    public void RpcTakeDamage(float damage)
     {
         if (_isDead) return;
 
         _currentHealth -= damage;
 
-        Debug.Log(transform.name + " nwo has " + _currentHealth + " health.");
+        Debug.Log(transform.name + " now has " + _currentHealth + " health.");
 
         if (_currentHealth <= 0) Die();
     }
