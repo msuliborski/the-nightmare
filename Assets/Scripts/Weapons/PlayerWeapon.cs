@@ -17,5 +17,8 @@ public class PlayerWeapon : NetworkBehaviour
     void Start()
     {
         Flash = transform.GetChild(0).GetChild(0).GetComponentInChildren<ParticleSystem>();
+    
+       
+        
     }
 }
