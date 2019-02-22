@@ -10,9 +10,10 @@ public class PlayerEquipment : NetworkBehaviour
 
     public void PlayerShooting()
     {
-        WeaponSound.Play();
         Weapon.Flash.Play();
-        Weapon.Smoke.Play();
+        WeaponSound.Play();
+        GameObject smokeEffect = Instantiate(Weapon.Smoke, Weapon.transform.GetChild(0).position, Quaternion.Euler(-90, 0, 0));
+        Destroy(smokeEffect, 2f);
     }
     
 
@@ -21,9 +22,10 @@ public class PlayerEquipment : NetworkBehaviour
     {
         if (!isLocalPlayer)
         {
-            WeaponSound.Play();
             Weapon.Flash.Play();
-            Weapon.Smoke.Play();
+            WeaponSound.Play();
+            GameObject smokeEffect = Instantiate(Weapon.Smoke, Weapon.transform.GetChild(0).position, Quaternion.Euler(-90, 0, 0));
+            Destroy(smokeEffect, 2f);
         }
 
     }
