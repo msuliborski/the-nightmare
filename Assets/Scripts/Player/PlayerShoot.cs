@@ -32,7 +32,6 @@ public class PlayerShoot : NetworkBehaviour
         Equipment.PlayerShooting();
         CmdPlayerShooting();
         RaycastHit hit;
-        Debug.Log(Equipment.Weapon.Range);
         if (Physics.Raycast(Cam.transform.position, Cam.transform.forward, out hit, Equipment.Weapon.Range, _mask))
         {
             Debug.Log("We hit " + hit.collider.name);
