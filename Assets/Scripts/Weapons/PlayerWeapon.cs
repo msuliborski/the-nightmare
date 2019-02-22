@@ -57,32 +57,48 @@ public class PlayerWeapon : NetworkBehaviour
     private float _justFiredTimer = 0;
     private float _justReloadedTimer = 0;
     
-    protected enum State {idle, shooting, reloading};
-    protected State state;
+    public enum WeaponState {idle, shooting, reloading};
+
+    private WeaponState _state;
+    public WeaponState State { get { return _state; } set { _state = value; } }
     
     
     void Start()
     {
         Flash = transform.GetChild(0).GetChild(0).GetComponentInChildren<ParticleSystem>();
-        state = State.idle;
+        _state = WeaponState.idle;
     }
 
     private void Update()
     {
+        if (_state.Equals(WeaponState.shooting)){
+            _justFiredTimer -= Time.deltaTime;        
+            if (_justFiredTimer < 0) {
+                _justFiredTimer = 0;
+                _state = WeaponState.idle;
+            }
+        }
         
+        if (_state.Equals(WeaponState.reloading)){
+            _justReloadedTimer -= Time.deltaTime;        
+            if (_justReloadedTimer < 0) {
+                _justReloadedTimer = 0;
+                _state = WeaponState.idle;
+            }
+        }
     }
 
     public void reload()
     {
+        _justReloadedTimer = _reloadTime;
+        _state = WeaponState.reloading;
     }
 
 
-    public void fire()
+    public void shoot()
     {
         _justFiredTimer = _fireRate;
-        state = State.reloading;
-
-
+        _state = WeaponState.shooting;
     }
 
 
