@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Main Camera
   - Floor
+  - Enemy
   layers:
   - Default
   - TransparentFX
