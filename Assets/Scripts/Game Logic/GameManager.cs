@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
+using System.Collections;
 using System.Collections.Generic;
 
-public class GameManager : MonoBehaviour
+public class GameManager : NetworkBehaviour
 {
     public static GameManager Instance;
-
+    [SerializeField] private Transform[] _enemySpawnPoints;
+    [SerializeField] private GameObject _enemyPrefab;
     [SerializeField] private MatchSettings _matchSettings;
     public MatchSettings MatchSettings { get { return _matchSettings; } set { _matchSettings = value; } }
 
@@ -13,7 +16,34 @@ public class GameManager : MonoBehaviour
     {
         if (Instance != null) Debug.LogError("More than one GameManager in scene!");
         else Instance = this;
-    }  
+        StartCoroutine(SpawnEnemy());
+    }
+
+    #region EnemySpawning
+    
+    [Command]
+    void CmdSpawnEnemy(int randIndex)
+    {
+        RcpSpawnEnemy(randIndex);
+    }
+
+    [ClientRpc]
+    void RcpSpawnEnemy(int randIndex)
+    {
+        Instantiate(_enemyPrefab, _enemySpawnPoints[randIndex]);
+    }
+
+
+    private IEnumerator SpawnEnemy()
+    {
+        yield return new WaitForSeconds(_matchSettings.EnemyRespawnTime);
+        int randIndex = Random.Range(0, 3);
+        CmdSpawnEnemy(randIndex);
+        StartCoroutine(SpawnEnemy());
+    }
+
+
+    #endregion
 
 
     #region PlayerTracking
@@ -21,6 +51,7 @@ public class GameManager : MonoBehaviour
     private const string PLAYER_ID_PREFIX = "Player ";
 
     private static Dictionary<string, PlayerManager> _players = new Dictionary<string, PlayerManager>();
+    public static Dictionary<string, PlayerManager> Players { get { return _players; } }
 
     public static void RegisterPlayer(string netId, PlayerManager player)
     {

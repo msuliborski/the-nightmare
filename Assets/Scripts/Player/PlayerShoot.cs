@@ -6,8 +6,6 @@ using UnityEngine.Networking;
 
 public class PlayerShoot : NetworkBehaviour
 {
-    
-    
     public Camera Cam { get; set; }
 
     public PlayerEquipment Equipment { get; set; }
@@ -60,7 +58,7 @@ public class PlayerShoot : NetworkBehaviour
     
 
     [Command]
-    void CmdPlayerShoot(string shootPlayerId, int damage)
+    void CmdPlayerShoot(string shootPlayerId, float damage)
     {
         Debug.Log(shootPlayerId + " has been shoot");
         GameManager.GetPlayer(shootPlayerId).RpcTakeDamage(damage);
