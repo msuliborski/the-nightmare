@@ -24,7 +24,7 @@ public class GameManager : NetworkBehaviour
     [Command]
     void CmdSpawnEnemy(int randIndex)
     {
-        RcpSpawnEnemy(randIndex);
+        RpcSpawnEnemy(randIndex);
     }
 
     [ClientRpc]
