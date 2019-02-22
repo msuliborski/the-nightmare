@@ -28,7 +28,7 @@ public class GameManager : NetworkBehaviour
     }
 
     [ClientRpc]
-    void RcpSpawnEnemy(int randIndex)
+    void RpcSpawnEnemy(int randIndex)
     {
         Instantiate(_enemyPrefab, _enemySpawnPoints[randIndex]);
     }
