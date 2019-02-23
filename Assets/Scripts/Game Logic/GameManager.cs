@@ -14,24 +14,16 @@ public class GameManager : NetworkBehaviour
         public GameObject Enemy;
         public EnemyStruct(GameObject enemy) { Enemy = enemy; }
     }
-    private class SyncListEnemies : SyncListStruct<EnemyStruct> { }
-    private SyncListEnemies _enemies;
-    [SyncVar] private bool _spawnedByFirstClient = false;
+    
     public MatchSettings MatchSettings { get { return _matchSettings; } set { _matchSettings = value; } }
 
 
     void Start()
     {
+        _matchSettings.WaitForSpawn -= _matchSettings.EnemyRespawnTime;
         if (Instance != null) Debug.LogError("More than one GameManager in scene!");
         else Instance = this;
-        if (_enemies == null) _enemies = new SyncListEnemies();
-        else foreach (EnemyStruct enemyStruct in _enemies)
-            {
-                GameObject enemy = enemyStruct.Enemy;
-                Instantiate(enemy, enemy.transform.position, enemy.transform.rotation);
-            }
-        
-        StartCoroutine(SpawnEnemy());
+       StartCoroutine(WaitForSpawn());
     }
 
     #region EnemySpawning
@@ -39,8 +31,7 @@ public class GameManager : NetworkBehaviour
     [Command]
     void CmdSpawnEnemy(int randIndex)
     {
-        _spawnedByFirstClient = false;
-        RpcSpawnEnemy(randIndex);
+       RpcSpawnEnemy(randIndex);
     }
 
 
@@ -48,9 +39,14 @@ public class GameManager : NetworkBehaviour
     [ClientRpc]
     void RpcSpawnEnemy(int randIndex)
     {
-        if (!_spawnedByFirstClient)
-            _enemies.Add(new EnemyStruct(Instantiate(_enemyPrefab, _enemySpawnPoints[randIndex])));
-        else Instantiate(_enemyPrefab, _enemySpawnPoints[randIndex]);
+       Instantiate(_enemyPrefab, _enemySpawnPoints[randIndex]);
+    }
+
+
+    private IEnumerator WaitForSpawn()
+    {
+        yield return new WaitForSeconds(_matchSettings.WaitForSpawn);
+        StartCoroutine(SpawnEnemy());
     }
 
     private IEnumerator SpawnEnemy()

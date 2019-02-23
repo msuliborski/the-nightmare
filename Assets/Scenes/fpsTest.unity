@@ -1041,6 +1041,7 @@ MonoBehaviour:
   _matchSettings:
     RespawnTime: 3
     EnemyRespawnTime: 7
+    WaitForSpawn: 10
 --- !u!4 &1433278927
 Transform:
   m_ObjectHideFlags: 0

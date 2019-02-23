@@ -6,5 +6,5 @@ public class MatchSettings
 
     public float EnemyRespawnTime = 7f;
 
-    public int MaxEnemiesNumber = 100;
+    public float WaitForSpawn = 10f;
 }
