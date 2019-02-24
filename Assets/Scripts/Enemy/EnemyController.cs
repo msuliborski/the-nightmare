@@ -9,7 +9,7 @@ public class EnemyController : NetworkBehaviour
     private const string ENEMY_ID_PREFIX = "Enemy ";
 
     public bool IsWalking { get; set; }
-    [SyncVar] private float _currentHealth;
+    private float _currentHealth;
     [SerializeField] private float _maxHealth = 50f;
 
     public NavMeshAgent Agent { get; set; }
@@ -83,8 +83,7 @@ public class EnemyController : NetworkBehaviour
     }
 
 
-    [ClientRpc]
-    public void RpcTakeDamage(float damage)
+    public void TakeDamage(float damage)
     {
         _currentHealth -= damage;
 
