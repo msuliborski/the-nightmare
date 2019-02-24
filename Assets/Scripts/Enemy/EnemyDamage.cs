@@ -31,7 +31,7 @@ public class EnemyDamage : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && enabled)
         {
             _damageDest = other.GetComponentInParent<PlayerManager>();
             _enemyController.Agent.enabled = false;
@@ -41,7 +41,7 @@ public class EnemyDamage : NetworkBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && enabled)
         {
             _damageDest = null;
             _enemyController.Agent.enabled = true;
