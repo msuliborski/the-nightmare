@@ -3,7 +3,7 @@ using UnityEngine.Networking;
 
 public class HostGame : MonoBehaviour
 {
-    [SerializeField] private uint _roomSize = 6;
+    [SerializeField] private uint _roomSize = 4;
     private string _roomName;
     private string _password;
     private NetworkManager _networkManager;
@@ -32,7 +32,7 @@ public class HostGame : MonoBehaviour
         if (_roomName != "" && _roomName != null)
         {
             Debug.Log("Creating Room: "+_roomName+" for "+_roomSize+" players");
-            _networkManager.matchMaker.CreateMatch(_roomName, _roomSize, true, _password, "", "", 0, 0, _networkManager.OnMatchCreate);
+            _networkManager.matchMaker.CreateMatch(_roomName, _roomSize, true, "", "", "", 0, 0, _networkManager.OnMatchCreate);
             GameObject.Find("Lobby").SetActive(false);
         }
     }
