@@ -9,14 +9,21 @@ public class GameManager : NetworkBehaviour
     [SerializeField] private Transform[] _enemySpawnPoints;
     [SerializeField] private GameObject _enemyPrefab;
     [SerializeField] private MatchSettings _matchSettings;
+    private struct EnemyStruct
+    {
+        public GameObject Enemy;
+        public EnemyStruct(GameObject enemy) { Enemy = enemy; }
+    }
+    
     public MatchSettings MatchSettings { get { return _matchSettings; } set { _matchSettings = value; } }
 
 
-    void Awake()
+    void Start()
     {
+        _matchSettings.WaitForSpawn -= _matchSettings.EnemyRespawnTime;
         if (Instance != null) Debug.LogError("More than one GameManager in scene!");
         else Instance = this;
-        StartCoroutine(SpawnEnemy());
+       StartCoroutine(WaitForSpawn());
     }
 
     #region EnemySpawning
@@ -24,15 +31,23 @@ public class GameManager : NetworkBehaviour
     [Command]
     void CmdSpawnEnemy(int randIndex)
     {
-        RpcSpawnEnemy(randIndex);
+       RpcSpawnEnemy(randIndex);
     }
+
+
 
     [ClientRpc]
     void RpcSpawnEnemy(int randIndex)
     {
-        Instantiate(_enemyPrefab, _enemySpawnPoints[randIndex]);
+       Instantiate(_enemyPrefab, _enemySpawnPoints[randIndex]);
     }
 
+
+    private IEnumerator WaitForSpawn()
+    {
+        yield return new WaitForSeconds(_matchSettings.WaitForSpawn);
+        StartCoroutine(SpawnEnemy());
+    }
 
     private IEnumerator SpawnEnemy()
     {

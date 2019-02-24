@@ -33,7 +33,7 @@ public class PlayerShoot : NetworkBehaviour
     {
         Equipment.PlayerShooting();
         Equipment.Weapon.shoot();
-        Cam.transform.localEulerAngles = new Vector3(Cam.transform.localEulerAngles.x + 2f, 0f, 0f);
+        //Cam.transform.localEulerAngles = new Vector3(Cam.transform.localEulerAngles.x + 2f, 0f, 0f);
         CmdPlayerShooting();
         RaycastHit hit;
         if (Physics.Raycast(Cam.transform.position, Cam.transform.forward, out hit, Equipment.Weapon.Range, _mask))
