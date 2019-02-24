@@ -51,7 +51,7 @@ public class EnemyDamage : NetworkBehaviour
     [Command]
     void CmdPlayerTakeDamage()
     {
-        _damageDest.RpcTakeDamage(Time.deltaTime * _damage);
+        _damageDest.GetComponent<PlayerShoot>().CmdPlayerTakeDamage(_damageDest.transform.name, Time.deltaTime * _damage);
     }
     
 }
