@@ -18,7 +18,7 @@ public class EnemyDamage : NetworkBehaviour
     {
         if (_damageDest != null)
         {
-            _damageDestShoot.CmdPlayerShoot(_damageDest.transform.name, Time.deltaTime * _damage);
+            _damageDestShoot.InvokeCmdPlayerShoot(_damageDest.transform.name, Time.deltaTime * _damage);
             if (_damageDest.IsDead)
             {
                 _damageDest = null;
