@@ -73,8 +73,14 @@ public class PlayerShoot : NetworkBehaviour
         GameManager.GetEnemy(shootEnemyId).RpcTakeDamage(damage);
     }
 
+
+    public void InvokeCmdPlayerShoot(string shootPlayerId, float damage)
+    {
+        CmdPlayerShoot(shootPlayerId, damage);
+    }
+
     [Command]
-    public void CmdPlayerShoot(string shootPlayerId, float damage)
+    void CmdPlayerShoot(string shootPlayerId, float damage)
     {
         Debug.Log(shootPlayerId + " has been shoot");
         GameManager.GetPlayer(shootPlayerId).RpcTakeDamage(damage);
