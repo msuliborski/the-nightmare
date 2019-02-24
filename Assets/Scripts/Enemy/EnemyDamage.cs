@@ -1,12 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.AI;
+﻿using UnityEngine;
+using UnityEngine.Networking;
 
-public class EnemyDamage : MonoBehaviour
+public class EnemyDamage : NetworkBehaviour
 {
     private PlayerManager _damageDest;
     private EnemyController _enemyController;
+    [SerializeField] private float _damage;
 
     private void Start()
     {
@@ -18,7 +17,7 @@ public class EnemyDamage : MonoBehaviour
     {
         if (_damageDest != null)
         {
-            _damageDest.RpcTakeDamage(Time.deltaTime * 2f);
+            CmdPlayerTakeDamage();
             if (_damageDest.IsDead)
             {
                 _damageDest = null;
@@ -48,4 +47,11 @@ public class EnemyDamage : MonoBehaviour
             _enemyController.IsWalking = true;
         }
     }
+
+    [Command]
+    void CmdPlayerTakeDamage()
+    {
+        _damageDest.RpcTakeDamage(Time.deltaTime * 2f);
+    }
+    
 }
