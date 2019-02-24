@@ -5,13 +5,13 @@ public class EnemyDamage : NetworkBehaviour
 {
     private PlayerManager _damageDest;
     private EnemyController _enemyController;
-    [SerializeField] private float _damage;
+    [SerializeField] private float _damage = 2f;
 
     private void Start()
     {
-        _enemyController = GetComponentInParent<EnemyController>();    
+        _enemyController = GetComponent<EnemyController>();    
     }
-
+    
     // Update is called once per frame
     void Update()
     {
@@ -51,7 +51,7 @@ public class EnemyDamage : NetworkBehaviour
     [Command]
     void CmdPlayerTakeDamage()
     {
-        _damageDest.RpcTakeDamage(Time.deltaTime * 2f);
+        _damageDest.RpcTakeDamage(Time.deltaTime * _damage);
     }
     
 }
