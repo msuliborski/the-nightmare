@@ -23,24 +23,24 @@ public class GameManager : NetworkBehaviour
         _matchSettings.WaitForSpawn -= _matchSettings.EnemyRespawnTime;
         if (Instance != null) Debug.LogError("More than one GameManager in scene!");
         else Instance = this;
-       StartCoroutine(WaitForSpawn());
+       if (isServer) StartCoroutine(WaitForSpawn());
     }
 
     #region EnemySpawning
     
-    [Command]
-    void CmdSpawnEnemy(int randIndex)
-    {
-       RpcSpawnEnemy(randIndex);
-    }
+    //[Command]
+    //void CmdSpawnEnemy(int randIndex)
+    //{
+    //   RpcSpawnEnemy(randIndex);
+    //}
 
 
 
-    [ClientRpc]
-    void RpcSpawnEnemy(int randIndex)
-    {
-       Instantiate(_enemyPrefab, _enemySpawnPoints[randIndex]);
-    }
+    //[ClientRpc]
+    //void RpcSpawnEnemy(int randIndex)
+    //{
+    //   Instantiate(_enemyPrefab, _enemySpawnPoints[randIndex]);
+    //}
 
 
     private IEnumerator WaitForSpawn()
@@ -53,7 +53,9 @@ public class GameManager : NetworkBehaviour
     {
         yield return new WaitForSeconds(_matchSettings.EnemyRespawnTime);
         int randIndex = Random.Range(0, 3);
-        CmdSpawnEnemy(randIndex);
+        //CmdSpawnEnemy(randIndex);
+        
+        NetworkServer.Spawn(Instantiate(_enemyPrefab, _enemySpawnPoints[randIndex]));
         StartCoroutine(SpawnEnemy());
     }
 
@@ -66,23 +68,46 @@ public class GameManager : NetworkBehaviour
     private const string PLAYER_ID_PREFIX = "Player ";
 
     private static Dictionary<string, PlayerManager> _players = new Dictionary<string, PlayerManager>();
+    private static Dictionary<string, PlayerManager> _activePlayers = new Dictionary<string, PlayerManager>();
     public static Dictionary<string, PlayerManager> Players { get { return _players; } }
+    public static Dictionary<string, PlayerManager> ActivePlayers { get { return _activePlayers; } }
+    public static Dictionary<string, EnemyController> _enemies = new Dictionary<string, EnemyController>();
+    public static Dictionary<string, EnemyController> Enemies { get { return _enemies; } }
+    private static int _enemyIdCounter = 0;
+    public static int EnemyIdCounter { get { return _enemyIdCounter; } set { _enemyIdCounter = value; } }
 
     public static void RegisterPlayer(string netId, PlayerManager player)
     {
         string playerId = PLAYER_ID_PREFIX + netId;
         _players.Add(playerId, player);
+        _activePlayers.Add(playerId, player);
         player.transform.name = playerId;
     }
 
     public static void UnregisterPlayer(string playerId)
     {
         _players.Remove(playerId);
+        if (_activePlayers.ContainsKey(playerId)) _activePlayers.Remove(playerId);
     }
 
     public static PlayerManager GetPlayer(string playerId)
     {
         return _players[playerId];
+    }
+
+    public static EnemyController GetEnemy(string enemyId)
+    {
+        return _enemies[enemyId];
+    }
+
+    public static void DeactivatePlayer(string playerId)
+    {
+        _activePlayers.Remove(playerId);
+    }
+
+    public static void ActivatePlayer(string playerId, PlayerManager player)
+    {
+        _activePlayers.Add(playerId, player);
     }
 
     /*void OnGUI()

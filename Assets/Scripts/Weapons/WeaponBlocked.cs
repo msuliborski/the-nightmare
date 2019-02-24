@@ -55,11 +55,15 @@ public class WeaponBlocked : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag("Floor") && !other.CompareTag("Enemy")) IsBlocked = true;
+        if (!other.CompareTag("Floor") && !other.CompareTag("Enemy") &&
+            !other.CompareTag("EnemyHead") && !other.CompareTag("EnemyLegs") &&
+            !other.CompareTag("EnemyBody")) IsBlocked = true;
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (!other.CompareTag("Floor") && !other.CompareTag("Enemy")) IsBlocked = false; 
+        if (!other.CompareTag("Floor") && !other.CompareTag("Enemy") &&
+            !other.CompareTag("EnemyHead") && !other.CompareTag("EnemyLegs") &&
+            !other.CompareTag("EnemyBody")) IsBlocked = false; 
     }
 }

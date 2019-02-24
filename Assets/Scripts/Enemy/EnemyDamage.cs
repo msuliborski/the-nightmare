@@ -19,6 +19,13 @@ public class EnemyDamage : MonoBehaviour
         if (_damageDest != null)
         {
             _damageDest.RpcTakeDamage(Time.deltaTime * 2f);
+            if (_damageDest.IsDead)
+            {
+                _damageDest = null;
+                _enemyController.Agent.enabled = true;
+                _enemyController.IsWalking = true;
+                _enemyController.SetClosestPlayer();
+            }
         }
     }
 

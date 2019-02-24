@@ -41,6 +41,12 @@ public class PlayerShoot : NetworkBehaviour
             Debug.Log("We hit " + hit.collider.name);
             if (hit.collider.tag == "Player")
                 CmdPlayerShoot(hit.collider.GetComponentInParent<PlayerManager>().transform.name, Equipment.Weapon.Damage);
+            else if (hit.collider.tag == "EnemyHead")
+                CmdEnemyShoot(hit.collider.GetComponentInParent<EnemyController>().transform.name, 3 * Equipment.Weapon.Damage);
+            else if (hit.collider.tag == "EnemyBody")
+                CmdEnemyShoot(hit.collider.GetComponentInParent<EnemyController>().transform.name, 2 * Equipment.Weapon.Damage);
+            else if (hit.collider.tag == "EnemyLegs")
+                CmdEnemyShoot(hit.collider.GetComponentInParent<EnemyController>().transform.name, Equipment.Weapon.Damage);
 
             Equipment.DoHitEffect(hit.point, hit.normal);
             CmdOnHit(hit.point, hit.normal);
@@ -60,7 +66,12 @@ public class PlayerShoot : NetworkBehaviour
         Equipment.RpcDoHitEffect(hitPoint, normal);
     }
 
-    
+    [Command]
+    void CmdEnemyShoot(string shootEnemyId, float damage)
+    {
+        Debug.Log(shootEnemyId + " has been shoot");
+        GameManager.GetEnemy(shootEnemyId).RpcTakeDamage(damage);
+    }
 
     [Command]
     void CmdPlayerShoot(string shootPlayerId, float damage)

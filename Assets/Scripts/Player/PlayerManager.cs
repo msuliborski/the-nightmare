@@ -61,7 +61,7 @@ public class PlayerManager : NetworkBehaviour
 
         transform.GetChild(0).gameObject.SetActive(false);
         transform.GetChild(1).gameObject.SetActive(false);
-
+        GameManager.DeactivatePlayer(transform.name);
         StartCoroutine(Respawn());
     }
 
@@ -73,5 +73,6 @@ public class PlayerManager : NetworkBehaviour
         Transform spawnPoint = NetworkManager.singleton.GetStartPosition();
         transform.position = spawnPoint.position;
         transform.rotation = spawnPoint.rotation;
+        GameManager.ActivatePlayer(transform.name, this);
     }
 }
