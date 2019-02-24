@@ -4,6 +4,7 @@ using UnityEngine.Networking;
 public class EnemyDamage : NetworkBehaviour
 {
     private PlayerManager _damageDest;
+    private PlayerShoot _damageDestShoot;
     private EnemyController _enemyController;
     [SerializeField] private float _damage = 2f;
 
@@ -17,7 +18,7 @@ public class EnemyDamage : NetworkBehaviour
     {
         if (_damageDest != null)
         {
-            CmdPlayerTakeDamage();
+            _damageDestShoot.CmdPlayerShoot(_damageDest.transform.name, Time.deltaTime * _damage);
             if (_damageDest.IsDead)
             {
                 _damageDest = null;
@@ -33,6 +34,7 @@ public class EnemyDamage : NetworkBehaviour
         if (other.CompareTag("Player"))
         {
             _damageDest = other.GetComponentInParent<PlayerManager>();
+            _damageDestShoot = _damageDest.GetComponent<PlayerShoot>();
             _enemyController.Agent.enabled = false;
             _enemyController.IsWalking = false;
         }
@@ -48,10 +50,4 @@ public class EnemyDamage : NetworkBehaviour
         }
     }
 
-    [Command]
-    void CmdPlayerTakeDamage()
-    {
-        _damageDest.GetComponent<PlayerShoot>().CmdPlayerTakeDamage(_damageDest.transform.name, Time.deltaTime * _damage);
-    }
-    
 }
