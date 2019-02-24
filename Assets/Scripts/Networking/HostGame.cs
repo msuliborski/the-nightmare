@@ -33,7 +33,6 @@ public class HostGame : MonoBehaviour
         {
             Debug.Log("Creating Room: "+_roomName+" for "+_roomSize+" players");
             _networkManager.matchMaker.CreateMatch(_roomName, _roomSize, true, "", "", "", 0, 0, _networkManager.OnMatchCreate);
-            GameObject.Find("Lobby").SetActive(false);
         }
     }
 }

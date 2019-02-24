@@ -37,7 +37,7 @@ public class JoinGame : MonoBehaviour
 
       if (responsedata == null)
       {
-         _status.text = "Couldn't get room list";
+         _status.text = "Couldn't get room list.";
          return;
       }
 
@@ -58,7 +58,7 @@ public class JoinGame : MonoBehaviour
 
       if (_roomList.Count == 0)
       {
-         _status.text = "No servers found";
+         _status.text = "No servers found.";
       }
    }
 
@@ -77,6 +77,5 @@ public class JoinGame : MonoBehaviour
       _networkManager.matchMaker.JoinMatch(match.networkId, "", "", "", 0, 0, _networkManager.OnMatchJoined);
       ClearRoomList();
       _status.text = "Joining...";
-      GameObject.Find("Lobby").SetActive(false);
    }
 }
