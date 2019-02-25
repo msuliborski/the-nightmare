@@ -4,13 +4,13 @@ using UnityEngine.Networking;
 public class EnemyDamage : NetworkBehaviour
 {
     private PlayerManager _damageDest;
-    private EnemyController _enemyController;
+    private EnemyControllerServer _enemyController;
     [SerializeField] private float _damage = 2f;
 
     private void Start()
     {
         if (!isServer) enabled = false;
-        else _enemyController = GetComponent<EnemyController>();
+        else _enemyController = GetComponent<EnemyControllerServer>();
     }
 
     // Update is called once per frame
@@ -24,6 +24,7 @@ public class EnemyDamage : NetworkBehaviour
                 _damageDest = null;
                 _enemyController.Agent.enabled = true;
                 _enemyController.IsWalking = true;
+                RpcTurnOnWalking(true);
                 _enemyController.SetClosestPlayer();
             }
         }
@@ -36,6 +37,7 @@ public class EnemyDamage : NetworkBehaviour
             _damageDest = other.GetComponentInParent<PlayerManager>();
             _enemyController.Agent.enabled = false;
             _enemyController.IsWalking = false;
+            RpcTurnOnWalking(false);
         }
     }
 
@@ -46,7 +48,19 @@ public class EnemyDamage : NetworkBehaviour
             _damageDest = null;
             _enemyController.Agent.enabled = true;
             _enemyController.IsWalking = true;
+            RpcTurnOnWalking(true);
         }
     }
 
+    [ClientRpc]
+    void RpcTurnOnWalking(bool isOn)
+    {
+        if (!isServer)
+        {
+            EnemyControllerClient enemyControllerClient = GetComponent<EnemyControllerClient>();
+            enemyControllerClient.Agent.enabled = isOn;
+            enemyControllerClient.IsWalking = isOn;
+
+        }
+    }
 }

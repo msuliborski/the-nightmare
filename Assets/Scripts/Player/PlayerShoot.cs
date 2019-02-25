@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.AI;
 
 public class PlayerShoot : NetworkBehaviour
 {
@@ -42,11 +43,11 @@ public class PlayerShoot : NetworkBehaviour
             if (hit.collider.tag == "Player")
                 CmdPlayerShoot(hit.collider.GetComponentInParent<PlayerManager>().transform.name, Equipment.Weapon.Damage);
             else if (hit.collider.tag == "EnemyHead")
-                CmdEnemyShoot(hit.collider.GetComponentInParent<EnemyController>().transform.name, 3 * Equipment.Weapon.Damage);
+                CmdEnemyShoot(hit.collider.GetComponentInParent<NavMeshAgent>().transform.name, 3 * Equipment.Weapon.Damage);
             else if (hit.collider.tag == "EnemyBody")
-                CmdEnemyShoot(hit.collider.GetComponentInParent<EnemyController>().transform.name, 2 * Equipment.Weapon.Damage);
+                CmdEnemyShoot(hit.collider.GetComponentInParent<NavMeshAgent>().transform.name, 2 * Equipment.Weapon.Damage);
             else if (hit.collider.tag == "EnemyLegs")
-                CmdEnemyShoot(hit.collider.GetComponentInParent<EnemyController>().transform.name, Equipment.Weapon.Damage);
+                CmdEnemyShoot(hit.collider.GetComponentInParent<NavMeshAgent>().transform.name, Equipment.Weapon.Damage);
 
             Equipment.DoHitEffect(hit.point, hit.normal);
             CmdOnHit(hit.point, hit.normal);

@@ -4,7 +4,7 @@ using UnityEngine.AI;
 using System.Collections;
 using System.Collections.Generic;
 
-public class EnemyController : NetworkBehaviour
+public class EnemyControllerServer : NetworkBehaviour
 {
     private const string ENEMY_ID_PREFIX = "Enemy ";
 
@@ -15,7 +15,7 @@ public class EnemyController : NetworkBehaviour
     public NavMeshAgent Agent { get; set; }
 
     public Transform Dest { get; set; }
-
+    
     private void Start()
     {
         transform.name = ENEMY_ID_PREFIX + GameManager.EnemyIdCounter++;
@@ -58,6 +58,7 @@ public class EnemyController : NetworkBehaviour
             }
         }
         Dest =  tMin;
+        RpcSendDest();
     }
 
     public void SetClosestPlayer()
@@ -80,6 +81,7 @@ public class EnemyController : NetworkBehaviour
             }
         }
         Dest = tMin;
+        RpcSendDest();
     }
 
 
@@ -91,6 +93,17 @@ public class EnemyController : NetworkBehaviour
         {
             GameManager.Enemies.Remove(transform.name);
             Destroy(gameObject);
+        }
+    }
+
+    [ClientRpc]
+    void RpcSendDest()
+    {
+        if (!isServer)
+        {
+            EnemyControllerClient enemyControllerClient = GetComponent<EnemyControllerClient>();
+            enemyControllerClient.Dest = Dest;
+            
         }
     }
 }

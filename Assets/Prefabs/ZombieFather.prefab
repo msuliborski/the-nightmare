@@ -179,9 +179,10 @@ GameObject:
   - component: {fileID: 4821163273310060634}
   - component: {fileID: 1712046220449955906}
   - component: {fileID: 5604535786576862060}
-  - component: {fileID: 7867148250838355139}
   - component: {fileID: 5292651104544856760}
   - component: {fileID: 290730769035761863}
+  - component: {fileID: 8383481672037800567}
+  - component: {fileID: 3969500987735794099}
   m_Layer: 9
   m_Name: ZombieFather
   m_TagString: Enemy
@@ -320,19 +321,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &7867148250838355139
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6513423205020058902}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f96a2860d59d0d40a0cd31d21d2f869, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _maxHealth: 100
 --- !u!65 &5292651104544856760
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -359,6 +347,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _damage: 2
+--- !u!114 &8383481672037800567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6513423205020058902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97255443c2938e34f82a0258a67652bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3969500987735794099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6513423205020058902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c74eb2771fc89aa47bbdf5530e3099c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxHealth: 100
 --- !u!1001 &1462937343887697675
 PrefabInstance:
   m_ObjectHideFlags: 0

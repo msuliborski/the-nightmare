@@ -71,8 +71,8 @@ public class GameManager : NetworkBehaviour
     private static Dictionary<string, PlayerManager> _activePlayers = new Dictionary<string, PlayerManager>();
     public static Dictionary<string, PlayerManager> Players { get { return _players; } }
     public static Dictionary<string, PlayerManager> ActivePlayers { get { return _activePlayers; } }
-    public static Dictionary<string, EnemyController> _enemies = new Dictionary<string, EnemyController>();
-    public static Dictionary<string, EnemyController> Enemies { get { return _enemies; } }
+    public static Dictionary<string, EnemyControllerServer> _enemies = new Dictionary<string, EnemyControllerServer>();
+    public static Dictionary<string, EnemyControllerServer> Enemies { get { return _enemies; } }
     private static int _enemyIdCounter = 0;
     public static int EnemyIdCounter { get { return _enemyIdCounter; } set { _enemyIdCounter = value; } }
 
@@ -95,7 +95,7 @@ public class GameManager : NetworkBehaviour
         return _players[playerId];
     }
 
-    public static EnemyController GetEnemy(string enemyId)
+    public static EnemyControllerServer GetEnemy(string enemyId)
     {
         return _enemies[enemyId];
     }
