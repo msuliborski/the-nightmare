@@ -57,6 +57,7 @@ public class EnemyDamage : NetworkBehaviour
     {
         if (!isServer)
         {
+            Debug.Log("setting!");
             EnemyControllerClient enemyControllerClient = GetComponent<EnemyControllerClient>();
             enemyControllerClient.Agent.enabled = isOn;
             enemyControllerClient.IsWalking = isOn;
