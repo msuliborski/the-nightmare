@@ -7,7 +7,7 @@ public class EnemyControllerClient : NetworkBehaviour
 
     public NavMeshAgent Agent { get; set; }
 
-    public Transform Dest { get; set; }
+    public Vector3 Dest { get; set; }
 
     public bool IsWalking { get; set; }
 
@@ -26,7 +26,7 @@ public class EnemyControllerClient : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Dest != null && IsWalking) Agent.SetDestination(Dest.position);
+        if (Dest != null && IsWalking) Agent.SetDestination(Dest);
     }
 
 
