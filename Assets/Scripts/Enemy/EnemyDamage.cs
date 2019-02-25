@@ -24,7 +24,7 @@ public class EnemyDamage : NetworkBehaviour
                 _damageDest = null;
                 _enemyController.Agent.enabled = true;
                 _enemyController.IsWalking = true;
-                RpcTurnOnWalking(true);
+                //RpcTurnOnWalking(true);
                 _enemyController.SetClosestPlayer();
             }
         }
@@ -37,7 +37,7 @@ public class EnemyDamage : NetworkBehaviour
             _damageDest = other.GetComponentInParent<PlayerManager>();
             _enemyController.Agent.enabled = false;
             _enemyController.IsWalking = false;
-            RpcTurnOnWalking(false);
+            //RpcTurnOnWalking(false);
         }
     }
 
@@ -48,11 +48,11 @@ public class EnemyDamage : NetworkBehaviour
             _damageDest = null;
             _enemyController.Agent.enabled = true;
             _enemyController.IsWalking = true;
-            RpcTurnOnWalking(true);
+            //RpcTurnOnWalking(true);
         }
     }
 
-    [ClientRpc]
+    /*[ClientRpc]
     void RpcTurnOnWalking(bool isOn)
     {
         if (!isServer)
@@ -63,5 +63,5 @@ public class EnemyDamage : NetworkBehaviour
             enemyControllerClient.IsWalking = isOn;
 
         }
-    }
+    }*/
 }

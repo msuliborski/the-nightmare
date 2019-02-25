@@ -4,7 +4,7 @@ using UnityEngine.AI;
 using System.Collections;
 using System.Collections.Generic;
 
-public class EnemyControllerServer : NetworkBehaviour
+public class EnemyController : NetworkBehaviour
 {
     private const string ENEMY_ID_PREFIX = "Enemy ";
 
@@ -34,7 +34,6 @@ public class EnemyControllerServer : NetworkBehaviour
     {
         if (Dest != null && IsWalking) Agent.SetDestination(Dest.position);
         else SetClosestPlayer();
-        RpcSendTransform(transform.position, transform.rotation);
     }
 
     private IEnumerator SetClosestPlayerStart()
@@ -59,7 +58,7 @@ public class EnemyControllerServer : NetworkBehaviour
             }
         }
         Dest =  tMin;
-        //RpcSendDest(Dest.name);
+        RpcSendDest(Dest.name);
     }
 
     public void SetClosestPlayer()
@@ -82,7 +81,7 @@ public class EnemyControllerServer : NetworkBehaviour
             }
         }
         Dest = tMin;
-        //RpcSendDest(Dest.name);
+        RpcSendDest(Dest.name);
         
     }
 
@@ -98,7 +97,7 @@ public class EnemyControllerServer : NetworkBehaviour
         }
     }
 
-    /*[ClientRpc]
+    [ClientRpc]
     void RpcSendDest(string destId)
     {
         if (!isServer)
@@ -107,16 +106,6 @@ public class EnemyControllerServer : NetworkBehaviour
             PlayerManager player = GameManager.GetPlayer(destId);
             if (player) enemyControllerClient.Dest = player.transform;
             else enemyControllerClient.Dest = null;
-        }
-    }*/
-
-    [ClientRpc]
-    void RpcSendTransform(Vector3 position, Quaternion rotation)
-    {
-        if (!isServer)
-        {
-            transform.position = position;
-            transform.rotation = rotation;
         }
     }
 }

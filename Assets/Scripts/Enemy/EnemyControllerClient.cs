@@ -5,12 +5,12 @@ using UnityEngine.AI;
 public class EnemyControllerClient : NetworkBehaviour
 {
 
-    public NavMeshAgent Agent { get; set; }
+    //public NavMeshAgent Agent { get; set; }
 
-    public Transform Dest { get; set; }
+    //public Transform Dest { get; set; }
 
     
-    public bool IsWalking { get; set; }
+    //public bool IsWalking { get; set; }
 
 
     // Start is called before the first frame update
@@ -19,15 +19,15 @@ public class EnemyControllerClient : NetworkBehaviour
         if (isServer) enabled = false;
         else
         {
-            Agent = GetComponent<NavMeshAgent>();
-            IsWalking = true;
+            //Agent = GetComponent<NavMeshAgent>();
+            //IsWalking = true;
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Dest != null && IsWalking) Agent.SetDestination(Dest.position);
+        //if (Dest != null && IsWalking) Agent.SetDestination(Dest.position);
     }
 
 
