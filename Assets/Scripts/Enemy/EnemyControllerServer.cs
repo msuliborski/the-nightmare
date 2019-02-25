@@ -99,6 +99,7 @@ public class EnemyControllerServer : NetworkBehaviour
     [ClientRpc]
     void RpcSendDest(Transform dest)
     {
+        
         if (!isServer)
         {
             EnemyControllerClient enemyControllerClient = GetComponent<EnemyControllerClient>();
