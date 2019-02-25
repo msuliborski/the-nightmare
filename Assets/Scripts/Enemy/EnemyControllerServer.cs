@@ -14,7 +14,7 @@ public class EnemyControllerServer : NetworkBehaviour
 
     public NavMeshAgent Agent { get; set; }
 
-    public Transform Dest { get; set; }
+    public Vector3 Dest { get; set; }
     
     private void Start()
     {
@@ -32,7 +32,7 @@ public class EnemyControllerServer : NetworkBehaviour
 
     private void Update()
     {
-        if (Dest != null && IsWalking) Agent.SetDestination(Dest.position);
+        if (Dest != null && IsWalking) Agent.SetDestination(Dest);
         else SetClosestPlayer();
     }
 
@@ -57,7 +57,7 @@ public class EnemyControllerServer : NetworkBehaviour
                 minDist = dist;
             }
         }
-        Dest =  tMin;
+        Dest =  tMin.position;
         RpcSendDest(Dest);
     }
 
@@ -80,7 +80,7 @@ public class EnemyControllerServer : NetworkBehaviour
                 minDist = dist;
             }
         }
-        Dest = tMin;
+        Dest = tMin.position;
         RpcSendDest(Dest);
     }
 
@@ -97,7 +97,7 @@ public class EnemyControllerServer : NetworkBehaviour
     }
 
     [ClientRpc]
-    void RpcSendDest(Transform dest)
+    void RpcSendDest(Vector3 dest)
     {
         
         if (!isServer)
