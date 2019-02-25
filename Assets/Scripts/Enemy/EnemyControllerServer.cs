@@ -58,7 +58,7 @@ public class EnemyControllerServer : NetworkBehaviour
             }
         }
         Dest =  tMin;
-        RpcSendDest();
+        RpcSendDest(Dest);
     }
 
     public void SetClosestPlayer()
@@ -81,7 +81,7 @@ public class EnemyControllerServer : NetworkBehaviour
             }
         }
         Dest = tMin;
-        RpcSendDest();
+        RpcSendDest(Dest);
     }
 
 
@@ -97,13 +97,12 @@ public class EnemyControllerServer : NetworkBehaviour
     }
 
     [ClientRpc]
-    void RpcSendDest()
+    void RpcSendDest(Transform dest)
     {
         if (!isServer)
         {
             EnemyControllerClient enemyControllerClient = GetComponent<EnemyControllerClient>();
-            enemyControllerClient.Dest = Dest;
-            Debug.Log("SETTING!!!");
+            enemyControllerClient.Dest = dest;
         }
     }
 }
