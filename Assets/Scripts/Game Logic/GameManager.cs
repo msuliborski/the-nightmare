@@ -92,6 +92,7 @@ public class GameManager : NetworkBehaviour
 
     public static PlayerManager GetPlayer(string playerId)
     {
+        if (!_players.ContainsKey(playerId)) return null;
         return _players[playerId];
     }
 
