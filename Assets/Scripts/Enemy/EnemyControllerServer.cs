@@ -15,7 +15,10 @@ public class EnemyControllerServer : NetworkBehaviour
     public NavMeshAgent Agent { get; set; }
 
     public Transform Dest { get; set; }
-    
+
+    [SyncVar] Vector3 pos;
+    [SyncVar] Quaternion rot;
+
     private void Start()
     {
         transform.name = ENEMY_ID_PREFIX + GameManager.EnemyIdCounter++;
@@ -27,14 +30,27 @@ public class EnemyControllerServer : NetworkBehaviour
             IsWalking = true;
             _currentHealth = _maxHealth;
         }
-        else enabled = false;
+        //else enabled = false;
     }
 
     private void Update()
     {
-        if (Dest != null && IsWalking) Agent.SetDestination(Dest.position);
-        else SetClosestPlayer();
-        RpcSendTransform(transform.position, transform.rotation);
+        
+        if (isServer)
+        {
+            if (Dest != null && IsWalking) Agent.SetDestination(Dest.position);
+            else SetClosestPlayer();
+            pos = transform.position;
+            rot = transform.rotation;
+        }
+        else
+        {
+            transform.position = pos;
+            transform.rotation = rot;
+        }
+        
+        
+        //RpcSendTransform(transform.position, transform.rotation);
     }
 
     private IEnumerator SetClosestPlayerStart()
