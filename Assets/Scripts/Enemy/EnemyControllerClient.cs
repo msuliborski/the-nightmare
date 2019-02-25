@@ -15,12 +15,12 @@ public class EnemyControllerClient : NetworkBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        if (isServer)
+        if (isServer) enabled = false;
+        else
         {
-            enabled = false;
+            Agent = GetComponent<NavMeshAgent>();
             IsWalking = true;
         }
-        else Agent = GetComponent<NavMeshAgent>();
     }
 
     // Update is called once per frame
