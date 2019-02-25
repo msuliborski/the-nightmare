@@ -20,6 +20,7 @@ public class EnemyControllerClient : NetworkBehaviour
             enabled = false;
             IsWalking = true;
         }
+        else Agent = GetComponent<NavMeshAgent>();
     }
 
     // Update is called once per frame
