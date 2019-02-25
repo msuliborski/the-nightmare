@@ -58,7 +58,8 @@ public class EnemyControllerServer : NetworkBehaviour
             }
         }
         Dest =  tMin;
-        RpcSendDest(Dest.position);
+        if (Dest) RpcSendDest(Dest.position);
+        else RpcSendDest(null);
     }
 
     public void SetClosestPlayer()
@@ -81,7 +82,8 @@ public class EnemyControllerServer : NetworkBehaviour
             }
         }
         Dest = tMin;
-        RpcSendDest(Dest.position);
+        if (Dest) RpcSendDest(Dest.position);
+        else RpcSendDest(null);
     }
 
 
@@ -97,7 +99,7 @@ public class EnemyControllerServer : NetworkBehaviour
     }
 
     [ClientRpc]
-    void RpcSendDest(Vector3 dest)
+    void RpcSendDest(Vector3? dest)
     {
         if (!isServer)
         {
