@@ -15,7 +15,11 @@ public class EnemyControllerClient : NetworkBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (isServer) enabled = false;
+        if (isServer)
+        {
+            enabled = false;
+            IsWalking = true;
+        }
     }
 
     // Update is called once per frame
