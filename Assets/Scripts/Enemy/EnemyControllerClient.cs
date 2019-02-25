@@ -13,7 +13,7 @@ public class EnemyControllerClient : NetworkBehaviour
 
 
     // Start is called before the first frame update
-    void Awake()
+    void Start()
     {
         if (isServer) enabled = false;
         else
