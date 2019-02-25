@@ -103,7 +103,7 @@ public class EnemyControllerServer : NetworkBehaviour
         {
             EnemyControllerClient enemyControllerClient = GetComponent<EnemyControllerClient>();
             enemyControllerClient.Dest = Dest;
-            
+            Debug.Log("SETTING!!!");
         }
     }
 }
