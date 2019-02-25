@@ -48,7 +48,7 @@ public class EnemyDamage : NetworkBehaviour
             _damageDest = null;
             _enemyController.Agent.enabled = true;
             _enemyController.IsWalking = true;
-            //RpcTurnOnWalking(true);
+            RpcTurnOnWalking(true);
         }
     }
 
@@ -57,11 +57,9 @@ public class EnemyDamage : NetworkBehaviour
     {
         if (!isServer)
         {
-            Debug.Log("setting!");
             EnemyControllerClient enemyControllerClient = GetComponent<EnemyControllerClient>();
             enemyControllerClient.Agent.enabled = isOn;
             enemyControllerClient.IsWalking = isOn;
-
         }
     }
 }
