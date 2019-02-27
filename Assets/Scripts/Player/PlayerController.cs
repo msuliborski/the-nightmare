@@ -13,38 +13,45 @@ public class PlayerController : NetworkBehaviour
 
     void Start()
     {
-        
         _motor = GetComponent<PlayerMotor>();
-        Cursor.lockState = CursorLockMode.Locked;
     }
 
 
     private void Update()
     {
-        float xMov = Input.GetAxisRaw("Horizontal");
-        float zMov = Input.GetAxisRaw("Vertical");
+        if (!PauseGame.menuActive)
+        {
+            float xMov = Input.GetAxisRaw("Horizontal");
+            float zMov = Input.GetAxisRaw("Vertical");
 
-        Vector3 moveHorizontal = transform.right * xMov;
-        Vector3 moveVertical = transform.forward * zMov;
+            Vector3 moveHorizontal = transform.right * xMov;
+            Vector3 moveVertical = transform.forward * zMov;
 
-        Vector3 velocity = (moveHorizontal + moveVertical).normalized * _speed;
+            Vector3 velocity = (moveHorizontal + moveVertical).normalized * _speed;
 
-        _motor.Move(velocity);
+            _motor.Move(velocity);
 
-        float yRot = Input.GetAxisRaw("Mouse X");
+            float yRot = Input.GetAxisRaw("Mouse X");
 
-        Vector3 rotation = new Vector3(0f, yRot, 0f) * _lookSensitivity;
+            Vector3 rotation = new Vector3(0f, yRot, 0f) * _lookSensitivity;
 
-        _motor.Rotate(rotation);
+            _motor.Rotate(rotation);
 
-        float xRot = Input.GetAxis("Mouse Y");
+            float xRot = Input.GetAxis("Mouse Y");
 
 
-        float cameraRotationX = xRot * _lookSensitivity;
+            float cameraRotationX = xRot * _lookSensitivity;
 
-        _motor.RotateCamera(cameraRotationX);
+            _motor.RotateCamera(cameraRotationX);
 
-        //float yRot = Input.GetAxisRaw("Mouse Y");
+            //float yRot = Input.GetAxisRaw("Mouse Y");
+            
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
+        }
     }
-
 }

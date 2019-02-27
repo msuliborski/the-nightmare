@@ -24,7 +24,7 @@ public class PlayerShoot : NetworkBehaviour
     {
         
         
-        if (Input.GetButtonDown("Fire1") && Equipment.Weapon.State == PlayerWeapon.WeaponState.idle)
+        if (Input.GetButtonDown("Fire1") && Equipment.Weapon.State == PlayerWeapon.WeaponState.idle && !PauseGame.menuActive)
             Shoot();
         
         //add reload
