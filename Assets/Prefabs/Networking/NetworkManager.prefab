@@ -277,6 +277,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_HostMigration: 1
-  m_ShowGUI: 1
+  m_ShowGUI: 0
   m_OffsetX: 10
   m_OffsetY: 300
