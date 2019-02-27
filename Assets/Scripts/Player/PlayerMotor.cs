@@ -12,6 +12,7 @@ public class PlayerMotor : NetworkBehaviour
     private Rigidbody _rb;
     private Animator _anim;
     [SerializeField] private float _cameraRotationLimit = 85f;
+    private float _recoilOffset = 0f;
     
     void Start()
     {
@@ -28,6 +29,7 @@ public class PlayerMotor : NetworkBehaviour
     {
         PerformMovement();
         PerformRotation();
+        decreaseRecoil();
     }
 
     private void PerformMovement()
@@ -53,12 +55,22 @@ public class PlayerMotor : NetworkBehaviour
             currentCameraRotationX -= _cameraRotationX;
             currentCameraRotationX = Mathf.Clamp(currentCameraRotationX, -_cameraRotationLimit, _cameraRotationLimit);
             
-            _cam.transform.localEulerAngles = new Vector3(currentCameraRotationX, 0f, 0f);
+            _cam.transform.localEulerAngles = new Vector3(currentCameraRotationX - _recoilOffset, 0f, 0f);
         }
     }
 
     public void RotateCamera(float cameraRotation)
     {
         _cameraRotationX = cameraRotation;
+    }
+
+    public void increaseRecoil(float weaponRecoil)
+    {
+        _recoilOffset += weaponRecoil - _recoilOffset*0.05f;
+    }
+    private void decreaseRecoil()
+    {
+        _recoilOffset -= _recoilOffset * 0.15f + 0.05f;
+        if (_recoilOffset < 0) _recoilOffset = 0;
     }
 }
