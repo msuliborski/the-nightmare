@@ -4993,12 +4993,18 @@ MonoBehaviour:
   _ammo: 49
   _maxAmmo: 49
   _range: 100
-  _fireRate: 0.8
+  _fireRate: 0.15
   _reloadTime: 1.1
   _accuracyFacor: 1
+  _recoil: 8
   _hitEffect: {fileID: 468241387988754173, guid: 8d919d20a2e27424aad97bd96d25d098,
     type: 3}
   _smoke: {fileID: 7640579246655775121, guid: 3990f0794274d4645896970959b59ed5, type: 3}
+  _state: 0
+  allowTriple: 1
+  allowContinous: 1
+  _defaultFireMode: 0
+  _fireMode: 0
 --- !u!82 &2047915764187048823
 AudioSource:
   m_ObjectHideFlags: 0

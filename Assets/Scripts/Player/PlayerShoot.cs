@@ -13,6 +13,7 @@ public class PlayerShoot : NetworkBehaviour
 
 
     [SerializeField] private LayerMask _mask;
+    private bool shootingDone = false;
     
     // Start is called before the first frame update
     void Start()
@@ -20,13 +21,35 @@ public class PlayerShoot : NetworkBehaviour
         if (Cam == null) enabled = false;
     }
 
+    IEnumerator TripleShot()
+    {
+        Shoot();
+        yield return new WaitForSeconds(Equipment.Weapon.FireRate*0.8f);
+        Shoot();
+        yield return new WaitForSeconds(Equipment.Weapon.FireRate*0.8f);
+        Shoot();
+        yield return new WaitForSeconds(Equipment.Weapon.FireRate*0.8f);
+    }
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.B)) Equipment.Weapon.changeFireMode();
         
-        
-        if (Input.GetButtonDown("Fire1") && Equipment.Weapon.State == PlayerWeapon.WeaponState.idle && !PauseGame.menuActive)
-            Shoot();
-        
+        if (Input.GetButton("Fire1") && Equipment.Weapon.State == PlayerWeapon.WeaponState.idle && !PauseGame.menuActive){
+            if (Equipment.Weapon.Mode == PlayerWeapon.FireMode.single && !shootingDone){
+                Shoot();
+                shootingDone = true;
+            } else if (Equipment.Weapon.Mode == PlayerWeapon.FireMode.triple && !shootingDone){
+                Equipment.Weapon.Recoil = Equipment.Weapon.Recoil / 2;
+                StartCoroutine(TripleShot());
+                Equipment.Weapon.Recoil = Equipment.Weapon.Recoil * 2;
+                shootingDone = true;
+            } else if (Equipment.Weapon.Mode == PlayerWeapon.FireMode.continous){
+                Shoot();
+            }
+            
+        }
+        if(Input.GetButtonUp("Fire1")) 
+            shootingDone = false;
         //add reload
     }
 
@@ -34,6 +57,7 @@ public class PlayerShoot : NetworkBehaviour
     {
         Equipment.PlayerShooting();
         Equipment.Weapon.shoot();
+        gameObject.GetComponent<PlayerMotor>().increaseRecoil(Equipment.Weapon.Recoil);
         //Cam.transform.localEulerAngles = new Vector3(Cam.transform.localEulerAngles.x + 2f, 0f, 0f);
         CmdPlayerShooting();
         RaycastHit hit;
