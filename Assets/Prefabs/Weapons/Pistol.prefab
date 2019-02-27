@@ -4921,7 +4921,7 @@ GameObject:
   - component: {fileID: 2047915764187048823}
   m_Layer: 0
   m_Name: Pistol
-  m_TagString: Untagged
+  m_TagString: Weapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4994,7 +4994,7 @@ MonoBehaviour:
   _maxAmmo: 49
   _range: 100
   _fireRate: 0.15
-  _reloadTime: 1.1
+  _reloadTime: 2
   _accuracyFacor: 1
   _recoil: 5
   _hitEffect: {fileID: 468241387988754173, guid: 8d919d20a2e27424aad97bd96d25d098,
