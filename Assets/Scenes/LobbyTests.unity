@@ -191,7 +191,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4174200850865802061}
+      - m_Target: {fileID: 993233417}
         m_MethodName: CreateRoom
         m_Mode: 1
         m_Arguments:
@@ -551,8 +551,9 @@ GameObject:
   m_Component:
   - component: {fileID: 993233416}
   - component: {fileID: 993233415}
+  - component: {fileID: 993233417}
   m_Layer: 0
-  m_Name: JoinGame
+  m_Name: LobbyHandler
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -588,6 +589,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &993233417
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 993233414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a34b9ea2d6e765c4eb5a962c325c29c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _roomSize: 4
 --- !u!1 &1056709502
 GameObject:
   m_ObjectHideFlags: 0
@@ -1750,7 +1764,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4174200850865802061}
+      - m_Target: {fileID: 993233417}
         m_MethodName: SetRoomName
         m_Mode: 0
         m_Arguments:
@@ -2544,6 +2558,11 @@ PrefabInstance:
       propertyPath: _sights
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 4174200850865802061, guid: 073947f950d4f2fd599365c522c0559e,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1390900699946870433, guid: 073947f950d4f2fd599365c522c0559e, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 073947f950d4f2fd599365c522c0559e, type: 3}
@@ -2554,7 +2573,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 2902817521022614287}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a34b9ea2d6e765c4eb5a962c325c29c2, type: 3}
   m_Name: 
