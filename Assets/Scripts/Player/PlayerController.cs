@@ -51,6 +51,9 @@ public class PlayerController : NetworkBehaviour
 
         else
         {
+            _motor.Move(Vector3.zero);
+            _motor.Rotate(Vector3.zero);
+            _motor.RotateCamera(0f);
             Cursor.lockState = CursorLockMode.None;
         }
     }

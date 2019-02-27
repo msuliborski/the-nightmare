@@ -674,8 +674,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6894b4ec83b90e641abea9e990861e23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _enemySpawnPoints: []
+  _enemyPrefab: {fileID: 0}
   _matchSettings:
     RespawnTime: 3
+    EnemyRespawnTime: 7
+    WaitForSpawn: 10
 --- !u!4 &945368585
 Transform:
   m_ObjectHideFlags: 0
@@ -1212,7 +1216,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 719d80fa6d5d36043b53d134d1955314, type: 2}
+  - {fileID: 2100000, guid: 297e3a11e7d07fc48b4f71056b4f927f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
