@@ -29,6 +29,6 @@ public class PauseGame : MonoBehaviour
     {
         MatchInfo info = _networkManager.matchInfo;
         _networkManager.matchMaker.DropConnection(info.networkId, info.nodeId, 0, _networkManager.OnDropConnection);
-        //_networkManager.StopHost();
+        _networkManager.StopHost();
     }
 }
