@@ -4996,7 +4996,7 @@ MonoBehaviour:
   _fireRate: 0.08
   _reloadTime: 1.1
   _accuracyFacor: 1
-  _recoil: 8
+  _recoil: 4
   _hitEffect: {fileID: 468241387988754173, guid: 8d919d20a2e27424aad97bd96d25d098,
     type: 3}
   _smoke: {fileID: 7640579246655775121, guid: 3990f0794274d4645896970959b59ed5, type: 3}

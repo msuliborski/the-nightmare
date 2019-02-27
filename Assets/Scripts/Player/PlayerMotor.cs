@@ -2,8 +2,7 @@
 using UnityEngine.Networking;
 
 [RequireComponent(typeof(Rigidbody))]
-public class PlayerMotor : NetworkBehaviour
-{
+public class PlayerMotor : NetworkBehaviour {
     [SerializeField] private Camera _cam;
     private Vector3 _velocity = Vector3.zero;
     private Vector3 _rotation = Vector3.zero;
@@ -13,64 +12,54 @@ public class PlayerMotor : NetworkBehaviour
     private Animator _anim;
     [SerializeField] private float _cameraRotationLimit = 85f;
     private float _recoilOffset = 0f;
-    
-    void Start()
-    {
+
+    void Start() {
         _anim = transform.GetChild(0).GetChild(0).GetComponent<Animator>();
         _rb = GetComponent<Rigidbody>();
     }
 
-    public void Move(Vector3 velocity)
-    {
+    public void Move(Vector3 velocity) {
         _velocity = velocity;
     }
 
-    void FixedUpdate()
-    {
+    void FixedUpdate() {
         PerformMovement();
         PerformRotation();
         decreaseRecoil();
     }
 
-    private void PerformMovement()
-    {
-        if (_velocity != Vector3.zero)
-        {
+    private void PerformMovement() {
+        if (_velocity != Vector3.zero) {
             _rb.MovePosition(_rb.position + _velocity * Time.fixedDeltaTime);
             _anim.SetBool("running", true);
         }
         else _anim.SetBool("running", false);
     }
 
-    public void Rotate(Vector3 rotation)
-    {
+    public void Rotate(Vector3 rotation) {
         _rotation = rotation;
     }
 
-    void PerformRotation()
-    {
+    void PerformRotation() {
         _rb.MoveRotation(_rb.rotation * Quaternion.Euler(_rotation));
-        if (_cam != null)
-        {
+        if (_cam != null) {
             currentCameraRotationX -= _cameraRotationX;
             currentCameraRotationX = Mathf.Clamp(currentCameraRotationX, -_cameraRotationLimit, _cameraRotationLimit);
-            
+
             _cam.transform.localEulerAngles = new Vector3(currentCameraRotationX - _recoilOffset, 0f, 0f);
         }
     }
 
-    public void RotateCamera(float cameraRotation)
-    {
+    public void RotateCamera(float cameraRotation) {
         _cameraRotationX = cameraRotation;
     }
 
-    public void increaseRecoil(float weaponRecoil)
-    {
-        _recoilOffset += weaponRecoil - _recoilOffset*0.05f;
+    public void increaseRecoil(float weaponRecoil) {
+        _recoilOffset += weaponRecoil - _recoilOffset * 0.05f;
     }
-    private void decreaseRecoil()
-    {
-        _recoilOffset -= _recoilOffset * 0.15f + 0.05f;
+
+    private void decreaseRecoil() {
+        _recoilOffset -= _recoilOffset * 0.1f + 0.02f;
         if (_recoilOffset < 0) _recoilOffset = 0;
     }
 }
