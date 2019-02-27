@@ -22,7 +22,7 @@ public class PlayerShoot : NetworkBehaviour {
 
     void Update() {
         if (Input.GetKeyDown(KeyCode.B)) Equipment.Weapon.changeFireMode();
-        if (Input.GetKeyDown(KeyCode.R)) Equipment.Weapon.reload();
+        if (Input.GetKeyDown(KeyCode.R) && Equipment.Weapon.CurrentMagAmmo != Equipment.Weapon.MaxMagAmmo) Equipment.Weapon.reload();
 
         if (Input.GetButton("Fire1") && Equipment.Weapon.State == PlayerWeapon.WeaponState.idle &&
             !PauseGame.menuActive && Equipment.Weapon.CurrentMagAmmo >= 1)  {
