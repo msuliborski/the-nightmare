@@ -10,6 +10,7 @@ public class PlacementController : MonoBehaviour
     private float _mouseWheelRotation;
     private float _x = 0, _y = 0, _reverseGrid;
     private GameObject _currentObject;
+    private Camera _camera;
 
     public GameObject CurrentObject
     {
@@ -20,6 +21,7 @@ public class PlacementController : MonoBehaviour
     private void Start()
     {
         _reverseGrid = 1f / _grid;
+        _camera = gameObject.transform.Find("Player Camera").GetComponent<Camera>();
     }
     
     private void Update()
@@ -52,28 +54,31 @@ public class PlacementController : MonoBehaviour
     {
         if (Input.GetMouseButton(0))
         {
-            _currentObject.transform.GetChild(0).GetComponent<BoxCollider>().enabled = true;
+            _currentObject.transform.GetComponent<BoxCollider>().enabled = true;
             _currentObject = null;
         }
     }
 
     void MoveToMouse()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-        RaycastHit hitInfo;
-        if (Physics.Raycast(ray, out hitInfo))
+        if (_currentObject != null)
         {
-            _x = Mathf.Round(hitInfo.point.x * _reverseGrid) / _reverseGrid;
-            _y = Mathf.Round(hitInfo.point.z * _reverseGrid) / _reverseGrid;
-            _currentObject.transform.position = new Vector3(_x, hitInfo.transform.position.y, _y);
-            //_currentObject.transform.rotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
+            Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
+
+            RaycastHit hitInfo;
+            if (Physics.Raycast(ray, out hitInfo))
+            {
+                _x = Mathf.Round(hitInfo.point.x * _reverseGrid) / _reverseGrid;
+                _y = Mathf.Round(hitInfo.point.z * _reverseGrid) / _reverseGrid;
+                _currentObject.transform.position = new Vector3(_x, hitInfo.transform.position.y, _y);
+                //_currentObject.transform.rotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
+            }
         }
     }
     
     void HandleKey()
     {
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
             if (_currentObject == null)
             {
