@@ -13,12 +13,11 @@ public class PlayerEquipment : NetworkBehaviour {
         if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out weaponFider, 10,
             _mask)) {
             if (weaponFider.collider.CompareTag("Weapon") && Input.GetKeyDown(KeyCode.E)) {
-                Debug.Log("cyyyk");
                 Weapon = weaponFider.collider.gameObject.GetComponent<GunSpawnPoint>().weapon.GetComponent<PlayerWeapon>();
                 Debug.Log(weaponFider.collider.gameObject.GetComponent<GunSpawnPoint>().weapon.GetComponent<PlayerWeapon>().Name);
                 
-                Destroy(_cam.transform.GetChild(0).gameObject);
-                GameObject weaponObject = Instantiate(weaponFider.collider.gameObject.GetComponent<GunSpawnPoint>().weapon.gameObject, _cam.transform);
+                Destroy(_cam.transform.GetChild(0).transform.GetChild(0).gameObject);
+                GameObject weaponObject = Instantiate(weaponFider.collider.gameObject.GetComponent<GunSpawnPoint>().weapon.gameObject, _cam.transform.GetChild(0).transform);
                 PlayerEquipment equipment = GetComponent<PlayerEquipment>();
                 equipment.Weapon = weaponObject.GetComponent<PlayerWeapon>();
                 equipment.WeaponSound = weaponObject.GetComponent<AudioSource>();
