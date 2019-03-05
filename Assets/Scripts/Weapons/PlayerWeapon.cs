@@ -2,7 +2,11 @@
 using UnityEngine.Networking;
 
 public class PlayerWeapon : NetworkBehaviour {
-    
+
+    [SerializeField] protected int _id;
+    public int Id { get { return _id; } set { _id = value; } }
+
+
     [SerializeField] protected string _name;
     public string Name {
         get { return _name; }
