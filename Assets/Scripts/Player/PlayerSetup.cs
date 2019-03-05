@@ -8,6 +8,7 @@ public class PlayerSetup : NetworkBehaviour
     [SerializeField] private Camera _sceneCamera;
     [SerializeField] private Camera _cam;
     [SerializeField] private GameObject _weaponObjectPrefab;
+    private PlayerEquipment _equipment;
     
     // Start is called before the first frame update
     void Start()
@@ -33,6 +34,8 @@ public class PlayerSetup : NetworkBehaviour
     void DisableWeaponCamera()
     {
         _cam.transform.GetChild(1).GetComponent<Camera>().enabled = false;
+        
+        _cam.transform.GetChild(0).GetChild(0).gameObject.layer = LayerMask.NameToLayer("LocalPlayer");
     }
 
     void EquipWeapon()
@@ -40,10 +43,10 @@ public class PlayerSetup : NetworkBehaviour
         GameObject weaponObject = Instantiate(_weaponObjectPrefab, _cam.transform.GetChild(0));
         PlayerShoot shoot = GetComponent<PlayerShoot>();
         shoot.Cam = _cam;
-        PlayerEquipment equipment = GetComponent<PlayerEquipment>();
-        equipment.Weapon = weaponObject.GetComponent<PlayerWeapon>();
-        equipment.WeaponSound = weaponObject.GetComponent<AudioSource>();
-        shoot.Equipment = equipment;
+        _equipment = GetComponent<PlayerEquipment>();
+        _equipment.Weapon = weaponObject.GetComponent<PlayerWeapon>();
+        _equipment.WeaponSound = weaponObject.GetComponent<AudioSource>();
+        shoot.Equipment = _equipment;
     }
 
     public override void OnStartClient()

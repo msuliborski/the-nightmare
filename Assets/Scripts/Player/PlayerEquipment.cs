@@ -49,6 +49,7 @@ public class PlayerEquipment : NetworkBehaviour {
             GameObject weaponObject = Instantiate(GameManager.Instance.Weapons[weaponId], _cam.transform.GetChild(0).transform);
             Weapon = weaponObject.GetComponent<PlayerWeapon>();
             WeaponSound = weaponObject.GetComponent<AudioSource>();
+            weaponObject.layer = LayerMask.NameToLayer("LocalPlayer");
         }
     }
 
