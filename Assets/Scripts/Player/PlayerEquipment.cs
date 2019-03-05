@@ -36,6 +36,18 @@ public class PlayerEquipment : NetworkBehaviour {
     }
 
 
+    [Command]
+    void CmdChangeWeapon()
+    {
+
+    }
+
+    [ClientRpc]
+    void RpcChangeWeapon()
+    {
+
+    }
+
     [ClientRpc]
     public void RpcPlayerShooting() {
         if (!isLocalPlayer) {
