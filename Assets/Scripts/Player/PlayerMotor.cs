@@ -25,7 +25,7 @@ public class PlayerMotor : NetworkBehaviour {
     void FixedUpdate() {
         PerformMovement();
         PerformRotation();
-        decreaseRecoil();
+        DecreaseRecoil();
     }
 
     private void PerformMovement() {
@@ -54,12 +54,12 @@ public class PlayerMotor : NetworkBehaviour {
         _cameraRotationX = cameraRotation;
     }
 
-    public void increaseRecoil(float weaponRecoil) {
+    public void IncreaseRecoil(float weaponRecoil) {
         _recoilOffset += weaponRecoil - _recoilOffset * 0.05f;
     }
 
-    private void decreaseRecoil() {
-        _recoilOffset -= _recoilOffset * 0.1f + 0.02f;
+    private void DecreaseRecoil() {
+        _recoilOffset -= _recoilOffset * 0.03f + 0.01f;
         if (_recoilOffset < 0) _recoilOffset = 0;
     }
 }

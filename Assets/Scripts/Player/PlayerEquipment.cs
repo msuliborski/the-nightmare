@@ -9,7 +9,7 @@ public class PlayerEquipment : NetworkBehaviour {
     [SerializeField] private LayerMask _mask;
 
     private void Update() {
-        RaycastHit weaponFider;
+       RaycastHit weaponFider;
         if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out weaponFider, 10,
             _mask)) {
             if (weaponFider.collider.CompareTag("Weapon") && Input.GetKeyDown(KeyCode.E)) {
