@@ -177,6 +177,7 @@ GameObject:
   - component: {fileID: 3654204675247675900}
   - component: {fileID: 4055598186277160339}
   - component: {fileID: 7881932200356267403}
+  - component: {fileID: 6736232146832934853}
   m_Layer: 9
   m_Name: ChildPlayer
   m_TagString: Untagged
@@ -354,6 +355,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74ccc6a7997c8c5b0aa470753a83b221, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Cross: {fileID: 0}
   _mask:
     serializedVersion: 2
     m_Bits: 1335
@@ -428,6 +430,21 @@ MonoBehaviour:
   param3: 
   param4: 
   param5: 
+--- !u!114 &6736232146832934853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2361017057787199711}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a3aa3e7abee9191ea817cb7cd85caee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _grid: 2.5
+  _placeableObject: {fileID: 3905061388165123986, guid: 64529fe2fad73d485b75f22ac03f1ff2,
+    type: 3}
 --- !u!135 &6077428425511275788
 SphereCollider:
   m_ObjectHideFlags: 0

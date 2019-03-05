@@ -47,7 +47,10 @@ public class EnemyDamage : NetworkBehaviour
 
             else if (other.CompareTag("Snares"))
             {
+                Debug.Log("Snares kurwa");
                 _enemyController.Agent.enabled = false;
+                _enemyController.IsWalking = false;
+                    RpcTurnOnWalking(false);
                 _snares = other.GetComponent<Snares>();
                 StartCoroutine(Freeze());
             }
@@ -79,6 +82,9 @@ public class EnemyDamage : NetworkBehaviour
     IEnumerator Freeze()
     {
         yield return new WaitForSeconds(_snares.freezeTime);
-        _enemyController.Agent.enabled = false;
+        _damageDest = null;
+        _enemyController.Agent.enabled = true;
+        _enemyController.IsWalking = true;
+        RpcTurnOnWalking(true);
     }
 }
