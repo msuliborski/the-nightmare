@@ -45,6 +45,7 @@ public class PlayerEquipment : NetworkBehaviour {
     {
         if (!isLocalPlayer)
         {
+            Destroy(_cam.transform.GetChild(0).transform.GetChild(0).gameObject);
             GameObject weaponObject = Instantiate(GameManager.Instance.Weapons[weaponId], _cam.transform.GetChild(0).transform);
             Weapon = weaponObject.GetComponent<PlayerWeapon>();
             WeaponSound = weaponObject.GetComponent<AudioSource>();
