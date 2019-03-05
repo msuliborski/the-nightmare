@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Networking;
 
 public class EnemyDamage : NetworkBehaviour
@@ -6,6 +8,7 @@ public class EnemyDamage : NetworkBehaviour
     private PlayerManager _damageDest;
     private EnemyControllerServer _enemyController;
     [SerializeField] private float _damage = 2f;
+    private Snares _snares;
 
     private void Start()
     {
@@ -32,12 +35,22 @@ public class EnemyDamage : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && enabled)
+        if (enabled)
         {
-            _damageDest = other.GetComponentInParent<PlayerManager>();
-            _enemyController.Agent.enabled = false;
-            _enemyController.IsWalking = false;
-            RpcTurnOnWalking(false);
+            if (other.CompareTag("Player"))
+            {
+                _damageDest = other.GetComponentInParent<PlayerManager>();
+                _enemyController.Agent.enabled = false;
+                _enemyController.IsWalking = false;
+                RpcTurnOnWalking(false);
+            }
+
+            else if (other.CompareTag("Snares"))
+            {
+                _enemyController.Agent.enabled = false;
+                _snares = other.GetComponent<Snares>();
+                StartCoroutine(Freeze());
+            }
         }
     }
 
@@ -61,5 +74,11 @@ public class EnemyDamage : NetworkBehaviour
             enemyControllerClient.Agent.enabled = isOn;
             enemyControllerClient.IsWalking = isOn;
         }
+    }
+
+    IEnumerator Freeze()
+    {
+        yield return new WaitForSeconds(_snares.freezeTime);
+        _enemyController.Agent.enabled = false;
     }
 }

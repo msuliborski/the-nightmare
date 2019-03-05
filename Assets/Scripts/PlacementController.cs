@@ -73,15 +73,17 @@ public class PlacementController : MonoBehaviour
     
     void HandleKey()
     {
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
             if (_currentObject == null)
             {
                 _currentObject = Instantiate(_placeableObject);
+                Cursor.lockState = CursorLockMode.None;
             }
             else
             {
                 Destroy(_currentObject);
+                Cursor.lockState = CursorLockMode.Locked;
             }
         }
     }

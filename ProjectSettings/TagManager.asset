@@ -11,6 +11,7 @@ TagManager:
   - EnemyBody
   - EnemyLegs
   - Weapon
+  - Snares
   layers:
   - Default
   - TransparentFX
