@@ -9,6 +9,8 @@ public class GameManager : NetworkBehaviour
     [SerializeField] private Transform[] _enemySpawnPoints;
     [SerializeField] private GameObject _enemyPrefab;
     [SerializeField] private MatchSettings _matchSettings;
+    [SerializeField] private GameObject[] _weapons;
+    public GameObject[] Weapons { get { return _weapons; } set { _weapons = value; } }
     private struct EnemyStruct
     {
         public GameObject Enemy;
