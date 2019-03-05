@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 9106332776127177791}
   - component: {fileID: 9106332776127177792}
   m_Layer: 0
-  m_Name: "Rifle\x13SpawnPoint"
+  m_Name: RifleSpawnPoint
   m_TagString: Weapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -104,4 +104,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bba65dba29c9cbbc3989b772413d6793, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weapon: {fileID: 7510527661228352801, guid: 71897cd304d2f36ca92d0abfebada4db, type: 3}
+  WeaponId: 1

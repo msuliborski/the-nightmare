@@ -9,18 +9,17 @@ public class PlayerEquipment : NetworkBehaviour {
     [SerializeField] private LayerMask _mask;
 
     private void Update() {
-       RaycastHit weaponFider;
-        if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out weaponFider, 10,
+       RaycastHit weaponFinder;
+        if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out weaponFinder, 10,
             _mask)) {
-            if (weaponFider.collider.CompareTag("Weapon") && Input.GetKeyDown(KeyCode.E)) {
-                Weapon = weaponFider.collider.gameObject.GetComponent<GunSpawnPoint>().weapon.GetComponent<PlayerWeapon>();
-                Debug.Log(weaponFider.collider.gameObject.GetComponent<GunSpawnPoint>().weapon.GetComponent<PlayerWeapon>().Name);
-                
+            if (weaponFinder.collider.CompareTag("Weapon") && Input.GetKeyDown(KeyCode.E))
+            {
                 Destroy(_cam.transform.GetChild(0).transform.GetChild(0).gameObject);
-                GameObject weaponObject = Instantiate(weaponFider.collider.gameObject.GetComponent<GunSpawnPoint>().weapon.gameObject, _cam.transform.GetChild(0).transform);
-                PlayerEquipment equipment = GetComponent<PlayerEquipment>();
-                equipment.Weapon = weaponObject.GetComponent<PlayerWeapon>();
-                equipment.WeaponSound = weaponObject.GetComponent<AudioSource>();
+                int weaponId = weaponFinder.collider.gameObject.GetComponent<GunSpawnPoint>().WeaponId;
+                GameObject weaponObject = Instantiate(GameManager.Instance.Weapons[weaponId], _cam.transform.GetChild(0).transform);
+                Weapon = weaponObject.GetComponent<PlayerWeapon>();
+                WeaponSound = weaponObject.GetComponent<AudioSource>();
+                CmdChangeWeapon(weaponId);
             }
         }
     }
@@ -36,15 +35,20 @@ public class PlayerEquipment : NetworkBehaviour {
 
 
     [Command]
-    void CmdChangeWeapon()
+    void CmdChangeWeapon(int weaponId)
     {
-
+        RpcChangeWeapon(weaponId);
     }
 
     [ClientRpc]
-    void RpcChangeWeapon()
+    void RpcChangeWeapon(int weaponId)
     {
-
+        if (!isLocalPlayer)
+        {
+            GameObject weaponObject = Instantiate(GameManager.Instance.Weapons[weaponId], _cam.transform.GetChild(0).transform);
+            Weapon = weaponObject.GetComponent<PlayerWeapon>();
+            WeaponSound = weaponObject.GetComponent<AudioSource>();
+        }
     }
 
     [ClientRpc]

@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 499796165}
   - component: {fileID: 499796167}
-  - component: {fileID: 499796166}
   m_Layer: 9
   m_Name: WeaponCamera
   m_TagString: Untagged
@@ -74,14 +73,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &499796166
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 499796164}
-  m_Enabled: 1
 --- !u!1 &456793943785517340
 GameObject:
   m_ObjectHideFlags: 0
@@ -640,14 +631,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4953134542706898467}
     m_Modifications:
-    - target: {fileID: 9500000, guid: 2cc7df5de8dd2514cb167f9cdc94fdfe, type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: fce18002c7402b946858dfeb944eb8c4, type: 2}
     - target: {fileID: 100004, guid: 2cc7df5de8dd2514cb167f9cdc94fdfe, type: 3}
       propertyPath: m_Name
       value: Ch1T-Pose
       objectReference: {fileID: 0}
+    - target: {fileID: 100006, guid: 2cc7df5de8dd2514cb167f9cdc94fdfe, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 100074, guid: 2cc7df5de8dd2514cb167f9cdc94fdfe, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 100094, guid: 2cc7df5de8dd2514cb167f9cdc94fdfe, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 9500000, guid: 2cc7df5de8dd2514cb167f9cdc94fdfe, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: fce18002c7402b946858dfeb944eb8c4, type: 2}
     - target: {fileID: 400004, guid: 2cc7df5de8dd2514cb167f9cdc94fdfe, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -704,18 +707,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 13
       objectReference: {fileID: 0}
-    - target: {fileID: 100006, guid: 2cc7df5de8dd2514cb167f9cdc94fdfe, type: 3}
-      propertyPath: m_TagString
-      value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 100074, guid: 2cc7df5de8dd2514cb167f9cdc94fdfe, type: 3}
-      propertyPath: m_TagString
-      value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 100094, guid: 2cc7df5de8dd2514cb167f9cdc94fdfe, type: 3}
-      propertyPath: m_TagString
-      value: Player
-      objectReference: {fileID: 0}
     - target: {fileID: 13700006, guid: 2cc7df5de8dd2514cb167f9cdc94fdfe, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -770,6 +761,12 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 63a2fa0f61dbccb40bf332e555f34c66, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2cc7df5de8dd2514cb167f9cdc94fdfe, type: 3}
+--- !u!1 &4611424498546739821 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100074, guid: 2cc7df5de8dd2514cb167f9cdc94fdfe,
+    type: 3}
+  m_PrefabInstance: {fileID: 4611424498546642055}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &4611424498546739833 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100094, guid: 2cc7df5de8dd2514cb167f9cdc94fdfe,
@@ -791,12 +788,6 @@ Animator:
 --- !u!4 &4611424498547037699 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400004, guid: 2cc7df5de8dd2514cb167f9cdc94fdfe,
-    type: 3}
-  m_PrefabInstance: {fileID: 4611424498546642055}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &4611424498546739821 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 100074, guid: 2cc7df5de8dd2514cb167f9cdc94fdfe,
     type: 3}
   m_PrefabInstance: {fileID: 4611424498546642055}
   m_PrefabAsset: {fileID: 0}
