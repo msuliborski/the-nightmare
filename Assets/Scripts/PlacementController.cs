@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class PlacementController : MonoBehaviour
+public class PlacementController : NetworkBehaviour
 {
     [SerializeField] private float _grid;
     [SerializeField] private GameObject _placeableObject;
@@ -54,11 +55,29 @@ public class PlacementController : MonoBehaviour
     {
         if (Input.GetMouseButton(0))
         {
+            CmdPlaceEntity(_currentObject.transform.position, _currentObject.transform.rotation);
             _currentObject.transform.GetComponent<BoxCollider>().enabled = true;
             _currentObject = null;
         }
     }
 
+    [Command]
+    void CmdPlaceEntity(Vector3 pos, Quaternion rot)
+    {
+        RpcPlaceEntity(pos, rot);
+    }
+
+    [ClientRpc]
+    void RpcPlaceEntity(Vector3 pos, Quaternion rot)
+    {
+        if (!isLocalPlayer)
+        {
+            GameObject temp = Instantiate(_placeableObject, pos, rot);
+            temp.GetComponent<BoxCollider>().enabled = true;
+        }
+    }
+    
+    
     void MoveToMouse()
     {
         if (_currentObject != null)
@@ -83,6 +102,7 @@ public class PlacementController : MonoBehaviour
             if (_currentObject == null)
             {
                 _currentObject = Instantiate(_placeableObject);
+                
             }
             else
             {
