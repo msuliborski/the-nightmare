@@ -62,6 +62,20 @@ public class GameManager : NetworkBehaviour
     }
 
 
+    public static void SetLayerRecursively(GameObject obj, string layerName)
+    {
+        if (obj == null) return;
+
+        obj.layer = LayerMask.NameToLayer(layerName);
+
+        foreach (Transform child in obj.transform)
+        {
+            if (child == null) continue;
+            SetLayerRecursively(child.gameObject, layerName);
+        }
+    }
+
+
     #endregion
 
 

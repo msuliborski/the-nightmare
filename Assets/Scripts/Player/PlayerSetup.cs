@@ -34,8 +34,8 @@ public class PlayerSetup : NetworkBehaviour
     void DisableWeaponCamera()
     {
         _cam.transform.GetChild(1).GetComponent<Camera>().enabled = false;
-        
-        _cam.transform.GetChild(0).GetChild(0).gameObject.layer = LayerMask.NameToLayer("LocalPlayer");
+
+        GameManager.SetLayerRecursively(_cam.transform.GetChild(0).GetChild(0).gameObject, "LocalPlayer");
     }
 
     void EquipWeapon()
