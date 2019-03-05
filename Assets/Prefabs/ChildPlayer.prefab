@@ -355,6 +355,7 @@ MonoBehaviour:
   - {fileID: 7278791426480694111}
   - {fileID: 3344707091803307947}
   - {fileID: 8791451780193772567}
+  - {fileID: 6736232146832934853}
   _sceneCamera: {fileID: 0}
   _cam: {fileID: 3344707091803307947}
   _weaponObjectPrefab: {fileID: 7510527661228352801, guid: 91374300b4e08480182055d3ebf4dd11,
