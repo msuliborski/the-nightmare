@@ -15,6 +15,9 @@ public class PlayerShoot : NetworkBehaviour {
     [SerializeField] private LayerMask _mask;
     private bool _shootingDone = false;
 
+
+    public Animator weaponAnimator;
+
     // Start is called before the first frame update
     void Start() {
         if (Cam == null) enabled = false;
@@ -23,16 +26,27 @@ public class PlayerShoot : NetworkBehaviour {
 
 
     void Update() {
+        //fire mode
         if (Input.GetKeyDown(KeyCode.B)) Equipment.Weapon.changeFireMode();
+
+        //reloading
         if (Input.GetKeyDown(KeyCode.R) && Equipment.Weapon.CurrentMagAmmo != Equipment.Weapon.MaxMagAmmo) Equipment.Weapon.reload();
 
+        //fireing
         if (Input.GetButton("Fire1") && Equipment.Weapon.State == PlayerWeapon.WeaponState.idle &&
             !PauseGame.menuActive && Equipment.Weapon.CurrentMagAmmo >= 1)  {
            Shoot();
         }
         if (Input.GetButtonUp("Fire1"))
             _shootingDone = false;
-        
+
+        //aiming
+        if (Input.GetButton("Fire2") && Equipment.Weapon.State == PlayerWeapon.WeaponState.idle &&
+    !PauseGame.menuActive)
+        {
+            //scope();
+        }
+
     }
 
     IEnumerator TripleShot() {

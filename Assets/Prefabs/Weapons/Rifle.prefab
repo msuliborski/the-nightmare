@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5720710225608519536}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Scaler
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 7604062452487673254}
   - component: {fileID: 584018228492180266}
   - component: {fileID: 6486309136336934344}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Barrel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -121,7 +121,7 @@ GameObject:
   - component: {fileID: 911495540112161972}
   - component: {fileID: 4612912541798376712}
   - component: {fileID: 507893900098692038}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: FlareMobile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4748,7 +4748,7 @@ GameObject:
   - component: {fileID: 2843690700132011276}
   - component: {fileID: 3923078177439213630}
   - component: {fileID: 7272986831980262858}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4782,7 +4782,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.23408796, y: 0.16, z: 1.0723275}
-  m_Center: {x: -0.042043976, y: 0, z: 0.25776738}
+  m_Center: {x: 0, y: 0, z: 0.25776738}
 --- !u!114 &3923078177439213630
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4841,7 +4841,7 @@ GameObject:
   - component: {fileID: 5535868301892289266}
   - component: {fileID: 3584791004158982212}
   - component: {fileID: 737224165483054047}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Grip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4919,7 +4919,7 @@ GameObject:
   - component: {fileID: 3471071838798417599}
   - component: {fileID: 2233095065396478130}
   - component: {fileID: 2047915764187048823}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Rifle
   m_TagString: Weapon
   m_Icon: {fileID: 0}
@@ -4934,7 +4934,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7510527661228352801}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.23, y: -0.12, z: 0.76}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 9196925190832244918}

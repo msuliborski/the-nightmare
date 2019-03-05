@@ -21,7 +21,7 @@ public class PlacementController : MonoBehaviour
     private void Start()
     {
         _reverseGrid = 1f / _grid;
-        _camera = gameObject.transform.Find("Player Camera").GetComponent<Camera>();
+        _camera = gameObject.transform.Find("PlayerCamera").GetComponent<Camera>();
     }
     
     private void Update()
