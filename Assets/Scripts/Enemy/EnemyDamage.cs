@@ -5,10 +5,10 @@ using UnityEngine.Networking;
 
 public class EnemyDamage : NetworkBehaviour
 {
-    private PlayerManager _damageDest;
+    public PlayerManager _damageDest;
     private EnemyControllerServer _enemyController;
     [SerializeField] private float _damage = 2f;
-    private Snares _snares;
+    
 
     private void Start()
     {
@@ -39,27 +39,18 @@ public class EnemyDamage : NetworkBehaviour
         {
             if (other.CompareTag("Player"))
             {
+                Debug.Log("collision with Player");
                 _damageDest = other.GetComponentInParent<PlayerManager>();
                 _enemyController.Agent.enabled = false;
                 _enemyController.IsWalking = false;
                 RpcTurnOnWalking(false);
-            }
-
-            else if (other.CompareTag("Snares"))
-            {
-                Debug.Log("Snares kurwa");
-                _enemyController.Agent.enabled = false;
-                _enemyController.IsWalking = false;
-                    RpcTurnOnWalking(false);
-                _snares = other.GetComponent<Snares>();
-                StartCoroutine(Freeze());
             }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player") && enabled)
+        if (other.gameObject.CompareTag("Player") && enabled)
         {
             _damageDest = null;
             _enemyController.Agent.enabled = true;
@@ -69,7 +60,7 @@ public class EnemyDamage : NetworkBehaviour
     }
 
     [ClientRpc]
-    void RpcTurnOnWalking(bool isOn)
+    public void RpcTurnOnWalking(bool isOn)
     {
         if (!isServer)
         {
@@ -79,12 +70,5 @@ public class EnemyDamage : NetworkBehaviour
         }
     }
 
-    IEnumerator Freeze()
-    {
-        yield return new WaitForSeconds(_snares.freezeTime);
-        _damageDest = null;
-        _enemyController.Agent.enabled = true;
-        _enemyController.IsWalking = true;
-        RpcTurnOnWalking(true);
-    }
+    
 }
