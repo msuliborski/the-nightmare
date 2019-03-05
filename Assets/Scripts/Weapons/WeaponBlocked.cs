@@ -28,6 +28,7 @@ public class WeaponBlocked : NetworkBehaviour
                     _shoot.enabled = true;
                 }
                 _gun.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
+                Debug.Log("chuj");
                 //_gun.transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, _initPosZ);
             }
         }
@@ -45,11 +46,11 @@ public class WeaponBlocked : NetworkBehaviour
         _initPosZ = transform.localPosition.z;
         _player = transform.GetComponentInParent<PlayerManager>();
         _gun = transform.GetChild(0);
-        
+        Debug.Log("START!");
         if (_player.isLocalPlayer)
-        { 
-            _cross = GameObject.Find("cross");
+        {
             _shoot = transform.GetComponentInParent<PlayerShoot>();
+            _cross = _shoot.Cross;
         }
     }
 

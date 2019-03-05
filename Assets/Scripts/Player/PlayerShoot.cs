@@ -10,13 +10,15 @@ public class PlayerShoot : NetworkBehaviour {
 
     public PlayerEquipment Equipment { get; set; }
 
+    public GameObject Cross;
 
     [SerializeField] private LayerMask _mask;
-    private bool shootingDone = false;
+    private bool _shootingDone = false;
 
     // Start is called before the first frame update
     void Start() {
         if (Cam == null) enabled = false;
+        else Cross = GameObject.Find("cross");
     }
 
 
@@ -26,10 +28,10 @@ public class PlayerShoot : NetworkBehaviour {
 
         if (Input.GetButton("Fire1") && Equipment.Weapon.State == PlayerWeapon.WeaponState.idle &&
             !PauseGame.menuActive && Equipment.Weapon.CurrentMagAmmo >= 1)  {
-           shoot();
+           Shoot();
         }
         if (Input.GetButtonUp("Fire1"))
-            shootingDone = false;
+            _shootingDone = false;
         
     }
 
@@ -42,17 +44,17 @@ public class PlayerShoot : NetworkBehaviour {
         yield return new WaitForSeconds(Equipment.Weapon.FireRate * 0.8f);
     }
 
-    void shoot() {
+    void Shoot() {
        
-        if (Equipment.Weapon.Mode == PlayerWeapon.FireMode.single && !shootingDone) {
+        if (Equipment.Weapon.Mode == PlayerWeapon.FireMode.single && !_shootingDone) {
             PerformWeaponFire();
-            shootingDone = true;
+            _shootingDone = true;
         }
-        else if (Equipment.Weapon.Mode == PlayerWeapon.FireMode.triple && !shootingDone) {
+        else if (Equipment.Weapon.Mode == PlayerWeapon.FireMode.triple && !_shootingDone) {
             Equipment.Weapon.Recoil = Equipment.Weapon.Recoil / 2;
             StartCoroutine(TripleShot());
             Equipment.Weapon.Recoil = Equipment.Weapon.Recoil * 2;
-            shootingDone = true;
+            _shootingDone = true;
         }
         else if (Equipment.Weapon.Mode == PlayerWeapon.FireMode.continous) {
             PerformWeaponFire();
@@ -66,7 +68,7 @@ public class PlayerShoot : NetworkBehaviour {
         if (Equipment.Weapon.CurrentMagAmmo >= 1) {
             Equipment.PlayerShooting();
             Equipment.Weapon.shoot();
-            gameObject.GetComponent<PlayerMotor>().increaseRecoil(Equipment.Weapon.Recoil);
+            gameObject.GetComponent<PlayerMotor>().IncreaseRecoil(Equipment.Weapon.Recoil);
             CmdPlayerShooting();
             RaycastHit hit;
             if (Physics.Raycast(Cam.transform.position, Cam.transform.forward, out hit, Equipment.Weapon.Range,

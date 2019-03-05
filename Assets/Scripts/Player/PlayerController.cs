@@ -8,6 +8,8 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] private float _lookSensitivity = 3f;
     
     private PlayerMotor _motor;
+
+    
     
     
 
