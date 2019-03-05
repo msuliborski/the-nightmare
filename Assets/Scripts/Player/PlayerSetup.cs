@@ -18,6 +18,7 @@ public class PlayerSetup : NetworkBehaviour
         {
             DisableComponents();
             AssignRemoteLayer();
+            DisableWeaponCamera();
         }
         else
         {
@@ -29,9 +30,14 @@ public class PlayerSetup : NetworkBehaviour
         GetComponent<PlayerManager>().Setup();
     }
 
+    void DisableWeaponCamera()
+    {
+        _cam.transform.GetChild(1).GetComponent<Camera>().enabled = false;
+    }
+
     void EquipWeapon()
     {
-        GameObject weaponObject = Instantiate(_weaponObjectPrefab, _cam.transform.GetChild(0).transform);
+        GameObject weaponObject = Instantiate(_weaponObjectPrefab, _cam.transform.GetChild(0));
         PlayerShoot shoot = GetComponent<PlayerShoot>();
         shoot.Cam = _cam;
         PlayerEquipment equipment = GetComponent<PlayerEquipment>();
