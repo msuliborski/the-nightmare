@@ -19,9 +19,10 @@ public class EnemyControllerServer : NetworkBehaviour
     private void Start()
     {
         transform.name = ENEMY_ID_PREFIX + GameManager.EnemyIdCounter++;
+        if (!GameManager.Enemies.ContainsKey(transform.name)) GameManager.Enemies.Add(transform.name, this);
         if (isServer)
         {
-            if (!GameManager.Enemies.ContainsKey(transform.name)) GameManager.Enemies.Add(transform.name, this);
+           
             Agent = GetComponent<NavMeshAgent>();
             StartCoroutine(SetClosestPlayerStart());
             IsWalking = true;
@@ -32,7 +33,7 @@ public class EnemyControllerServer : NetworkBehaviour
 
     private void Update()
     {
-        if (Dest != null && IsWalking) Agent.SetDestination(Dest.position);
+        if (Dest != null && Dest.gameObject.activeSelf && IsWalking) Agent.SetDestination(Dest.position);
         else SetClosestPlayer();
     }
 

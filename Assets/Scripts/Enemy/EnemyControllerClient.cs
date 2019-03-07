@@ -27,7 +27,7 @@ public class EnemyControllerClient : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Dest != null && IsWalking) Agent.SetDestination(Dest.position);
+        if (Dest != null && Dest.gameObject.activeSelf && IsWalking) Agent.SetDestination(Dest.position);
     }
 
 

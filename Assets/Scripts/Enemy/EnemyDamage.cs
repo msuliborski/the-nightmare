@@ -22,7 +22,7 @@ public class EnemyDamage : NetworkBehaviour
         if (_damageDest != null)
         {
             _damageDest.RpcTakeDamage(Time.deltaTime * _damage);
-            if (_damageDest.IsDead)
+            if (_damageDest.IsDead || !_damageDest.gameObject.activeSelf)
             {
                 _damageDest = null;
                 _enemyController.Agent.enabled = true;

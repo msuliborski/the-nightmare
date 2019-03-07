@@ -140,7 +140,7 @@ GameObject:
   - component: {fileID: 1250475252818553949}
   - component: {fileID: 3041406342502215934}
   - component: {fileID: 132920175}
-  - component: {fileID: 5443145543136264431}
+  - component: {fileID: 5066969031249784106}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -192,7 +192,8 @@ MonoBehaviour:
   m_PlayerSpawnMethod: 1
   m_OfflineScene: LobbyTests
   m_OnlineScene: fpsTest2
-  m_SpawnPrefabs: []
+  m_SpawnPrefabs:
+  - {fileID: 6513423205020058902, guid: 53776c2a44fce1c488312695240e7217, type: 3}
   m_CustomConfig: 0
   m_MaxConnections: 4
   m_ConnectionConfig:
@@ -255,7 +256,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 210125983785559080}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 227461547, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
   m_Name: 
@@ -264,7 +265,7 @@ MonoBehaviour:
   showGUI: 1
   offsetX: 0
   offsetY: 0
---- !u!114 &5443145543136264431
+--- !u!114 &5066969031249784106
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -273,7 +274,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 210125983785559080}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1180575928, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Script: {fileID: 11500000, guid: f000284a7bee25b41b9e428cf34c4467, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_HostMigration: 1

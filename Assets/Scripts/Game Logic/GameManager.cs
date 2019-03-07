@@ -79,7 +79,7 @@ public class GameManager : NetworkBehaviour
     #endregion
 
 
-    #region PlayerTracking
+    #region PlayerAndEnemies
 
     private const string PLAYER_ID_PREFIX = "Player ";
 
