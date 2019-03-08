@@ -9,7 +9,7 @@ public class PlayerSetup : NetworkBehaviour
     [SerializeField] private Camera _cam;
     [SerializeField] private GameObject _weaponObjectPrefab;
     private PlayerEquipment _equipment;
-    
+     
     // Start is called before the first frame update
     void Start()
     {
@@ -23,13 +23,14 @@ public class PlayerSetup : NetworkBehaviour
         }
         else
         {
+            GameManager.LocalPlayer = GetComponent<PlayerManager>();
            _sceneCamera = Camera.main;
            if (_sceneCamera != null)
                 _sceneCamera.gameObject.SetActive(false);
         }
-
         GetComponent<PlayerManager>().Setup();
     }
+
 
     void DisableWeaponCamera()
     {
@@ -73,4 +74,15 @@ public class PlayerSetup : NetworkBehaviour
 
         GameManager.UnregisterPlayer(transform.name);
     }
+
+    [ClientRpc]
+    void RpcTurnOffCameras()
+    {
+        if (_sceneCamera != null)
+            _sceneCamera.gameObject.SetActive(false);
+        
+    }
+
 }
+
+

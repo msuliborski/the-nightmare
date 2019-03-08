@@ -20,15 +20,14 @@ public class EnemyControllerServer : NetworkBehaviour
     {
         transform.name = ENEMY_ID_PREFIX + GameManager.EnemyIdCounter++;
         if (!GameManager.Enemies.ContainsKey(transform.name)) GameManager.Enemies.Add(transform.name, this);
-        if (isServer)
+        if (!isServer) enabled = false;
+        else
         {
-           
-            Agent = GetComponent<NavMeshAgent>();
             StartCoroutine(SetClosestPlayerStart());
             IsWalking = true;
             _currentHealth = _maxHealth;
         }
-        else enabled = false;
+        Agent = GetComponent<NavMeshAgent>();
     }
 
     private void Update()

@@ -83,6 +83,7 @@ public class GameManager : NetworkBehaviour
 
     private const string PLAYER_ID_PREFIX = "Player ";
 
+    public static PlayerManager LocalPlayer { get; set; }
     private static Dictionary<string, PlayerManager> _players = new Dictionary<string, PlayerManager>();
     private static Dictionary<string, PlayerManager> _activePlayers = new Dictionary<string, PlayerManager>();
     public static Dictionary<string, PlayerManager> Players { get { return _players; } }

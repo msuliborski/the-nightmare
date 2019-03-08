@@ -12,9 +12,9 @@ public class EnemyDamage : NetworkBehaviour
 
     private void Start()
     {
+        _enemyController = GetComponent<EnemyControllerServer>();
         if (!isServer) enabled = false;
-        else _enemyController = GetComponent<EnemyControllerServer>();
-    }
+    }   
 
     // Update is called once per frame
     void Update()
