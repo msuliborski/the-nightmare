@@ -48,7 +48,7 @@ public class PlayerController : NetworkBehaviour
 
             //float yRot = Input.GetAxisRaw("Mouse Y");
             
-            Cursor.lockState = CursorLockMode.Locked;
+            //Cursor.lockState = CursorLockMode.Locked;
         }
 
         else
@@ -56,7 +56,7 @@ public class PlayerController : NetworkBehaviour
             _motor.Move(Vector3.zero);
             _motor.Rotate(Vector3.zero);
             _motor.RotateCamera(0f);
-            Cursor.lockState = CursorLockMode.None;
+            //Cursor.lockState = CursorLockMode.None;
         }
     }
 }

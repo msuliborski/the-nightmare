@@ -93,10 +93,17 @@ public class EnemyControllerServer : NetworkBehaviour
 
         if (_currentHealth <= 0)
         {
-            GameManager.Enemies.Remove(transform.name);
+            RpcRemoveEnemy();
             Destroy(gameObject);
         }
     }
+
+    [ClientRpc]
+    void RpcRemoveEnemy()
+    {
+        GameManager.Enemies.Remove(transform.name);
+    }
+
 
     [ClientRpc]
     void RpcSendDest(string destId)
