@@ -128,6 +128,13 @@ public class GameManager : NetworkBehaviour
         _activePlayers.Add(playerId, player);
     }
 
+    //[ClientRpc]
+    //void RpcTurnOffCameras()
+    //{
+    //   LocalPlayer.GetComponent<PlayerSetup>().D
+
+    //}
+
     /*void OnGUI()
     {
         GUILayout.BeginArea(new Rect(200, 200, 200, 500));

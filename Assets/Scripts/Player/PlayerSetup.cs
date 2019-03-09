@@ -23,7 +23,7 @@ public class PlayerSetup : NetworkBehaviour
         }
         else
         {
-            GameManager.LocalPlayer = GetComponent<PlayerManager>();
+           GameManager.LocalPlayer = GetComponent<PlayerManager>();
            _sceneCamera = Camera.main;
            if (_sceneCamera != null)
                 _sceneCamera.gameObject.SetActive(false);
@@ -75,14 +75,19 @@ public class PlayerSetup : NetworkBehaviour
         GameManager.UnregisterPlayer(transform.name);
     }
 
-    [ClientRpc]
-    void RpcTurnOffCameras()
+    private void OnEnable()
     {
         if (_sceneCamera != null)
-            _sceneCamera.gameObject.SetActive(false);
-        
+            _sceneCamera.gameObject.SetActive(true);
+
+        GameManager.RegisterPlayer(GetComponent<NetworkIdentity>().netId.ToString(), GetComponent<PlayerManager>());
     }
 
+    //public void DeactivateCamera()
+    //{
+    //    if (_sceneCamera != null)
+    //        _sceneCamera.gameObject.SetActive(false);
+    //}
 }
 
 

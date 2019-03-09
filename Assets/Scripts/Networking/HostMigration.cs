@@ -10,7 +10,6 @@ public class HostMigration : NetworkMigrationManager
         bool isHost = base.FindNewHost(out newHostInfo, out youAreNewHost);
         if (isHost)
         {
-
             Debug.Log("KURWAA!");
             foreach (EnemyControllerServer enemy in GameManager.Enemies.Values)
             {
