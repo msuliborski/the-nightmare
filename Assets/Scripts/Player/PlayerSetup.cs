@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
+using System.Collections.Generic;
+using System.Collections;
 
 [RequireComponent(typeof(PlayerManager))]
 public class PlayerSetup : NetworkBehaviour
@@ -9,6 +11,7 @@ public class PlayerSetup : NetworkBehaviour
     [SerializeField] private Camera _cam;
     [SerializeField] private GameObject _weaponObjectPrefab;
     private PlayerEquipment _equipment;
+    private bool _initialConf = true;
      
     // Start is called before the first frame update
     void Start()
@@ -21,7 +24,14 @@ public class PlayerSetup : NetworkBehaviour
             AssignRemoteLayer();
             DisableWeaponCamera();
         }
-        else GameManager.LocalPlayer = GetComponent<PlayerManager>();
+        else
+        {
+            GameManager.LocalPlayer = GetComponent<PlayerManager>();
+            _sceneCamera = Camera.main;
+            if (_sceneCamera != null)
+                _sceneCamera.gameObject.SetActive(false);
+            
+        }
         GetComponent<PlayerManager>().Setup();
     }
 
@@ -48,12 +58,6 @@ public class PlayerSetup : NetworkBehaviour
     {
         base.OnStartClient();
         GameManager.RegisterPlayer(GetComponent<NetworkIdentity>().netId.ToString(), GetComponent<PlayerManager>());
-        _sceneCamera = Camera.main;
-        if (isLocalPlayer)
-        {
-            if (_sceneCamera != null)
-                _sceneCamera.gameObject.SetActive(false);
-        }
     }
 
     private void AssignRemoteLayer()
@@ -69,27 +73,22 @@ public class PlayerSetup : NetworkBehaviour
 
     private void OnDisable()
     {
-        //if (_sceneCamera != null)
-        //    _sceneCamera.gameObject.SetActive(true);
-
+        if (isLocalPlayer)
+        {
+            if (_sceneCamera != null)
+                _sceneCamera.gameObject.SetActive(true);
+        }
         GameManager.UnregisterPlayer(transform.name);
     }
 
     private void OnEnable()
     {
-        //if (_sceneCamera != null)
-        //    _sceneCamera.gameObject.SetActive(false);
-
-        //Debug.Lo
-
-        //if (!GameManager.Players.ContainsValue(GetComponent<PlayerManager>())) GameManager.RegisterPlayer(GetComponent<NetworkIdentity>().netId.ToString(), GetComponent<PlayerManager>());
+        if (isLocalPlayer)
+        {
+            if (_sceneCamera != null)
+                _sceneCamera.gameObject.SetActive(false);
+        }
     }
-
-    //public void DeactivateCamera()
-    //{
-    //    if (_sceneCamera != null)
-    //        _sceneCamera.gameObject.SetActive(false);
-    //}
 }
 
 
