@@ -77,10 +77,10 @@ public class PlayerSetup : NetworkBehaviour
 
     private void OnEnable()
     {
-        //if (_sceneCamera != null)
-         //   _sceneCamera.gameObject.SetActive(true);
+        if (_sceneCamera != null)
+            _sceneCamera.gameObject.SetActive(true);
 
-        //if (!GameManager.Players.ContainsKey(transform.name)) GameManager.RegisterPlayer(GetComponent<NetworkIdentity>().netId.ToString(), GetComponent<PlayerManager>());
+        if (!GameManager.Players.ContainsValue(GetComponent<PlayerManager>())) GameManager.RegisterPlayer(GetComponent<NetworkIdentity>().netId.ToString(), GetComponent<PlayerManager>());
     }
 
     //public void DeactivateCamera()
