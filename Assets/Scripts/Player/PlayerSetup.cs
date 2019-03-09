@@ -21,13 +21,7 @@ public class PlayerSetup : NetworkBehaviour
             AssignRemoteLayer();
             DisableWeaponCamera();
         }
-        else
-        {
-           GameManager.LocalPlayer = GetComponent<PlayerManager>();
-           _sceneCamera = Camera.main;
-           if (_sceneCamera != null)
-                _sceneCamera.gameObject.SetActive(false);
-        }
+        else GameManager.LocalPlayer = GetComponent<PlayerManager>();
         GetComponent<PlayerManager>().Setup();
     }
 
@@ -54,6 +48,12 @@ public class PlayerSetup : NetworkBehaviour
     {
         base.OnStartClient();
         GameManager.RegisterPlayer(GetComponent<NetworkIdentity>().netId.ToString(), GetComponent<PlayerManager>());
+        _sceneCamera = Camera.main;
+        if (isLocalPlayer)
+        {
+            if (_sceneCamera != null)
+                _sceneCamera.gameObject.SetActive(false);
+        }
     }
 
     private void AssignRemoteLayer()
@@ -78,7 +78,7 @@ public class PlayerSetup : NetworkBehaviour
     private void OnEnable()
     {
         //if (_sceneCamera != null)
-        //    _sceneCamera.gameObject.SetActive(true);
+        //    _sceneCamera.gameObject.SetActive(false);
 
         //Debug.Lo
 
