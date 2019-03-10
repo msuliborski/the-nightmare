@@ -16,6 +16,16 @@ public class PlayerManager : NetworkBehaviour
     private bool[] _wasEnabled;
 
 
+    public void SetBuildingMode()
+    {
+        
+    }
+
+    public void SetActionMode()
+    {
+
+    }
+
     public void Setup()
     {
         _wasEnabled = new bool[_disableOnDeath.Length];

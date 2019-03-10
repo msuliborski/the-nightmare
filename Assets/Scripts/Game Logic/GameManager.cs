@@ -5,11 +5,32 @@ using System.Collections.Generic;
 
 public class GameManager : NetworkBehaviour
 {
+
     public static GameManager Instance;
     [SerializeField] private Transform[] _enemySpawnPoints;
     [SerializeField] private GameObject _enemyPrefab;
     [SerializeField] private MatchSettings _matchSettings;
     [SerializeField] private GameObject[] _weapons;
+    [SerializeField] private int _waves;
+    [SerializeField] private int _enemiesAmount;
+    private int _enemiesCounter;
+    public enum GameState { Building, Fighting }
+    private static GameState _currentState = GameState.Building;
+    public static GameState CurrentState
+    {
+        get { return _currentState; }
+        set
+        {
+            foreach (PlayerManager player in _players.Values)
+            {
+                if (value == GameState.Building)
+                    player.SetBuildingMode();
+                else if (value == GameState.Fighting)
+                    player.SetActionMode();
+            }
+        }
+    }
+    public static bool[] ReadyPlayers;            
     public GameObject[] Weapons { get { return _weapons; } set { _weapons = value; } }
     private struct EnemyStruct
     {

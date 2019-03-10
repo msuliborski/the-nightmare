@@ -1,0 +1,8 @@
+1) 1-4 graczy w teamie
+2) podzial na faze fal i faze rozbudowy na siatce w stylu tower defense
+3) zdobywanie nowych pokoi - lepsze bronie odblokowane i produkcja ammo do nich, wiecej punktow do wyniku i wiekszy grid do budowy, ale mocniejsze mobki i wiekszy obszar do obrony
+4) aby zdobyc nowy pokoj trzeba oczyscic go z mobkow i 
+5) przegrana = utrata obszaru bazowego, mozna go przenosic, ale to fhuj drogie
+6) obszar bazowy to spawn point, smierc = utrata jakiejs ilosci punktow
+7) zajecie obszaru = zapalenie swieczek, utrata = mobki gasza swieczki
+8) pokoje i strefy gdzie spawnia sie mobki oznaczone w fazie planowania znaczikiem z czacha tak zeby wykorzystujac bdynki, pulapki i uksztalowanie terenu zaplanowac obrone
