@@ -13,7 +13,8 @@ public class GameManager : NetworkBehaviour
     [SerializeField] private GameObject[] _weapons;
     [SerializeField] private int _waves;
     [SerializeField] private int _enemiesAmount;
-    private int _enemiesCounter;
+    private static int _enemiesCounter = 0;
+    private static int _spawnedEnemiesCounter = 0;
     public enum GameState { Building, Fighting }
     private static GameState _currentState = GameState.Building;
     public static GameState CurrentState
@@ -46,7 +47,7 @@ public class GameManager : NetworkBehaviour
         _matchSettings.WaitForSpawn -= _matchSettings.EnemyRespawnTime;
         if (Instance != null) Debug.LogError("More than one GameManager in scene!");
         else Instance = this;
-       if (isServer) StartCoroutine(WaitForSpawn());
+       //if (isServer) StartCoroutine(WaitForSpawn());
     }
 
     #region EnemySpawning
@@ -66,11 +67,11 @@ public class GameManager : NetworkBehaviour
     //}
 
 
-    private IEnumerator WaitForSpawn()
-    {
-        yield return new WaitForSeconds(_matchSettings.WaitForSpawn);
-        StartCoroutine(SpawnEnemy());
-    }
+    //private IEnumerator WaitForSpawn()
+    //{
+    //    yield return new WaitForSeconds(_matchSettings.WaitForSpawn);
+    //    StartCoroutine(SpawnEnemy());
+    //}
 
     private IEnumerator SpawnEnemy()
     {
@@ -79,6 +80,8 @@ public class GameManager : NetworkBehaviour
         //CmdSpawnEnemy(randIndex);
         
         NetworkServer.Spawn(Instantiate(_enemyPrefab, _enemySpawnPoints[randIndex]));
+        _enemiesCounter++;
+        _spawnedEnemiesCounter++;
         StartCoroutine(SpawnEnemy());
     }
 

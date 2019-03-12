@@ -18,12 +18,18 @@ public class PlayerManager : NetworkBehaviour
 
     public void SetBuildingMode()
     {
-        
+        for (int i = 0; i < 3; i++) transform.GetChild(i).gameObject.SetActive(false);
+        transform.GetChild(3).gameObject.SetActive(true);
+        for (int i = 0; i < _disableOnDeath.Length; i++)
+            _disableOnDeath[i].enabled = !_wasEnabled[i];
     }
 
     public void SetActionMode()
     {
-
+        for (int i = 0; i < 3; i++) transform.GetChild(i).gameObject.SetActive(true);
+        transform.GetChild(3).gameObject.SetActive(false);
+        for (int i = 0; i < _disableOnDeath.Length; i++)
+            _disableOnDeath[i].enabled = _wasEnabled[i];
     }
 
     public void Setup()
@@ -34,6 +40,7 @@ public class PlayerManager : NetworkBehaviour
 
        _currentHealth = _maxHealth;
 
+        SetBuildingMode();
     }
 
     public void SetDefaults()
