@@ -29,7 +29,7 @@ real-time creation platform
 * **Michał Kuśmidrowicz** - [ninjarlz](https://github.com/ninjarlz)
 * **Antoni Forzpańczyk** - [antek2137](https://github.com/antek2137)
 * **Olga Kardas** - [OlgaKar](https://github.com/OlgaKar)
-* **Adam Sabela**
+* **Adam Sabela** - [Drazzi0](https://github.com/Drazzi0)
 
 ## License
 
