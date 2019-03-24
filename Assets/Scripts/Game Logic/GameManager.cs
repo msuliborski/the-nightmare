@@ -16,7 +16,8 @@ public class GameManager : NetworkBehaviour
     private static int _enemiesCounter = 0;
     private static int _spawnedEnemiesCounter = 0;
     public enum GameState { Building, Fighting }
-    private static GameState _currentState = GameState.Building;
+    //private static GameState _currentState = GameState.Building;
+    private static GameState _currentState = GameState.Fighting;
     public static GameState CurrentState
     {
         get { return _currentState; }
@@ -47,31 +48,31 @@ public class GameManager : NetworkBehaviour
         _matchSettings.WaitForSpawn -= _matchSettings.EnemyRespawnTime;
         if (Instance != null) Debug.LogError("More than one GameManager in scene!");
         else Instance = this;
-       //if (isServer) StartCoroutine(WaitForSpawn());
+       if (isServer) StartCoroutine(WaitForSpawn());
     }
 
     #region EnemySpawning
     
-    //[Command]
-    //void CmdSpawnEnemy(int randIndex)
-    //{
-    //   RpcSpawnEnemy(randIndex);
-    //}
+    [Command]
+    void CmdSpawnEnemy(int randIndex)
+    {
+       RpcSpawnEnemy(randIndex);
+    }
 
 
 
-    //[ClientRpc]
-    //void RpcSpawnEnemy(int randIndex)
-    //{
-    //   Instantiate(_enemyPrefab, _enemySpawnPoints[randIndex]);
-    //}
+    [ClientRpc]
+    void RpcSpawnEnemy(int randIndex)
+    {
+       Instantiate(_enemyPrefab, _enemySpawnPoints[randIndex]);
+    }
 
 
-    //private IEnumerator WaitForSpawn()
-    //{
-    //    yield return new WaitForSeconds(_matchSettings.WaitForSpawn);
-    //    StartCoroutine(SpawnEnemy());
-    //}
+    private IEnumerator WaitForSpawn()
+    {
+        yield return new WaitForSeconds(_matchSettings.WaitForSpawn);
+        StartCoroutine(SpawnEnemy());
+    }
 
     private IEnumerator SpawnEnemy()
     {

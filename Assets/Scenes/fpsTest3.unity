@@ -703,6 +703,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3041406342502215934, guid: 073947f950d4f2fd599365c522c0559e,
+        type: 3}
+      propertyPath: m_OnlineScene
+      value: fpsTest3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 073947f950d4f2fd599365c522c0559e, type: 3}
 --- !u!1 &604813476

@@ -27,12 +27,15 @@ public class PlacementController : NetworkBehaviour
     
     private void Update()
     {
-        HandleKey();
-        if (_currentObject != null)
+        if (GameManager.CurrentState == GameManager.GameState.Building)
         {
-            MoveToMouse();
-            ReleaseOnClick();
-            RotateObject();
+            HandleKey();
+            if (_currentObject != null)
+            {
+                MoveToMouse();
+                ReleaseOnClick();
+                RotateObject();
+            }
         }
     }
 

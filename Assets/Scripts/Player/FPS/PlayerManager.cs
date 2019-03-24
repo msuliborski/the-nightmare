@@ -40,7 +40,8 @@ public class PlayerManager : NetworkBehaviour
 
        _currentHealth = _maxHealth;
 
-        SetBuildingMode();
+        //SetBuildingMode();
+        SetActionMode();
     }
 
     public void SetDefaults()
