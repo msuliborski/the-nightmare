@@ -27,7 +27,6 @@ public class PlacementController : NetworkBehaviour
     
     private void Update()
     {
-        Debug.Log("krrr");
         if (GameManager.CurrentState == GameManager.GameState.Building)
         {
             HandleKey();
