@@ -22,13 +22,14 @@ public class PlacementController : NetworkBehaviour
     private void Start()
     {
         _reverseGrid = 1f / _grid;
-        _camera = gameObject.transform.Find("PlayerCamera").GetComponent<Camera>();
+        _camera = gameObject.transform.Find("BuildingCamera").GetComponent<Camera>();
     }
     
     private void Update()
     {
-        //if (GameManager.CurrentState == GameManager.GameState.Building)
-        //{
+        Debug.Log("krrr");
+        if (GameManager.CurrentState == GameManager.GameState.Building)
+        {
             HandleKey();
             if (_currentObject != null)
             {
@@ -36,7 +37,7 @@ public class PlacementController : NetworkBehaviour
                 ReleaseOnClick();
                 RotateObject();
             }
-        //}
+        }
     }
 
     void RotateObject()
@@ -97,20 +98,17 @@ public class PlacementController : NetworkBehaviour
             }
         }
     }
-    
+
     void HandleKey()
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
             if (_currentObject == null)
-            {
                 _currentObject = Instantiate(_placeableObject);
-                
-            }
-            else
-            {
-                Destroy(_currentObject);
-            }
+            else Destroy(_currentObject);
+            
         }
+        if (Input.GetKeyDown(KeyCode.R))
+            GameManager.Instance.CmdRegisterBeingReady();
     }
 }
