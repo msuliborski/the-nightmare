@@ -6,6 +6,9 @@ using System.Collections.Generic;
 
 public class EnemyControllerServer : NetworkBehaviour
 {
+
+    private const string NO_DESTINATION = "";
+
     private const string ENEMY_ID_PREFIX = "Enemy ";
 
     public bool IsWalking { get; set; }
@@ -59,7 +62,7 @@ public class EnemyControllerServer : NetworkBehaviour
         }
         Dest =  tMin;
         if (Dest) RpcSendDest(Dest.name);
-        else RpcSendDest("-1");
+        else RpcSendDest(NO_DESTINATION);
     }
 
     public void SetClosestPlayer()
@@ -83,7 +86,7 @@ public class EnemyControllerServer : NetworkBehaviour
         }
         Dest = tMin;
         if (Dest) RpcSendDest(Dest.name);
-        else RpcSendDest("-1");
+        else RpcSendDest(NO_DESTINATION);
     }
 
 
@@ -92,16 +95,16 @@ public class EnemyControllerServer : NetworkBehaviour
         _currentHealth -= damage;
 
         if (_currentHealth <= 0)
-        {
             RpcRemoveEnemy();
-            Destroy(gameObject);
-        }
+            
+        
     }
 
     [ClientRpc]
     void RpcRemoveEnemy()
     {
         GameManager.Enemies.Remove(transform.name);
+        Destroy(gameObject);
     }
 
 
