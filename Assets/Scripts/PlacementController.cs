@@ -27,7 +27,7 @@ public class PlacementController : NetworkBehaviour
     
     private void Update()
     {
-        if (GameManager.Instance.CurrentState == GameManager.GameState.Building)
+        if (GameManager.CurrentState == GameManager.GameState.Building)
         {
             HandleKey();
             if (_currentObject != null)

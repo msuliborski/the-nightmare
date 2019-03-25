@@ -16,9 +16,9 @@ public class GameManager : NetworkBehaviour
     private static int _enemiesCounter = 0;
     private static int _spawnedEnemiesCounter = 0;
     public enum GameState { Building, Fighting }
-    [SyncVar] private GameState _currentState = GameState.Building;
+    private static GameState _currentState = GameState.Building;
     //private static GameState _currentState = GameState.Fighting;
-    public GameState CurrentState
+    public static GameState CurrentState
     {
         get { return _currentState; }
         set
@@ -31,7 +31,6 @@ public class GameManager : NetworkBehaviour
             }
             else if (value == GameState.Fighting)
             {
-                Debug.Log("kkkuuuurwa");
                 foreach (PlayerManager player in _players.Values)
                     player.SetActionMode();
                 Instance.StartCoroutine(Instance.SpawnEnemy());
@@ -48,13 +47,6 @@ public class GameManager : NetworkBehaviour
     
     public MatchSettings MatchSettings { get { return _matchSettings; } set { _matchSettings = value; } }
 
-
-    public void RegisterBeingReady()
-    {
-        ReadyPlayersCnt++;
-        if (ReadyPlayersCnt == _players.Count)
-            CurrentState = GameState.Fighting;
-    }
 
     void Start()
     {
