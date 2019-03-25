@@ -108,6 +108,20 @@ public class PlacementController : NetworkBehaviour
             
         }
         if (Input.GetKeyDown(KeyCode.R))
-            GameManager.Instance.RegisterBeingReady();
+            CmdRegisterBeingReady();
+    }
+
+    [Command]
+    void CmdRegisterBeingReady()
+    {
+        GameManager.Instance.ReadyPlayersCnt++;
+        if (GameManager.Instance.ReadyPlayersCnt == GameManager.Players.Count)
+            RpcRegisterBeingReady();
+    }
+
+    [ClientRpc]
+    void RpcRegisterBeingReady()
+    {
+        GameManager.CurrentState = GameManager.GameState.Fighting;
     }
 }
