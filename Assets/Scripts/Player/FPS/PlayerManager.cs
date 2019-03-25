@@ -20,7 +20,8 @@ public class PlayerManager : NetworkBehaviour
     {
         for (int i = 0; i < 3; i++) transform.GetChild(i).gameObject.SetActive(false);
         transform.GetChild(3).gameObject.SetActive(true);
-        for (int i = 0; i < _disableOnDeath.Length; i++)
+         if (isLocalPlayer)
+            for (int i = 0; i < _disableOnDeath.Length; i++)
             _disableOnDeath[i].enabled = !_wasEnabled[i];
     }
 
@@ -28,6 +29,7 @@ public class PlayerManager : NetworkBehaviour
     {
         for (int i = 0; i < 3; i++) transform.GetChild(i).gameObject.SetActive(true);
         transform.GetChild(3).gameObject.SetActive(false);
+        if (isLocalPlayer)
         for (int i = 0; i < _disableOnDeath.Length; i++)
             _disableOnDeath[i].enabled = _wasEnabled[i];
     }
