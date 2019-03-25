@@ -16,9 +16,9 @@ public class GameManager : NetworkBehaviour
     private static int _enemiesCounter = 0;
     private static int _spawnedEnemiesCounter = 0;
     public enum GameState { Building, Fighting }
-    [SyncVar] private static GameState _currentState = GameState.Building;
+    [SyncVar] private GameState _currentState = GameState.Building;
     //private static GameState _currentState = GameState.Fighting;
-    public static GameState CurrentState
+    public GameState CurrentState
     {
         get { return _currentState; }
         set
