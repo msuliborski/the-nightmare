@@ -31,6 +31,7 @@ public class GameManager : NetworkBehaviour
             }
             else if (value == GameState.Fighting)
             {
+                Debug.Log("kkkuuuurwa");
                 foreach (PlayerManager player in _players.Values)
                     player.SetActionMode();
                 Instance.StartCoroutine(Instance.SpawnEnemy());
