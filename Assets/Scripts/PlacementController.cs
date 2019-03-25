@@ -108,6 +108,6 @@ public class PlacementController : NetworkBehaviour
             
         }
         if (Input.GetKeyDown(KeyCode.R))
-            GameManager.Instance.CmdRegisterBeingReady();
+            GameManager.Instance.RegisterBeingReady();
     }
 }

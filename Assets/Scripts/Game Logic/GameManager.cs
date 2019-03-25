@@ -16,7 +16,7 @@ public class GameManager : NetworkBehaviour
     private static int _enemiesCounter = 0;
     private static int _spawnedEnemiesCounter = 0;
     public enum GameState { Building, Fighting }
-    private static GameState _currentState = GameState.Building;
+    [SyncVar] private static GameState _currentState = GameState.Building;
     //private static GameState _currentState = GameState.Fighting;
     public static GameState CurrentState
     {
@@ -48,8 +48,7 @@ public class GameManager : NetworkBehaviour
     public MatchSettings MatchSettings { get { return _matchSettings; } set { _matchSettings = value; } }
 
 
-    [Command]
-    public void CmdRegisterBeingReady()
+    public void RegisterBeingReady()
     {
         ReadyPlayersCnt++;
         if (ReadyPlayersCnt == _players.Count)
