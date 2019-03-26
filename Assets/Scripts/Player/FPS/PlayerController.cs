@@ -18,6 +18,8 @@ public class PlayerController : NetworkBehaviour
     void Start()
     {
         _motor = GetComponent<PlayerMotor>();
+        move = GameObject.Find("Move").GetComponent<Joystick>();
+        look = GameObject.Find("Look").GetComponent<Joystick>();
     }
 
 
