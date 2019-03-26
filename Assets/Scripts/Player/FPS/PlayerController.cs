@@ -6,6 +6,8 @@ public class PlayerController : NetworkBehaviour
 {
     [SerializeField] private float _speed = 5f;
     [SerializeField] private float _lookSensitivity = 3f;
+    [SerializeField] private Joystick move;
+    [SerializeField] private Joystick look;
     
     private PlayerMotor _motor;
 
@@ -23,8 +25,16 @@ public class PlayerController : NetworkBehaviour
     {
         if (!PauseGame.menuActive)
         {
+
+            #if UNITY_ANDROID
+            float xMov = move.Horizontal;
+            float zMov = move.Vertical;
+            #endif
+            
+            #if UNITY_STANDALONE
             float xMov = Input.GetAxisRaw("Horizontal");
             float zMov = Input.GetAxisRaw("Vertical");
+            #endif
 
             Vector3 moveHorizontal = transform.right * xMov;
             Vector3 moveVertical = transform.forward * zMov;
@@ -33,20 +43,30 @@ public class PlayerController : NetworkBehaviour
 
             _motor.Move(velocity);
 
+
+            #if UNITY_ANDROID
+            float yRot = look.Horizontal;
+            float xRot = look.Vertical;
+            #endif
+            
+            #if UNITY_STANDALONE
             float yRot = Input.GetAxisRaw("Mouse X");
+            float xRot = Input.GetAxis("Mouse Y");
+            #endif
 
             Vector3 rotation = new Vector3(0f, yRot, 0f) * _lookSensitivity;
 
             _motor.Rotate(rotation);
 
-            float xRot = Input.GetAxis("Mouse Y");
+
+            
 
 
             float cameraRotationX = xRot * _lookSensitivity;
 
             _motor.RotateCamera(cameraRotationX);
 
-            //float yRot = Input.GetAxisRaw("Mouse Y");
+            
             
             Cursor.lockState = CursorLockMode.Locked;
         }
