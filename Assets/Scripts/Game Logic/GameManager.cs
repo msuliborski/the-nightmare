@@ -2,6 +2,7 @@
 using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 
 public class GameManager : NetworkBehaviour
 {
@@ -39,12 +40,6 @@ public class GameManager : NetworkBehaviour
     }
     [SyncVar] public int ReadyPlayersCnt = 0;            
     public GameObject[] Weapons { get { return _weapons; } set { _weapons = value; } }
-    private struct EnemyStruct
-    {
-        public GameObject Enemy;
-        public EnemyStruct(GameObject enemy) { Enemy = enemy; }
-    }
-    
     public MatchSettings MatchSettings { get { return _matchSettings; } set { _matchSettings = value; } }
 
 
@@ -53,8 +48,7 @@ public class GameManager : NetworkBehaviour
        _matchSettings.WaitForSpawn -= _matchSettings.EnemyRespawnTime;
         if (Instance != null) Debug.LogError("More than one GameManager in scene!");
         else Instance = this;
-       //if (isServer) StartCoroutine(WaitForSpawn());
-    }
+     }
 
     #region EnemySpawning
     
@@ -73,18 +67,10 @@ public class GameManager : NetworkBehaviour
     }
 
 
-    /*private IEnumerator WaitForSpawn()
-    {
-        yield return new WaitForSeconds(_matchSettings.WaitForSpawn);
-        StartCoroutine(SpawnEnemy());
-    }*/
-
     private IEnumerator SpawnEnemy()
     {
         yield return new WaitForSeconds(_matchSettings.EnemyRespawnTime);
         int randIndex = Random.Range(0, 3);
-        //CmdSpawnEnemy(randIndex);
-        
         NetworkServer.Spawn(Instantiate(_enemyPrefab, _enemySpawnPoints[randIndex]));
         _enemiesCounter++;
         _spawnedEnemiesCounter++;

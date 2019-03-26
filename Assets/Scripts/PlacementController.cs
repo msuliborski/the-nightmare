@@ -11,7 +11,12 @@ public class PlacementController : NetworkBehaviour
     private float _mouseWheelRotation;
     private float _x = 0, _y = 0, _reverseGrid;
     private GameObject _currentObject;
-    private Camera _camera;
+    private Camera _buildingCamera;
+    private Camera _actionCamera;
+    private Camera _currentCamera;
+    [SerializeField] private GameObject _gridPointPrefab;
+    private List<GameObject> _gridPoints = new List<GameObject>();
+    private Canvas _gridCanvas;
 
     public GameObject CurrentObject
     {
@@ -22,13 +27,16 @@ public class PlacementController : NetworkBehaviour
     private void Start()
     {
         _reverseGrid = 1f / _grid;
-        _camera = gameObject.transform.Find("BuildingCamera").GetComponent<Camera>();
+        _currentCamera = _buildingCamera = gameObject.transform.Find("BuildingCamera").GetComponent<Camera>();
+        _actionCamera = gameObject.transform.Find("PlayerCamera").GetComponent<Camera>();
+        _gridCanvas = GameObject.Find("GridCanvas").GetComponent<Canvas>();
+        DrawGrid();
     }
     
     private void Update()
     {
-        if (GameManager.CurrentState == GameManager.GameState.Building)
-        {
+        //if (GameManager.CurrentState == GameManager.GameState.Building)
+        //{
             HandleKey();
             if (_currentObject != null)
             {
@@ -36,8 +44,20 @@ public class PlacementController : NetworkBehaviour
                 ReleaseOnClick();
                 RotateObject();
             }
-        }
+        //}
     }
+
+
+    void DrawGrid()
+    {
+        for (float x = 0f; x < 40f; x += _grid)
+            for (float y = 0f; y < 40f; y += _grid)
+            {
+                _gridPoints.Add(Instantiate(_gridPointPrefab, new Vector3(x, 0.1f, y), Quaternion.Euler(90f, 0f, 0f), _gridCanvas.transform));
+            }
+          
+    }
+
 
     void RotateObject()
     {
@@ -85,7 +105,7 @@ public class PlacementController : NetworkBehaviour
     {
         if (_currentObject != null)
         {
-            Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
+            Ray ray = _currentCamera.ScreenPointToRay(Input.mousePosition);
 
             RaycastHit hitInfo;
             if (Physics.Raycast(ray, out hitInfo))
@@ -107,7 +127,7 @@ public class PlacementController : NetworkBehaviour
             else Destroy(_currentObject);
             
         }
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R) && GameManager.CurrentState == GameManager.GameState.Building)
             CmdRegisterBeingReady();
     }
 
@@ -116,12 +136,13 @@ public class PlacementController : NetworkBehaviour
     {
         GameManager.Instance.ReadyPlayersCnt++;
         if (GameManager.Instance.ReadyPlayersCnt == GameManager.Players.Count)
-            RpcRegisterBeingReady();
+           RpcRegisterBeingReady();
     }
 
     [ClientRpc]
     void RpcRegisterBeingReady()
     {
+        if (isLocalPlayer) _currentCamera = _actionCamera;
         GameManager.CurrentState = GameManager.GameState.Fighting;
     }
 }
