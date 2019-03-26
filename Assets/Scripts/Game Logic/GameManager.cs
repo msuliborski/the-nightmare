@@ -13,8 +13,8 @@ public class GameManager : NetworkBehaviour
     [SerializeField] private GameObject[] _weapons;
     [SerializeField] private int _waves;
     [SerializeField] private int _enemiesAmount;
-    private static int _enemiesCounter = 0;
-    private static int _spawnedEnemiesCounter = 0;
+    [SyncVar] private int _enemiesCounter = 0;
+    [SyncVar] private int _spawnedEnemiesCounter = 0;
     public enum GameState { Building, Fighting }
     private static GameState _currentState = GameState.Building;
     //private static GameState _currentState = GameState.Fighting;
@@ -27,13 +27,13 @@ public class GameManager : NetworkBehaviour
             {
                 foreach (PlayerManager player in _players.Values)
                     player.SetBuildingMode();
-                Instance.StopCoroutine(Instance.SpawnEnemy());
+                if (Instance.isServer) Instance.StopCoroutine(Instance.SpawnEnemy());
             }
             else if (value == GameState.Fighting)
             {
                 foreach (PlayerManager player in _players.Values)
                     player.SetActionMode();
-                Instance.StartCoroutine(Instance.SpawnEnemy());
+                if (Instance.isServer) Instance.StartCoroutine(Instance.SpawnEnemy());
             }
         }
     }
