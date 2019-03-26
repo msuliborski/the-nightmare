@@ -20,6 +20,11 @@ public class PlayerController : NetworkBehaviour
         _motor = GetComponent<PlayerMotor>();
         move = GameObject.Find("Move").GetComponent<Joystick>();
         look = GameObject.Find("Look").GetComponent<Joystick>();
+        
+        #if UNITY_STANDALONE
+        move.enabled = false;
+        look.enabled = false;
+        #endif
     }
 
 
@@ -27,15 +32,19 @@ public class PlayerController : NetworkBehaviour
     {
         if (!PauseGame.menuActive)
         {
-
+            float xMov = 0;
+            float zMov = 0;
+            
             #if UNITY_ANDROID
-            float xMov = move.Horizontal;
-            float zMov = move.Vertical;
+            if(Mathf.Abs(move.Horizontal) >= 0.2)
+                xMov = move.Horizontal;
+            if(Mathf.Abs(move.Vertical) >= 0.2)
+                zMov = move.Vertical;
             #endif
             
             #if UNITY_STANDALONE
-            float xMov = Input.GetAxisRaw("Horizontal");
-            float zMov = Input.GetAxisRaw("Vertical");
+            xMov = Input.GetAxisRaw("Horizontal");
+            zMov = Input.GetAxisRaw("Vertical");
             #endif
 
             Vector3 moveHorizontal = transform.right * xMov;
@@ -45,32 +54,30 @@ public class PlayerController : NetworkBehaviour
 
             _motor.Move(velocity);
 
-
+            float yRot = 0;
+            float xRot = 0;
+            
             #if UNITY_ANDROID
-            float yRot = look.Horizontal;
-            float xRot = look.Vertical;
+            if(Mathf.Abs(look.Horizontal) >= 0.2)
+                yRot = look.Horizontal;
+            if(Mathf.Abs(look.Horizontal) >= 0.2)
+                xRot = look.Vertical;
             #endif
             
             #if UNITY_STANDALONE
-            float yRot = Input.GetAxisRaw("Mouse X");
-            float xRot = Input.GetAxis("Mouse Y");
+            yRot = Input.GetAxisRaw("Mouse X");
+            xRot = Input.GetAxis("Mouse Y");
             #endif
 
             Vector3 rotation = new Vector3(0f, yRot, 0f) * _lookSensitivity;
-
             _motor.Rotate(rotation);
-
-
             
-
-
             float cameraRotationX = xRot * _lookSensitivity;
-
             _motor.RotateCamera(cameraRotationX);
 
             
             
-         //   Cursor.lockState = CursorLockMode.Locked;
+            //Cursor.lockState = CursorLockMode.Locked;
         }
 
         else
