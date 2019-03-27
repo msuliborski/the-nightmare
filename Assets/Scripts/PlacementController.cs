@@ -50,10 +50,10 @@ public class PlacementController : NetworkBehaviour
 
     void DrawGrid()
     {
-        for (float x = 0f; x < 40f; x += _grid)
-            for (float y = 0f; y < 40f; y += _grid)
+        for (float x = -40f; x < 40f; x += _grid)
+            for (float y = -40f; y < 40f; y += _grid)
             {
-                _gridPoints.Add(Instantiate(_gridPointPrefab, new Vector3(x, 0.1f, y), Quaternion.Euler(90f, 0f, 0f), _gridCanvas.transform));
+                _gridPoints.Add(Instantiate(_gridPointPrefab, new Vector3(x + 0.5f, 0.1f, y + 0.5f), Quaternion.Euler(90f, 0f, 0f), _gridCanvas.transform));
             }
           
     }
