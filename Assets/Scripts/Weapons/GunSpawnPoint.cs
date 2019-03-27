@@ -5,5 +5,4 @@ using UnityEngine;
 public class GunSpawnPoint : MonoBehaviour
 {
     public int WeaponId;
-   
 }
