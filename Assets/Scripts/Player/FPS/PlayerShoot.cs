@@ -14,6 +14,8 @@ public class PlayerShoot : NetworkBehaviour {
 
     [SerializeField] private LayerMask _mask;
     private bool _shootingDone = false;
+    private float normalFOV;
+    private float zoomFOV;
 
 
     private Animator weaponAnimator;
@@ -23,6 +25,8 @@ public class PlayerShoot : NetworkBehaviour {
     void Start() {
         if (Cam == null) enabled = false;
         else Cross = GameObject.Find("cross");
+        normalFOV = Cam.fieldOfView;
+        zoomFOV = normalFOV - 40;
     }
 
 
@@ -47,10 +51,14 @@ public class PlayerShoot : NetworkBehaviour {
             !PauseGame.menuActive)
         {
             Equipment.Weapon.GetComponent<Animator>().SetBool(IsAiming, true);
+            Cam.fieldOfView = Mathf.Lerp(Cam.fieldOfView, zoomFOV, 0.6f);
+            Cross.gameObject.SetActive(false);
         }
         else
         {
             Equipment.Weapon.GetComponent<Animator>().SetBool(IsAiming, false);
+            Cam.fieldOfView = Mathf.Lerp(Cam.fieldOfView, normalFOV, 0.6f);
+            Cross.gameObject.SetActive(true);
         }
 
     }
