@@ -16,7 +16,8 @@ public class PlayerShoot : NetworkBehaviour {
     private bool _shootingDone = false;
 
 
-    public Animator weaponAnimator;
+    private Animator weaponAnimator;
+    private static readonly int IsAiming = Animator.StringToHash("isAiming");
 
     // Start is called before the first frame update
     void Start() {
@@ -33,7 +34,7 @@ public class PlayerShoot : NetworkBehaviour {
         if (Input.GetKeyDown(KeyCode.R) && Equipment.Weapon.CurrentMagAmmo != Equipment.Weapon.MaxMagAmmo) Equipment.Weapon.reload();
 
         //fireing
-        if (Input.GetButton("Fire1") && Equipment.Weapon.State == PlayerWeapon.WeaponState.idle &&
+        if (Input.GetButton("Fire1") && Equipment.Weapon.State == Weapon.WeaponState.idle &&
             !PauseGame.menuActive && Equipment.Weapon.CurrentMagAmmo >= 1)  {
            Shoot();
         }
@@ -41,10 +42,15 @@ public class PlayerShoot : NetworkBehaviour {
             _shootingDone = false;
 
         //aiming
-        if (Input.GetButton("Fire2") && Equipment.Weapon.State == PlayerWeapon.WeaponState.idle &&
-    !PauseGame.menuActive)
+        if (Input.GetButton("Fire2") && 
+            (Equipment.Weapon.State == Weapon.WeaponState.idle || Equipment.Weapon.State == Weapon.WeaponState.shooting) &&
+            !PauseGame.menuActive)
         {
-            //scope();
+            Equipment.Weapon.GetComponent<Animator>().SetBool(IsAiming, true);
+        }
+        else
+        {
+            Equipment.Weapon.GetComponent<Animator>().SetBool(IsAiming, false);
         }
 
     }
@@ -60,22 +66,21 @@ public class PlayerShoot : NetworkBehaviour {
 
     void Shoot() {
        
-        if (Equipment.Weapon.Mode == PlayerWeapon.FireMode.single && !_shootingDone) {
+        if (Equipment.Weapon.Mode == Weapon.FireMode.single && !_shootingDone) {
             PerformWeaponFire();
             _shootingDone = true;
         }
-        else if (Equipment.Weapon.Mode == PlayerWeapon.FireMode.triple && !_shootingDone) {
+        else if (Equipment.Weapon.Mode == Weapon.FireMode.triple && !_shootingDone) {
             Equipment.Weapon.Recoil = Equipment.Weapon.Recoil / 2;
             StartCoroutine(TripleShot());
             Equipment.Weapon.Recoil = Equipment.Weapon.Recoil * 2;
             _shootingDone = true;
         }
-        else if (Equipment.Weapon.Mode == PlayerWeapon.FireMode.continous) {
+        else if (Equipment.Weapon.Mode == Weapon.FireMode.continous) {
             PerformWeaponFire();
         }
         
     }
-    
     
 
     void PerformWeaponFire() {

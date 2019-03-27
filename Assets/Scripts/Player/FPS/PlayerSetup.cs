@@ -49,7 +49,7 @@ public class PlayerSetup : NetworkBehaviour
         PlayerShoot shoot = GetComponent<PlayerShoot>();
         shoot.Cam = _cam;
         _equipment = GetComponent<PlayerEquipment>();
-        _equipment.Weapon = weaponObject.GetComponent<PlayerWeapon>();
+        _equipment.Weapon = weaponObject.GetComponent<Weapon>();
         _equipment.WeaponSound = weaponObject.GetComponent<AudioSource>();
         shoot.Equipment = _equipment;
     }

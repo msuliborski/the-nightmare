@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
 
-public class PlayerWeapon : NetworkBehaviour {
+public class Weapon : NetworkBehaviour {
 
     [SerializeField] protected int _id;
     public int Id { get { return _id; } set { _id = value; } }
@@ -119,6 +119,7 @@ public class PlayerWeapon : NetworkBehaviour {
         get { return _fireMode; }
         set { _fireMode = value; }
     }
+
 
 
     void Start() {

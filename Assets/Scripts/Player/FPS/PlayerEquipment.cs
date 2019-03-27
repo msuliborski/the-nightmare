@@ -4,7 +4,7 @@ using UnityEngine.Networking;
 
 public class PlayerEquipment : NetworkBehaviour {
     public AudioSource WeaponSound { get; set; }
-    public PlayerWeapon Weapon { get; set; }
+    public Weapon Weapon { get; set; }
     [SerializeField] private Camera _cam;
     [SerializeField] private LayerMask _mask;
 
@@ -17,7 +17,7 @@ public class PlayerEquipment : NetworkBehaviour {
                 Destroy(_cam.transform.GetChild(0).transform.GetChild(0).gameObject);
                 int weaponId = weaponFinder.collider.gameObject.GetComponent<GunSpawnPoint>().WeaponId;
                 GameObject weaponObject = Instantiate(GameManager.Instance.Weapons[weaponId], _cam.transform.GetChild(0).transform);
-                Weapon = weaponObject.GetComponent<PlayerWeapon>();
+                Weapon = weaponObject.GetComponent<Weapon>();
                 WeaponSound = weaponObject.GetComponent<AudioSource>();
                 CmdChangeWeapon(weaponId);
             }
@@ -47,7 +47,7 @@ public class PlayerEquipment : NetworkBehaviour {
         {
             Destroy(_cam.transform.GetChild(0).transform.GetChild(0).gameObject);
             GameObject weaponObject = Instantiate(GameManager.Instance.Weapons[weaponId], _cam.transform.GetChild(0).transform);
-            Weapon = weaponObject.GetComponent<PlayerWeapon>();
+            Weapon = weaponObject.GetComponent<Weapon>();
             WeaponSound = weaponObject.GetComponent<AudioSource>();
             GameManager.SetLayerRecursively(weaponObject, "LocalPlayer");
         }
