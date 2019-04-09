@@ -77,7 +77,7 @@ public class PlayerController : NetworkBehaviour
 
             
             
-            //Cursor.lockState = CursorLockMode.Locked;
+            Cursor.lockState = CursorLockMode.Locked;
         }
 
         else
