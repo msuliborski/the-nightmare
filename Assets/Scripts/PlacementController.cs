@@ -5,7 +5,7 @@ using UnityEngine.Networking;
 
 public class PlacementController : NetworkBehaviour
 {
-    [SerializeField] private float _grid;
+    public static float GridTileSize = 1f;
     [SerializeField] private GameObject _placeableObject;
     public GameObject PlaceableObject {get { return _placeableObject; } set { _placeableObject = value; }}
     private float _mouseWheelRotation;
@@ -16,7 +16,12 @@ public class PlacementController : NetworkBehaviour
     private Camera _currentCamera;
     [SerializeField] private GameObject _gridPointPrefab;
     private List<GameObject> _gridPoints = new List<GameObject>();
-    private Canvas _gridCanvas;
+    public Canvas GridCanvas { get; set; }
+
+    [SerializeField] private float _scrollBorderThickness = 0.005f;  // percentage of screen height
+    [SerializeField] private float _moveSpeedMinZoom = 30f;
+    [SerializeField] private float _moveSpeedMaxZoom = 30f;
+    private static float _zoom = 0f;
 
     public GameObject CurrentObject
     {
@@ -26,38 +31,28 @@ public class PlacementController : NetworkBehaviour
 
     private void Start()
     {
-        _reverseGrid = 1f / _grid;
+        _reverseGrid = 1f / GridTileSize;
         _currentCamera = _buildingCamera = gameObject.transform.Find("BuildingCamera").GetComponent<Camera>();
         _actionCamera = gameObject.transform.Find("PlayerCamera").GetComponent<Camera>();
-        _gridCanvas = GameObject.Find("GridCanvas").GetComponent<Canvas>();
-        DrawGrid();
+        GridCanvas = GameObject.Find("GridCanvas").GetComponent<Canvas>();
+        for (int i = 0; i < GridCanvas.transform.childCount; i++)
+        {
+            _gridPoints.Add(GridCanvas.transform.GetChild(i).gameObject);
+        }
     }
-    
+
     private void Update()
     {
-        //if (GameManager.CurrentState == GameManager.GameState.Building)
-        //{
-            HandleKey();
-            if (_currentObject != null)
-            {
-                MoveToMouse();
-                ReleaseOnClick();
-                RotateObject();
-            }
-        //}
+
+        HandleKeys();
+        if (_currentObject != null)
+        {
+            MoveToMouse();
+            ReleaseOnClick();
+            RotateObject();
+        }
+        
     }
-
-
-    void DrawGrid()
-    {
-        for (float x = -40f; x < 40f; x += _grid)
-            for (float y = -40f; y < 40f; y += _grid)
-            {
-                _gridPoints.Add(Instantiate(_gridPointPrefab, new Vector3(x + 0.5f, 0.1f, y + 0.5f), Quaternion.Euler(90f, 0f, 0f), _gridCanvas.transform));
-            }
-          
-    }
-
 
     void RotateObject()
     {
@@ -78,6 +73,8 @@ public class PlacementController : NetworkBehaviour
     {
         if (Input.GetMouseButton(0))
         {
+            if (GameManager.CurrentState == GameManager.GameState.Fighting)
+                GridCanvas.gameObject.SetActive(false);
             CmdPlaceEntity(_currentObject.transform.position, _currentObject.transform.rotation);
             _currentObject.transform.GetComponent<BoxCollider>().enabled = true;
             _currentObject = null;
@@ -118,17 +115,61 @@ public class PlacementController : NetworkBehaviour
         }
     }
 
-    void HandleKey()
+    void HandleKeys()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
+        switch (GameManager.CurrentState)
         {
-            if (_currentObject == null)
-                _currentObject = Instantiate(_placeableObject);
-            else Destroy(_currentObject);
+            case GameManager.GameState.Fighting:
+
+                if (Input.GetKeyDown(KeyCode.Q))
+                {
+                    if (_currentObject == null)
+                    {
+                        
+                        GridCanvas.gameObject.SetActive(true);
+                        Debug.Log(GridCanvas.gameObject.activeSelf);
+                        _currentObject = Instantiate(_placeableObject);
+                    }
+                    else
+                    {
+                        GridCanvas.gameObject.SetActive(false);
+                        Destroy(_currentObject);
+                    }
+
+                }
+                break;
+
+            case GameManager.GameState.Building:
             
+                float xDelta = 0f, zDelta = 0f, rotationDelta = 0f;
+
+                float zoomDelta = Input.GetAxis("Mouse ScrollWheel");
+                if (zoomDelta != 0f) AdjustZoom(zoomDelta);
+
+
+                if (Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.Comma)) rotationDelta++;
+                if (Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.Period)) rotationDelta--;
+
+                if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W) || Input.mousePosition.y >= Screen.height - _scrollBorderThickness) zDelta++;
+                if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S) || Input.mousePosition.y <= _scrollBorderThickness) zDelta--;
+                if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D) || Input.mousePosition.x >= Screen.width - _scrollBorderThickness) xDelta++;
+                if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A) || Input.mousePosition.x <= _scrollBorderThickness) xDelta--;
+
+                if (xDelta != 0f || zDelta != 0f) AdjustPositionMouse(xDelta, zDelta);
+                //if (rotationDelta != 0f) AdjustRotationKeyboard(rotationDelta);
+
+                if (Input.GetKeyDown(KeyCode.Q))
+                {
+                    if (_currentObject == null)
+                        _currentObject = Instantiate(_placeableObject);
+                    else Destroy(_currentObject);
+
+                }
+
+                if (Input.GetKeyDown(KeyCode.R))
+                    CmdRegisterBeingReady();
+                break;
         }
-        if (Input.GetKeyDown(KeyCode.R) && GameManager.CurrentState == GameManager.GameState.Building)
-            CmdRegisterBeingReady();
     }
 
     [Command]
@@ -144,5 +185,25 @@ public class PlacementController : NetworkBehaviour
     {
         if (isLocalPlayer) _currentCamera = _actionCamera;
         GameManager.CurrentState = GameManager.GameState.Fighting;
+    }
+
+    void AdjustPositionMouse(float xDelta, float zDelta)
+    {
+        Vector3 direction = transform.localRotation * new Vector3(xDelta, 0f, zDelta).normalized;
+        float distance = Mathf.Lerp(_moveSpeedMinZoom, _moveSpeedMaxZoom, _zoom) * Time.deltaTime;
+        Vector3 position = _buildingCamera.transform.localPosition;
+        position += direction * distance;
+        //transform.localPosition = ClampPosition(position);
+        _buildingCamera.transform.localPosition = position;
+    }
+
+
+    void AdjustZoom(float delta)
+    {
+        _zoom = Mathf.Clamp01(_zoom + delta);
+
+       // float distance = Mathf.Lerp(_stickMinZoom, _stickMaxZoom, _zoom);
+       // came.localPosition = new Vector3(0f, 0f, distance);
+
     }
 }

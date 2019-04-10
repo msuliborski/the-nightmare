@@ -36,6 +36,7 @@ public class GameManager : NetworkBehaviour
                     player.SetActionMode();
                 if (Instance.isServer) Instance.StartCoroutine(Instance.SpawnEnemy());
             }
+            _currentState = value;
         }
     }
     [SyncVar] public int ReadyPlayersCnt = 0;            
