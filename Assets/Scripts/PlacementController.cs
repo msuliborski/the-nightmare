@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -23,6 +22,8 @@ public class PlacementController : NetworkBehaviour
     [SerializeField] private float _moveSpeedMaxZoom = 30f;
     private static float _zoom = 0f;
 
+   private PlayerShoot _playerShoot;
+
     public GameObject CurrentObject
     {
         get => _currentObject;
@@ -31,6 +32,7 @@ public class PlacementController : NetworkBehaviour
 
     private void Start()
     {
+        _playerShoot = GetComponent<PlayerShoot>();
         _reverseGrid = 1f / GridTileSize;
         _currentCamera = _buildingCamera = gameObject.transform.Find("BuildingCamera").GetComponent<Camera>();
         _actionCamera = gameObject.transform.Find("PlayerCamera").GetComponent<Camera>();
@@ -125,15 +127,15 @@ public class PlacementController : NetworkBehaviour
                 {
                     if (_currentObject == null)
                     {
-                        
                         GridCanvas.gameObject.SetActive(true);
-                        Debug.Log(GridCanvas.gameObject.activeSelf);
                         _currentObject = Instantiate(_placeableObject);
+                        _playerShoot.IsBuildingOnFly = true;
                     }
                     else
                     {
                         GridCanvas.gameObject.SetActive(false);
                         Destroy(_currentObject);
+                        _playerShoot.IsBuildingOnFly = false;
                     }
 
                 }

@@ -1,6 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.AI;
@@ -17,14 +15,20 @@ public class PlayerShoot : NetworkBehaviour {
     private float normalFOV;
     private float zoomFOV;
 
-
+    public bool IsBuildingOnFly { get; set; }
     private Animator weaponAnimator;
     private static readonly int IsAiming = Animator.StringToHash("isAiming");
+    
+
 
     // Start is called before the first frame update
     void Start() {
         if (Cam == null) enabled = false;
-        else Cross = GameObject.Find("cross");
+        else
+        {
+            Cross = GameObject.Find("cross");
+            IsBuildingOnFly = false;
+        }
         normalFOV = Cam.fieldOfView;
         zoomFOV = normalFOV - 40;
     }
@@ -39,12 +43,14 @@ public class PlayerShoot : NetworkBehaviour {
 
         //fireing
         if (Input.GetButton("Fire1") && Equipment.Weapon.State == Weapon.WeaponState.idle &&
-            !PauseGame.menuActive && Equipment.Weapon.CurrentMagAmmo >= 1)  {
+            !PauseGame.menuActive && Equipment.Weapon.CurrentMagAmmo >= 1 && !IsBuildingOnFly)  {
            Shoot();
         }
         if (Input.GetButtonUp("Fire1"))
+        {
+            IsBuildingOnFly = false;
             _shootingDone = false;
-
+        }
         //aiming
         if (Input.GetButton("Fire2") && 
             (Equipment.Weapon.State == Weapon.WeaponState.idle || Equipment.Weapon.State == Weapon.WeaponState.shooting) &&
@@ -73,7 +79,7 @@ public class PlayerShoot : NetworkBehaviour {
     }
 
     void Shoot() {
-       
+
         if (Equipment.Weapon.Mode == Weapon.FireMode.single && !_shootingDone) {
             PerformWeaponFire();
             _shootingDone = true;
