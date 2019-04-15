@@ -14,6 +14,7 @@ public class PlayerShoot : NetworkBehaviour {
 
     [SerializeField] private LayerMask _mask;
     private bool _shootingDone = false;
+    private float crossAccuracy = 1;
     private float normalFOV;
     private float zoomFOV;
 
@@ -30,7 +31,9 @@ public class PlayerShoot : NetworkBehaviour {
     }
 
 
-    void Update() {
+    void Update(){
+        if (crossAccuracy > 1.02) crossAccuracy -= 0.02f;
+        Cross.transform.localScale = new Vector3(Cross.transform.localScale.x * crossAccuracy, Cross.transform.localScale.y * crossAccuracy, Cross.transform.localScale.z * crossAccuracy);
         //fire mode
         if (Input.GetKeyDown(KeyCode.B)) Equipment.Weapon.changeFireMode();
 
@@ -72,8 +75,9 @@ public class PlayerShoot : NetworkBehaviour {
         yield return new WaitForSeconds(Equipment.Weapon.FireRate * 0.8f);
     }
 
-    void Shoot() {
-       
+    void Shoot()
+    {
+        crossAccuracy += crossAccuracy * 0.3f + 2f;
         if (Equipment.Weapon.Mode == Weapon.FireMode.single && !_shootingDone) {
             PerformWeaponFire();
             _shootingDone = true;
