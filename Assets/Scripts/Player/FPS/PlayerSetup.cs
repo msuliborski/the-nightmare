@@ -12,6 +12,7 @@ public class PlayerSetup : NetworkBehaviour
     [SerializeField] private GameObject _weaponObjectPrefab;
     private PlayerEquipment _equipment;
     private bool _initialConf = true;
+    private BulletsHUD bulletshud;
      
     // Start is called before the first frame update
     void Start()
@@ -26,7 +27,10 @@ public class PlayerSetup : NetworkBehaviour
         }
         else
         {
+            bulletshud = GameObject.Find("bulletNumber").GetComponent<BulletsHUD>();
             GameManager.LocalPlayer = GetComponent<PlayerManager>();
+            bulletshud.player = GetComponent<PlayerEquipment>();
+            bulletshud.playerEnabled = true;
             _sceneCamera = Camera.main;
             if (_sceneCamera != null)
                 _sceneCamera.gameObject.SetActive(false);

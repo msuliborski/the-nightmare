@@ -12,13 +12,14 @@ public class PlayerShoot : NetworkBehaviour {
 
     [SerializeField] private LayerMask _mask;
     private bool _shootingDone = false;
+    private float crossAccuracy = 1;
     private float normalFOV;
     private float zoomFOV;
 
     public bool IsBuildingOnFly { get; set; }
     private Animator weaponAnimator;
     private static readonly int IsAiming = Animator.StringToHash("isAiming");
-    
+    private static readonly int IsReloading = Animator.StringToHash("isReloading");
 
 
     // Start is called before the first frame update
@@ -34,12 +35,18 @@ public class PlayerShoot : NetworkBehaviour {
     }
 
 
-    void Update() {
+    void Update()
+    {
+        if (crossAccuracy > 1.02) crossAccuracy -= (crossAccuracy*0.05f + 0.02f);
+        else crossAccuracy = 1f;
+        Cross.transform.localScale = new Vector3(crossAccuracy, crossAccuracy, crossAccuracy);
         //fire mode
         if (Input.GetKeyDown(KeyCode.B)) Equipment.Weapon.changeFireMode();
 
         //reloading
-        if (Input.GetKeyDown(KeyCode.R) && Equipment.Weapon.CurrentMagAmmo != Equipment.Weapon.MaxMagAmmo) Equipment.Weapon.reload();
+        if (Input.GetKeyDown(KeyCode.R) && Equipment.Weapon.CurrentMagAmmo != Equipment.Weapon.MaxMagAmmo){
+            StartCoroutine(Reload());
+        }
 
         //fireing
         if (Input.GetButton("Fire1") && Equipment.Weapon.State == Weapon.WeaponState.idle &&
@@ -68,6 +75,14 @@ public class PlayerShoot : NetworkBehaviour {
         }
 
     }
+    
+        
+    IEnumerator Reload() {
+        Equipment.Weapon.GetComponent<Animator>().SetBool(IsReloading, true);
+        Equipment.Weapon.reload();
+        yield return new WaitForSeconds(Equipment.Weapon.ReloadTime);
+        Equipment.Weapon.GetComponent<Animator>().SetBool(IsReloading, false);
+    }
 
     IEnumerator TripleShot() {
         PerformWeaponFire();
@@ -78,8 +93,10 @@ public class PlayerShoot : NetworkBehaviour {
         yield return new WaitForSeconds(Equipment.Weapon.FireRate * 0.8f);
     }
 
-    void Shoot() {
 
+    void Shoot()
+    {
+        crossAccuracy += 2f - crossAccuracy*0.5f;
         if (Equipment.Weapon.Mode == Weapon.FireMode.single && !_shootingDone) {
             PerformWeaponFire();
             _shootingDone = true;
@@ -95,7 +112,7 @@ public class PlayerShoot : NetworkBehaviour {
         }
         
     }
-    
+
 
     void PerformWeaponFire() {
         if (Equipment.Weapon.CurrentMagAmmo >= 1) {
@@ -123,8 +140,7 @@ public class PlayerShoot : NetworkBehaviour {
                 Equipment.DoHitEffect(hit.point, hit.normal);
                 CmdOnHit(hit.point, hit.normal);
             }
-
-            if (Equipment.Weapon.CurrentMagAmmo == 0 && Equipment.Weapon.CurrentAmmo >= 1) Equipment.Weapon.reload();
+            if (Equipment.Weapon.CurrentMagAmmo == 0 && Equipment.Weapon.CurrentAmmo >= 1) StartCoroutine(Reload());
         }
     }
 
