@@ -15,6 +15,8 @@ public class PlayerManager : NetworkBehaviour
     [SerializeField] private Behaviour[] _disableOnDeath;
     private bool[] _wasEnabled;
 
+    private PlacementController _placementController;
+    private GameObject _cross;
 
     public void SetBuildingMode()
     {
@@ -23,26 +25,39 @@ public class PlayerManager : NetworkBehaviour
          if (isLocalPlayer)
             for (int i = 0; i < _disableOnDeath.Length; i++)
             _disableOnDeath[i].enabled = !_wasEnabled[i];
+
+        if (_placementController.GridCanvas != null)
+            _placementController.GridCanvas.gameObject.SetActive(true);
+        _cross.SetActive(false);
     }
 
     public void SetActionMode()
     {
+        
+
         for (int i = 0; i < 3; i++) transform.GetChild(i).gameObject.SetActive(true);
         transform.GetChild(3).gameObject.SetActive(false);
         if (isLocalPlayer)
         for (int i = 0; i < _disableOnDeath.Length; i++)
             _disableOnDeath[i].enabled = _wasEnabled[i];
+        if (_placementController.GridCanvas != null)
+            _placementController.GridCanvas.gameObject.SetActive(false);
+        _cross.SetActive(true);
     }
 
     public void Setup()
     {
+       
+
         _wasEnabled = new bool[_disableOnDeath.Length];
 
         for (int i = 0; i < _wasEnabled.Length; i++) _wasEnabled[i] = _disableOnDeath[i].enabled;
 
        _currentHealth = _maxHealth;
-
+        _placementController = GetComponent<PlacementController>();
+        _cross = GameObject.Find("cross");
         SetBuildingMode();
+        
         //SetActionMode();
     }
 

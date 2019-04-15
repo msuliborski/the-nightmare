@@ -8,7 +8,9 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] private float _lookSensitivity = 3f;
     [SerializeField] private Joystick move;
     [SerializeField] private Joystick look;
+
     
+
     private PlayerMotor _motor;
 
     
@@ -18,13 +20,11 @@ public class PlayerController : NetworkBehaviour
     void Start()
     {
         _motor = GetComponent<PlayerMotor>();
+
+#if UNITY_ANDROID
         move = GameObject.Find("Move").GetComponent<Joystick>();
         look = GameObject.Find("Look").GetComponent<Joystick>();
-        
-        #if UNITY_STANDALONE
-        move.enabled = false;
-        look.enabled = false;
-        #endif
+#endif
     }
 
 
@@ -77,7 +77,7 @@ public class PlayerController : NetworkBehaviour
 
             
             
-            //Cursor.lockState = CursorLockMode.Locked;
+            Cursor.lockState = CursorLockMode.Locked;
         }
 
         else
@@ -88,4 +88,8 @@ public class PlayerController : NetworkBehaviour
             Cursor.lockState = CursorLockMode.None;
         }
     }
+
+
+    
+
 }
