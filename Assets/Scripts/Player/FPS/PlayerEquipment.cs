@@ -49,6 +49,9 @@ public class PlayerEquipment : NetworkBehaviour {
             GameObject weaponObject = Instantiate(GameManager.Instance.Weapons[weaponId], _cam.transform.GetChild(0).transform);
             Weapon = weaponObject.GetComponent<Weapon>();
             WeaponSound = weaponObject.GetComponent<AudioSource>();
+            Weapon.State = Weapon.WeaponState.idle;
+            Weapon.CurrentMagAmmo = Weapon.MaxMagAmmo;
+            Weapon.CurrentAmmo = Weapon.MaxAmmo;
             GameManager.SetLayerRecursively(weaponObject, "LocalPlayer");
         }
     }
