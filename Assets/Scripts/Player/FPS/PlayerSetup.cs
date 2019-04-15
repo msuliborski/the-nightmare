@@ -27,7 +27,7 @@ public class PlayerSetup : NetworkBehaviour
         }
         else
         {
-            bulletshud = GameObject.Find("bulletNumber").GetComponent<BulletsHUD>();
+            bulletshud = GameObject.Find("bulletsNumber").GetComponent<BulletsHUD>();
             GameManager.LocalPlayer = GetComponent<PlayerManager>();
             bulletshud.player = GetComponent<PlayerEquipment>();
             bulletshud.playerEnabled = true;

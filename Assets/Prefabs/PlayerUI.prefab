@@ -639,6 +639,7 @@ GameObject:
   - component: {fileID: 8413979873258509647}
   - component: {fileID: 3513640239788233819}
   - component: {fileID: 5673249081392725774}
+  - component: {fileID: 5026295374191540388}
   m_Layer: 0
   m_Name: bulletsNumber
   m_TagString: Untagged
@@ -788,6 +789,20 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &5026295374191540388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6521169045269568633}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdea4539fb357ba01a9ac0ef660901ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  playerEnabled: 0
 --- !u!114 &7089758339142037370
 MonoBehaviour:
   m_ObjectHideFlags: 0

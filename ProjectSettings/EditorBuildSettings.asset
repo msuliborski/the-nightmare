@@ -26,4 +26,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/scopeTest.unity
     guid: 0f735814e21b6675e8bd169d5f5efa30
+  - enabled: 1
+    path: Assets/Scenes/michaltestchuju.unity
+    guid: a21e81ad4c4415528b312f8124b3e8c4
   m_configObjects: {}
