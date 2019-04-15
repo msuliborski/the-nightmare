@@ -8,7 +8,7 @@ public class PlacementController : NetworkBehaviour
     [SerializeField] private GameObject _placeableObject;
     public GameObject PlaceableObject {get { return _placeableObject; } set { _placeableObject = value; }}
     private float _mouseWheelRotation;
-    private float _x = 0, _y = 0, _reverseGrid;
+    private float _x = 0, _y = 0, _reverseGrid, _camMinZoom, _camMaxZoom;
     private GameObject _currentObject;
     private Camera _buildingCamera;
     private Camera _actionCamera;
@@ -20,6 +20,7 @@ public class PlacementController : NetworkBehaviour
     [SerializeField] private float _scrollBorderThickness = 0.005f;  // percentage of screen height
     [SerializeField] private float _moveSpeedMinZoom = 30f;
     [SerializeField] private float _moveSpeedMaxZoom = 30f;
+    [SerializeField] private float _rotationSpeedKeyboard = 150f;
     private static float _zoom = 0f;
 
    private PlayerShoot _playerShoot;
@@ -35,6 +36,8 @@ public class PlacementController : NetworkBehaviour
         _playerShoot = GetComponent<PlayerShoot>();
         _reverseGrid = 1f / GridTileSize;
         _currentCamera = _buildingCamera = gameObject.transform.Find("BuildingCamera").GetComponent<Camera>();
+        _camMaxZoom = _buildingCamera.transform.position.y;
+        _camMinZoom = 1f;
         _actionCamera = gameObject.transform.Find("PlayerCamera").GetComponent<Camera>();
         GridCanvas = GameObject.Find("GridCanvas").GetComponent<Canvas>();
         for (int i = 0; i < GridCanvas.transform.childCount; i++)
@@ -123,7 +126,7 @@ public class PlacementController : NetworkBehaviour
         {
             case GameManager.GameState.Fighting:
 
-                if (Input.GetKeyDown(KeyCode.Q))
+                if (Input.GetKeyDown(KeyCode.P))
                 {
                     if (_currentObject == null)
                     {
@@ -149,8 +152,8 @@ public class PlacementController : NetworkBehaviour
                 if (zoomDelta != 0f) AdjustZoom(zoomDelta);
 
 
-                if (Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.Comma)) rotationDelta++;
-                if (Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.Period)) rotationDelta--;
+                //if (Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.Comma)) rotationDelta++;
+                //if (Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.Period)) rotationDelta--;
 
                 if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W) || Input.mousePosition.y >= Screen.height - _scrollBorderThickness) zDelta++;
                 if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S) || Input.mousePosition.y <= _scrollBorderThickness) zDelta--;
@@ -158,9 +161,9 @@ public class PlacementController : NetworkBehaviour
                 if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A) || Input.mousePosition.x <= _scrollBorderThickness) xDelta--;
 
                 if (xDelta != 0f || zDelta != 0f) AdjustPositionMouse(xDelta, zDelta);
-                //if (rotationDelta != 0f) AdjustRotationKeyboard(rotationDelta);
+                if (rotationDelta != 0f) AdjustRotationKeyboard(rotationDelta);
 
-                if (Input.GetKeyDown(KeyCode.Q))
+                if (Input.GetKeyDown(KeyCode.P))
                 {
                     if (_currentObject == null)
                         _currentObject = Instantiate(_placeableObject);
@@ -202,10 +205,17 @@ public class PlacementController : NetworkBehaviour
 
     void AdjustZoom(float delta)
     {
+        delta *= -1f;
         _zoom = Mathf.Clamp01(_zoom + delta);
 
-       // float distance = Mathf.Lerp(_stickMinZoom, _stickMaxZoom, _zoom);
-       // came.localPosition = new Vector3(0f, 0f, distance);
+       float distance = Mathf.Lerp(_camMinZoom, _camMaxZoom, _zoom);
+       _buildingCamera.transform.localPosition = new Vector3(_buildingCamera.transform.localPosition.x, distance, _buildingCamera.transform.localPosition.z);
 
+    }
+
+    void AdjustRotationKeyboard(float angle)
+    {
+        angle *= _rotationSpeedKeyboard * Time.deltaTime;
+        _buildingCamera.transform.localRotation = Quaternion.Euler(90f, 0f, _buildingCamera.transform.localRotation.eulerAngles.z + angle);
     }
 }

@@ -30,6 +30,7 @@ public class PauseGame : MonoBehaviour
         }
 
         _pauseMenu.SetActive(menuActive);
+
     }
 
     public void Disconnect()
