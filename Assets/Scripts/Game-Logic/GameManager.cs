@@ -16,6 +16,8 @@ public class GameManager : NetworkBehaviour
     [SerializeField] private int _enemiesAmount;
     [SyncVar] private int _enemiesCounter = 0;
     [SyncVar] private int _spawnedEnemiesCounter = 0;
+    [SerializeField] private CameraFacing[] _billboards;
+    public CameraFacing[] Billboards { get { return _billboards; } set { _billboards = value; } }
     public enum GameState { Building, Fighting }
     private static GameState _currentState = GameState.Building;
     //private static GameState _currentState = GameState.Fighting;
@@ -145,22 +147,11 @@ public class GameManager : NetworkBehaviour
         _activePlayers.Add(playerId, player);
     }
 
-    //[ClientRpc]
-    //void RpcTurnOffCameras()
-    //{
-    //   LocalPlayer.GetComponent<PlayerSetup>().D
-
-    //}
-
-    /*void OnGUI()
+    public void SetCameraForBillboards(Camera cam)
     {
-        GUILayout.BeginArea(new Rect(200, 200, 200, 500));
-        GUILayout.BeginVertical();
-        foreach (string playerId in _players.Keys)
-            GUILayout.Label(playerId + " - " + _players[playerId].transform.name);
-        GUILayout.EndVertical();
-        GUILayout.EndArea();
-    }*/
+        foreach (CameraFacing cameraFacing in _billboards)
+            cameraFacing.cameraToLookAt = cam;
+    }
 
     #endregion
 }

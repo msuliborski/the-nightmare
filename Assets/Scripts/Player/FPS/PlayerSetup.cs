@@ -30,6 +30,7 @@ public class PlayerSetup : NetworkBehaviour
             _sceneCamera = Camera.main;
             if (_sceneCamera != null)
                 _sceneCamera.gameObject.SetActive(false);
+            GameManager.Instance.SetCameraForBillboards(_cam);
             
         }
         GetComponent<PlayerManager>().Setup();
