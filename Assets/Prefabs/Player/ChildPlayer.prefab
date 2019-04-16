@@ -329,8 +329,8 @@ MonoBehaviour:
   - {fileID: 3344707091803307947}
   - {fileID: 8791451780193772567}
   - {fileID: 6736232146832934853}
-  _sceneCamera: {fileID: 0}
-  _cam: {fileID: 3344707091803307947}
+  _buildingCamera: {fileID: 8076992145364159691}
+  _actionCamera: {fileID: 3344707091803307947}
   _weaponObjectPrefab: {fileID: 7510527661228352801, guid: 20bd68f0c05c52146b148704f8aa7706,
     type: 3}
 --- !u!114 &7381497835903766135
@@ -528,6 +528,7 @@ MonoBehaviour:
   _scrollBorderThickness: 0.005
   _moveSpeedMinZoom: 30
   _moveSpeedMaxZoom: 30
+  _rotationSpeedKeyboard: 150
 --- !u!135 &6077428425511275788
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -672,6 +673,12 @@ PrefabInstance:
 --- !u!4 &2370268052889161346 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2187590114338708699, guid: 7d917871d8c970a45a02188b364bfcb6,
+    type: 3}
+  m_PrefabInstance: {fileID: 4521336546258506329}
+  m_PrefabAsset: {fileID: 0}
+--- !u!20 &8076992145364159691 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 5667848497323826834, guid: 7d917871d8c970a45a02188b364bfcb6,
     type: 3}
   m_PrefabInstance: {fileID: 4521336546258506329}
   m_PrefabAsset: {fileID: 0}

@@ -7,8 +7,8 @@ using System.Collections;
 public class PlayerSetup : NetworkBehaviour
 {
     [SerializeField] private Behaviour[] _toDisable;
-    [SerializeField] private Camera _sceneCamera;
-    [SerializeField] private Camera _cam;
+    [SerializeField] private Camera _buildingCamera;
+    [SerializeField] private Camera _actionCamera;
     [SerializeField] private GameObject _weaponObjectPrefab;
     private PlayerEquipment _equipment;
     private bool _initialConf = true;
@@ -31,10 +31,7 @@ public class PlayerSetup : NetworkBehaviour
             GameManager.LocalPlayer = GetComponent<PlayerManager>();
             bulletshud.player = GetComponent<PlayerEquipment>();
             bulletshud.playerEnabled = true;
-            _sceneCamera = Camera.main;
-            if (_sceneCamera != null)
-                _sceneCamera.gameObject.SetActive(false);
-            GameManager.Instance.SetCameraForBillboards(_cam);
+            GameManager.Instance.SetCameraForBillboards(_actionCamera);
             
         }
         GetComponent<PlayerManager>().Setup();
@@ -43,16 +40,16 @@ public class PlayerSetup : NetworkBehaviour
 
     void DisableWeaponCamera()
     {
-        _cam.transform.GetChild(1).GetComponent<Camera>().enabled = false;
+        _actionCamera.transform.GetChild(1).GetComponent<Camera>().enabled = false;
 
-        GameManager.SetLayerRecursively(_cam.transform.GetChild(0).GetChild(0).gameObject, "LocalPlayer");
+        GameManager.SetLayerRecursively(_actionCamera.transform.GetChild(0).GetChild(0).gameObject, "LocalPlayer");
     }
 
     void EquipWeapon()
     {
-        GameObject weaponObject = Instantiate(_weaponObjectPrefab, _cam.transform.GetChild(0));
+        GameObject weaponObject = Instantiate(_weaponObjectPrefab, _actionCamera.transform.GetChild(0));
         PlayerShoot shoot = GetComponent<PlayerShoot>();
-        shoot.Cam = _cam;
+        shoot.Cam = _actionCamera;
         _equipment = GetComponent<PlayerEquipment>();
         _equipment.Weapon = weaponObject.GetComponent<Weapon>();
         _equipment.WeaponSound = weaponObject.GetComponent<AudioSource>();
@@ -74,25 +71,26 @@ public class PlayerSetup : NetworkBehaviour
     {
         for (int i = 0; i < _toDisable.Length; i++)
             _toDisable[i].enabled = false;
+        _buildingCamera.gameObject.SetActive(false);
     }
 
     private void OnDisable()
     {
-        if (isLocalPlayer)
+        /*if (isLocalPlayer)
         {
             if (_sceneCamera != null)
                 _sceneCamera.gameObject.SetActive(true);
-        }
+        }*/
         GameManager.UnregisterPlayer(transform.name);
     }
 
     private void OnEnable()
     {
-        if (isLocalPlayer)
+       /* if (isLocalPlayer)
         {
             if (_sceneCamera != null)
                 _sceneCamera.gameObject.SetActive(false);
-        }
+        }*/
     }
 }
 
