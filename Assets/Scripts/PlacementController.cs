@@ -132,6 +132,7 @@ public class PlacementController : NetworkBehaviour
                     {
                         GridCanvas.gameObject.SetActive(true);
                         _currentObject = Instantiate(_placeableObject);
+                        Debug.Log(_currentObject.name);
                         _playerShoot.IsBuildingOnFly = true;
                     }
                     else
