@@ -12,8 +12,9 @@ public class TrapsHandler : NetworkBehaviour
     
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Snares") && isServer)
+        if (other.CompareTag("Snares") && _enemyController.enabled)
         {
+
             Debug.Log("Snares kurwa");
             _enemyController.Agent.enabled = false;
             _enemyController.IsWalking = false;
