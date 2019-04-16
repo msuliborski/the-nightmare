@@ -28,7 +28,7 @@ public class PlayerManager : NetworkBehaviour
 
         if (_placementController.GridCanvas != null)
             _placementController.GridCanvas.gameObject.SetActive(true);
-        _cross.SetActive(false);
+        if (_cross != null) _cross.SetActive(false);
     }
 
     public void SetActionMode()
@@ -42,7 +42,7 @@ public class PlayerManager : NetworkBehaviour
             _disableOnDeath[i].enabled = _wasEnabled[i];
         if (_placementController.GridCanvas != null)
             _placementController.GridCanvas.gameObject.SetActive(false);
-        _cross.SetActive(true);
+        if (_cross != null) _cross.SetActive(true);
     }
 
     public void Setup()
@@ -55,7 +55,7 @@ public class PlayerManager : NetworkBehaviour
 
        _currentHealth = _maxHealth;
         _placementController = GetComponent<PlacementController>();
-        _cross = GameObject.Find("cross");
+        if (isLocalPlayer) _cross = GameObject.Find("cross");
         SetBuildingMode();
         
         //SetActionMode();
