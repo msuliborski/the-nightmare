@@ -72,6 +72,7 @@ public class PlayerSetup : NetworkBehaviour
         for (int i = 0; i < _toDisable.Length; i++)
             _toDisable[i].enabled = false;
         _buildingCamera.gameObject.SetActive(false);
+        Debug.Log("CHUUUJ");
     }
 
     private void OnDisable()
