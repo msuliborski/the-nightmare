@@ -9,6 +9,7 @@ public class PlayerSetup : NetworkBehaviour
     [SerializeField] private Behaviour[] _toDisable;
     [SerializeField] private Camera _buildingCamera;
     [SerializeField] private Camera _actionCamera;
+    private Camera _sceneCamera;
     [SerializeField] private GameObject _weaponObjectPrefab;
     private PlayerEquipment _equipment;
     private bool _initialConf = true;
@@ -27,6 +28,9 @@ public class PlayerSetup : NetworkBehaviour
         }
         else
         {
+            _sceneCamera = GameObject.Find("SceneCamera").GetComponent<Camera>();
+            if (_sceneCamera != null)
+                _sceneCamera.gameObject.SetActive(false);
             bulletshud = GameObject.Find("bulletsNumber").GetComponent<BulletsHUD>();
             GameManager.LocalPlayer = GetComponent<PlayerManager>();
             bulletshud.player = GetComponent<PlayerEquipment>();
@@ -72,26 +76,26 @@ public class PlayerSetup : NetworkBehaviour
         for (int i = 0; i < _toDisable.Length; i++)
             _toDisable[i].enabled = false;
         _buildingCamera.gameObject.SetActive(false);
-        Debug.Log("CHUUUJ");
+        
     }
 
     private void OnDisable()
     {
-        /*if (isLocalPlayer)
+        if (isLocalPlayer)
         {
             if (_sceneCamera != null)
                 _sceneCamera.gameObject.SetActive(true);
-        }*/
+        }
         GameManager.UnregisterPlayer(transform.name);
     }
 
     private void OnEnable()
     {
-       /* if (isLocalPlayer)
+        if (isLocalPlayer)
         {
             if (_sceneCamera != null)
                 _sceneCamera.gameObject.SetActive(false);
-        }*/
+        }
     }
 }
 
