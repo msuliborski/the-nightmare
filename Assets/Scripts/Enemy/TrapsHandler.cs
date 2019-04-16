@@ -12,7 +12,7 @@ public class TrapsHandler : NetworkBehaviour
     
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Snares"))
+        if (other.CompareTag("Snares") && isServer)
         {
             Debug.Log("Snares kurwa");
             _enemyController.Agent.enabled = false;
@@ -29,6 +29,6 @@ public class TrapsHandler : NetworkBehaviour
         _enemyDamage._damageDest = null;
         _enemyController.Agent.enabled = true;
         _enemyController.IsWalking = true;
-        if (isServer) _enemyDamage.RpcTurnOnWalking(true);
+        _enemyDamage.RpcTurnOnWalking(true);
     }
 }
