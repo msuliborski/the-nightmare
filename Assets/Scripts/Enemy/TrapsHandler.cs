@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using UnityEngine;
 
+using UnityEngine.Networking;
 
-public class TrapsHandler : MonoBehaviour
+public class TrapsHandler : NetworkBehaviour
 {
     private Snares _snares;
     [SerializeField] private EnemyControllerServer _enemyController;
@@ -28,6 +29,6 @@ public class TrapsHandler : MonoBehaviour
         _enemyDamage._damageDest = null;
         _enemyController.Agent.enabled = true;
         _enemyController.IsWalking = true;
-        _enemyDamage.RpcTurnOnWalking(true);
+        if (isServer) _enemyDamage.RpcTurnOnWalking(true);
     }
 }
