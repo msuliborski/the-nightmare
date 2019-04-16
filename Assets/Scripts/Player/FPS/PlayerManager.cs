@@ -21,14 +21,15 @@ public class PlayerManager : NetworkBehaviour
     public void SetBuildingMode()
     {
         for (int i = 0; i < 3; i++) transform.GetChild(i).gameObject.SetActive(false);
-        transform.GetChild(3).gameObject.SetActive(true);
-         if (isLocalPlayer)
+        if (isLocalPlayer)
+        {
+            transform.GetChild(3).gameObject.SetActive(true);
+            if (_placementController.GridCanvas != null)
+                _placementController.GridCanvas.gameObject.SetActive(true);
             for (int i = 0; i < _disableOnDeath.Length; i++)
-            _disableOnDeath[i].enabled = !_wasEnabled[i];
-
-        if (_placementController.GridCanvas != null)
-            _placementController.GridCanvas.gameObject.SetActive(true);
-        if (_cross != null) _cross.SetActive(false);
+                _disableOnDeath[i].enabled = !_wasEnabled[i];
+            _cross.SetActive(false);
+        }
     }
 
     public void SetActionMode()
@@ -36,13 +37,15 @@ public class PlayerManager : NetworkBehaviour
         
 
         for (int i = 0; i < 3; i++) transform.GetChild(i).gameObject.SetActive(true);
-        transform.GetChild(3).gameObject.SetActive(false);
         if (isLocalPlayer)
-        for (int i = 0; i < _disableOnDeath.Length; i++)
-            _disableOnDeath[i].enabled = _wasEnabled[i];
-        if (_placementController.GridCanvas != null)
-            _placementController.GridCanvas.gameObject.SetActive(false);
-        if (_cross != null) _cross.SetActive(true);
+        {
+            transform.GetChild(3).gameObject.SetActive(false);
+            for (int i = 0; i < _disableOnDeath.Length; i++)
+                _disableOnDeath[i].enabled = _wasEnabled[i];
+            if (_placementController.GridCanvas != null)
+                _placementController.GridCanvas.gameObject.SetActive(false);
+            _cross.SetActive(true);
+        }
     }
 
     public void Setup()
