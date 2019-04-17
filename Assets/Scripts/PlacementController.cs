@@ -181,6 +181,7 @@ public class PlacementController : NetworkBehaviour
     [Command]
     void CmdRegisterBeingReady()
     {
+        Debug.Log("REGISTERED ON SERVER");
         GameManager.Instance.ReadyPlayersCnt++;
         if (GameManager.Instance.ReadyPlayersCnt == GameManager.Players.Count)
            RpcRegisterBeingReady();
@@ -192,7 +193,7 @@ public class PlacementController : NetworkBehaviour
         if (isLocalPlayer)
         {
             _currentCamera = _actionCamera;
-            //Debug.Log(_currentCamera.name);
+            Debug.Log(_currentCamera.name);
             GameManager.CurrentState = GameManager.GameState.Fighting;
         }
     }
