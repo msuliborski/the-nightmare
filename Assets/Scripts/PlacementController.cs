@@ -186,14 +186,10 @@ public class PlacementController : NetworkBehaviour
     }
 
     [ClientRpc]
-    void RpcRegisterBeingReady()
+    void RpcRegisterBeingReady() // kiedy kilka obiektow ma ten skryp (nawet pomimo faktu ze tylko jeden jet aktywny), metoda jest wywolywana raz na osatanim w drzewie sceny !!!
     {
-        if (isLocalPlayer)
-        {
-            _currentCamera = _actionCamera;
-            GameManager.CurrentState = GameManager.GameState.Fighting;
-        }
-        
+        GameManager.LocalPlayer.GetComponent<PlacementController>()._currentCamera = _actionCamera;
+        GameManager.CurrentState = GameManager.GameState.Fighting;
     }
 
     void AdjustPositionMouse(float xDelta, float zDelta)
