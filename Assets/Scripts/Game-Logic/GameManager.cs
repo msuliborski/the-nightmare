@@ -155,7 +155,7 @@ public class GameManager : NetworkBehaviour
 
 
     [Command]
-    void CmdRegisterBeingReady()
+    public void CmdRegisterBeingReady()
     {
         ReadyPlayersCnt++;
         if (ReadyPlayersCnt == Players.Count)

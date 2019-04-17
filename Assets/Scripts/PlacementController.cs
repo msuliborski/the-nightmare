@@ -173,7 +173,7 @@ public class PlacementController : NetworkBehaviour
                 }
 
                 if (Input.GetKeyDown(KeyCode.R))
-                    CmdRegisterBeingReady();
+                    GameManager.Instance.CmdRegisterBeingReady();
                 break;
         }
     }
