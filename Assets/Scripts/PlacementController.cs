@@ -178,25 +178,13 @@ public class PlacementController : NetworkBehaviour
         }
     }
 
-    [Command]
-    void CmdRegisterBeingReady()
-    {
-        Debug.Log("REGISTERED ON SERVER");
-        GameManager.Instance.ReadyPlayersCnt++;
-        if (GameManager.Instance.ReadyPlayersCnt == GameManager.Players.Count)
-           RpcRegisterBeingReady();
-    }
+   
 
-    [ClientRpc]
-    void RpcRegisterBeingReady()
+    public void ChangeState(GameManager.GameState state)
     {
-        Debug.Log("RPC REGISTERD ON: " + transform.name);
-        if (isLocalPlayer)
-        {
-            _currentCamera = _actionCamera;
-            Debug.Log(_currentCamera.name);
-            GameManager.CurrentState = GameManager.GameState.Fighting;
-        }
+        if (state == GameManager.GameState.Building)
+            _currentCamera = _buildingCamera;
+        else _currentCamera = _actionCamera;
     }
 
     void AdjustPositionMouse(float xDelta, float zDelta)
