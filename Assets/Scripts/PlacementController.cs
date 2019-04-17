@@ -189,8 +189,12 @@ public class PlacementController : NetworkBehaviour
     [ClientRpc]
     void RpcRegisterBeingReady()
     {
-        if (isLocalPlayer) _currentCamera = _actionCamera;
-        GameManager.CurrentState = GameManager.GameState.Fighting;
+        if (isLocalPlayer)
+        {
+            _currentCamera = _actionCamera;
+            Debug.Log(_currentCamera.name);
+            GameManager.CurrentState = GameManager.GameState.Fighting;
+        }
     }
 
     void AdjustPositionMouse(float xDelta, float zDelta)
