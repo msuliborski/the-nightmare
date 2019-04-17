@@ -188,7 +188,8 @@ public class PlacementController : NetworkBehaviour
     [ClientRpc]
     void RpcRegisterBeingReady() // kiedy kilka obiektow ma ten skryp (nawet pomimo faktu ze tylko jeden jet aktywny), metoda jest wywolywana raz na osatanim w drzewie sceny !!!
     {
-        GameManager.LocalPlayer.GetComponent<PlacementController>()._currentCamera = _actionCamera; // musimy wyluskac local playera, bo moze on nie byc ostatnim playerem w drzewie sceny
+        PlacementController localPlayer = GameManager.LocalPlayer.GetComponent<PlacementController>(); // musimy wyluskac local playera, bo moze on nie byc ostatnim playerem w drzewie sceny
+        localPlayer._currentCamera = localPlayer._actionCamera; 
         GameManager.CurrentState = GameManager.GameState.Fighting;
     }
 
