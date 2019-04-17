@@ -190,6 +190,7 @@ public class PlacementController : NetworkBehaviour
     [ClientRpc]
     void RpcRegisterBeingReady()
     {
+        Debug.Log("RPC REGISTERD ON: " + transform.name);
         if (isLocalPlayer)
         {
             _currentCamera = _actionCamera;
