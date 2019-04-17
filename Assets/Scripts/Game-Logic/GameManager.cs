@@ -153,34 +153,5 @@ public class GameManager : NetworkBehaviour
             cameraFacing.cameraToLookAt = cam;
     }
 
-
-    [Command]
-    public void CmdRegisterBeingReady()
-    {
-        ReadyPlayersCnt++;
-        if (ReadyPlayersCnt == Players.Count)
-            RpcRegisterBeingReady();
-    }
-
-    
-    public void RegisterBeingReady()
-    {
-        CmdRegisterBeingReady();
-    }
-
-    [ClientRpc]
-    void RpcRegisterBeingReady()
-    {
-        Debug.Log("RPC REGISTERD ON: " + transform.name);
-        CurrentState = GameState.Fighting;
-        foreach (PlayerManager player in _players.Values)
-        {
-            if (isLocalPlayer)
-                player.GetComponent<PlacementController>().ChangeState(CurrentState);
-            
-        }
-    }
-
-
     #endregion
 }

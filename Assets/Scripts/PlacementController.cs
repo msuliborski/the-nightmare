@@ -132,7 +132,6 @@ public class PlacementController : NetworkBehaviour
                     {
                         GridCanvas.gameObject.SetActive(true);
                         _currentObject = Instantiate(_placeableObject);
-                        Debug.Log(_currentObject.name);
                         _playerShoot.IsBuildingOnFly = true;
                     }
                     else
@@ -173,18 +172,24 @@ public class PlacementController : NetworkBehaviour
                 }
 
                 if (Input.GetKeyDown(KeyCode.R))
-                    GameManager.Instance.RegisterBeingReady();
+                    CmdRegisterBeingReady();
                 break;
         }
     }
 
-   
-
-    public void ChangeState(GameManager.GameState state)
+    [Command]
+    void CmdRegisterBeingReady()
     {
-        if (state == GameManager.GameState.Building)
-            _currentCamera = _buildingCamera;
-        else _currentCamera = _actionCamera;
+        GameManager.Instance.ReadyPlayersCnt++;
+        if (GameManager.Instance.ReadyPlayersCnt == GameManager.Players.Count)
+           RpcRegisterBeingReady();
+    }
+
+    [ClientRpc]
+    void RpcRegisterBeingReady()
+    {
+        if (isLocalPlayer) _currentCamera = _actionCamera;
+        GameManager.CurrentState = GameManager.GameState.Fighting;
     }
 
     void AdjustPositionMouse(float xDelta, float zDelta)
