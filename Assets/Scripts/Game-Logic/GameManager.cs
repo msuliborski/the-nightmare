@@ -162,6 +162,12 @@ public class GameManager : NetworkBehaviour
             RpcRegisterBeingReady();
     }
 
+    
+    public void RegisterBeingReady()
+    {
+        CmdRegisterBeingReady();
+    }
+
     [ClientRpc]
     void RpcRegisterBeingReady()
     {
