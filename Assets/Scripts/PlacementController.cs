@@ -192,7 +192,7 @@ public class PlacementController : NetworkBehaviour
         if (isLocalPlayer)
         {
             _currentCamera = _actionCamera;
-            Debug.Log(_currentCamera.name);
+            //Debug.Log(_currentCamera.name);
             GameManager.CurrentState = GameManager.GameState.Fighting;
         }
     }
