@@ -75,6 +75,7 @@ public class PlayerEquipment : NetworkBehaviour {
 
     [ClientRpc]
     public void RpcDoHitEffect(Vector3 hitPoint, Vector3 normal) {
+        Debug.Log("Called on: " + transform.name);
         if (!isLocalPlayer) {
             GameObject hitEffect = Instantiate(Weapon.HitEffect, hitPoint, Quaternion.LookRotation(normal));
             Destroy(hitEffect, 2f);
