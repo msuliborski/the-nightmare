@@ -23,6 +23,8 @@ public class PlayerManager : NetworkBehaviour
         for (int i = 0; i < 3; i++) transform.GetChild(i).gameObject.SetActive(false);
         if (isLocalPlayer)
         {
+            foreach (MeshRenderer floor in GameManager.Instance.FloorsToDisable)
+                floor.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
             transform.GetChild(3).gameObject.SetActive(true);
             if (_placementController.GridCanvas != null)
                 _placementController.GridCanvas.gameObject.SetActive(true);
@@ -39,6 +41,8 @@ public class PlayerManager : NetworkBehaviour
         for (int i = 0; i < 3; i++) transform.GetChild(i).gameObject.SetActive(true);
         if (isLocalPlayer)
         {
+            foreach (MeshRenderer floor in GameManager.Instance.FloorsToDisable)
+                floor.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
             transform.GetChild(3).gameObject.SetActive(false);
             for (int i = 0; i < _disableOnDeath.Length; i++)
                 _disableOnDeath[i].enabled = _wasEnabled[i];

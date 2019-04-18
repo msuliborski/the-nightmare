@@ -44,7 +44,8 @@ public class GameManager : NetworkBehaviour
     [SyncVar] public int ReadyPlayersCnt = 0;            
     public GameObject[] Weapons { get { return _weapons; } set { _weapons = value; } }
     public MatchSettings MatchSettings { get { return _matchSettings; } set { _matchSettings = value; } }
-
+    [SerializeField] private MeshRenderer[] _floorsToDisable;
+    public MeshRenderer[] FloorsToDisable { get { return _floorsToDisable; }  set { _floorsToDisable = value; } }
 
     void Start()
     {

@@ -21,7 +21,7 @@ public class PlacementController : NetworkBehaviour
     [SerializeField] private float _moveSpeedMinZoom = 30f;
     [SerializeField] private float _moveSpeedMaxZoom = 30f;
     [SerializeField] private float _rotationSpeedKeyboard = 150f;
-    private static float _zoom = 0f;
+    private static float _zoom = 1f;
 
    private PlayerShoot _playerShoot;
 
@@ -152,8 +152,8 @@ public class PlacementController : NetworkBehaviour
                 if (zoomDelta != 0f) AdjustZoom(zoomDelta);
 
 
-                //if (Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.Comma)) rotationDelta++;
-                //if (Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.Period)) rotationDelta--;
+                if (Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.Comma)) rotationDelta++;
+                if (Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.Period)) rotationDelta--;
 
                 if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W) || Input.mousePosition.y >= Screen.height - _scrollBorderThickness) zDelta++;
                 if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S) || Input.mousePosition.y <= _scrollBorderThickness) zDelta--;
@@ -186,10 +186,11 @@ public class PlacementController : NetworkBehaviour
     }
 
     [ClientRpc]
-    void RpcRegisterBeingReady() // kiedy kilka obiektow ma ten skryp (nawet pomimo faktu ze tylko jeden jet aktywny), metoda jest wywolywana raz na osatanim w drzewie sceny !!!
+    void RpcRegisterBeingReady() // kiedy kilka obiektow ma ten skrypt (nawet pomimo faktu ze tylko jeden jest aktywny), metoda jest wywolywana raz na ostatnim w drzewie sceny !!!
     {
         PlacementController localPlayer = GameManager.LocalPlayer.GetComponent<PlacementController>(); // musimy wyluskac local playera, bo moze on nie byc ostatnim playerem w drzewie sceny
-        localPlayer._currentCamera = localPlayer._actionCamera; 
+        localPlayer._currentCamera = localPlayer._actionCamera;
+        if (localPlayer._currentObject != null) Destroy(localPlayer._currentObject);
         GameManager.CurrentState = GameManager.GameState.Fighting;
     }
 
@@ -217,6 +218,7 @@ public class PlacementController : NetworkBehaviour
     void AdjustRotationKeyboard(float angle)
     {
         angle *= _rotationSpeedKeyboard * Time.deltaTime;
-        _buildingCamera.transform.localRotation = Quaternion.Euler(90f, 0f, _buildingCamera.transform.localRotation.eulerAngles.z + angle);
+        _buildingCamera.transform.rotation = Quaternion.Euler(90f, 0f, _buildingCamera.transform.rotation.eulerAngles.z + angle);
+        Debug.Log(_buildingCamera.transform.rotation.eulerAngles.z);
     }
 }
