@@ -10,7 +10,9 @@ public class PlacementController : NetworkBehaviour
     private float _mouseWheelRotation;
     private float _x = 0, _y = 0, _reverseGrid, _camMinZoom, _camMaxZoom;
     private GameObject _currentObject;
+    private Transform _buildingCameraHolder;
     private Camera _buildingCamera;
+    private float _buildingCameraAngle = 0f;
     private Camera _actionCamera;
     private Camera _currentCamera;
     [SerializeField] private GameObject _gridPointPrefab;
@@ -35,7 +37,8 @@ public class PlacementController : NetworkBehaviour
     {
         _playerShoot = GetComponent<PlayerShoot>();
         _reverseGrid = 1f / GridTileSize;
-        _currentCamera = _buildingCamera = gameObject.transform.Find("BuildingCamera").GetComponent<Camera>();
+        _buildingCameraHolder = gameObject.transform.Find("BuildingCameraHolder");
+        _currentCamera = _buildingCamera = _buildingCameraHolder.GetComponentInChildren<Camera>();
         _camMaxZoom = _buildingCamera.transform.position.y;
         _camMinZoom = 1f;
         _actionCamera = gameObject.transform.Find("PlayerCamera").GetComponent<Camera>();
@@ -182,7 +185,7 @@ public class PlacementController : NetworkBehaviour
     {
         GameManager.Instance.ReadyPlayersCnt++;
         if (GameManager.Instance.ReadyPlayersCnt == GameManager.Players.Count)
-           RpcRegisterLocalPlayerBeingReady(); // rpc bedzie wywolywana na obiketach symbolizujacych ostatniegp playera ktory zadeklarowal sie 'ready'
+           RpcRegisterLocalPlayerBeingReady(); // rpc bedzie wywolywana na obiketach symbolizujacych ostatniego playera ktory zadeklarowal sie 'ready'
     }
 
     [ClientRpc]
@@ -196,12 +199,12 @@ public class PlacementController : NetworkBehaviour
 
     void AdjustPositionMouse(float xDelta, float zDelta)
     {
-        Vector3 direction = transform.localRotation * new Vector3(xDelta, 0f, zDelta).normalized;
+        Vector3 direction = _buildingCameraHolder.localRotation * new Vector3(xDelta, 0f, zDelta).normalized;
         float distance = Mathf.Lerp(_moveSpeedMinZoom, _moveSpeedMaxZoom, _zoom) * Time.deltaTime;
-        Vector3 position = _buildingCamera.transform.localPosition;
+        Vector3 position = _buildingCameraHolder.localPosition;
         position += direction * distance;
         //transform.localPosition = ClampPosition(position);
-        _buildingCamera.transform.localPosition = position;
+        _buildingCameraHolder.localPosition = position;
     }
 
 
@@ -215,10 +218,10 @@ public class PlacementController : NetworkBehaviour
 
     }
 
+    
     void AdjustRotationKeyboard(float angle)
     {
         angle *= _rotationSpeedKeyboard * Time.deltaTime;
-        _buildingCamera.transform.rotation = Quaternion.Euler(90f, 0f, _buildingCamera.transform.rotation.eulerAngles.z + angle);
-        Debug.Log(_buildingCamera.transform.rotation.eulerAngles.z);
+        _buildingCameraHolder.rotation = Quaternion.Euler(0f, _buildingCameraHolder.localEulerAngles.y + angle, 0f);
     }
 }
