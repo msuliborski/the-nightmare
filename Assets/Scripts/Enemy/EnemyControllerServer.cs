@@ -61,8 +61,8 @@ public class EnemyControllerServer : NetworkBehaviour
             }
         }
         Dest =  tMin;
-        if (Dest) RpcSendDest(Dest.name);
-        else RpcSendDest(NO_DESTINATION);
+        if (Dest) RpcSendDest(Dest.name, netId.ToString());
+        else RpcSendDest(NO_DESTINATION, netId.ToString());
     }
 
     public void SetClosestPlayer()
@@ -85,8 +85,8 @@ public class EnemyControllerServer : NetworkBehaviour
             }
         }
         Dest = tMin;
-        if (Dest) RpcSendDest(Dest.name);
-        else RpcSendDest(NO_DESTINATION);
+        if (Dest) RpcSendDest(Dest.name, netId.ToString());
+        else RpcSendDest(NO_DESTINATION, netId.ToString());
     }
 
 
@@ -109,8 +109,9 @@ public class EnemyControllerServer : NetworkBehaviour
 
 
     [ClientRpc]
-    void RpcSendDest(string destId)
-    { 
+    void RpcSendDest(string destId, string netID)
+    {
+        if (netId.ToString() != netID) Debug.Log("POYYYEBAUO");
         if (!isServer)
         {
             EnemyControllerClient enemyControllerClient = GetComponent<EnemyControllerClient>();
