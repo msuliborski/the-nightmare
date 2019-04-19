@@ -112,6 +112,7 @@ public class EnemyControllerServer : NetworkBehaviour
     void RpcSendDest(string destId, string netID)
     {
         if (netId.ToString() != netID) Debug.Log("POYYYEBAUO");
+        else Debug.Log("GIT KURWA");
         if (!isServer)
         {
             EnemyControllerClient enemyControllerClient = GetComponent<EnemyControllerClient>();
