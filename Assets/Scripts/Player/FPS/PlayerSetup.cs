@@ -12,7 +12,6 @@ public class PlayerSetup : NetworkBehaviour
     private Camera _sceneCamera;
     [SerializeField] private GameObject _weaponObjectPrefab;
     private PlayerEquipment _equipment;
-    private bool _initialConf = true;
     private BulletsHUD bulletshud;
      
     // Start is called before the first frame update

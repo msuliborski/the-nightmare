@@ -8,6 +8,8 @@ public class GameManager : NetworkBehaviour
 {
 
     public static GameManager Instance;
+    private List<GameObject> _rooms = new List<GameObject>();
+    public List<GameObject> Rooms { get { return _rooms; } }
     [SerializeField] private Transform[] _enemySpawnPoints;
     [SerializeField] private GameObject _enemyPrefab;
     [SerializeField] private MatchSettings _matchSettings;
@@ -49,13 +51,33 @@ public class GameManager : NetworkBehaviour
 
     void Start()
     {
+        Transform rooms = GameObject.Find("Rooms").transform;
+        for (int i = 0; i < rooms.childCount; i++)
+            _rooms.Add(rooms.GetChild(i).gameObject);
+
+        foreach (GameObject room in _rooms)
+        {
+            Transform points = room.transform.GetChild(1);
+            for (int i = 0; i < points.childCount; i++)
+            {
+                Transform point = points.GetChild(i);
+                _buildingPoints.Add(new Vector2(point.transform.position.x, point.transform.position.z), point.GetComponent<GridPoint>());
+            }
+        }
+
        _matchSettings.WaitForSpawn -= _matchSettings.EnemyRespawnTime;
         if (Instance != null) Debug.LogError("More than one GameManager in scene!");
         else Instance = this;
      }
 
+
+    #region Building
+    private Dictionary<Vector2, GridPoint> _buildingPoints = new Dictionary<Vector2, GridPoint>();
+    public Dictionary<Vector2, GridPoint> BuildingPoints { get { return _buildingPoints; } }
+    #endregion
+
     #region EnemySpawning
-    
+
     [Command]
     void CmdSpawnEnemy(int randIndex)
     {

@@ -17,6 +17,7 @@ public class PlayerShoot : NetworkBehaviour {
     private float zoomFOV;
 
     public bool IsBuildingOnFly { get; set; }
+    public bool WasBuilt { get; set; }
     private Animator weaponAnimator;
     private static readonly int IsAiming = Animator.StringToHash("isAiming");
     private static readonly int IsReloading = Animator.StringToHash("isReloading");
@@ -55,8 +56,12 @@ public class PlayerShoot : NetworkBehaviour {
         }
         if (Input.GetButtonUp("Fire1"))
         {
-            IsBuildingOnFly = false;
             _shootingDone = false;
+            if (WasBuilt)
+            {
+                IsBuildingOnFly = false;
+                WasBuilt = false;
+            }
         }
         //aiming
         if (Input.GetButton("Fire2") && 

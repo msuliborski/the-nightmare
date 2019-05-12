@@ -81,11 +81,20 @@ public class PlacementController : NetworkBehaviour
     {
         if (Input.GetMouseButton(0))
         {
-            if (GameManager.CurrentState == GameManager.GameState.Fighting)
-                GridCanvas.gameObject.SetActive(false);
-            CmdPlaceEntity(_currentObject.transform.position, _currentObject.transform.rotation);
-            _currentObject.transform.GetComponent<BoxCollider>().enabled = true;
-            _currentObject = null;
+            Vector2 pos = new Vector2(_currentObject.transform.position.x, _currentObject.transform.position.z);
+            if (GameManager.Instance.BuildingPoints.ContainsKey(pos)
+                && GameManager.Instance.BuildingPoints[pos].Buildable
+                )
+            {
+
+                if (GameManager.CurrentState == GameManager.GameState.Fighting)
+                    GridCanvas.gameObject.SetActive(false);
+                CmdPlaceEntity(_currentObject.transform.position, _currentObject.transform.rotation);
+                _currentObject.transform.GetComponent<BoxCollider>().enabled = true;
+                GameManager.Instance.BuildingPoints[pos].Buildable = false;
+                _currentObject = null;
+                _playerShoot.WasBuilt = true;
+            }
         }
     }
 
@@ -102,6 +111,8 @@ public class PlacementController : NetworkBehaviour
         {
             GameObject temp = Instantiate(_placeableObject, pos, rot);
             temp.GetComponent<BoxCollider>().enabled = true;
+            Vector2 pos1 = new Vector2(temp.transform.position.x, temp.transform.position.z);
+            GameManager.Instance.BuildingPoints[pos1].Buildable = false;
         }
     }
     

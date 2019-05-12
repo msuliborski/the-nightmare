@@ -4,15 +4,12 @@ using UnityEngine;
 
 public class Room : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    private List<GameObject> _buildingPoints = new List<GameObject>();
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    [SerializeField] private int _width;
+    public int Width { get { return _width; } }
+    [SerializeField] private int _height;
+    public int Height { get { return _height; } }
+
+
 }
