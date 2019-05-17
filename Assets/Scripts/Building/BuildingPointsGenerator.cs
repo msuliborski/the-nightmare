@@ -37,7 +37,8 @@ public class BuildingPointsGenerator : MonoBehaviour
                     GameObject point = Instantiate(empty, new Vector3(x, 0f, y), Quaternion.Euler(0f, 0f, 0f), points.transform);
                     point.name = "Point " + x + " " + y;
                     point.AddComponent<GridPoint>();
-                    Instantiate(_gridPointPrefab, new Vector3(x, 0.1f, y), Quaternion.Euler(90f, 0f, 0f), roomCanvas.transform);
+                    GameObject temp = Instantiate(_gridPointPrefab, new Vector3(x, 0.1f, y), Quaternion.Euler(90f, 0f, 0f), roomCanvas.transform);
+                    point.GetComponent<GridPoint>().setSpriteRenderer(temp);
                 }
         }
 		DestroyImmediate(empty);
