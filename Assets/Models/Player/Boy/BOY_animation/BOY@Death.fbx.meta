@@ -62,6 +62,76 @@ ModelImporter:
     100112: Character1_Spine1
     100114: Character1_Spine2
     100116: group1
+    100118: mesh
+    100120: mixamorig:Head
+    100122: mixamorig:HeadTop_End
+    100124: mixamorig:Hips
+    100126: mixamorig:LeftArm
+    100128: mixamorig:LeftFoot
+    100130: mixamorig:LeftForeArm
+    100132: mixamorig:LeftHand
+    100134: mixamorig:LeftHandIndex1
+    100136: mixamorig:LeftHandIndex2
+    100138: mixamorig:LeftHandIndex3
+    100140: mixamorig:LeftHandIndex4
+    100142: mixamorig:LeftHandMiddle1
+    100144: mixamorig:LeftHandMiddle2
+    100146: mixamorig:LeftHandMiddle3
+    100148: mixamorig:LeftHandMiddle4
+    100150: mixamorig:LeftHandPinky1
+    100152: mixamorig:LeftHandPinky2
+    100154: mixamorig:LeftHandPinky3
+    100156: mixamorig:LeftHandPinky4
+    100158: mixamorig:LeftHandRing1
+    100160: mixamorig:LeftHandRing2
+    100162: mixamorig:LeftHandRing3
+    100164: mixamorig:LeftHandRing4
+    100166: mixamorig:LeftHandThumb1
+    100168: mixamorig:LeftHandThumb2
+    100170: mixamorig:LeftHandThumb3
+    100172: mixamorig:LeftHandThumb4
+    100174: mixamorig:LeftLeg
+    100176: mixamorig:LeftShoulder
+    100178: mixamorig:LeftToe_End
+    100180: mixamorig:LeftToeBase
+    100182: mixamorig:LeftUpLeg
+    100184: mixamorig:Neck
+    100186: mixamorig:RightArm
+    100188: mixamorig:RightFoot
+    100190: mixamorig:RightForeArm
+    100192: mixamorig:RightHand
+    100194: mixamorig:RightHandIndex1
+    100196: mixamorig:RightHandIndex2
+    100198: mixamorig:RightHandIndex3
+    100200: mixamorig:RightHandIndex4
+    100202: mixamorig:RightHandMiddle1
+    100204: mixamorig:RightHandMiddle2
+    100206: mixamorig:RightHandMiddle3
+    100208: mixamorig:RightHandMiddle4
+    100210: mixamorig:RightHandPinky1
+    100212: mixamorig:RightHandPinky2
+    100214: mixamorig:RightHandPinky3
+    100216: mixamorig:RightHandPinky4
+    100218: mixamorig:RightHandRing1
+    100220: mixamorig:RightHandRing2
+    100222: mixamorig:RightHandRing3
+    100224: mixamorig:RightHandRing4
+    100226: mixamorig:RightHandThumb1
+    100228: mixamorig:RightHandThumb2
+    100230: mixamorig:RightHandThumb3
+    100232: mixamorig:RightHandThumb4
+    100234: mixamorig:RightLeg
+    100236: mixamorig:RightShoulder
+    100238: mixamorig:RightToe_End
+    100240: mixamorig:RightToeBase
+    100242: mixamorig:RightUpLeg
+    100244: mixamorig:Spine
+    100246: mixamorig:Spine1
+    100248: mixamorig:Spine2
+    100250: skinCluster1Set
+    100252: skinCluster2Set
+    100254: skinCluster3Set
+    100256: skinCluster4Set
     400000: //RootNode
     400002: BOY_model:Group1
     400004: BOY_model:Group2
@@ -121,17 +191,103 @@ ModelImporter:
     400112: Character1_Spine1
     400114: Character1_Spine2
     400116: group1
+    400118: mesh
+    400120: mixamorig:Head
+    400122: mixamorig:HeadTop_End
+    400124: mixamorig:Hips
+    400126: mixamorig:LeftArm
+    400128: mixamorig:LeftFoot
+    400130: mixamorig:LeftForeArm
+    400132: mixamorig:LeftHand
+    400134: mixamorig:LeftHandIndex1
+    400136: mixamorig:LeftHandIndex2
+    400138: mixamorig:LeftHandIndex3
+    400140: mixamorig:LeftHandIndex4
+    400142: mixamorig:LeftHandMiddle1
+    400144: mixamorig:LeftHandMiddle2
+    400146: mixamorig:LeftHandMiddle3
+    400148: mixamorig:LeftHandMiddle4
+    400150: mixamorig:LeftHandPinky1
+    400152: mixamorig:LeftHandPinky2
+    400154: mixamorig:LeftHandPinky3
+    400156: mixamorig:LeftHandPinky4
+    400158: mixamorig:LeftHandRing1
+    400160: mixamorig:LeftHandRing2
+    400162: mixamorig:LeftHandRing3
+    400164: mixamorig:LeftHandRing4
+    400166: mixamorig:LeftHandThumb1
+    400168: mixamorig:LeftHandThumb2
+    400170: mixamorig:LeftHandThumb3
+    400172: mixamorig:LeftHandThumb4
+    400174: mixamorig:LeftLeg
+    400176: mixamorig:LeftShoulder
+    400178: mixamorig:LeftToe_End
+    400180: mixamorig:LeftToeBase
+    400182: mixamorig:LeftUpLeg
+    400184: mixamorig:Neck
+    400186: mixamorig:RightArm
+    400188: mixamorig:RightFoot
+    400190: mixamorig:RightForeArm
+    400192: mixamorig:RightHand
+    400194: mixamorig:RightHandIndex1
+    400196: mixamorig:RightHandIndex2
+    400198: mixamorig:RightHandIndex3
+    400200: mixamorig:RightHandIndex4
+    400202: mixamorig:RightHandMiddle1
+    400204: mixamorig:RightHandMiddle2
+    400206: mixamorig:RightHandMiddle3
+    400208: mixamorig:RightHandMiddle4
+    400210: mixamorig:RightHandPinky1
+    400212: mixamorig:RightHandPinky2
+    400214: mixamorig:RightHandPinky3
+    400216: mixamorig:RightHandPinky4
+    400218: mixamorig:RightHandRing1
+    400220: mixamorig:RightHandRing2
+    400222: mixamorig:RightHandRing3
+    400224: mixamorig:RightHandRing4
+    400226: mixamorig:RightHandThumb1
+    400228: mixamorig:RightHandThumb2
+    400230: mixamorig:RightHandThumb3
+    400232: mixamorig:RightHandThumb4
+    400234: mixamorig:RightLeg
+    400236: mixamorig:RightShoulder
+    400238: mixamorig:RightToe_End
+    400240: mixamorig:RightToeBase
+    400242: mixamorig:RightUpLeg
+    400244: mixamorig:Spine
+    400246: mixamorig:Spine1
+    400248: mixamorig:Spine2
+    400250: skinCluster1Set
+    400252: skinCluster2Set
+    400254: skinCluster3Set
+    400256: skinCluster4Set
     2100000: BOY_model_defaultMat1
+    2100002: No Name
+    2300000: skinCluster1Set
+    2300002: skinCluster2Set
+    2300004: skinCluster3Set
+    2300006: skinCluster4Set
+    3300000: skinCluster1Set
+    3300002: skinCluster2Set
+    3300004: skinCluster3Set
+    3300006: skinCluster4Set
     4300000: BOY_model:ZBrush_defualt_group
     4300002: BOY_model:Group3
     4300004: BOY_model:Group2
     4300006: BOY_model:Group1
+    4300008: skinCluster2Set
+    4300010: skinCluster3Set
+    4300012: mesh
+    4300014: skinCluster4Set
+    4300016: skinCluster1Set
     7400000: mixamo.com
     9500000: //RootNode
     13700000: BOY_model:Group1
     13700002: BOY_model:Group2
     13700004: BOY_model:Group3
     13700006: BOY_model:ZBrush_defualt_group
+    13700008: mesh
+    2186277476908879412: ImportLogs
   externalObjects: {}
   materials:
     importMaterials: 1
