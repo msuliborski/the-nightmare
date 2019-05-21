@@ -93,8 +93,6 @@ public class PlacementController : NetworkBehaviour
                 _currentObject.transform.GetComponent<BoxCollider>().enabled = true;
                 GameManager.Instance.BuildingPoints[pos].Buildable = false;
                 _currentObject = null;
-                GameManager.Instance.BuildingPoints[pos].changeSprite(false);
-                
                 _playerShoot.WasBuilt = true;
             }
         }
@@ -115,7 +113,6 @@ public class PlacementController : NetworkBehaviour
             temp.GetComponent<BoxCollider>().enabled = true;
             Vector2 pos1 = new Vector2(temp.transform.position.x, temp.transform.position.z);
             GameManager.Instance.BuildingPoints[pos1].Buildable = false;
-            GameManager.Instance.BuildingPoints[pos1].changeSprite(false);
         }
     }
     

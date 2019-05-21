@@ -8,7 +8,15 @@ public class GridPoint : MonoBehaviour
     [SerializeField] private SpriteRenderer _sprite;
     
     [SerializeField] private bool _buildable = true;
-    public bool Buildable { get { return _buildable; } set { _buildable = value; } }
+    public bool Buildable
+    {
+        get { return _buildable; }
+        set
+        {
+            _buildable = value;
+            changeSprite(value);
+        }
+    }
 
     void Start()
     {
