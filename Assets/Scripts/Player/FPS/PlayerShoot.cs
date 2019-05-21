@@ -21,6 +21,7 @@ public class PlayerShoot : NetworkBehaviour {
     private Animator weaponAnimator;
     private static readonly int IsAiming = Animator.StringToHash("isAiming");
     private static readonly int IsReloading = Animator.StringToHash("isReloading");
+    private float currentRecoil;
 
 
     // Start is called before the first frame update
@@ -33,6 +34,7 @@ public class PlayerShoot : NetworkBehaviour {
         }
         normalFOV = Cam.fieldOfView;
         zoomFOV = normalFOV - 40;
+        currentRecoil = Equipment.Weapon.Recoil;
     }
 
 
@@ -66,14 +68,13 @@ public class PlayerShoot : NetworkBehaviour {
         //aiming
         if (Input.GetButton("Fire2") && 
             (Equipment.Weapon.State == Weapon.WeaponState.idle || Equipment.Weapon.State == Weapon.WeaponState.shooting) &&
-            !PauseGame.menuActive)
-        {
+            !PauseGame.menuActive) {
+            currentRecoil = Equipment.Weapon.Recoil * 0.35f;
             Equipment.Weapon.GetComponent<Animator>().SetBool(IsAiming, true);
             Cam.fieldOfView = Mathf.Lerp(Cam.fieldOfView, zoomFOV, 0.6f);
             Cross.gameObject.SetActive(false);
-        }
-        else
-        {
+        } else {   
+            currentRecoil = Equipment.Weapon.Recoil;
             Equipment.Weapon.GetComponent<Animator>().SetBool(IsAiming, false);
             Cam.fieldOfView = Mathf.Lerp(Cam.fieldOfView, normalFOV, 0.6f);
             Cross.gameObject.SetActive(true);
@@ -123,7 +124,7 @@ public class PlayerShoot : NetworkBehaviour {
         if (Equipment.Weapon.CurrentMagAmmo >= 1) {
             Equipment.PlayerShooting();
             Equipment.Weapon.shoot();
-            gameObject.GetComponent<PlayerMotor>().IncreaseRecoil(Equipment.Weapon.Recoil);
+            gameObject.GetComponent<PlayerMotor>().IncreaseRecoil(currentRecoil);
             CmdPlayerShooting();
             RaycastHit hit;
             if (Physics.Raycast(Cam.transform.position, Cam.transform.forward, out hit, Equipment.Weapon.Range,
