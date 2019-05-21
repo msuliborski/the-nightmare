@@ -18,6 +18,10 @@ public class EnemyControllerServer : NetworkBehaviour
     public NavMeshAgent Agent { get; set; }
 
     public Transform Dest { get; set; }
+    private Animator _animator;
+
+    public enum EnemyState { Walking, Screaming, Running, Fighting};
+    private EnemyState _currentState = EnemyState.Walking;
 
     private void Start()
     {
@@ -29,14 +33,29 @@ public class EnemyControllerServer : NetworkBehaviour
             StartCoroutine(SetClosestPlayerStart());
             IsWalking = true;
             _currentHealth = _maxHealth;
+            _animator = GetComponent<Animator>();
         }
         Agent = GetComponent<NavMeshAgent>();
     }
 
     private void Update()
     {
-        if (Dest != null && Dest.gameObject.activeSelf && IsWalking) Agent.SetDestination(Dest.position);
-        else SetClosestPlayer();
+       if (_currentState == EnemyState.Walking || _currentState == EnemyState.Running)
+       {
+            if (Dest != null && Dest.gameObject.activeSelf && IsWalking) Agent.SetDestination(Dest.position);
+            else SetClosestPlayer();
+       }
+       else if (_currentState == EnemyState.Screaming)
+       {
+            if (!(_animator.GetCurrentAnimatorStateInfo(0).IsName("Scream") &&
+            _animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f))
+            {
+                SetAnim("", false);
+                _currentState = EnemyState.Running;
+            }
+       }
+       
+        
     }
 
     private IEnumerator SetClosestPlayerStart()
@@ -127,6 +146,21 @@ public class EnemyControllerServer : NetworkBehaviour
         {
             transform.position = position;
             transform.rotation = rotation;
+        }
+    }
+
+    public void SetAnim(string animName, bool isOn)
+    {
+        _animator.SetBool(animName, isOn);
+    }
+
+    [ClientRpc]
+    void RpcSetAnim(string animName, bool isOn)
+    {
+        if (!isServer)
+        {
+            EnemyControllerClient enemyControllerClient = GetComponent<EnemyControllerClient>();
+            enemyControllerClient.SetAnim(animName, isOn);
         }
     }
 }
