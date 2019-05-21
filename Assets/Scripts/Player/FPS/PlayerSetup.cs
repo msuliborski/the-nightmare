@@ -17,16 +17,14 @@ public class PlayerSetup : NetworkBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        EquipWeapon();
 
         if (!isLocalPlayer)
         {
+            EquipWeaponNotLocal();
             DisableComponents();
             AssignRemoteLayer();
-            DisableWeaponCamera();
-        }
-        else
-        {
+        } else {
+            EquipWeapon();
             _sceneCamera = GameObject.Find("SceneCamera").GetComponent<Camera>();
             if (_sceneCamera != null)
                 _sceneCamera.gameObject.SetActive(false);
@@ -34,20 +32,45 @@ public class PlayerSetup : NetworkBehaviour
             GameManager.LocalPlayer = GetComponent<PlayerManager>();
             bulletshud.player = GetComponent<PlayerEquipment>();
             bulletshud.playerEnabled = true;
-            GameManager.Instance.SetCameraForBillboards(_actionCamera);
-            
+            GameManager.Instance.SetCameraForBillboards(_actionCamera);   
         }
         GetComponent<PlayerManager>().Setup();
     }
 
-
-    void DisableWeaponCamera()
-    {
+    void EquipWeaponNotLocal(){
+        Transform rightHand = transform.GetChild(0).GetChild(0).GetChild(2).GetChild(2)
+            .GetChild(0).GetChild(0).GetChild(2).GetChild(0).GetChild(0).GetChild(0).transform;
+        GameObject weaponObject = Instantiate(_weaponObjectPrefab, rightHand);
+        if (weaponObject.GetComponent<Weapon>().Name.Equals("Rifle")) {
+            Debug.Log("rifla ma");
+            Debug.Log(rightHand.GetChild(5).transform.localPosition);
+            Debug.Log(weaponObject.transform.localPosition);
+            weaponObject.transform.localPosition = new Vector3(-0.061f, -0.442f, 0.308f);
+            weaponObject.transform.localRotation = Quaternion.Euler(-106.591f, 62.645f, 25.95499f);
+            Debug.Log(rightHand.GetChild(5).localPosition);
+            Debug.Log(weaponObject.transform.localPosition);
+        } else {
+            
+            Debug.Log("pistola ma");
+            Debug.Log(rightHand.GetChild(5).localPosition);
+            Debug.Log(weaponObject.transform.localPosition);
+            weaponObject.transform.localPosition = new Vector3(-0.115f, -0.407f, 0.333f);
+            weaponObject.transform.localRotation = Quaternion.Euler(-101.359f, 19.54199f, 79.521f);
+            Debug.Log(rightHand.GetChild(5).localPosition);
+            Debug.Log(weaponObject.transform.localPosition);
+        }  
+        PlayerShoot shoot = GetComponent<PlayerShoot>();
+        shoot.Cam = _actionCamera;
+        _equipment = GetComponent<PlayerEquipment>();
+        _equipment.Weapon = weaponObject.GetComponent<Weapon>();
+        _equipment.WeaponSound = weaponObject.GetComponent<AudioSource>();
+        shoot.Equipment = _equipment;
+        
         _actionCamera.transform.GetChild(1).GetComponent<Camera>().enabled = false;
 
-        GameManager.SetLayerRecursively(_actionCamera.transform.GetChild(0).GetChild(0).gameObject, "LocalPlayer");
+        GameManager.SetLayerRecursively(rightHand.GetChild(5).gameObject, "LocalPlayer");
     }
-
+    
     void EquipWeapon()
     {
         GameObject weaponObject = Instantiate(_weaponObjectPrefab, _actionCamera.transform.GetChild(0));
