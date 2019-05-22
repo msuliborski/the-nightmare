@@ -9,7 +9,7 @@ public class EnemyControllerClient : NetworkBehaviour
 
     public Transform Dest { get; set; }
 
-    
+    private AudioSource _source;
     public bool IsWalking { get; set; }
     private Animator _animator;
 
@@ -19,9 +19,10 @@ public class EnemyControllerClient : NetworkBehaviour
         if (isServer) enabled = false;
         else
         {
+            _source = GetComponent<AudioSource>();
             Agent = GetComponent<NavMeshAgent>();
             IsWalking = true;
-            _animator = GetComponent<Animator>();
+            _animator = GetComponentInChildren<Animator>();
         }
     }
 
@@ -36,5 +37,15 @@ public class EnemyControllerClient : NetworkBehaviour
         _animator.SetBool(animName, isOn);
     }
 
+    public void Scream()
+    {
+        _source.PlayOneShot(_source.clip);
+
+    }
+
+    public void SetAgentSpeed(float speed)
+    {
+        Agent.speed = speed;
+    }
 
 }

@@ -3,22 +3,26 @@ using UnityEngine;
 
 using UnityEngine.Networking;
 
-public class TrapsHandler : NetworkBehaviour
+public class TrapsHandler : MonoBehaviour
 {
     private Snares _snares;
-    [SerializeField] private EnemyControllerServer _enemyController;
-    [SerializeField] private EnemyDamage _enemyDamage;
+    private EnemyControllerServer _enemyController;
 
-    
+
+    private void Start()
+    {
+        _enemyController = GetComponentInParent<EnemyControllerServer>();
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Snares") && _enemyController.enabled)
         {
 
             Debug.Log("Snares kurwa");
-            _enemyController.Agent.enabled = false;
-            _enemyController.IsWalking = false;
-            _enemyDamage.RpcTurnOnWalking(false);
+            _enemyController.TurnOnWalking(false);
+            _enemyController.CurrentState = EnemyControllerServer.EnemyState.Blocked;
+            _enemyController.SetAnim("blocked", true);
             _snares = other.GetComponent<Snares>();
             StartCoroutine(Freeze());
         }
@@ -27,9 +31,18 @@ public class TrapsHandler : NetworkBehaviour
     IEnumerator Freeze()
     {
         yield return new WaitForSeconds(_snares.freezeTime);
-        _enemyDamage._damageDest = null;
-        _enemyController.Agent.enabled = true;
-        _enemyController.IsWalking = true;
-        _enemyDamage.RpcTurnOnWalking(true);
+        _enemyController._damageDest = null;
+        _enemyController.TurnOnWalking(true);
+        _enemyController.CurrentState = _enemyController.PreviousState;
+        switch (_enemyController.CurrentState)
+        {
+            case EnemyControllerServer.EnemyState.Running:
+                _enemyController.SetAnim("running", true);
+                _enemyController.SetAnim("blocked", false);
+                break;
+            case EnemyControllerServer.EnemyState.Walking:
+                _enemyController.SetAnim("blocked", false);
+                break;
+        }
     }
 }
