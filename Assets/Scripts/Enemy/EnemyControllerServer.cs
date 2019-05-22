@@ -51,19 +51,14 @@ public class EnemyControllerServer : NetworkBehaviour
             IsWalking = true;
             _currentHealth = _maxHealth;
             _animator = GetComponentInChildren<Animator>();
+            
         }
         Agent = GetComponent<NavMeshAgent>();
+        Agent.speed = 2f;
     }
 
     private void Update()
     {
-        if (!_init)
-        {
-            Debug.Log(Agent.speed);
-            SetAgentSpeed(2f);
-            _init = true;
-        }
-
         switch(_currentState)
         {
             case EnemyState.Walking:
@@ -104,8 +99,7 @@ public class EnemyControllerServer : NetworkBehaviour
                 if (_damageDest.IsDead || !_damageDest.gameObject.activeSelf)
                 {
                     _damageDest = null;
-                    Agent.enabled = true;
-                    RpcTurnOnWalking(true);
+                    TurnOnWalking(true);
                     SetClosestPlayer();
                     SetAnim("running", true);
                 }
