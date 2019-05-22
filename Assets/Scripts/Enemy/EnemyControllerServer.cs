@@ -93,8 +93,8 @@ public class EnemyControllerServer : NetworkBehaviour
                     SetAnim("screaming", false);
                     SetAnim("running", true);
                     _currentState = EnemyState.Running;
-                    SetAgentSpeed(3.5f);
                     TurnOnWalking(true);
+                    SetAgentSpeed(3.5f);
                 }
                 break;
 
