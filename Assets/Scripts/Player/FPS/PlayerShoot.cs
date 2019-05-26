@@ -27,67 +27,69 @@ public class PlayerShoot : NetworkBehaviour {
     // Start is called before the first frame update
     void Start() {
         if (Cam == null) enabled = false;
-        else
-        {
+        else {
             Cross = GameObject.Find("cross");
             IsBuildingOnFly = false;
         }
+
         normalFOV = Cam.fieldOfView;
         zoomFOV = normalFOV - 40;
         currentRecoil = Equipment.Weapon.Recoil;
+
+        if (!isLocalPlayer) Equipment.Weapon.GetComponent<Animator>().enabled = false;
     }
 
 
-    void Update()
-    {
-        if (crossAccuracy > 1.02) crossAccuracy -= (crossAccuracy*0.05f + 0.02f);
+    void Update() {
+        if (crossAccuracy > 1.02) crossAccuracy -= (crossAccuracy * 0.05f + 0.02f);
         else crossAccuracy = 1f;
         Cross.transform.localScale = new Vector3(crossAccuracy, crossAccuracy, crossAccuracy);
         //fire mode
         if (Input.GetKeyDown(KeyCode.B)) Equipment.Weapon.changeFireMode();
 
         //reloading
-        if (Input.GetKeyDown(KeyCode.R) && Equipment.Weapon.CurrentMagAmmo != Equipment.Weapon.MaxMagAmmo){
+        if (Input.GetKeyDown(KeyCode.R) && Equipment.Weapon.CurrentMagAmmo != Equipment.Weapon.MaxMagAmmo) {
             StartCoroutine(Reload());
         }
 
         //fireing
         if (Input.GetButton("Fire1") && Equipment.Weapon.State == Weapon.WeaponState.idle &&
-            !PauseGame.menuActive && Equipment.Weapon.CurrentMagAmmo >= 1 && !IsBuildingOnFly)  {
-           Shoot();
+            !PauseGame.menuActive && Equipment.Weapon.CurrentMagAmmo >= 1 && !IsBuildingOnFly) {
+            Shoot();
         }
-        if (Input.GetButtonUp("Fire1"))
-        {
+
+        if (Input.GetButtonUp("Fire1")) {
             _shootingDone = false;
-            if (WasBuilt)
-            {
+            if (WasBuilt) {
                 IsBuildingOnFly = false;
                 WasBuilt = false;
             }
         }
+
         //aiming
-        if (Input.GetButton("Fire2") && 
-            (Equipment.Weapon.State == Weapon.WeaponState.idle || Equipment.Weapon.State == Weapon.WeaponState.shooting) &&
+        if (Input.GetButton("Fire2") &&
+            (Equipment.Weapon.State == Weapon.WeaponState.idle ||
+             Equipment.Weapon.State == Weapon.WeaponState.shooting) &&
             !PauseGame.menuActive) {
             currentRecoil = Equipment.Weapon.Recoil * 0.35f;
-            Equipment.Weapon.GetComponent<Animator>().SetBool(IsAiming, true);
+            if (!isLocalPlayer) Equipment.Weapon.GetComponent<Animator>().SetBool(IsAiming, true);
             Cam.fieldOfView = Mathf.Lerp(Cam.fieldOfView, zoomFOV, 0.6f);
             Cross.gameObject.SetActive(false);
-        } else {   
+        }
+        else {
             currentRecoil = Equipment.Weapon.Recoil;
-            Equipment.Weapon.GetComponent<Animator>().SetBool(IsAiming, false);
+            if (!isLocalPlayer) Equipment.Weapon.GetComponent<Animator>().SetBool(IsAiming, false);
             Cam.fieldOfView = Mathf.Lerp(Cam.fieldOfView, normalFOV, 0.6f);
             Cross.gameObject.SetActive(true);
         }
-
     }
-    
-        
+
+
     IEnumerator Reload() {
-        Equipment.Weapon.GetComponent<Animator>().SetBool(IsReloading, true);
+        if (!isLocalPlayer) Equipment.Weapon.GetComponent<Animator>().SetBool(IsReloading, true);
         Equipment.Weapon.reload();
         yield return new WaitForSeconds(Equipment.Weapon.ReloadTime);
-        Equipment.Weapon.GetComponent<Animator>().SetBool(IsReloading, false);
+        if (!isLocalPlayer) Equipment.Weapon.GetComponent<Animator>().SetBool(IsReloading, false);
     }
 
     IEnumerator TripleShot() {
@@ -100,9 +102,8 @@ public class PlayerShoot : NetworkBehaviour {
     }
 
 
-    void Shoot()
-    {
-        crossAccuracy += 2f - crossAccuracy*0.5f;
+    void Shoot() {
+        crossAccuracy += 2f - crossAccuracy * 0.5f;
         if (Equipment.Weapon.Mode == Weapon.FireMode.single && !_shootingDone) {
             PerformWeaponFire();
             _shootingDone = true;
@@ -116,7 +117,6 @@ public class PlayerShoot : NetworkBehaviour {
         else if (Equipment.Weapon.Mode == Weapon.FireMode.continous) {
             PerformWeaponFire();
         }
-        
     }
 
 
@@ -146,6 +146,7 @@ public class PlayerShoot : NetworkBehaviour {
                 Equipment.DoHitEffect(hit.point, hit.normal);
                 CmdOnHit(hit.point, hit.normal);
             }
+
             if (Equipment.Weapon.CurrentMagAmmo == 0 && Equipment.Weapon.CurrentAmmo >= 1) StartCoroutine(Reload());
         }
     }
