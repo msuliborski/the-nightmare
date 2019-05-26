@@ -12,6 +12,7 @@ TagManager:
   - EnemyLegs
   - Weapon
   - Snares
+  - CaptureArea
   layers:
   - Default
   - TransparentFX
