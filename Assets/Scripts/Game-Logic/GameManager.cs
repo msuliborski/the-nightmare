@@ -10,7 +10,10 @@ public class GameManager : NetworkBehaviour
     public static GameManager Instance;
     private List<GameObject> _rooms = new List<GameObject>();
     public List<GameObject> Rooms { get { return _rooms; } }
-    [SerializeField] private Transform[] _enemySpawnPoints;
+    private Dictionary<string, Transform> _enemySpawnPoints = new Dictionary<string, Transform>();
+    public Dictionary<string, Transform> EnemySpawnPoints { get { return _enemySpawnPoints; } }
+    private static List<GameObject> _gridRenderes = new List<GameObject>();
+    public static List<GameObject> GridRenderes { get { return _gridRenderes; } }
     [SerializeField] private GameObject _enemyPrefab;
     [SerializeField] private MatchSettings _matchSettings;
     [SerializeField] private GameObject[] _weapons;
@@ -33,11 +36,13 @@ public class GameManager : NetworkBehaviour
                 foreach (PlayerManager player in _players.Values)
                     player.SetBuildingMode();
                 if (Instance.isServer) Instance.StopCoroutine(Instance.SpawnEnemy());
+                TurnOnGridRenders(true);
             }
             else if (value == GameState.Fighting)
             {
                 foreach (PlayerManager player in _players.Values)
                     player.SetActionMode();
+                TurnOnGridRenders(false);
                 if (Instance.isServer) Instance.StartCoroutine(Instance.SpawnEnemy());
             }
             _currentState = value;
@@ -49,7 +54,7 @@ public class GameManager : NetworkBehaviour
     [SerializeField] private GameObject[] _floorsToDisable;
     public GameObject[] FloorsToDisable { get { return _floorsToDisable; }  set { _floorsToDisable = value; } }
 
-    void Start()
+    void Awake()
     {
         Transform rooms = GameObject.Find("Rooms").transform;
         for (int i = 0; i < rooms.childCount; i++)
@@ -74,30 +79,36 @@ public class GameManager : NetworkBehaviour
     #region Building
     private Dictionary<Vector2, GridPoint> _buildingPoints = new Dictionary<Vector2, GridPoint>();
     public Dictionary<Vector2, GridPoint> BuildingPoints { get { return _buildingPoints; } }
+    
+    public static void TurnOnGridRenders(bool isOn)
+    {
+        foreach (GameObject renderer in GridRenderes)
+            renderer.SetActive(isOn);
+    }
+    
+    
     #endregion
 
     #region EnemySpawning
-
-    [Command]
-    void CmdSpawnEnemy(int randIndex)
-    {
-       RpcSpawnEnemy(randIndex);
-    }
-
-
-
-    [ClientRpc]
-    void RpcSpawnEnemy(int randIndex)
-    {
-       Instantiate(_enemyPrefab, _enemySpawnPoints[randIndex]);
-    }
 
 
     private IEnumerator SpawnEnemy()
     {
         yield return new WaitForSeconds(_matchSettings.EnemyRespawnTime);
-        int randIndex = Random.Range(0, 3);
-        NetworkServer.Spawn(Instantiate(_enemyPrefab, _enemySpawnPoints[randIndex]));
+        Transform spawnPoint = null;
+        int randIndex = Random.Range(0, EnemySpawnPoints.Keys.Count);
+        int counter = 0;
+        foreach (KeyValuePair<string, Transform> entry in _enemySpawnPoints)
+        {
+            if (counter == randIndex)
+            {
+                //Debug.Log(counter);
+                spawnPoint = entry.Value;
+                break;
+            }
+            counter++;
+        }
+        NetworkServer.Spawn(Instantiate(_enemyPrefab, spawnPoint));
         _enemiesCounter++;
         _spawnedEnemiesCounter++;
         StartCoroutine(SpawnEnemy());

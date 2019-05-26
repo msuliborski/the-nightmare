@@ -9,16 +9,28 @@ public class BuildingPointsGenerator : MonoBehaviour
     GameObject empty;
     private Canvas _gridCanvas;
     private GameObject _gridPointPrefab;
+    private GameObject _areaPrefab;
+    
 
 
     void Awake()
     {
-        Transform rooms = GameObject.Find("Rooms").transform;
+        _gridCanvas = GameObject.Find("GridCanvas").GetComponent<Canvas>();
+        for (int i = 0; i < _gridCanvas.transform.childCount; i++)
+        {
+            DestroyImmediate(_gridCanvas.transform.GetChild(i).gameObject);
+        }
+        GameObject roomsGameObject = (GameObject)Resources.Load("Rooms", typeof(GameObject));
+        GameObject roomsInstance = Instantiate(roomsGameObject, _gridCanvas.transform);
+        roomsInstance.name = "Rooms";
+        Transform rooms = roomsInstance.transform;
         for (int i = 0; i < rooms.childCount; i++)
             _rooms.Add(rooms.GetChild(i).gameObject);
         empty = new GameObject();
         _gridPointPrefab = (GameObject)Resources.Load("cross", typeof(GameObject));
-        _gridCanvas = GameObject.Find("GridCanvas").GetComponent<Canvas>();
+        _areaPrefab = (GameObject)Resources.Load("CaptureArea", typeof(GameObject));
+        
+
         
         for (int i = 0; i < _rooms.Count; i++)
         {
@@ -40,6 +52,21 @@ public class BuildingPointsGenerator : MonoBehaviour
                     GameObject temp = Instantiate(_gridPointPrefab, new Vector3(x, 0.1f, y), Quaternion.Euler(90f, 0f, 0f), roomCanvas.transform);
                     point.GetComponent<GridPoint>().setSpriteRenderer(temp);
                 }
+            GameObject areas = Instantiate(empty, room.transform);
+            areas.name = "Areas";
+            for (int j = 0; j < room.Areas; j++)
+            {
+                GameObject area = Instantiate(_areaPrefab, areas.transform);
+                area.transform.name = "Area " + j;
+                room.CaptureAreas.Add(area.GetComponent<CaptureArea>());
+            }
+            Transform spawnPoints = Instantiate(empty, room.transform).transform;
+            spawnPoints.name = "Enemy Spawn Points";
+            for (int j = 0; j < room.EnemySpawnPointsCounter; j++)
+            {
+                GameObject spawnPoint = Instantiate(empty, spawnPoints);
+                spawnPoint.name = "Spawn Point " + j + " Room" + i;
+            }
         }
 		DestroyImmediate(empty);
         

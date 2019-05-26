@@ -29,8 +29,6 @@ public class PlayerManager : NetworkBehaviour
                 floor.GetComponent<MeshCollider>().enabled = false;
             }
             transform.GetChild(3).gameObject.SetActive(true);
-            if (_placementController.GridCanvas != null)
-                _placementController.GridCanvas.gameObject.SetActive(true);
             for (int i = 0; i < _disableOnDeath.Length; i++)
                 _disableOnDeath[i].enabled = !_wasEnabled[i];
             _cross.SetActive(false);
@@ -52,8 +50,6 @@ public class PlayerManager : NetworkBehaviour
             transform.GetChild(3).gameObject.SetActive(false);
             for (int i = 0; i < _disableOnDeath.Length; i++)
                 _disableOnDeath[i].enabled = _wasEnabled[i];
-            if (_placementController.GridCanvas != null)
-                _placementController.GridCanvas.gameObject.SetActive(false);
             _cross.SetActive(true);
         }
     }

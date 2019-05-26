@@ -182,10 +182,15 @@ public class EnemyControllerServer : NetworkBehaviour
 
     IEnumerator Die()
     {
-        yield return new WaitForSeconds(3.2f);
+        Transform body = transform.GetChild(0).GetChild(0);
+        body.GetChild(4).gameObject.SetActive(false);
+        body.GetChild(5).gameObject.SetActive(false);
+        body.GetChild(6).gameObject.SetActive(false);
+        RpcRemoveEnemy();
         if (_area != null)
             _area.DecrementEnemies();
-        RpcRemoveEnemy();
+        yield return new WaitForSeconds(3.2f);
+        RpcDie();
     }
 
 
@@ -193,9 +198,13 @@ public class EnemyControllerServer : NetworkBehaviour
     void RpcRemoveEnemy()
     {
         GameManager.Enemies.Remove(transform.name);
-        Destroy(gameObject);
     }
 
+    [ClientRpc]
+    void RpcDie()
+    {
+        Destroy(gameObject);
+    }
 
     [ClientRpc]
     void RpcSendDest(string destId)

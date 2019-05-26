@@ -16,9 +16,6 @@ public class PlacementController : NetworkBehaviour
     private Camera _actionCamera;
     private Camera _currentCamera;
     [SerializeField] private GameObject _gridPointPrefab;
-    private List<GameObject> _gridPoints = new List<GameObject>();
-    public Canvas GridCanvas { get; set; }
-
     [SerializeField] private float _scrollBorderThickness = 0.005f;  // percentage of screen height
     [SerializeField] private float _moveSpeedMinZoom = 30f;
     [SerializeField] private float _moveSpeedMaxZoom = 30f;
@@ -42,11 +39,7 @@ public class PlacementController : NetworkBehaviour
         _camMaxZoom = _buildingCamera.transform.position.y;
         _camMinZoom = 1f;
         _actionCamera = gameObject.transform.Find("PlayerCamera").GetComponent<Camera>();
-        GridCanvas = GameObject.Find("GridCanvas").GetComponent<Canvas>();
-        for (int i = 0; i < GridCanvas.transform.childCount; i++)
-        {
-            _gridPoints.Add(GridCanvas.transform.GetChild(i).gameObject);
-        }
+        
     }
 
     private void Update()
@@ -88,7 +81,8 @@ public class PlacementController : NetworkBehaviour
             {
 
                 if (GameManager.CurrentState == GameManager.GameState.Fighting)
-                    GridCanvas.gameObject.SetActive(false);
+                    GameManager.TurnOnGridRenders(false);
+                    
                 CmdPlaceEntity(_currentObject.transform.position, _currentObject.transform.rotation);
                 _currentObject.transform.GetComponent<BoxCollider>().enabled = true;
                 GameManager.Instance.BuildingPoints[pos].Buildable = false;
@@ -144,13 +138,13 @@ public class PlacementController : NetworkBehaviour
                 {
                     if (_currentObject == null)
                     {
-                        GridCanvas.gameObject.SetActive(true);
+                        GameManager.TurnOnGridRenders(true);
                         _currentObject = Instantiate(_placeableObject);
                         _playerShoot.IsBuildingOnFly = true;
                     }
                     else
                     {
-                        GridCanvas.gameObject.SetActive(false);
+                        GameManager.TurnOnGridRenders(false);
                         Destroy(_currentObject);
                         _playerShoot.IsBuildingOnFly = false;
                     }
