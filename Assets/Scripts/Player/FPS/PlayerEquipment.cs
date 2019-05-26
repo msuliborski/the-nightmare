@@ -60,7 +60,7 @@ public class PlayerEquipment : NetworkBehaviour {
             Weapon.State = Weapon.WeaponState.idle;
             Weapon.CurrentMagAmmo = Weapon.MaxMagAmmo;
             Weapon.CurrentAmmo = Weapon.MaxAmmo;
-            Weapon.GetComponent<Animator>().enabled = false;
+            weaponObject.GetComponent<Animator>().enabled = false;
             GameManager.SetLayerRecursively(weaponObject, "LocalPlayer");
         }
     }

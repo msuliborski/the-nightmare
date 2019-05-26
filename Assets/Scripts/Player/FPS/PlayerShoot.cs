@@ -72,13 +72,13 @@ public class PlayerShoot : NetworkBehaviour {
              Equipment.Weapon.State == Weapon.WeaponState.shooting) &&
             !PauseGame.menuActive) {
             currentRecoil = Equipment.Weapon.Recoil * 0.35f;
-            if (!isLocalPlayer) Equipment.Weapon.GetComponent<Animator>().SetBool(IsAiming, true);
+            if (isLocalPlayer) Equipment.Weapon.GetComponent<Animator>().SetBool(IsAiming, true);
             Cam.fieldOfView = Mathf.Lerp(Cam.fieldOfView, zoomFOV, 0.6f);
             Cross.gameObject.SetActive(false);
         }
         else {
             currentRecoil = Equipment.Weapon.Recoil;
-            if (!isLocalPlayer) Equipment.Weapon.GetComponent<Animator>().SetBool(IsAiming, false);
+            if (isLocalPlayer) Equipment.Weapon.GetComponent<Animator>().SetBool(IsAiming, false);
             Cam.fieldOfView = Mathf.Lerp(Cam.fieldOfView, normalFOV, 0.6f);
             Cross.gameObject.SetActive(true);
         }
@@ -86,10 +86,10 @@ public class PlayerShoot : NetworkBehaviour {
 
 
     IEnumerator Reload() {
-        if (!isLocalPlayer) Equipment.Weapon.GetComponent<Animator>().SetBool(IsReloading, true);
+        if (isLocalPlayer) Equipment.Weapon.GetComponent<Animator>().SetBool(IsReloading, true);
         Equipment.Weapon.reload();
         yield return new WaitForSeconds(Equipment.Weapon.ReloadTime);
-        if (!isLocalPlayer) Equipment.Weapon.GetComponent<Animator>().SetBool(IsReloading, false);
+        if (isLocalPlayer) Equipment.Weapon.GetComponent<Animator>().SetBool(IsReloading, false);
     }
 
     IEnumerator TripleShot() {
