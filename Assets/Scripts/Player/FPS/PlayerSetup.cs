@@ -4,8 +4,7 @@ using System.Collections.Generic;
 using System.Collections;
 
 [RequireComponent(typeof(PlayerManager))]
-public class PlayerSetup : NetworkBehaviour
-{
+public class PlayerSetup : NetworkBehaviour {
     [SerializeField] private Behaviour[] _toDisable;
     [SerializeField] private Camera _buildingCamera;
     [SerializeField] private Camera _actionCamera;
@@ -13,20 +12,16 @@ public class PlayerSetup : NetworkBehaviour
     [SerializeField] private GameObject _weaponObjectPrefab;
     private PlayerEquipment _equipment;
     private BulletsHUD bulletshud;
-     
-    // Start is called before the first frame update
-    void Start()
-    {
-        EquipWeapon();
 
-        if (!isLocalPlayer)
-        {
+    // Start is called before the first frame update
+    void Start() {
+        if (!isLocalPlayer) {
+            EquipWeaponNotLocal();
             DisableComponents();
             AssignRemoteLayer();
-            DisableWeaponCamera();
         }
-        else
-        {
+        else {
+            EquipWeapon();
             _sceneCamera = GameObject.Find("SceneCamera").GetComponent<Camera>();
             if (_sceneCamera != null)
                 _sceneCamera.gameObject.SetActive(false);
@@ -35,21 +30,38 @@ public class PlayerSetup : NetworkBehaviour
             bulletshud.player = GetComponent<PlayerEquipment>();
             bulletshud.playerEnabled = true;
             GameManager.Instance.SetCameraForBillboards(_actionCamera);
-            
         }
+
         GetComponent<PlayerManager>().Setup();
     }
 
+    void EquipWeaponNotLocal() {
+        Transform rightHand = transform.GetChild(0).GetChild(0).GetChild(2).GetChild(2)
+            .GetChild(0).GetChild(0).GetChild(2).GetChild(0).GetChild(0).GetChild(0).transform;
+        GameObject weaponObject = Instantiate(_weaponObjectPrefab, rightHand);
+        if (weaponObject.GetComponent<Weapon>().Name.Equals("Rifle")) {
+            weaponObject.transform.localPosition = new Vector3(-0.061f, -0.442f, 0.308f);
+            weaponObject.transform.localRotation = Quaternion.Euler(-106.591f, 62.645f, 25.95499f);
+        }
+        else {
+            weaponObject.transform.localPosition = new Vector3(-0.115f, -0.407f, 0.333f);
+            weaponObject.transform.localRotation = Quaternion.Euler(-101.359f, 19.54199f, 79.521f);
+        }
 
-    void DisableWeaponCamera()
-    {
+        PlayerShoot shoot = GetComponent<PlayerShoot>();
+        shoot.Cam = _actionCamera;
+        _equipment = GetComponent<PlayerEquipment>();
+        _equipment.Weapon = weaponObject.GetComponent<Weapon>();
+        _equipment.WeaponSound = weaponObject.GetComponent<AudioSource>();
+        _equipment.Weapon.GetComponent<Animator>().enabled = false;
+        shoot.Equipment = _equipment;
+
         _actionCamera.transform.GetChild(1).GetComponent<Camera>().enabled = false;
 
-        GameManager.SetLayerRecursively(_actionCamera.transform.GetChild(0).GetChild(0).gameObject, "LocalPlayer");
+        GameManager.SetLayerRecursively(rightHand.GetChild(5).gameObject, "LocalPlayer");
     }
 
-    void EquipWeapon()
-    {
+    void EquipWeapon() {
         GameObject weaponObject = Instantiate(_weaponObjectPrefab, _actionCamera.transform.GetChild(0));
         PlayerShoot shoot = GetComponent<PlayerShoot>();
         shoot.Cam = _actionCamera;
@@ -59,43 +71,34 @@ public class PlayerSetup : NetworkBehaviour
         shoot.Equipment = _equipment;
     }
 
-    public override void OnStartClient()
-    {
+    public override void OnStartClient() {
         base.OnStartClient();
         GameManager.RegisterPlayer(GetComponent<NetworkIdentity>().netId.ToString(), GetComponent<PlayerManager>());
     }
 
-    private void AssignRemoteLayer()
-    {
+    private void AssignRemoteLayer() {
         transform.GetChild(0).gameObject.layer = LayerMask.NameToLayer("RemotePlayer");
     }
 
-    private void DisableComponents()
-    {
+    private void DisableComponents() {
         for (int i = 0; i < _toDisable.Length; i++)
             _toDisable[i].enabled = false;
         _buildingCamera.gameObject.SetActive(false);
-        
     }
 
-    private void OnDisable()
-    {
-        if (isLocalPlayer)
-        {
+    private void OnDisable() {
+        if (isLocalPlayer) {
             if (_sceneCamera != null)
                 _sceneCamera.gameObject.SetActive(true);
         }
+
         GameManager.UnregisterPlayer(transform.name);
     }
 
-    private void OnEnable()
-    {
-        if (isLocalPlayer)
-        {
+    private void OnEnable() {
+        if (isLocalPlayer) {
             if (_sceneCamera != null)
                 _sceneCamera.gameObject.SetActive(false);
         }
     }
 }
-
-
