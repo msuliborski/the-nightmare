@@ -85,7 +85,7 @@ GameObject:
   - component: {fileID: 6974692887593171844}
   m_Layer: 9
   m_Name: SphereCollider
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -114,10 +114,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.17016381
+  m_Radius: 0.35326403
   m_Height: 0.8707694
   m_Direction: 1
-  m_Center: {x: -0.010482565, y: -0.06461531, z: -0.1998843}
+  m_Center: {x: -0.0145299435, y: -0.06461531, z: -0.17569268}
 --- !u!1 &1252147270679827366
 GameObject:
   m_ObjectHideFlags: 0
@@ -222,7 +222,7 @@ Camera:
   m_GameObject: {fileID: 2039979910484294719}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 2
+  m_ClearFlags: 1
   m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_SensorSize: {x: 36, y: 24}
