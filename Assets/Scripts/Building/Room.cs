@@ -10,7 +10,10 @@ public class Room : MonoBehaviour
     public int Width { get { return _width; } }
     [SerializeField] private int _height;
     public int Height { get { return _height; } }
+    [SerializeField] private int _areas;
+    public int Areas { get { return _areas; } }
     private List<GridPoint> _gridPoints = new List<GridPoint>();
+    private List<CaptureArea> _captureAreas = new List<CaptureArea>();
 
     private void Start()
     {
@@ -20,5 +23,5 @@ public class Room : MonoBehaviour
             _gridPoints.Add(points.GetChild(i).GetComponent<GridPoint>());
         }
     }
-
+    
 }
