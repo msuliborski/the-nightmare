@@ -9,6 +9,7 @@ public class PlayerController : NetworkBehaviour {
     [SerializeField] private Joystick look;
 
     private PlayerMotor _motor;
+    private static readonly int IsSprinting = Animator.StringToHash("isSprinting");
 
     void Start() {
         _motor = GetComponent<PlayerMotor>();
@@ -22,13 +23,11 @@ public class PlayerController : NetworkBehaviour {
 
     private void Update() {
 
-        if (Input.GetKey(KeyCode.LeftShift)) {
+        if (Input.GetKey(KeyCode.LeftShift) ) {
             _speed = 6.5f;
-            Debug.Log(_speed);
         }
         else {
             _speed = 3f;
-            Debug.Log(_speed);
         }
         
         if (!PauseGame.menuActive) {
