@@ -13,7 +13,7 @@ public class CaptureArea : MonoBehaviour
     [SerializeField] private float _step = 0.2f;
     private bool _capturing = false;
     private int _capturingNum = 0;
-    public int _enemyNum = 0;
+    private int _enemyNum = 0;
     private List<GameObject> _candles = new List<GameObject>();
     private Sprite _red;
     private Sprite _green;
@@ -65,6 +65,11 @@ public class CaptureArea : MonoBehaviour
             if (_enemyNum == 0)
                 _isLocked = true;
         }
+    }
+
+    public void DecrementEnemies()
+    {
+        _enemyNum--;
     }
 
     void Update()

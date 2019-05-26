@@ -184,7 +184,7 @@ public class EnemyControllerServer : NetworkBehaviour
     {
         yield return new WaitForSeconds(3.2f);
         if (_area != null)
-            _area._enemyNum--;
+            _area.DecrementEnemies();
         RpcRemoveEnemy();
     }
 
