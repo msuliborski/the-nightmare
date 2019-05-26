@@ -23,6 +23,7 @@ public class EnemyControllerServer : NetworkBehaviour
     [SerializeField] private float _damage = 2f;
     public Transform Dest { get; set; }
     private Animator _animator;
+    private CaptureArea _area;
     public enum EnemyState { Walking, Screaming, Running, Fighting, Blocked};
     private EnemyState _currentState = EnemyState.Walking;
     public EnemyState PreviousState { get; set; }
@@ -182,6 +183,8 @@ public class EnemyControllerServer : NetworkBehaviour
     IEnumerator Die()
     {
         yield return new WaitForSeconds(3.2f);
+        if (_area != null)
+            _area._enemyNum--;
         RpcRemoveEnemy();
     }
 
@@ -245,6 +248,11 @@ public class EnemyControllerServer : NetworkBehaviour
                 CurrentState = EnemyState.Fighting;
                 SetAnim("running", false);
             }
+        }
+        
+        if (other.CompareTag("CaptureArea"))
+        {
+            _area = other.GetComponent<CaptureArea>();
         }
     }
 

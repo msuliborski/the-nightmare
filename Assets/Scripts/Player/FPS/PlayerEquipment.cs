@@ -1,5 +1,4 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Networking;
 
 public class PlayerEquipment : NetworkBehaviour {
@@ -9,21 +8,20 @@ public class PlayerEquipment : NetworkBehaviour {
     [SerializeField] private LayerMask _mask;
 
     private void Update() {
-       RaycastHit weaponFinder;
+        RaycastHit weaponFinder;
         if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out weaponFinder, 10,
             _mask)) {
-            if (weaponFinder.collider.CompareTag("Weapon") && Input.GetKeyDown(KeyCode.E))
-            {
+            if (weaponFinder.collider.CompareTag("Weapon") && Input.GetKeyDown(KeyCode.E)) {
                 Destroy(_cam.transform.GetChild(0).transform.GetChild(0).gameObject);
                 int weaponId = weaponFinder.collider.gameObject.GetComponent<GunSpawnPoint>().WeaponId;
-                GameObject weaponObject = Instantiate(GameManager.Instance.Weapons[weaponId], _cam.transform.GetChild(0).transform);
+                GameObject weaponObject = Instantiate(GameManager.Instance.Weapons[weaponId],
+                    _cam.transform.GetChild(0).transform);
                 Weapon = weaponObject.GetComponent<Weapon>();
                 WeaponSound = weaponObject.GetComponent<AudioSource>();
                 CmdChangeWeapon(weaponId);
             }
         }
     }
-
 
     public void PlayerShooting() {
         Weapon.Flash.Play();
@@ -35,23 +33,34 @@ public class PlayerEquipment : NetworkBehaviour {
 
 
     [Command]
-    void CmdChangeWeapon(int weaponId)
-    {
+    void CmdChangeWeapon(int weaponId) {
         RpcChangeWeapon(weaponId);
     }
 
     [ClientRpc]
-    void RpcChangeWeapon(int weaponId)
-    {
-        if (!isLocalPlayer)
-        {
-            Destroy(_cam.transform.GetChild(0).transform.GetChild(0).gameObject);
-            GameObject weaponObject = Instantiate(GameManager.Instance.Weapons[weaponId], _cam.transform.GetChild(0).transform);
+    void RpcChangeWeapon(int weaponId) {
+        if (!isLocalPlayer) {
+            Transform rightHand = transform.GetChild(0).GetChild(0).GetChild(2).GetChild(2)
+                .GetChild(0).GetChild(0).GetChild(2).GetChild(0).GetChild(0).GetChild(0).transform;
+            Destroy(rightHand.GetChild(5).gameObject);
+            GameObject weaponObject =
+                Instantiate(GameManager.Instance.Weapons[weaponId],
+                    rightHand); //_cam.transform.GetChild(0).transform);//tutaj
+            if (weaponObject.GetComponent<Weapon>().Name.Equals("Rifle")) {
+                weaponObject.transform.localPosition = new Vector3(-0.061f, -0.442f, 0.308f);
+                weaponObject.transform.localRotation = Quaternion.Euler(-106.591f, 62.645f, 25.95499f);
+            }
+            else {
+                weaponObject.transform.localPosition = new Vector3(-0.115f, -0.407f, 0.333f);
+                weaponObject.transform.localRotation = Quaternion.Euler(-101.359f, 19.54199f, 79.521f);
+            }
+
             Weapon = weaponObject.GetComponent<Weapon>();
             WeaponSound = weaponObject.GetComponent<AudioSource>();
             Weapon.State = Weapon.WeaponState.idle;
             Weapon.CurrentMagAmmo = Weapon.MaxMagAmmo;
             Weapon.CurrentAmmo = Weapon.MaxAmmo;
+            Weapon.GetComponent<Animator>().enabled = false;
             GameManager.SetLayerRecursively(weaponObject, "LocalPlayer");
         }
     }
