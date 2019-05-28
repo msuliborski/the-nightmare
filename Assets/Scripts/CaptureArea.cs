@@ -2,21 +2,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class CaptureArea : MonoBehaviour
+public class CaptureArea : NetworkBehaviour
 {
-    private bool _isCaptured = false;
-    private bool _isLocked = false;
-    private bool _isConflict = false;
-    public float _progress = 0;
-    private float _max = 0;
-    [SerializeField] private float _step = 0.2f;
-    private bool _capturing = false;
-    private int _capturingNum = 0;
-    private int _enemyNum = 0;
+    [SyncVar] private bool _isCaptured = false;
+    [SyncVar] private bool _isLocked = false;
+    [SyncVar] private bool _isConflict = false;
+    [SyncVar] public float _progress = 0;
+    [SyncVar] private float _max = 0;
+    [SyncVar] [SerializeField] private float _step = 0.2f;
+    [SyncVar] private bool _capturing = false;
+    [SyncVar] private int _capturingNum = 0;
+    [SyncVar] private int _enemyNum = 0;
     private List<GameObject> _candles = new List<GameObject>();
-    private Sprite _red;
-    private Sprite _green;
+    private Sprite[] _sprites = new Sprite[2];
     private SpriteRenderer _renderer;
 
     public bool IsCaptured
@@ -27,8 +27,8 @@ public class CaptureArea : MonoBehaviour
 
     void Start()
     {
-        _red = (Sprite)Resources.Load("red", typeof(Sprite));
-        _green = (Sprite)Resources.Load("green", typeof(Sprite));
+        _sprites[0] = (Sprite)Resources.Load("red", typeof(Sprite));
+        _sprites[1] = (Sprite)Resources.Load("green", typeof(Sprite));
         _renderer = GetComponent<SpriteRenderer>();
         for (int i = 0; i < transform.GetChild(0).childCount; i++)
         {
@@ -40,14 +40,20 @@ public class CaptureArea : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            _capturingNum++;
-            _capturing = true;
+            PlayerManager playerManager = other.GetComponentInParent<PlayerManager>();
+            if (playerManager.isLocalPlayer)
+            {
+                CmdPlayerInsideCaptureZone();
+            }
         }
 
         if (other.CompareTag("EnemyLegs"))
         {
-            _enemyNum++;
-            _isLocked = false;
+            EnemyControllerServer enemy = other.GetComponentInParent<EnemyControllerServer>();
+            if (enemy.isActiveAndEnabled) {
+                _enemyNum++;
+                _isLocked = false;
+            }
         }
     }
 
@@ -55,92 +61,142 @@ public class CaptureArea : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            _capturingNum--;
-            if (_capturingNum == 0)
-                _capturing = false;
+            PlayerManager playerManager = other.GetComponentInParent<PlayerManager>();
+            if (playerManager.isLocalPlayer)
+            {
+                CmdPlayerOutsideCaputerZone();
+            }
         }
         if (other.CompareTag("EnemyLegs"))
         {
-            _enemyNum--;
-            if (_enemyNum == 0)
-                _isLocked = true;
+            EnemyControllerServer enemy = other.GetComponentInParent<EnemyControllerServer>();
+            if (enemy.isActiveAndEnabled)
+            {
+                _enemyNum--;
+                if (_enemyNum == 0)
+                    _isLocked = true;
+            }
         }
     }
 
-    public void DecrementEnemies()
+    [Command]
+    public void CmdDecrementEnemies()
     {
         _enemyNum--;
     }
 
+    [Command]
+    void CmdPlayerOutsideCaputerZone()
+    {
+        _capturingNum--;
+        if (_capturingNum == 0)
+            _capturing = false;
+    }
+
+    [Command]
+    void CmdPlayerInsideCaptureZone()
+    {
+        _capturingNum++;
+        _capturing = true;
+    }
+
+
     void Update()
     {
-        if (_capturingNum > 0 && _enemyNum > 0)
-            _isConflict = true;
-        else
-            _isConflict = false;
-        
-        if (_capturing)
-            _step = Math.Abs(_step);
-
-        else
-            _step = -Math.Abs(_step);
-        
-        
-        if (!_isLocked && !_isConflict)
+        if (isServer)
         {
-            
-
-            _progress += _step;
-            if (_progress < 0)
-                _progress = 0;
-
-            if (_progress >= 100)
-            {
-                _progress = 100;
-                _isCaptured = true;
-                _isLocked = true;
-                _renderer.sprite = _green;
-            }
+            if (_capturingNum > 0 && _enemyNum > 0)
+                _isConflict = true;
             else
-            {
-                _isCaptured = false;
-                _renderer.sprite = _red;
-            }
+                _isConflict = false;
+
+            if (_capturing)
+                _step = Math.Abs(_step);
+
+            else
+                _step = -Math.Abs(_step);
 
 
-            if (_progress > 25)
+            if (!_isLocked && !_isConflict)
             {
-                _candles[0].transform.GetChild(0).gameObject.SetActive(true);
-                if (_progress > 50)
+
+
+                _progress += _step;
+                if (_progress < 0)
+                    _progress = 0;
+
+                if (_progress >= 100)
                 {
-                    _candles[1].transform.GetChild(0).gameObject.SetActive(true);
-                    if (_progress > 75)
+                    _progress = 100;
+                    _isCaptured = true;
+                    _isLocked = true;
+                    if (_renderer.sprite != _sprites[1])
+                        RpcChangeSprite(1);
+                }
+                else
+                {
+                    _isCaptured = false;
+                    if (_renderer.sprite != _sprites[0])
+                        RpcChangeSprite(0);
+                }
+
+
+                if (_progress > 25)
+                {
+                    if (!_candles[0].transform.GetChild(0).gameObject.activeSelf)
+                        RpcActivateCandle(0, true);
+                    if (_progress > 50)
                     {
-                        _candles[2].transform.GetChild(0).gameObject.SetActive(true);
-                        if (_progress >= 100)
+
+                        if (!_candles[1].transform.GetChild(0).gameObject.activeSelf)
+                            RpcActivateCandle(1, true);
+                        if (_progress > 75)
                         {
-                            _candles[3].transform.GetChild(0).gameObject.SetActive(true);
+                            if (!_candles[2].transform.GetChild(0).gameObject.activeSelf)
+                                RpcActivateCandle(2, true);
+                            if (_progress >= 100)
+                            {
+                                if (!_candles[3].transform.GetChild(0).gameObject.activeSelf)
+                                    RpcActivateCandle(3, true);
+                            }
+                            else
+                            {
+                                if (_candles[3].transform.GetChild(0).gameObject.activeSelf)
+                                    RpcActivateCandle(3, false);
+                            }
                         }
                         else
                         {
-                            _candles[3].transform.GetChild(0).gameObject.SetActive(false);
+                            if (_candles[2].transform.GetChild(0).gameObject.activeSelf)
+                                RpcActivateCandle(2, false);
                         }
                     }
                     else
                     {
-                        _candles[2].transform.GetChild(0).gameObject.SetActive(false);
+                        if (_candles[1].transform.GetChild(0).gameObject.activeSelf)
+                            RpcActivateCandle(1, false);
                     }
                 }
                 else
                 {
-                    _candles[1].transform.GetChild(0).gameObject.SetActive(false);
+                    if (_candles[0].transform.GetChild(0).gameObject.activeSelf)
+                        RpcActivateCandle(0, false);
                 }
-            }
-            else
-            {
-                _candles[0].transform.GetChild(0).gameObject.SetActive(false);
             }
         }
         
+    }
+
+
+    [ClientRpc]
+    void RpcChangeSprite(int index)
+    {
+        _renderer.sprite = _sprites[index];
+    }
+
+    [ClientRpc]
+    void RpcActivateCandle(int index, bool isOn)
+    {
+        _candles[index].transform.GetChild(0).gameObject.SetActive(isOn);
     }
 }

@@ -11,7 +11,8 @@ public class EnemyControllerServer : NetworkBehaviour
 
     private const string ENEMY_ID_PREFIX = "Enemy ";
 
-    
+    private const float SCREAM_TIME = 2.2f;
+    private const float DIST_TO_SCREAM = 6f;
     private AudioSource _source;
     public bool IsWalking { get; set; }
     private float _currentHealth;
@@ -66,7 +67,7 @@ public class EnemyControllerServer : NetworkBehaviour
                 if (Dest != null && Dest.gameObject.activeSelf) Agent.SetDestination(Dest.position);
                 else SetClosestPlayer();
                 _screamTimer -= Time.deltaTime;
-                if (Agent.remainingDistance < 6f && _screamTimer <= 0f)
+                if (Agent.remainingDistance < DIST_TO_SCREAM && _screamTimer <= 0f)
                 {
                     _currentState = EnemyState.Screaming;
                     Scream();
@@ -84,7 +85,7 @@ public class EnemyControllerServer : NetworkBehaviour
             case EnemyState.Screaming:
 
                 _screamTimer += Time.deltaTime;
-                if (_screamTimer >= 2.2)
+                if (_screamTimer >= SCREAM_TIME)
                 {
                     SetAnim("screaming", false);
                     SetAnim("running", true);
@@ -188,7 +189,7 @@ public class EnemyControllerServer : NetworkBehaviour
         body.GetChild(6).gameObject.SetActive(false);
         RpcRemoveEnemy();
         if (_area != null)
-            _area.DecrementEnemies();
+            _area.CmdDecrementEnemies();
         yield return new WaitForSeconds(3.2f);
         RpcDie();
     }
@@ -247,9 +248,9 @@ public class EnemyControllerServer : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (enabled && CurrentState == EnemyState.Running)
+        if (enabled)
         {
-            if (other.CompareTag("Player"))
+            if (other.CompareTag("Player") && CurrentState == EnemyState.Running)
             {
                 Debug.Log("collision with Player");
                 _damageDest = other.GetComponentInParent<PlayerManager>();
@@ -257,11 +258,10 @@ public class EnemyControllerServer : NetworkBehaviour
                 CurrentState = EnemyState.Fighting;
                 SetAnim("running", false);
             }
-        }
-        
-        if (other.CompareTag("CaptureArea"))
-        {
-            _area = other.GetComponent<CaptureArea>();
+            else if (other.CompareTag("CaptureArea"))
+            {
+                _area = other.GetComponent<CaptureArea>();
+            }
         }
     }
 
