@@ -165,7 +165,7 @@ public class PlayerShoot : NetworkBehaviour {
     [Command]
     void CmdEnemyShoot(string shootEnemyId, float damage) {
         Debug.Log(shootEnemyId + " has been shoot");
-        GameManager.GetEnemy(shootEnemyId).TakeDamage(damage);
+        GameManager.GetEnemy(shootEnemyId).CmdTakeDamage(damage);
     }
 
 
