@@ -15,7 +15,7 @@ public class EnemyControllerServer : NetworkBehaviour
     private const float DIST_TO_SCREAM = 6f;
     private AudioSource _source;
     public bool IsWalking { get; set; }
-    private float _currentHealth;
+    [SyncVar] private float _currentHealth;
     [SerializeField] private float _maxHealth = 50f;
     private float _screamTimer = 1f;
     public NavMeshAgent Agent { get; set; }
@@ -43,11 +43,11 @@ public class EnemyControllerServer : NetworkBehaviour
 
     private void Start()
     {
-        transform.name = ENEMY_ID_PREFIX + GameManager.EnemyIdCounter;
+        transform.name = ENEMY_ID_PREFIX + GameManager.EnemyIdCounter++;
+        if (!GameManager.Enemies.ContainsKey(transform.name)) GameManager.Enemies.Add(transform.name, this);
         if (!isServer) enabled = false;
         else
         {
-            GameManager.EnemyIdCounter++;
             _source = GetComponent<AudioSource>();
             StartCoroutine(SetClosestPlayerStart());
             IsWalking = true;
@@ -55,7 +55,6 @@ public class EnemyControllerServer : NetworkBehaviour
             _animator = GetComponentInChildren<Animator>();
             
         }
-        if (!GameManager.Enemies.ContainsKey(transform.name)) GameManager.Enemies.Add(transform.name, this);
         Agent = GetComponent<NavMeshAgent>();
         Agent.speed = 2f;
     }
@@ -164,8 +163,8 @@ public class EnemyControllerServer : NetworkBehaviour
         else RpcSendDest(NO_DESTINATION);
     }
 
-
-    public void TakeDamage(float damage)
+    [Command]
+    public void CmdTakeDamage(float damage)
     {
         _currentHealth -= damage;
 
