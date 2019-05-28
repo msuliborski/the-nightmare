@@ -44,7 +44,7 @@ public class EnemyControllerServer : NetworkBehaviour
     private void Start()
     {
         transform.name = ENEMY_ID_PREFIX + GameManager.EnemyIdCounter++;
-        if (!GameManager.Enemies.ContainsKey(transform.name)) GameManager.Enemies.Add(transform.name, this);
+        GameManager.Enemies.Add(transform.name, this);
         if (!isServer) enabled = false;
         else
         {
