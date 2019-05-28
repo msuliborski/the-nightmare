@@ -43,11 +43,11 @@ public class EnemyControllerServer : NetworkBehaviour
 
     private void Start()
     {
-        transform.name = ENEMY_ID_PREFIX + GameManager.EnemyIdCounter++;
-        if (!GameManager.Enemies.ContainsKey(transform.name)) GameManager.Enemies.Add(transform.name, this);
+        transform.name = ENEMY_ID_PREFIX + GameManager.EnemyIdCounter;
         if (!isServer) enabled = false;
         else
         {
+            GameManager.EnemyIdCounter++;
             _source = GetComponent<AudioSource>();
             StartCoroutine(SetClosestPlayerStart());
             IsWalking = true;
@@ -55,6 +55,7 @@ public class EnemyControllerServer : NetworkBehaviour
             _animator = GetComponentInChildren<Animator>();
             
         }
+        if (!GameManager.Enemies.ContainsKey(transform.name)) GameManager.Enemies.Add(transform.name, this);
         Agent = GetComponent<NavMeshAgent>();
         Agent.speed = 2f;
     }
