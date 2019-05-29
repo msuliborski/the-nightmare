@@ -20,7 +20,7 @@ public class EnemyControllerServer : NetworkBehaviour
     private float _screamTimer = 1f;
     public NavMeshAgent Agent { get; set; }
     public PlayerManager _damageDest;
-    private bool _isDying;
+    public bool _isDying;
     [SerializeField] private float _damage = 2f;
     public Transform Dest { get; set; }
     private Animator _animator;

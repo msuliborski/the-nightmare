@@ -1,0 +1,204 @@
+fileFormatVersion: 2
+guid: 9b8184af640dcf544974eac0a1b01096
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: group1
+    100002: //RootNode
+    100004: parter
+    100006: pCube3
+    100008: pietro
+    100010: pietro_sciana
+    100012: schodek1
+    100014: schodek10
+    100016: schodek11
+    100018: schodek12
+    100020: schodek13
+    100022: schodek14
+    100024: schodek15
+    100026: schodek2
+    100028: schodek3
+    100030: schodek4
+    100032: schodek5
+    100034: schodek6
+    100036: schodek7
+    100038: schodek8
+    100040: schodek9
+    100042: schody
+    100044: sufit
+    400000: group1
+    400002: //RootNode
+    400004: parter
+    400006: pCube3
+    400008: pietro
+    400010: pietro_sciana
+    400012: schodek1
+    400014: schodek10
+    400016: schodek11
+    400018: schodek12
+    400020: schodek13
+    400022: schodek14
+    400024: schodek15
+    400026: schodek2
+    400028: schodek3
+    400030: schodek4
+    400032: schodek5
+    400034: schodek6
+    400036: schodek7
+    400038: schodek8
+    400040: schodek9
+    400042: schody
+    400044: sufit
+    2100000: lambert2
+    2100002: lambert1
+    2300000: parter
+    2300002: pCube3
+    2300004: pietro
+    2300006: pietro_sciana
+    2300008: schodek1
+    2300010: schodek10
+    2300012: schodek11
+    2300014: schodek12
+    2300016: schodek13
+    2300018: schodek14
+    2300020: schodek15
+    2300022: schodek2
+    2300024: schodek3
+    2300026: schodek4
+    2300028: schodek5
+    2300030: schodek6
+    2300032: schodek7
+    2300034: schodek8
+    2300036: schodek9
+    2300038: schody
+    2300040: sufit
+    3300000: parter
+    3300002: pCube3
+    3300004: pietro
+    3300006: pietro_sciana
+    3300008: schodek1
+    3300010: schodek10
+    3300012: schodek11
+    3300014: schodek12
+    3300016: schodek13
+    3300018: schodek14
+    3300020: schodek15
+    3300022: schodek2
+    3300024: schodek3
+    3300026: schodek4
+    3300028: schodek5
+    3300030: schodek6
+    3300032: schodek7
+    3300034: schodek8
+    3300036: schodek9
+    3300038: schody
+    3300040: sufit
+    4300000: schody
+    4300002: schodek1
+    4300004: schodek2
+    4300006: schodek3
+    4300008: schodek4
+    4300010: schodek5
+    4300012: schodek6
+    4300014: schodek7
+    4300016: schodek8
+    4300018: schodek9
+    4300020: schodek10
+    4300022: schodek11
+    4300024: schodek12
+    4300026: schodek13
+    4300028: schodek14
+    4300030: schodek15
+    4300032: sufit
+    4300034: pietro
+    4300036: parter
+    4300038: pietro_sciana
+    4300040: pCube3
+    7400000: Take 001
+    9500000: //RootNode
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 0.01
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
