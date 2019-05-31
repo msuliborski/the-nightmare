@@ -39,6 +39,7 @@ public class BuildingPointsGenerator : MonoBehaviour
             int halfHeight = Mathf.FloorToInt(room.Height / 2);
             GameObject roomCanvas = Instantiate(empty, room.transform.position, room.transform.rotation, room.transform);
             roomCanvas.name = "RoomRender";
+            Vector3 renderPosition = roomCanvas.transform.position;
             GameObject points = Instantiate(empty, room.transform.position, room.transform.rotation, room.transform);
             points.name = "Points";
 
@@ -49,7 +50,7 @@ public class BuildingPointsGenerator : MonoBehaviour
                     GameObject point = Instantiate(empty, new Vector3(x, 0f, y), Quaternion.Euler(0f, 0f, 0f), points.transform);
                     point.name = "Point " + x + " " + y;
                     point.AddComponent<GridPoint>();
-                    GameObject temp = Instantiate(_gridPointPrefab, new Vector3(x, 0.1f, y), Quaternion.Euler(90f, 0f, 0f), roomCanvas.transform);
+                    GameObject temp = Instantiate(_gridPointPrefab, new Vector3(x, renderPosition.y, y), Quaternion.Euler(90f, 0f, 0f), roomCanvas.transform);
                     point.GetComponent<GridPoint>().setSpriteRenderer(temp);
                 }
             GameObject areas = Instantiate(empty, room.transform);

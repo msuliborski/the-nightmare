@@ -20,7 +20,8 @@ public class TeddyBearServer : NetworkBehaviour
     {
         Running,
         Fighting,
-        Waiting
+        Waiting,
+        Dying
     };
 
     private BearState _currentState = BearState.Waiting;
@@ -60,11 +61,16 @@ public class TeddyBearServer : NetworkBehaviour
         {
             if (enemy._isDying) _enemies.Remove(enemy);
         }
-        if (_enemies.Count == 0)
+        if (_isDying)
+        {
+            _currentState = BearState.Dying;
+        }
+        else if (_enemies.Count == 0)
         {
             _currentState = BearState.Waiting;
             _animator.SetBool("waiting", true);
         }
+        
         else if(_enemies.Count > 0 && _damageDest == null)
         {
             _currentState = BearState.Running;
@@ -95,6 +101,9 @@ public class TeddyBearServer : NetworkBehaviour
                 Debug.Log("running");
                 if (Dest != null && Dest.gameObject.activeSelf) Agent.SetDestination(Dest.position);
                 else SetClosestPlayer();
+                break;
+            
+            case BearState.Dying:
                 break;
         }
     }
@@ -178,7 +187,7 @@ public class TeddyBearServer : NetworkBehaviour
     [Command]
     public void CmdDeath()
     {
-        _currentState = BearState.Waiting;
+        _isDying = true;
         TurnOnWalking(false);
         _animator.SetBool("death", true);
         StartCoroutine(Die());

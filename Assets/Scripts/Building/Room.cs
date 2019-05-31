@@ -30,7 +30,7 @@ public class Room : MonoBehaviour
         Transform areas = transform.GetChild(3);
         for (int i = 0; i < areas.childCount; i++)
         {
-           GameManager.Instance.EnemySpawnPoints.Add(areas.GetChild(i).name, areas.GetChild(i));
+            GameManager.Instance.EnemySpawnPoints.Add(areas.GetChild(i).name, areas.GetChild(i));
         }
         GameManager.GridRenderes.Add(transform.GetChild(0).gameObject);
         
