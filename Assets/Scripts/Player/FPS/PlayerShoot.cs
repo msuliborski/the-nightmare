@@ -21,7 +21,10 @@ public class PlayerShoot : NetworkBehaviour {
     private Animator weaponAnimator;
     private static readonly int IsAiming = Animator.StringToHash("isAiming");
     private static readonly int IsReloading = Animator.StringToHash("isReloading");
+    private static readonly int IsSprinting = Animator.StringToHash("isSprinting");
     private float currentRecoil;
+    
+    
 
 
     // Start is called before the first frame update
@@ -72,7 +75,11 @@ public class PlayerShoot : NetworkBehaviour {
              Equipment.Weapon.State == Weapon.WeaponState.shooting) &&
             !PauseGame.menuActive) {
             currentRecoil = Equipment.Weapon.Recoil * 0.35f;
-            if (isLocalPlayer) Equipment.Weapon.GetComponent<Animator>().SetBool(IsAiming, true);
+            if (isLocalPlayer)
+            {
+                Equipment.Weapon.GetComponent<Animator>().SetBool(IsSprinting, false);
+                Equipment.Weapon.GetComponent<Animator>().SetBool(IsAiming, true);
+            }
             Cam.fieldOfView = Mathf.Lerp(Cam.fieldOfView, zoomFOV, 0.6f);
             Cross.gameObject.SetActive(false);
         }
@@ -102,8 +109,15 @@ public class PlayerShoot : NetworkBehaviour {
     }
 
 
-    void Shoot() {
+    void Shoot()
+    {
         crossAccuracy += 2f - crossAccuracy * 0.5f;
+//        if (isLocalPlayer) {
+//            if (Equipment.Weapon.GetComponent<Animator>().GetBool(IsSprinting)){
+                Equipment.Weapon.GetComponent<Animator>().SetBool(IsSprinting, false);
+//            }
+//        }
+
         if (Equipment.Weapon.Mode == Weapon.FireMode.single && !_shootingDone) {
             PerformWeaponFire();
             _shootingDone = true;
