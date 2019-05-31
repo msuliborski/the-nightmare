@@ -112,11 +112,8 @@ public class PlayerShoot : NetworkBehaviour {
     void Shoot()
     {
         crossAccuracy += 2f - crossAccuracy * 0.5f;
-//        if (isLocalPlayer) {
-//            if (Equipment.Weapon.GetComponent<Animator>().GetBool(IsSprinting)){
                 Equipment.Weapon.GetComponent<Animator>().SetBool(IsSprinting, false);
-//            }
-//        }
+
 
         if (Equipment.Weapon.Mode == Weapon.FireMode.single && !_shootingDone) {
             PerformWeaponFire();

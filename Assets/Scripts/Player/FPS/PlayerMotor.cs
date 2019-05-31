@@ -14,6 +14,7 @@ public class PlayerMotor : NetworkBehaviour {
     private float _recoilOffset = 0f;
     private static readonly int IsSprinting = Animator.StringToHash("isSprinting");
     public bool isSpeintingToggle;
+    private static readonly int IsAiming = Animator.StringToHash("isAiming");
 
     void Start() {
         _anim = transform.GetChild(0).GetChild(0).GetComponent<Animator>();
@@ -35,20 +36,13 @@ public class PlayerMotor : NetworkBehaviour {
             _rb.MovePosition(_rb.position + _velocity * Time.fixedDeltaTime);
             _anim.SetBool("running", true);
             if (isLocalPlayer) {
-                if (Input.GetKeyDown(KeyCode.LeftShift)) 
-                    transform.GetComponent<PlayerEquipment>().Weapon.GetComponent<Animator>().SetBool(IsSprinting, true);
-                
-//                if (Input.GetKeyUp(KeyCode.LeftShift)) 
-//                    transform.GetComponent<PlayerEquipment>().Weapon.GetComponent<Animator>().SetBool(IsSprinting, false);
-                
+                if (Input.GetKey(KeyCode.LeftShift) && transform.GetComponent<PlayerEquipment>().Weapon.State !=
+                                                    Weapon.WeaponState.shooting
+                                                    && !transform.GetComponent<PlayerEquipment>().Weapon
+                                                        .GetComponent<Animator>().GetBool("isAiming"))
+                    transform.GetComponent<PlayerEquipment>().Weapon.GetComponent<Animator>()
+                        .SetBool(IsSprinting, true);
             }
-//            
-//            if (isLocalPlayer)
-//            {
-//                if (Input.GetKeyDown(KeyCode.LeftShift))
-//                    transform.GetComponent<PlayerEquipment>().Weapon.GetComponent<Animator>()
-//                        .SetBool(IsSprinting, true);
-//            }
         }
         else {
             _anim.SetBool("running", false);
