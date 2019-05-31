@@ -3,7 +3,7 @@ using UnityEngine.Networking;
 
 [RequireComponent(typeof(PlayerMotor))]
 public class PlayerController : NetworkBehaviour {
-    [SerializeField] private float _speed = 3f;
+    [SerializeField] public float _speed = 3f;
     [SerializeField] private float _lookSensitivity = 3f;
     [SerializeField] private Joystick move;
     [SerializeField] private Joystick look;
@@ -23,12 +23,11 @@ public class PlayerController : NetworkBehaviour {
 
     private void Update() {
 
-        if (Input.GetKey(KeyCode.LeftShift) ) {
+        if (transform.GetComponent<PlayerEquipment>().Weapon.GetComponent<Animator>().GetBool(IsSprinting)) 
             _speed = 6.5f;
-        }
-        else {
+        else  
             _speed = 3f;
-        }
+        
         
         if (!PauseGame.menuActive) {
             float xMov = 0;
