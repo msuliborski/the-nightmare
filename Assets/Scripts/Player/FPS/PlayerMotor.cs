@@ -13,6 +13,8 @@ public class PlayerMotor : NetworkBehaviour {
     [SerializeField] private float _cameraRotationLimit = 85f;
     private float _recoilOffset = 0f;
     private static readonly int IsSprinting = Animator.StringToHash("isSprinting");
+    public bool isSpeintingToggle;
+    private static readonly int IsAiming = Animator.StringToHash("isAiming");
 
     void Start() {
         _anim = transform.GetChild(0).GetChild(0).GetComponent<Animator>();
@@ -34,11 +36,12 @@ public class PlayerMotor : NetworkBehaviour {
             _rb.MovePosition(_rb.position + _velocity * Time.fixedDeltaTime);
             _anim.SetBool("running", true);
             if (isLocalPlayer) {
-                if (Input.GetKey(KeyCode.LeftShift)) {
-                    transform.GetComponent<PlayerEquipment>().Weapon.GetComponent<Animator>().SetBool(IsSprinting, true);
-                } else {
-                    transform.GetComponent<PlayerEquipment>().Weapon.GetComponent<Animator>().SetBool(IsSprinting, false);
-                }
+                if (Input.GetKey(KeyCode.LeftShift) && transform.GetComponent<PlayerEquipment>().Weapon.State !=
+                                                    Weapon.WeaponState.shooting
+                                                    && !transform.GetComponent<PlayerEquipment>().Weapon
+                                                        .GetComponent<Animator>().GetBool("isAiming"))
+                    transform.GetComponent<PlayerEquipment>().Weapon.GetComponent<Animator>()
+                        .SetBool(IsSprinting, true);
             }
         }
         else {

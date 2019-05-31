@@ -113,6 +113,35 @@ public class EnemyControllerServer : NetworkBehaviour
         }
     }
 
+
+    /*private IEnumerator SetClosestCaptureArea()
+    {
+        yield return new WaitForSeconds(1f);
+
+        List<Transform> captureAreas = new List<Transform>();
+
+        foreach (PlayerManager player in GameManager.ActivePlayers.Values)
+            players.Add(player.transform);
+
+        Transform tMin = null;
+        float minDist = Mathf.Infinity;
+        Vector3 currentPos = transform.position;
+        foreach (Transform t in players)
+        {
+            float dist = Vector3.Distance(t.position, currentPos);
+            if (dist < minDist)
+            {
+                tMin = t;
+                minDist = dist;
+            }
+        }
+        Dest = tMin;
+        if (Dest) RpcSendDest(Dest.name);
+        else RpcSendDest(NO_DESTINATION);
+    }*/
+
+
+
     private IEnumerator SetClosestPlayerStart()
     {
         yield return new WaitForSeconds(1f);
@@ -204,7 +233,8 @@ public class EnemyControllerServer : NetworkBehaviour
     [ClientRpc]
     void RpcDie()
     {
-        Destroy(gameObject);
+        transform.GetChild(0).GetChild(0).GetChild(1).gameObject.SetActive(false); // turning off eyes
+        GetComponentInChildren<DissolveEnemyBody>().Enabled = true;
     }
 
     [ClientRpc]
