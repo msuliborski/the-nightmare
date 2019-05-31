@@ -12,9 +12,11 @@ public class GameManager : NetworkBehaviour
     public List<GameObject> Rooms { get { return _rooms; } }
     private Dictionary<string, Transform> _enemySpawnPoints = new Dictionary<string, Transform>();
     public Dictionary<string, Transform> EnemySpawnPoints { get { return _enemySpawnPoints; } }
+    private List<CaptureArea> _captureAreas = new List<CaptureArea>();
+    public List<CaptureArea> CaptureAreas { get { return _captureAreas; } }
     private static List<GameObject> _gridRenderes = new List<GameObject>();
     public static List<GameObject> GridRenderes { get { return _gridRenderes; } }
-    [SerializeField] private GameObject _enemyPrefab;
+    [SerializeField] private GameObject _enemyPrefab; 
     [SerializeField] private MatchSettings _matchSettings;
     [SerializeField] private GameObject[] _weapons;
     [SerializeField] private int _waves;
@@ -67,6 +69,12 @@ public class GameManager : NetworkBehaviour
             {
                 Transform point = points.GetChild(i);
                 _buildingPoints.Add(new Vector2(point.transform.position.x, point.transform.position.z), point.GetComponent<GridPoint>());
+            }
+            Transform captureAreas = room.transform.GetChild(2);
+            for (int i = 0; i < captureAreas.childCount; i++)
+            {
+                Transform captureArea = captureAreas.GetChild(i);
+                _captureAreas.Add(captureArea.GetComponent<CaptureArea>());
             }
         }
 
