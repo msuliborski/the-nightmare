@@ -75,6 +75,18 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.01
   m_Center: {x: 0.008, y: 0.062, z: 0.025}
+--- !u!114 &4070787546434483839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4361791423793007458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa0e72fd27d4b6640afacf8d480e490e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6478945405128599967
 GameObject:
   m_ObjectHideFlags: 0
@@ -266,6 +278,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxHealth: 100
   _damageDest: {fileID: 0}
+  _isDying: 0
   _damage: 2
 --- !u!114 &1860152029020784033
 MonoBehaviour:
@@ -431,6 +444,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: skeleton@Idle
       objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: a457922b935ba8f63b7a41a503033645, type: 3}
+      propertyPath: m_Name
+      value: eyes
+      objectReference: {fileID: 0}
     - target: {fileID: 400072, guid: a457922b935ba8f63b7a41a503033645, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -507,6 +524,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 4361791423792975236}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &4361791423793007458 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100070, guid: a457922b935ba8f63b7a41a503033645,
+    type: 3}
+  m_PrefabInstance: {fileID: 4361791423792975236}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4476684187798356943
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -514,6 +537,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 453661309136460926}
     m_Modifications:
+    - target: {fileID: 100006, guid: 906ef3748a66347cfb2d72de10092732, type: 3}
+      propertyPath: m_Name
+      value: GreenCore
+      objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: 906ef3748a66347cfb2d72de10092732, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.014
@@ -557,10 +584,6 @@ PrefabInstance:
     - target: {fileID: 400006, guid: 906ef3748a66347cfb2d72de10092732, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 100006, guid: 906ef3748a66347cfb2d72de10092732, type: 3}
-      propertyPath: m_Name
-      value: GreenCore
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 906ef3748a66347cfb2d72de10092732, type: 3}
