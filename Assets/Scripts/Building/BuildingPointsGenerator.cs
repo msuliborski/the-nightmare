@@ -40,14 +40,16 @@ public class BuildingPointsGenerator : MonoBehaviour
             GameObject roomCanvas = Instantiate(empty, room.transform.position, room.transform.rotation, room.transform);
             roomCanvas.name = "RoomRender";
             Vector3 renderPosition = roomCanvas.transform.position;
+            
             GameObject points = Instantiate(empty, room.transform.position, room.transform.rotation, room.transform);
+            Vector3 pointPosition = points.transform.position;
             points.name = "Points";
 
             for (float x = room.transform.position.x -halfWidth; x < room.transform.position.x + halfWidth + 1; x += PlacementController.GridTileSize)
                 for (float y = room.transform.position.z - halfHeight; y < room.transform.position.z + halfHeight + 1; y += PlacementController.GridTileSize)
                 {
 
-                    GameObject point = Instantiate(empty, new Vector3(x, 0f, y), Quaternion.Euler(0f, 0f, 0f), points.transform);
+                    GameObject point = Instantiate(empty, new Vector3(x, pointPosition.y, y), Quaternion.Euler(0f, 0f, 0f), points.transform);
                     point.name = "Point " + x + " " + y;
                     point.AddComponent<GridPoint>();
                     GameObject temp = Instantiate(_gridPointPrefab, new Vector3(x, renderPosition.y, y), Quaternion.Euler(90f, 0f, 0f), roomCanvas.transform);

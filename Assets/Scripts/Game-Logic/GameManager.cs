@@ -68,7 +68,7 @@ public class GameManager : NetworkBehaviour
             for (int i = 0; i < points.childCount; i++)
             {
                 Transform point = points.GetChild(i);
-                _buildingPoints.Add(new Vector2(point.transform.position.x, point.transform.position.z), point.GetComponent<GridPoint>());
+                _buildingPoints.Add(new Vector3(point.transform.position.x, point.transform.position.y, point.transform.position.z), point.GetComponent<GridPoint>());
             }
             Transform captureAreas = room.transform.GetChild(2);
             for (int i = 0; i < captureAreas.childCount; i++)
@@ -85,8 +85,8 @@ public class GameManager : NetworkBehaviour
 
 
     #region Building
-    private Dictionary<Vector2, GridPoint> _buildingPoints = new Dictionary<Vector2, GridPoint>();
-    public Dictionary<Vector2, GridPoint> BuildingPoints { get { return _buildingPoints; } }
+    private Dictionary<Vector3, GridPoint> _buildingPoints = new Dictionary<Vector3, GridPoint>();
+    public Dictionary<Vector3, GridPoint> BuildingPoints { get { return _buildingPoints; } }
     
     public static void TurnOnGridRenders(bool isOn)
     {
