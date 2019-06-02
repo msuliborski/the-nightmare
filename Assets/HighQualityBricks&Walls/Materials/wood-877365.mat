@@ -57,7 +57,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _node_6801:
         m_Texture: {fileID: 2800000, guid: 66bac1f73fc6f734c95ec83aae131f18, type: 3}
-        m_Scale: {x: 1, y: 1}
+        m_Scale: {x: 100, y: 100}
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _BumpScale: 1

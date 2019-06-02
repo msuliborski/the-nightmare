@@ -13,6 +13,8 @@ TagManager:
   - Weapon
   - Snares
   - CaptureArea
+  - Floor 0
+  - Floor 1
   layers:
   - Default
   - TransparentFX

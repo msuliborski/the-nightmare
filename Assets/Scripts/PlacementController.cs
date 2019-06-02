@@ -10,6 +10,7 @@ public class PlacementController : NetworkBehaviour
     private float _mouseWheelRotation;
     private float _x = 0, _y = 0, _reverseGrid, _camMinZoom, _camMaxZoom;
     private GameObject _currentObject;
+    private string _currentTag;
     private Transform _buildingCameraHolder;
     private Camera _buildingCamera;
     private float _buildingCameraAngle = 0f;
@@ -74,9 +75,10 @@ public class PlacementController : NetworkBehaviour
     {
         if (Input.GetMouseButton(0))
         {
-            Vector3 pos = new Vector3(_currentObject.transform.position.x, _currentObject.transform.position.y, _currentObject.transform.position.z);
-            if (GameManager.Instance.BuildingPoints.ContainsKey(pos)
-                && GameManager.Instance.BuildingPoints[pos].Buildable
+            Vector2 pos = new Vector2(_currentObject.transform.position.x, _currentObject.transform.position.z);
+            GameManager.PosAndTag posAndTag = new GameManager.PosAndTag(pos, _currentTag);
+            if (GameManager.Instance.BuildingPoints.ContainsKey(posAndTag)
+                && GameManager.Instance.BuildingPoints[posAndTag].Buildable
                 )
             {
 
@@ -85,7 +87,7 @@ public class PlacementController : NetworkBehaviour
                     
                 CmdPlaceEntity(_currentObject.transform.position, _currentObject.transform.rotation);
                 _currentObject.transform.GetComponent<BoxCollider>().enabled = true;
-                GameManager.Instance.BuildingPoints[pos].Buildable = false;
+                GameManager.Instance.BuildingPoints[posAndTag].Buildable = false;
                 _currentObject = null;
                 _playerShoot.WasBuilt = true;
             }
@@ -105,8 +107,9 @@ public class PlacementController : NetworkBehaviour
         {
             GameObject temp = Instantiate(_placeableObject, pos, rot);
             temp.GetComponent<BoxCollider>().enabled = true;
-            Vector3 pos1 = new Vector3(temp.transform.position.x, temp.transform.position.y, temp.transform.position.z);
-            GameManager.Instance.BuildingPoints[pos1].Buildable = false;
+            Vector2 pos1 = new Vector3(temp.transform.position.x, temp.transform.position.z);
+            GameManager.PosAndTag posAndTag = new GameManager.PosAndTag(pos1, _currentTag);
+            GameManager.Instance.BuildingPoints[posAndTag].Buildable = false;
         }
     }
     
@@ -118,11 +121,12 @@ public class PlacementController : NetworkBehaviour
             Ray ray = _currentCamera.ScreenPointToRay(Input.mousePosition);
 
             RaycastHit hitInfo;
-            if (Physics.Raycast(ray, out hitInfo))
+            if (Physics.Raycast(ray, out hitInfo, 100f, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore))
             {
                 _x = Mathf.Round(hitInfo.point.x * _reverseGrid) / _reverseGrid;
                 _y = Mathf.Round(hitInfo.point.z * _reverseGrid) / _reverseGrid;
                 _currentObject.transform.position = new Vector3(_x, hitInfo.transform.position.y, _y);
+                _currentTag = hitInfo.collider.tag;
                 //_currentObject.transform.rotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
             }
         }

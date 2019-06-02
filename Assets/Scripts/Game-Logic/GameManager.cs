@@ -7,6 +7,19 @@ using TMPro;
 public class GameManager : NetworkBehaviour
 {
 
+
+    public struct PosAndTag
+    {
+        string tag;
+        Vector2 pos;
+
+        public PosAndTag(Vector2 pos, string tag)
+        {
+            this.tag = tag;
+            this.pos = pos;
+        }
+    }
+
     public static GameManager Instance;
     private List<GameObject> _rooms = new List<GameObject>();
     public List<GameObject> Rooms { get { return _rooms; } }
@@ -68,7 +81,9 @@ public class GameManager : NetworkBehaviour
             for (int i = 0; i < points.childCount; i++)
             {
                 Transform point = points.GetChild(i);
-                _buildingPoints.Add(new Vector3(point.transform.position.x, point.transform.position.y, point.transform.position.z), point.GetComponent<GridPoint>());
+                PosAndTag posAndTag = new PosAndTag(new Vector2(point.transform.position.x, point.transform.position.z), point.tag);
+
+                _buildingPoints.Add(posAndTag, point.GetComponent<GridPoint>());
             }
             Transform captureAreas = room.transform.GetChild(2);
             for (int i = 0; i < captureAreas.childCount; i++)
@@ -85,8 +100,8 @@ public class GameManager : NetworkBehaviour
 
 
     #region Building
-    private Dictionary<Vector3, GridPoint> _buildingPoints = new Dictionary<Vector3, GridPoint>();
-    public Dictionary<Vector3, GridPoint> BuildingPoints { get { return _buildingPoints; } }
+    private Dictionary<PosAndTag, GridPoint> _buildingPoints = new Dictionary<PosAndTag, GridPoint>();
+    public Dictionary<PosAndTag, GridPoint> BuildingPoints { get { return _buildingPoints; } }
     
     public static void TurnOnGridRenders(bool isOn)
     {
