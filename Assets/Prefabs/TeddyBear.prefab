@@ -190,6 +190,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db8f275322f399248847ad49813a7c5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2686573638451735209
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4863637763325730755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1590678366, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Animator: {fileID: 4863637763333155963}
+  m_ParameterSendBits: 0
+  param0: 
+  param1: 
+  param2: 
+  param3: 
+  param4: 
+  param5: 
 --- !u!1 &5640151288742597188
 GameObject:
   m_ObjectHideFlags: 0
@@ -423,10 +443,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8573763338730078801}
     m_Modifications:
-    - target: {fileID: 100056, guid: 81b040ffc2780754bbe1014671e8f946, type: 3}
-      propertyPath: m_Name
-      value: Teddy_Bear@Attack
-      objectReference: {fileID: 0}
     - target: {fileID: 400056, guid: 81b040ffc2780754bbe1014671e8f946, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -483,6 +499,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 100056, guid: 81b040ffc2780754bbe1014671e8f946, type: 3}
+      propertyPath: m_Name
+      value: Teddy_Bear@Attack
+      objectReference: {fileID: 0}
     - target: {fileID: 9500000, guid: 81b040ffc2780754bbe1014671e8f946, type: 3}
       propertyPath: m_Controller
       value: 
@@ -506,6 +526,12 @@ GameObject:
 --- !u!4 &4863637763325625251 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400056, guid: 81b040ffc2780754bbe1014671e8f946,
+    type: 3}
+  m_PrefabInstance: {fileID: 4863637763325761819}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &4863637763333155963 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 9500000, guid: 81b040ffc2780754bbe1014671e8f946,
     type: 3}
   m_PrefabInstance: {fileID: 4863637763325761819}
   m_PrefabAsset: {fileID: 0}
