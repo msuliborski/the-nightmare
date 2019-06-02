@@ -583,7 +583,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Animator: {fileID: 6051463397883725652}
-  m_ParameterSendBits: 0
+  m_ParameterSendBits: 1
   param0: 
   param1: 
   param2: 
