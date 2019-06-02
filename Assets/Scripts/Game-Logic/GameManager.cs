@@ -191,6 +191,7 @@ public class GameManager : NetworkBehaviour
 
     public static EnemyControllerServer GetEnemy(string enemyId)
     {
+        if (!_enemies.ContainsKey(enemyId)) return null;
         return _enemies[enemyId];
     }
 
