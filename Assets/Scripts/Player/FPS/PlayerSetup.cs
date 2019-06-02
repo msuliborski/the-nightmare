@@ -12,6 +12,7 @@ public class PlayerSetup : NetworkBehaviour {
     [SerializeField] private GameObject _weaponObjectPrefab;
     private PlayerEquipment _equipment;
     private BulletsHUD bulletshud;
+    
 
     // Start is called before the first frame update
     void Start() {
