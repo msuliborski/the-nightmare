@@ -109,6 +109,7 @@ public class PlacementController : NetworkBehaviour
             temp.GetComponent<BoxCollider>().enabled = true;
             Vector2 pos1 = new Vector3(temp.transform.position.x, temp.transform.position.z);
             GameManager.PosAndTag posAndTag = new GameManager.PosAndTag(pos1, _currentTag);
+            Debug.Log(_currentTag);
             GameManager.Instance.BuildingPoints[posAndTag].Buildable = false;
         }
     }
