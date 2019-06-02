@@ -153,7 +153,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.013
-  m_Speed: 3.5
+  m_Speed: 10
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -443,6 +443,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8573763338730078801}
     m_Modifications:
+    - target: {fileID: 100056, guid: 81b040ffc2780754bbe1014671e8f946, type: 3}
+      propertyPath: m_Name
+      value: Teddy_Bear@Attack
+      objectReference: {fileID: 0}
     - target: {fileID: 400056, guid: 81b040ffc2780754bbe1014671e8f946, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -499,22 +503,18 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 5
       objectReference: {fileID: 0}
-    - target: {fileID: 100056, guid: 81b040ffc2780754bbe1014671e8f946, type: 3}
-      propertyPath: m_Name
-      value: Teddy_Bear@Attack
-      objectReference: {fileID: 0}
     - target: {fileID: 9500000, guid: 81b040ffc2780754bbe1014671e8f946, type: 3}
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 994b280a76cda0a4fa59fba0f6eb5748, type: 2}
-    - target: {fileID: 13700000, guid: 81b040ffc2780754bbe1014671e8f946, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 99547dc1ee0998c4391bea4129a2f0ea, type: 2}
     - target: {fileID: 13700002, guid: 81b040ffc2780754bbe1014671e8f946, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 66a17c63655307047a0f2eef39fe3aa6, type: 2}
+    - target: {fileID: 13700000, guid: 81b040ffc2780754bbe1014671e8f946, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 99547dc1ee0998c4391bea4129a2f0ea, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 81b040ffc2780754bbe1014671e8f946, type: 3}
 --- !u!1 &4863637763325730755 stripped

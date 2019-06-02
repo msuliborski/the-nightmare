@@ -50,7 +50,6 @@ public class TeddyBearServer : NetworkBehaviour
             StartCoroutine(SetClosestPlayerStart());
             _bearTransform = transform.GetChild(1);
             Agent = transform.GetChild(1).GetComponent<NavMeshAgent>();
-            Agent.speed = 10f;
             StartCoroutine(Decay());
         }
     }

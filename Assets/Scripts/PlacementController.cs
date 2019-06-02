@@ -85,7 +85,7 @@ public class PlacementController : NetworkBehaviour
                 if (GameManager.CurrentState == GameManager.GameState.Fighting)
                     GameManager.TurnOnGridRenders(false);
                     
-                CmdPlaceEntity(_currentObject.transform.position, _currentObject.transform.rotation);
+                CmdPlaceEntity(_currentObject.transform.position, _currentObject.transform.rotation, _currentTag);
                 _currentObject.transform.GetComponent<BoxCollider>().enabled = true;
                 GameManager.Instance.BuildingPoints[posAndTag].Buildable = false;
                 _currentObject = null;
@@ -95,21 +95,20 @@ public class PlacementController : NetworkBehaviour
     }
 
     [Command]
-    void CmdPlaceEntity(Vector3 pos, Quaternion rot)
+    void CmdPlaceEntity(Vector3 pos, Quaternion rot, string tag)
     {
-        RpcPlaceEntity(pos, rot);
+        RpcPlaceEntity(pos, rot, tag);
     }
 
     [ClientRpc]
-    void RpcPlaceEntity(Vector3 pos, Quaternion rot)
+    void RpcPlaceEntity(Vector3 pos, Quaternion rot, string tag)
     {
         if (!isLocalPlayer)
         {
             GameObject temp = Instantiate(_placeableObject, pos, rot);
             temp.GetComponent<BoxCollider>().enabled = true;
             Vector2 pos1 = new Vector3(temp.transform.position.x, temp.transform.position.z);
-            GameManager.PosAndTag posAndTag = new GameManager.PosAndTag(pos1, _currentTag);
-            Debug.Log(_currentTag);
+            GameManager.PosAndTag posAndTag = new GameManager.PosAndTag(pos1, tag);
             GameManager.Instance.BuildingPoints[posAndTag].Buildable = false;
         }
     }
