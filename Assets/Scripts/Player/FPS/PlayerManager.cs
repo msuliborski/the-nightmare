@@ -41,10 +41,10 @@ public class PlayerManager : NetworkBehaviour
     {
 
         _rigidbody.useGravity = true;
-       
+        for (int i = 0; i < 3; i++) transform.GetChild(i).gameObject.SetActive(true);
         if (isLocalPlayer)
         {
-            for (int i = 1; i < 3; i++) transform.GetChild(i).gameObject.SetActive(true);
+            //for (int i = 1; i < 3; i++) transform.GetChild(i).gameObject.SetActive(true);
             foreach (GameObject floor in GameManager.Instance.FloorsToDisable)
             {
                 floor.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
@@ -55,7 +55,7 @@ public class PlayerManager : NetworkBehaviour
                 _disableOnDeath[i].enabled = _wasEnabled[i];
             _cross.SetActive(true);
         }
-        else for (int i = 0; i < 3; i++) transform.GetChild(i).gameObject.SetActive(true);
+       // else 
     }
 
     public void Setup()
