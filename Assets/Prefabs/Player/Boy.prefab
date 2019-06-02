@@ -129,9 +129,9 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.35326403
-  m_Height: 0.8707694
+  m_Height: 0.84442014
   m_Direction: 1
-  m_Center: {x: -0.0145299435, y: -0.06461531, z: -0.17569268}
+  m_Center: {x: -0.0145299435, y: -0.051440686, z: -0.17569268}
 --- !u!1 &1252147270679827366
 GameObject:
   m_ObjectHideFlags: 0
@@ -352,7 +352,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 116
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!114 &917736756212613217
 MonoBehaviour:
@@ -719,6 +719,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4953134542706898467}
     m_Modifications:
+    - target: {fileID: 9500000, guid: f79548a34281b2a3c9f20247331e913c, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 3d8e25823d0fa151a84882d4122d057d, type: 2}
     - target: {fileID: 100000, guid: f79548a34281b2a3c9f20247331e913c, type: 3}
       propertyPath: m_Name
       value: BOY@Pistol Idle
@@ -783,10 +787,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 9500000, guid: f79548a34281b2a3c9f20247331e913c, type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 3d8e25823d0fa151a84882d4122d057d, type: 2}
     - target: {fileID: 13700000, guid: f79548a34281b2a3c9f20247331e913c, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 

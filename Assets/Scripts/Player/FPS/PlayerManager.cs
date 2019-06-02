@@ -17,9 +17,11 @@ public class PlayerManager : NetworkBehaviour
 
     private PlacementController _placementController;
     private GameObject _cross;
+    private Rigidbody _rigidbody;
 
     public void SetBuildingMode()
     {
+        _rigidbody.useGravity = false;
         for (int i = 0; i < 3; i++) transform.GetChild(i).gameObject.SetActive(false);
         if (isLocalPlayer)
         {
@@ -37,8 +39,8 @@ public class PlayerManager : NetworkBehaviour
 
     public void SetActionMode()
     {
-        
 
+        _rigidbody.useGravity = true;
         for (int i = 0; i < 3; i++) transform.GetChild(i).gameObject.SetActive(true);
         if (isLocalPlayer)
         {
@@ -56,8 +58,8 @@ public class PlayerManager : NetworkBehaviour
 
     public void Setup()
     {
-       
 
+        _rigidbody = GetComponent<Rigidbody>();
         _wasEnabled = new bool[_disableOnDeath.Length];
 
         for (int i = 0; i < _wasEnabled.Length; i++) _wasEnabled[i] = _disableOnDeath[i].enabled;

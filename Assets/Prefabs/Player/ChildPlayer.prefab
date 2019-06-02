@@ -352,7 +352,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 116
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!114 &917736756212613217
 MonoBehaviour:
@@ -719,6 +719,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4953134542706898467}
     m_Modifications:
+    - target: {fileID: 9500000, guid: f79548a34281b2a3c9f20247331e913c, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 3d8e25823d0fa151a84882d4122d057d, type: 2}
     - target: {fileID: 100000, guid: f79548a34281b2a3c9f20247331e913c, type: 3}
       propertyPath: m_Name
       value: BOY@Pistol Idle
@@ -783,10 +787,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 9500000, guid: f79548a34281b2a3c9f20247331e913c, type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 3d8e25823d0fa151a84882d4122d057d, type: 2}
     - target: {fileID: 13700000, guid: f79548a34281b2a3c9f20247331e913c, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
