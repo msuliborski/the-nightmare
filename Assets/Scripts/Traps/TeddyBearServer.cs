@@ -59,7 +59,9 @@ public class TeddyBearServer : NetworkBehaviour
     {
         foreach (var enemy in _enemies)
         {
-            if (enemy._isDying) _enemies.Remove(enemy);
+            if (enemy == null) _enemies.Remove(enemy);
+         //   if (enemy._isDying) 
+
         }
         if (_isDying)
         {
@@ -70,8 +72,7 @@ public class TeddyBearServer : NetworkBehaviour
             _currentState = BearState.Waiting;
             _animator.SetBool("waiting", true);
         }
-        
-        else if(_enemies.Count > 0 && _damageDest == null)
+        else if(_damageDest == null)
         {
             _currentState = BearState.Running;
             _animator.SetBool("waiting", false);
@@ -167,13 +168,14 @@ public class TeddyBearServer : NetworkBehaviour
         if (Dest)
         {
             RpcSendDest(Dest.name);
-            //_currentState = BearState.Running;
+            _currentState = BearState.Running;
             
         }
         else
         {
             RpcSendDest(NO_DESTINATION);
-            //_currentState = BearState.Waiting;
+            _currentState = BearState.Waiting;
+
             
         }
     }
@@ -225,13 +227,13 @@ public class TeddyBearServer : NetworkBehaviour
         if (Dest)
         {
             RpcSendDest(Dest.name);
-           // _currentState = BearState.Running;
+            _currentState = BearState.Running;
             
         }
         else
         {
             RpcSendDest(NO_DESTINATION);
-           // _currentState = BearState.Waiting;
+            _currentState = BearState.Waiting;
             
         }
     }
