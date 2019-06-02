@@ -82,7 +82,7 @@ public class GameManager : NetworkBehaviour
             {
                 Transform point = points.GetChild(i);
                 PosAndTag posAndTag = new PosAndTag(new Vector2(point.transform.position.x, point.transform.position.z), point.tag);
-
+                Debug.Log(point.tag);
                 _buildingPoints.Add(posAndTag, point.GetComponent<GridPoint>());
             }
             Transform captureAreas = room.transform.GetChild(2);

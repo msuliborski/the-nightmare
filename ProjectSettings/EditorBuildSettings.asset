@@ -20,7 +20,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/michal.unity
     guid: 2171e28c08e1bc948959b19bd7986727
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/fpsTest4.unity
     guid: ba8c5225c44632d72a1cf050bd90ab5c
   - enabled: 0
