@@ -74,7 +74,7 @@ public class PlacementController : NetworkBehaviour
     {
         if (Input.GetMouseButton(0))
         {
-            Vector2 pos = new Vector2(_currentObject.transform.position.x, _currentObject.transform.position.z);
+            Vector3 pos = new Vector3(_currentObject.transform.position.x, _currentObject.transform.position.y, _currentObject.transform.position.z);
             if (GameManager.Instance.BuildingPoints.ContainsKey(pos)
                 && GameManager.Instance.BuildingPoints[pos].Buildable
                 )
@@ -105,7 +105,7 @@ public class PlacementController : NetworkBehaviour
         {
             GameObject temp = Instantiate(_placeableObject, pos, rot);
             temp.GetComponent<BoxCollider>().enabled = true;
-            Vector2 pos1 = new Vector2(temp.transform.position.x, temp.transform.position.z);
+            Vector3 pos1 = new Vector3(temp.transform.position.x, temp.transform.position.y, temp.transform.position.z);
             GameManager.Instance.BuildingPoints[pos1].Buildable = false;
         }
     }
