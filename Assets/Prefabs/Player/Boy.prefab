@@ -132,6 +132,19 @@ CapsuleCollider:
   m_Height: 0.84442014
   m_Direction: 1
   m_Center: {x: -0.0145299435, y: -0.051440686, z: -0.17569268}
+--- !u!114 &3953590870183607671
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 570504736184090103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff26db721962cdf4a8edcdfa9a767d2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  profile: {fileID: 11400000, guid: ba12f8c07e01f534fb3453fd2dcf1769, type: 2}
 --- !u!1 &1252147270679827366
 GameObject:
   m_ObjectHideFlags: 0
@@ -290,7 +303,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff26db721962cdf4a8edcdfa9a767d2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  profile: {fileID: 11400000, guid: cef8a4c8fcd06424e93bf13fdbccb1f8, type: 2}
+  profile: {fileID: 11400000, guid: ba12f8c07e01f534fb3453fd2dcf1769, type: 2}
 --- !u!1 &2361017057787199711
 GameObject:
   m_ObjectHideFlags: 0
@@ -698,8 +711,24 @@ PrefabInstance:
       propertyPath: m_Name
       value: BuildingCamera
       objectReference: {fileID: 0}
+    - target: {fileID: 5667848497323826834, guid: 7d917871d8c970a45a02188b364bfcb6,
+        type: 3}
+      propertyPath: m_AllowMSAA
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5667848497323826834, guid: 7d917871d8c970a45a02188b364bfcb6,
+        type: 3}
+      propertyPath: m_RenderingPath
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d917871d8c970a45a02188b364bfcb6, type: 3}
+--- !u!1 &570504736184090103 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4131442063337385902, guid: 7d917871d8c970a45a02188b364bfcb6,
+    type: 3}
+  m_PrefabInstance: {fileID: 4521336546258506329}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2370268052889161346 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2187590114338708699, guid: 7d917871d8c970a45a02188b364bfcb6,
