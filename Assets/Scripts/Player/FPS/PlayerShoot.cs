@@ -15,6 +15,9 @@ public class PlayerShoot : NetworkBehaviour {
     private float crossAccuracy = 1;
     private float normalFOV;
     private float zoomFOV;
+    [SerializeField] private GameObject _grenadePrefab;
+    private float _grenadeTimer = 0f;
+
 
     public bool IsBuildingOnFly { get; set; }
     public bool WasBuilt { get; set; }
@@ -55,6 +58,19 @@ public class PlayerShoot : NetworkBehaviour {
             StartCoroutine(Reload());
         }
 
+        if (Input.GetKeyUp(KeyCode.G))
+        {
+            CmdSpawnGrenade(transform.position, transform.rotation, transform.forward, _grenadeTimer / 3);
+            _grenadeTimer = 0f;
+        }
+        else if (Input.GetKey(KeyCode.G))
+        {
+            if (_grenadeTimer <= 3f)
+            {
+                _grenadeTimer += Time.deltaTime;
+            }
+        }
+
         //fireing
         if (Input.GetButton("Fire1") && Equipment.Weapon.State == Weapon.WeaponState.idle &&
             !PauseGame.menuActive && Equipment.Weapon.CurrentMagAmmo >= 1 && !IsBuildingOnFly) {
@@ -89,6 +105,7 @@ public class PlayerShoot : NetworkBehaviour {
             Cam.fieldOfView = Mathf.Lerp(Cam.fieldOfView, normalFOV, 0.6f);
             Cross.gameObject.SetActive(true);
         }
+
     }
 
 
@@ -189,4 +206,14 @@ public class PlayerShoot : NetworkBehaviour {
         Debug.Log(shootPlayerId + " has been shoot");
         GameManager.GetPlayer(shootPlayerId).RpcTakeDamage(damage);
     }
+
+    [Command]
+    void CmdSpawnGrenade(Vector3 playerPos, Quaternion playerRot, Vector3 forwardVector, float force)
+    {
+        GameObject grenade = Instantiate(_grenadePrefab, playerPos + forwardVector + Vector3.up / 2, playerRot);
+        Rigidbody rb = grenade.GetComponent<Rigidbody>();
+        rb.velocity = force * (15 * forwardVector + 5 * Vector3.up);
+        NetworkServer.Spawn(grenade);
+    }
+
 }

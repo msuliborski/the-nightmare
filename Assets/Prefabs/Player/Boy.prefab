@@ -536,6 +536,8 @@ MonoBehaviour:
   _mask:
     serializedVersion: 2
     m_Bits: 1335
+  _grenadePrefab: {fileID: 3012633921025596544, guid: 4e88b0833fc1f794780665ba09ba3620,
+    type: 3}
 --- !u!114 &1307990793838130946
 MonoBehaviour:
   m_ObjectHideFlags: 0
