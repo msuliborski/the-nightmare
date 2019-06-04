@@ -15,9 +15,7 @@ public class TeddyBearServer : NetworkBehaviour
     [SerializeField] private float _damage = 60f;
     public Transform Dest { get; set; }
     private Animator _animator;
-    private NetworkAnimator _netAnimator;
-    public bool _isPlaced = false;
-
+    
     public enum BearState
     {
         Running,
@@ -54,79 +52,69 @@ public class TeddyBearServer : NetworkBehaviour
         {
             Debug.Log("bear server");
             _animator = GetComponentInChildren<Animator>();
-            _netAnimator = GetComponentInChildren<NetworkAnimator>();
             //StartCoroutine(SetClosestPlayerStart());
             _bearTransform = transform.GetChild(1);
             Agent = transform.GetChild(1).GetComponent<NavMeshAgent>();
-            TurnOnWalking(false);
-            //StartCoroutine(Decay());
+            StartCoroutine(Decay());
         }
     }
 
-    public void OnPlacing()
-    {
-        _isPlaced = true;
-        _animator.enabled = true;
-        _netAnimator.enabled = true;
-        TurnOnWalking(true);
-        StartCoroutine(Decay());
-    }
+    
 
-    void Update()
+   void Update()
     {
-        if (_isPlaced)
+        
+        foreach (var enemy in _enemies)
         {
-            foreach (var enemy in _enemies)
-            {
-                if (enemy == null) _enemies.Remove(enemy);
-                //   if (enemy._isDying) 
+            if (enemy == null) _enemies.Remove(enemy);
+            //   if (enemy._isDying) 
 
-            }
-            if (_isDying)
-            {
-                _currentState = BearState.Dying;
-            }
-            else if (_enemies.Count == 0)
-            {
-                _currentState = BearState.Waiting;
-                _animator.SetBool("waiting", true);
-            }
-            else if(_damageDest == null)
-            {
-                _currentState = BearState.Running;
-                _animator.SetBool("waiting", false);
-            }
-            switch (_currentState)
-            {
-                case BearState.Fighting:
-                    Debug.Log("fighting");
-                    _damageDest.CmdTakeDamage(Time.deltaTime * _damage);
-                    if (_damageDest._isDying || !_damageDest.gameObject.activeSelf)
-                    {
-                        _enemies.Remove(_damageDest);
-                        _damageDest = null;
-                        _currentState = BearState.Running;
-                        TurnOnWalking(true);
-                        SetClosestPlayer();
-                        _animator.SetBool("fighting", false);
-                    }
-                    break;
-
-                case BearState.Waiting:
-                    SetClosestPlayer();
-                    break;
-                
-                case BearState.Running:
-                    //TurnOnWalking(true);
-                    Debug.Log("running");
-                    if (Dest != null && Dest.gameObject.activeSelf) Agent.SetDestination(Dest.position);
-                    else SetClosestPlayer();
-                    break;
-            
-                case BearState.Dying:
-                    break;
-            }
         }
+        if (_isDying)
+        {
+            _currentState = BearState.Dying;
+        }
+        else if (_enemies.Count == 0)
+        {
+            _currentState = BearState.Waiting;
+            _animator.SetBool("waiting", true);
+        }
+        else if(_damageDest == null)
+        {
+            _currentState = BearState.Running;
+            _animator.SetBool("waiting", false);
+        }
+        switch (_currentState)
+        {
+            case BearState.Fighting:
+                Debug.Log("fighting");
+                _damageDest.CmdTakeDamage(Time.deltaTime * _damage);
+                if (_damageDest._isDying || !_damageDest.gameObject.activeSelf)
+                {
+                    _enemies.Remove(_damageDest);
+                    _damageDest = null;
+                    _currentState = BearState.Running;
+                    TurnOnWalking(true);
+                    SetClosestPlayer();
+                    _animator.SetBool("fighting", false);
+                }
+                break;
+
+            case BearState.Waiting:
+                SetClosestPlayer();
+                break;
+                
+            case BearState.Running:
+                //TurnOnWalking(true);
+                Debug.Log("running");
+                if (Dest != null && Dest.gameObject.activeSelf) Agent.SetDestination(Dest.position);
+                else SetClosestPlayer();
+                break;
+            
+            case BearState.Dying:
+                break;
+        }
+        
     }
 
     public void EntryDetected(Collider other)

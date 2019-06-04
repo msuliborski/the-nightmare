@@ -6,6 +6,7 @@ public class PlacementController : NetworkBehaviour
 {
     public static float GridTileSize = 1f;
     [SerializeField] private List<GameObject> _placeableObject;
+    [SerializeField] private List<GameObject> _placeableObjectModels;
     //public GameObject PlaceableObject {get { return _placeableObject; } set { _placeableObject = value; }}
     private float _mouseWheelRotation;
     private float _x = 0, _y = 0, _reverseGrid, _camMinZoom, _camMaxZoom;
@@ -81,7 +82,7 @@ public class PlacementController : NetworkBehaviour
     void UpdatePlaceable()
     {
         Destroy(_currentObject);
-        _currentObject = Instantiate(_placeableObject[_placeableIndex]);
+        _currentObject = Instantiate(_placeableObjectModels[_placeableIndex]);
     }
 
     void ReleaseOnClick()
@@ -97,14 +98,10 @@ public class PlacementController : NetworkBehaviour
 
                 if (GameManager.CurrentState == GameManager.GameState.Fighting)
                     GameManager.TurnOnGridRenders(false);
-                    
+
+                Destroy(_currentObject);
                 CmdPlaceEntity(_currentObject.transform.position, _currentObject.transform.rotation, _currentTag);
-                if(_placeableIndex == 0)
-                    _currentObject.transform.GetComponent<BoxCollider>().enabled = true;
-                else if(_placeableIndex == 1)
-                    _currentObject.transform.GetComponent<TeddyBearServer>().OnPlacing();
                 GameManager.Instance.BuildingPoints[posAndTag].Buildable = false;
-                _currentObject = null;
                 _playerShoot.WasBuilt = true;
             }
         }
@@ -113,6 +110,7 @@ public class PlacementController : NetworkBehaviour
     [Command]
     void CmdPlaceEntity(Vector3 pos, Quaternion rot, string tag)
     {
+        NetworkServer.Spawn(Instantiate(_placeableObject[_placeableIndex], pos, rot));
         RpcPlaceEntity(pos, rot, tag);
     }
 
@@ -121,12 +119,7 @@ public class PlacementController : NetworkBehaviour
     {
         if (!isLocalPlayer)
         {
-            GameObject temp = Instantiate(_placeableObject[_placeableIndex], pos, rot);
-            if(_placeableIndex == 0)
-                temp.GetComponent<BoxCollider>().enabled = true;
-            else if(_placeableIndex == 1)
-                temp.GetComponent<TeddyBearServer>().OnPlacing();
-            Vector2 pos1 = new Vector3(temp.transform.position.x, temp.transform.position.z);
+            Vector2 pos1 = new Vector2(pos.x, pos.z);
             GameManager.PosAndTag posAndTag = new GameManager.PosAndTag(pos1, tag);
             GameManager.Instance.BuildingPoints[posAndTag].Buildable = false;
         }
@@ -162,7 +155,7 @@ public class PlacementController : NetworkBehaviour
                     if (_currentObject == null)
                     {
                         GameManager.TurnOnGridRenders(true);
-                        _currentObject = Instantiate(_placeableObject[_placeableIndex]);
+                        _currentObject = Instantiate(_placeableObjectModels[_placeableIndex]);
                         _playerShoot.IsBuildingOnFly = true;
                     }
                     else
