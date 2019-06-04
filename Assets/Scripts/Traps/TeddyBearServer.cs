@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
@@ -24,7 +25,7 @@ public class TeddyBearServer : NetworkBehaviour
         Dying
     };
 
-    private BearState _currentState = BearState.Waiting;
+    private BearState _currentState = BearState.Dying;
     public BearState PreviousState { get; set; }
 
     public BearState CurrentState
@@ -55,6 +56,8 @@ public class TeddyBearServer : NetworkBehaviour
             //StartCoroutine(SetClosestPlayerStart());
             _bearTransform = transform.GetChild(1);
             Agent = transform.GetChild(1).GetComponent<NavMeshAgent>();
+            
+            StartCoroutine(SetClosestPlayerStart());
             StartCoroutine(Decay());
         }
     }
@@ -64,11 +67,9 @@ public class TeddyBearServer : NetworkBehaviour
    void Update()
     {
         
-        foreach (var enemy in _enemies)
+        foreach (var enemy in _enemies.ToList())
         {
-            if (enemy == null) _enemies.Remove(enemy);
-            //   if (enemy._isDying) 
-
+            if (enemy._isDying) _enemies.Remove(enemy);
         }
         if (_isDying)
         {
@@ -152,11 +153,18 @@ public class TeddyBearServer : NetworkBehaviour
             _animator.SetBool("fighting", false);
             _currentState = BearState.Running;
         }
+        if (_enemies.Count == 0 && _damageDest == null)
+        {
+            _currentState = BearState.Waiting;
+        }
     }
     
     private IEnumerator SetClosestPlayerStart()
     {
-        yield return new WaitForSeconds(1f);
+        TurnOnWalking(false);
+        yield return new WaitForSeconds(2.97f);
+        _currentState = BearState.Waiting;
+        TurnOnWalking(true);
 
         Transform tMin = null;
         float minDist = Mathf.Infinity;
