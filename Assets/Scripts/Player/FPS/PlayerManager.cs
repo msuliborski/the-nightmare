@@ -60,7 +60,7 @@ public class PlayerManager : NetworkBehaviour
 
     public void Setup()
     {
-
+        if (isServer) SetLayerRecursively(gameObject.transform.GetChild(0).gameObject, 12);
         _rigidbody = GetComponent<Rigidbody>();
         _wasEnabled = new bool[_disableOnDeath.Length];
 
@@ -72,6 +72,17 @@ public class PlayerManager : NetworkBehaviour
         SetBuildingMode();
         
         //SetActionMode();
+    }
+
+    private void SetLayerRecursively(GameObject obj, int newLayer)
+    {
+        if (obj == null) return;
+        obj.layer = newLayer;
+        foreach (Transform child in obj.transform)
+        {
+            if (child == null) continue;
+            SetLayerRecursively(child.gameObject, newLayer);
+        }
     }
 
     public void SetDefaults()
