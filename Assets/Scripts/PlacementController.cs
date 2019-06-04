@@ -5,8 +5,8 @@ using UnityEngine.Networking;
 public class PlacementController : NetworkBehaviour
 {
     public static float GridTileSize = 1f;
-    [SerializeField] private GameObject _placeableObject;
-    public GameObject PlaceableObject {get { return _placeableObject; } set { _placeableObject = value; }}
+    [SerializeField] private List<GameObject> _placeableObject;
+    //public GameObject PlaceableObject {get { return _placeableObject; } set { _placeableObject = value; }}
     private float _mouseWheelRotation;
     private float _x = 0, _y = 0, _reverseGrid, _camMinZoom, _camMaxZoom;
     private GameObject _currentObject;
@@ -22,6 +22,7 @@ public class PlacementController : NetworkBehaviour
     [SerializeField] private float _moveSpeedMaxZoom = 30f;
     [SerializeField] private float _rotationSpeedKeyboard = 150f;
     private static float _zoom = 1f;
+    private int _placeableIndex = 0;
 
    private PlayerShoot _playerShoot;
 
@@ -51,24 +52,36 @@ public class PlacementController : NetworkBehaviour
         {
             MoveToMouse();
             ReleaseOnClick();
-            RotateObject();
+            RotateWheel();
         }
         
     }
 
-    void RotateObject()
+    void RotateWheel()
     {
         _mouseWheelRotation = 0;
         _mouseWheelRotation += Input.mouseScrollDelta.y;
         
-        if (_mouseWheelRotation >= 0.5)
+        if (_mouseWheelRotation > 0.5)
         {
-            _currentObject.transform.Rotate(Vector3.up, 90);
+            _placeableIndex++;
+            if (_placeableIndex > _placeableObject.Count - 1) _placeableIndex = 0;
+            UpdatePlaceable();
+            //_currentObject.transform.Rotate(Vector3.up, 90);
         }
-        else if (_mouseWheelRotation <= -0.5)
+        else if (_mouseWheelRotation < -0.5)
         {
-            _currentObject.transform.Rotate(Vector3.up, -90);
+            _placeableIndex--;
+            if (_placeableIndex < 0) _placeableIndex = _placeableObject.Count - 1;
+            UpdatePlaceable();
+            //_currentObject.transform.Rotate(Vector3.up, -90);
         }
+    }
+
+    void UpdatePlaceable()
+    {
+        Destroy(_currentObject);
+        _currentObject = Instantiate(_placeableObject[_placeableIndex]);
     }
 
     void ReleaseOnClick()
@@ -86,7 +99,10 @@ public class PlacementController : NetworkBehaviour
                     GameManager.TurnOnGridRenders(false);
                     
                 CmdPlaceEntity(_currentObject.transform.position, _currentObject.transform.rotation, _currentTag);
-                _currentObject.transform.GetComponent<BoxCollider>().enabled = true;
+                if(_placeableIndex == 0)
+                    _currentObject.transform.GetComponent<BoxCollider>().enabled = true;
+                else if(_placeableIndex == 1)
+                    _currentObject.transform.GetComponent<TeddyBearServer>().OnPlacing();
                 GameManager.Instance.BuildingPoints[posAndTag].Buildable = false;
                 _currentObject = null;
                 _playerShoot.WasBuilt = true;
@@ -105,8 +121,11 @@ public class PlacementController : NetworkBehaviour
     {
         if (!isLocalPlayer)
         {
-            GameObject temp = Instantiate(_placeableObject, pos, rot);
-            temp.GetComponent<BoxCollider>().enabled = true;
+            GameObject temp = Instantiate(_placeableObject[_placeableIndex], pos, rot);
+            if(_placeableIndex == 0)
+                temp.GetComponent<BoxCollider>().enabled = true;
+            else if(_placeableIndex == 1)
+                temp.GetComponent<TeddyBearServer>().OnPlacing();
             Vector2 pos1 = new Vector3(temp.transform.position.x, temp.transform.position.z);
             GameManager.PosAndTag posAndTag = new GameManager.PosAndTag(pos1, tag);
             GameManager.Instance.BuildingPoints[posAndTag].Buildable = false;
@@ -143,7 +162,7 @@ public class PlacementController : NetworkBehaviour
                     if (_currentObject == null)
                     {
                         GameManager.TurnOnGridRenders(true);
-                        _currentObject = Instantiate(_placeableObject);
+                        _currentObject = Instantiate(_placeableObject[_placeableIndex]);
                         _playerShoot.IsBuildingOnFly = true;
                     }
                     else
@@ -178,7 +197,7 @@ public class PlacementController : NetworkBehaviour
                 if (Input.GetKeyDown(KeyCode.P))
                 {
                     if (_currentObject == null)
-                        _currentObject = Instantiate(_placeableObject);
+                        _currentObject = Instantiate(_placeableObject[_placeableIndex]);
                     else Destroy(_currentObject);
 
                 }
