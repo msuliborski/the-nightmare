@@ -24,6 +24,7 @@ public class PlacementController : NetworkBehaviour
     [SerializeField] private float _rotationSpeedKeyboard = 150f;
     private static float _zoom = 1f;
     private int _placeableIndex = 0;
+    private bool _isPlacing = false;
 
    private PlayerShoot _playerShoot;
 
@@ -150,7 +151,7 @@ public class PlacementController : NetworkBehaviour
         {
             case GameManager.GameState.Fighting:
 
-                if (Input.GetKeyDown(KeyCode.P))
+                if (Input.GetKeyDown(KeyCode.T))
                 {
                     if (_currentObject == null)
                     {
@@ -172,8 +173,12 @@ public class PlacementController : NetworkBehaviour
             
                 float xDelta = 0f, zDelta = 0f, rotationDelta = 0f;
 
-                float zoomDelta = Input.GetAxis("Mouse ScrollWheel");
-                if (zoomDelta != 0f) AdjustZoom(zoomDelta);
+                if (!_isPlacing)
+                {
+                    float zoomDelta = Input.GetAxis("Mouse ScrollWheel");
+                    if (zoomDelta != 0f) AdjustZoom(zoomDelta);                    
+                }
+                
 
 
                 if (Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.Comma)) rotationDelta++;
@@ -187,11 +192,18 @@ public class PlacementController : NetworkBehaviour
                 if (xDelta != 0f || zDelta != 0f) AdjustPositionMouse(xDelta, zDelta);
                 if (rotationDelta != 0f) AdjustRotationKeyboard(rotationDelta);
 
-                if (Input.GetKeyDown(KeyCode.P))
+                if (Input.GetKeyDown(KeyCode.T))
                 {
                     if (_currentObject == null)
+                    {
                         _currentObject = Instantiate(_placeableObject[_placeableIndex]);
-                    else Destroy(_currentObject);
+                        _isPlacing = true;
+                    }
+                    else
+                    {
+                        Destroy(_currentObject);
+                        _isPlacing = false;
+                    }
 
                 }
 

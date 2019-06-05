@@ -47,11 +47,9 @@ public class TeddyBearServer : NetworkBehaviour
         if (!isServer)
         {
             enabled = false;
-            Debug.Log("bear client");
         }
         else
         {
-            Debug.Log("bear server");
             _animator = GetComponentInChildren<Animator>();
             //StartCoroutine(SetClosestPlayerStart());
             _bearTransform = transform.GetChild(1);
