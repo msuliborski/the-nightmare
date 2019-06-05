@@ -56,7 +56,7 @@ public class TeddyBearServer : NetworkBehaviour
             //StartCoroutine(SetClosestPlayerStart());
             _bearTransform = transform.GetChild(1);
             Agent = transform.GetChild(1).GetComponent<NavMeshAgent>();
-            
+            _isDying = true;
             StartCoroutine(SetClosestPlayerStart());
             StartCoroutine(Decay());
         }
@@ -163,7 +163,8 @@ public class TeddyBearServer : NetworkBehaviour
     {
         TurnOnWalking(false);
         yield return new WaitForSeconds(2.97f);
-        _currentState = BearState.Waiting;
+
+        _isDying = false;
         TurnOnWalking(true);
 
         Transform tMin = null;
