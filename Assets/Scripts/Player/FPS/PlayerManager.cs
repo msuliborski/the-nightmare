@@ -60,7 +60,7 @@ public class PlayerManager : NetworkBehaviour
 
     public void Setup()
     {
-        if (isServer) SetLayerRecursively(gameObject.transform.GetChild(0).gameObject, 12);
+        if (isLocalPlayer) SetLayerRecursively(gameObject.transform.GetChild(0).gameObject, 12);
         _rigidbody = GetComponent<Rigidbody>();
         _wasEnabled = new bool[_disableOnDeath.Length];
 
