@@ -4823,8 +4823,8 @@ MonoBehaviour:
   _damage: 20
   _currentMagAmmo: 7
   _maxMagAmmo: 7
-  _currentAmmo: 49
-  _maxAmmo: 49
+  _currentAmmo: 35
+  _maxAmmo: 35
   _range: 100
   _fireRate: 0.15
   _reloadTime: 2

@@ -11,8 +11,9 @@ public class PlayerSetup : NetworkBehaviour {
     private Camera _sceneCamera;
     [SerializeField] private GameObject _weaponObjectPrefab;
     private PlayerEquipment _equipment;
-    private BulletsHUD bulletshud;
+    private BulletsHUD _bulletshud;
     private HealthBar _healthBar;
+    private ClipsManager _clipsManager;
     
 
     // Start is called before the first frame update
@@ -27,13 +28,16 @@ public class PlayerSetup : NetworkBehaviour {
             _sceneCamera = GameObject.Find("SceneCamera").GetComponent<Camera>();
             if (_sceneCamera != null)
                 _sceneCamera.gameObject.SetActive(false);
-            bulletshud = GameObject.Find("bulletsNumber").GetComponent<BulletsHUD>();
+            _bulletshud = GameObject.Find("bulletsNumber").GetComponent<BulletsHUD>();
             _healthBar = GameObject.Find("HP").GetComponent<HealthBar>();
+            _clipsManager = GameObject.Find("Clips").GetComponent<ClipsManager>();
             GameManager.LocalPlayer = GetComponent<PlayerManager>();
-            bulletshud.player = GetComponent<PlayerEquipment>();
+            _bulletshud.player = GetComponent<PlayerEquipment>();
+            _clipsManager.player = GetComponent<PlayerEquipment>();
             _healthBar.player = GetComponent<PlayerManager>();
-            bulletshud.playerEnabled = true;
+            _bulletshud.playerEnabled = true;
             _healthBar.playerEnabled = true;
+            _clipsManager.playerEnabled = true;
             GameManager.Instance.SetCameraForBillboards(_actionCamera);
         }
 

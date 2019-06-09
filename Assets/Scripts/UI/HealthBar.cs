@@ -14,7 +14,7 @@ public class HealthBar : MonoBehaviour
 
     void Start()
     {
-        percentage = transform.GetChild(2).GetComponent<TextMeshProUGUI>();
+        percentage = transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>();
         full = transform.GetChild(1).GetComponent<RectTransform>();
     }
 
