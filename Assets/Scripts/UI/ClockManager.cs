@@ -30,6 +30,7 @@ public class ClockManager : MonoBehaviour
         if (_minutes == 0 && _seconds == 0)
         {
             //WARUNEK KONCZACY GRE
+            GameManager.Lose();
             Debug.Break();
         }
 

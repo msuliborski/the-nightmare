@@ -6,7 +6,7 @@ using UnityEngine.Networking;
 
 public class CaptureArea : NetworkBehaviour
 {
-    [SyncVar] private bool _isCaptured = false;
+    [SyncVar] public bool _isCaptured = false;
     [SyncVar] private bool _isLocked = false;
     [SyncVar] private bool _isConflict = false;
     [SyncVar] public float _progress = 0;
@@ -108,6 +108,11 @@ public class CaptureArea : NetworkBehaviour
     {
         if (isServer)
         {
+            if (_capturingNum < 0)
+                _capturingNum = 0;
+            if (_enemyNum < 0)
+                _enemyNum = 0;
+            
             if (_capturingNum > 0 && _enemyNum > 0)
                 _isConflict = true;
             else

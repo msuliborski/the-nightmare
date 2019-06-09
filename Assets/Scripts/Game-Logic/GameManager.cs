@@ -107,6 +107,16 @@ public class GameManager : NetworkBehaviour
         foreach (GameObject renderer in GridRenderes)
             renderer.SetActive(isOn);
     }
+
+    public static void Win()
+    {
+        
+    }
+
+    public static void Lose()
+    {
+        
+    }
     
     
     #endregion

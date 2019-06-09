@@ -19,6 +19,7 @@ public class Room : MonoBehaviour
     public List<CaptureArea> CaptureAreas { get { return _captureAreas; } }
     private List<GameObject> _enemySpawnPoints = new List<GameObject>();
     public List<GameObject> EnemySpawnPoint { get { return _enemySpawnPoints; } }
+    public bool roomCaptured;
 
     private void Start()
     {
@@ -31,9 +32,36 @@ public class Room : MonoBehaviour
         for (int i = 0; i < areas.childCount; i++)
         {
             GameManager.Instance.EnemySpawnPoints.Add(areas.GetChild(i).name, areas.GetChild(i));
+            _enemySpawnPoints.Add(areas.GetChild(i).gameObject);
         }
         GameManager.GridRenderes.Add(transform.GetChild(0).gameObject);
-        
+
+        Transform captures = transform.GetChild(2);
+        for (int i = 0; i < captures.childCount; i++)
+        {
+            _captureAreas.Add(captures.GetChild(i).GetComponent<CaptureArea>());
+        }
+    }
+
+    void Update()
+    {
+        bool check = true;
+        foreach (CaptureArea capture in _captureAreas)
+        {
+            if (!capture._isCaptured)
+            {
+                check = false;
+                break;
+            }
+        }
+
+        if (check) roomCaptured = true;
+        else roomCaptured = false;
+
+        foreach (GameObject spawn in _enemySpawnPoints)
+        {
+            spawn.SetActive(!roomCaptured);
+        }
     }
     
 }
