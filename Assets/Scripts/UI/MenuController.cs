@@ -10,6 +10,11 @@ public class MenuController : MonoBehaviour
         SceneManager.LoadScene("LobbyTests");
     }
 
+    public void LoadScene(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
+    }
+
     public void Quit()
     {
         Application.Quit();
