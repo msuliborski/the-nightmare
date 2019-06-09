@@ -228,6 +228,7 @@ public class PlacementController : NetworkBehaviour
         Debug.Log("aaaa: " + GameManager.LocalPlayer.transform.name);
         PlacementController localPlayer = GameManager.LocalPlayer.GetComponent<PlacementController>(); // dlatego musimy wyluskac local playera
         localPlayer._currentCamera = localPlayer._actionCamera;
+        ClockManager.canCount = true;
         if (localPlayer._currentObject != null) Destroy(localPlayer._currentObject);
         GameManager.CurrentState = GameManager.GameState.Fighting;
     }
