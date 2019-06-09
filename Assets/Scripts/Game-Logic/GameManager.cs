@@ -117,8 +117,12 @@ public class GameManager : NetworkBehaviour
     {
         
     }
-    
-    
+
+    [ClientRpc]
+    void RpcPauseGame()
+    {
+        Debug.Break();
+    }
     #endregion
 
     #region EnemySpawning

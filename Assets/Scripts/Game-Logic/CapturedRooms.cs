@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
-public class CapturedRooms : MonoBehaviour
+public class CapturedRooms : NetworkBehaviour
 {
     private List<Room> rooms = new List<Room>();
     private List<Image> heads = new List<Image>();
@@ -39,6 +40,24 @@ public class CapturedRooms : MonoBehaviour
             }
         }
 
+        CmdTurnHeads(roomsToDisable);
+
+        if (check)
+        {
+            //WARUNEK WYGRYWANIA
+            GameManager.Win();
+        }
+    }
+
+    [Command]
+    void CmdTurnHeads(int roomsToDisable)
+    {
+        RpcTurnHeads(roomsToDisable);
+    }
+    
+    [ClientRpc]
+    void RpcTurnHeads(int roomsToDisable)
+    {
         for (int i = 0; i < roomsToDisable; i++)
         {
             heads[i].enabled = false;
@@ -46,13 +65,6 @@ public class CapturedRooms : MonoBehaviour
         for (int i = roomsToDisable; i < heads.Count; i++)
         {
             heads[i].enabled = true;
-        }
-
-        if (check)
-        {
-            //WARUNEK WYGRYWANIA
-            GameManager.Win();
-            Debug.Break();
         }
     }
 }

@@ -29,9 +29,8 @@ public class ClockManager : MonoBehaviour
 
         if (_minutes == 0 && _seconds == 0)
         {
-            //WARUNEK KONCZACY GRE
+            //WARUNEK PREZGRYWAJACY
             GameManager.Lose();
-            Debug.Break();
         }
 
         if (_minutes < 10)
