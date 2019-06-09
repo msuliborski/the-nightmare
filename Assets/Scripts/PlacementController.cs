@@ -90,13 +90,14 @@ public class PlacementController : NetworkBehaviour
     {
         if (Input.GetMouseButton(0))
         {
+            
             Vector2 pos = new Vector2(_currentObject.transform.position.x, _currentObject.transform.position.z);
             GameManager.PosAndTag posAndTag = new GameManager.PosAndTag(pos, _currentTag);
             if (GameManager.Instance.BuildingPoints.ContainsKey(posAndTag)
                 && GameManager.Instance.BuildingPoints[posAndTag].Buildable
                 )
             {
-
+                Debug.Log("clicked");
                 if (GameManager.CurrentState == GameManager.GameState.Fighting)
                     GameManager.TurnOnGridRenders(false);
 
