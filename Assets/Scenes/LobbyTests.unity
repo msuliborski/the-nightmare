@@ -564,7 +564,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000033224576}
+  m_AnchoredPosition: {x: 0, y: -0.0000020368325}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1257733208
@@ -2384,9 +2384,32 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3041406342502215934, guid: 073947f950d4f2fd599365c522c0559e,
         type: 3}
+      propertyPath: m_SpawnPrefabs.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3041406342502215934, guid: 073947f950d4f2fd599365c522c0559e,
+        type: 3}
       propertyPath: m_OnlineScene
       value: ExtremeHomeMakeover
       objectReference: {fileID: 0}
+    - target: {fileID: 3041406342502215934, guid: 073947f950d4f2fd599365c522c0559e,
+        type: 3}
+      propertyPath: m_SpawnPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 3012633921025596544, guid: 4e88b0833fc1f794780665ba09ba3620,
+        type: 3}
+    - target: {fileID: 3041406342502215934, guid: 073947f950d4f2fd599365c522c0559e,
+        type: 3}
+      propertyPath: m_SpawnPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 3905061388165123986, guid: 64529fe2fad73d485b75f22ac03f1ff2,
+        type: 3}
+    - target: {fileID: 3041406342502215934, guid: 073947f950d4f2fd599365c522c0559e,
+        type: 3}
+      propertyPath: m_SpawnPrefabs.Array.data[3]
+      value: 
+      objectReference: {fileID: 940214644287376405, guid: fff42774a33b7704f8d83ea810557ad6,
+        type: 3}
     - target: {fileID: 132920175, guid: 073947f950d4f2fd599365c522c0559e, type: 3}
       propertyPath: showGUI
       value: 0

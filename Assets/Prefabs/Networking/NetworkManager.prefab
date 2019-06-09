@@ -191,7 +191,7 @@ MonoBehaviour:
   m_AutoCreatePlayer: 1
   m_PlayerSpawnMethod: 1
   m_OfflineScene: LobbyTests
-  m_OnlineScene: fpsTest2
+  m_OnlineScene: ExtremeHomeMakeover
   m_SpawnPrefabs:
   - {fileID: 6513423205020058902, guid: 53776c2a44fce1c488312695240e7217, type: 3}
   m_CustomConfig: 0
