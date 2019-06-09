@@ -8,9 +8,9 @@ public class PlayerManager : NetworkBehaviour
     [SyncVar] private bool _isDead = false;
     public bool IsDead { get { return _isDead; }  protected set { _isDead = value; } }
 
-    [SerializeField] private float _maxHealth = 100;
+    public float _maxHealth = 100;
 
-    [SyncVar] private float _currentHealth;
+    [SyncVar] public float _currentHealth;
 
     [SerializeField] private Behaviour[] _disableOnDeath;
     private bool[] _wasEnabled;
