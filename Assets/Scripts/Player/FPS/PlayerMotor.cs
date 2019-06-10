@@ -15,6 +15,8 @@ public class PlayerMotor : NetworkBehaviour {
     private static readonly int IsSprinting = Animator.StringToHash("isSprinting");
     public bool isSpeintingToggle;
     private static readonly int IsAiming = Animator.StringToHash("isAiming");
+    [SerializeField] private Transform _leftHand;
+    [SerializeField] private Transform _rightHand;
 
     void Start() {
         _anim = transform.GetChild(0).GetChild(0).GetComponent<Animator>();
@@ -52,6 +54,10 @@ public class PlayerMotor : NetworkBehaviour {
 
     public void Rotate(Vector3 rotation) {
         _rotation = rotation;
+        float yRot = rotation.y;
+        _leftHand.rotation = Quaternion.Euler(yRot, _leftHand.rotation.y, _leftHand.rotation.z);
+        _rightHand.rotation = Quaternion.Euler(yRot, _leftHand.rotation.y, _leftHand.rotation.z);
+        
     }
 
     void PerformRotation() {
