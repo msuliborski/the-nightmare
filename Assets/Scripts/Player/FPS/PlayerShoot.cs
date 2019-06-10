@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.AI;
@@ -17,6 +18,9 @@ public class PlayerShoot : NetworkBehaviour {
     private float zoomFOV;
     [SerializeField] private GameObject _grenadePrefab;
     private float _grenadeTimer = 0f;
+    private int _grenades = 3;
+    private int _maxGrenades = 3;
+    public TextMeshProUGUI _grenadesTM;
 
 
     public bool IsBuildingOnFly { get; set; }
@@ -38,6 +42,7 @@ public class PlayerShoot : NetworkBehaviour {
             IsBuildingOnFly = false;
         }
 
+        _grenadesTM = GameObject.Find("Grenades").GetComponent<TextMeshProUGUI>();
         normalFOV = Cam.fieldOfView;
         zoomFOV = normalFOV - 40;
         currentRecoil = Equipment.Weapon.Recoil;
@@ -46,7 +51,9 @@ public class PlayerShoot : NetworkBehaviour {
     }
 
 
-    void Update() {
+    void Update()
+    {
+        _grenadesTM.text = _grenades.ToString();
         if (crossAccuracy > 1.02) crossAccuracy -= (crossAccuracy * 0.05f + 0.02f);
         else crossAccuracy = 1f;
         Cross.transform.localScale = new Vector3(crossAccuracy, crossAccuracy, crossAccuracy);
@@ -58,16 +65,20 @@ public class PlayerShoot : NetworkBehaviour {
             StartCoroutine(Reload());
         }
 
-        if (Input.GetKeyUp(KeyCode.G))
+        if(_grenades > 0)
         {
-            CmdSpawnGrenade(transform.position, transform.rotation, transform.forward, _grenadeTimer / 3);
-            _grenadeTimer = 0f;
-        }
-        else if (Input.GetKey(KeyCode.G))
-        {
-            if (_grenadeTimer <= 3f)
+            if (Input.GetKeyUp(KeyCode.G))
             {
-                _grenadeTimer += Time.deltaTime;
+                _grenades--;
+                CmdSpawnGrenade(transform.position, transform.rotation, transform.forward, _grenadeTimer / 3);
+                _grenadeTimer = 0f;
+            }
+            else if (Input.GetKey(KeyCode.G))
+            {
+                if (_grenadeTimer <= 3f)
+                {
+                    _grenadeTimer += Time.deltaTime;
+                }
             }
         }
 

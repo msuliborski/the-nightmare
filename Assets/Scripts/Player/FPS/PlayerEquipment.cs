@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Networking;
 
 public class PlayerEquipment : NetworkBehaviour {
@@ -6,21 +7,39 @@ public class PlayerEquipment : NetworkBehaviour {
     public Weapon Weapon { get; set; }
     [SerializeField] private Camera _cam;
     [SerializeField] private LayerMask _mask;
+    public GameObject pickUp;
+
+    private void Start()
+    {
+        pickUp = GameObject.Find("PickUp");
+        pickUp.SetActive(false);
+    }
 
     private void Update() {
         RaycastHit weaponFinder;
         if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out weaponFinder, 10,
-            _mask)) {
-            if (weaponFinder.collider.CompareTag("Weapon") && Input.GetKeyDown(KeyCode.E)) {
-                Destroy(_cam.transform.GetChild(0).transform.GetChild(0).gameObject);
-                int weaponId = weaponFinder.collider.gameObject.GetComponent<GunSpawnPoint>().WeaponId;
-                GameObject weaponObject = Instantiate(GameManager.Instance.Weapons[weaponId],
-                    _cam.transform.GetChild(0).transform);
-                Weapon = weaponObject.GetComponent<Weapon>();
-                WeaponSound = weaponObject.GetComponent<AudioSource>();
-                CmdChangeWeapon(weaponId);
+            _mask))
+        {
+            
+            if (weaponFinder.collider.CompareTag("Weapon")) {
+                pickUp.SetActive(true);
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    Destroy(_cam.transform.GetChild(0).transform.GetChild(0).gameObject);
+                    int weaponId = weaponFinder.collider.gameObject.GetComponent<GunSpawnPoint>().WeaponId;
+                    GameObject weaponObject = Instantiate(GameManager.Instance.Weapons[weaponId],
+                        _cam.transform.GetChild(0).transform);
+                    Weapon = weaponObject.GetComponent<Weapon>();
+                    WeaponSound = weaponObject.GetComponent<AudioSource>();
+                    CmdChangeWeapon(weaponId);
+                }
+            }
+            else
+            {
+                pickUp.SetActive(false);
             }
         }
+        
     }
 
     public void PlayerShooting() {
