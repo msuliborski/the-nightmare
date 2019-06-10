@@ -134,4 +134,9 @@ public class PlayerManager : NetworkBehaviour
         transform.rotation = spawnPoint.rotation;
         GameManager.ActivatePlayer(transform.name, this);
     }
+
+    public override void OnDeserialize(NetworkReader reader, bool initialState)
+    {
+        base.OnDeserialize(reader, initialState);
+    }
 }
