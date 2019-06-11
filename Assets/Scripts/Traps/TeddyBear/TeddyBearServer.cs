@@ -87,8 +87,7 @@ public class TeddyBearServer : NetworkBehaviour
         {
             case BearState.Fighting:
                 Debug.Log("fighting");
-                _damageDest.CmdTakeDamage(Time.deltaTime * _damage);
-                if (_damageDest._isDying || !_damageDest.gameObject.activeSelf)
+                if (_damageDest == null || _damageDest._isDying || !_damageDest.gameObject.activeSelf)
                 {
                     _enemies.Remove(_damageDest);
                     _damageDest = null;
@@ -96,7 +95,8 @@ public class TeddyBearServer : NetworkBehaviour
                     TurnOnWalking(true);
                     SetClosestPlayer();
                     _animator.SetBool("fighting", false);
-                }
+                } 
+                else _damageDest.CmdTakeDamage(Time.deltaTime * _damage);
                 break;
 
             case BearState.Waiting:
