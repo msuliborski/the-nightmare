@@ -525,6 +525,8 @@ MonoBehaviour:
   _moveSpeedMinZoom: 30
   _moveSpeedMaxZoom: 30
   _rotationSpeedKeyboard: 150
+  maxSnares: 5
+  snares: 0
 --- !u!114 &7278791426480694111
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -543,6 +545,8 @@ MonoBehaviour:
     m_Bits: 1335
   _grenadePrefab: {fileID: 3012633921025596544, guid: 4e88b0833fc1f794780665ba09ba3620,
     type: 3}
+  _maxGrenades: 3
+  _grenades: 0
   _grenadesTM: {fileID: 0}
 --- !u!114 &1307990793838130946
 MonoBehaviour:
