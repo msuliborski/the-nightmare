@@ -563,7 +563,7 @@ PrefabInstance:
     - target: {fileID: 1250475252818553949, guid: 073947f950d4f2fd599365c522c0559e,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 3.8
       objectReference: {fileID: 0}
     - target: {fileID: 1250475252818553949, guid: 073947f950d4f2fd599365c522c0559e,
         type: 3}
@@ -648,7 +648,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 749330305, guid: 073947f950d4f2fd599365c522c0559e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.5
+      value: 3.8
       objectReference: {fileID: 0}
     - target: {fileID: 81765818, guid: 073947f950d4f2fd599365c522c0559e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -660,7 +660,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 81765818, guid: 073947f950d4f2fd599365c522c0559e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.5
+      value: 3.8
       objectReference: {fileID: 0}
     - target: {fileID: 1933175177, guid: 073947f950d4f2fd599365c522c0559e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -672,7 +672,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1933175177, guid: 073947f950d4f2fd599365c522c0559e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.5
+      value: 3.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 132920175, guid: 073947f950d4f2fd599365c522c0559e, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 132920175, guid: 073947f950d4f2fd599365c522c0559e, type: 3}
+      propertyPath: showGUI
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 073947f950d4f2fd599365c522c0559e, type: 3}
@@ -771,7 +779,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000040954314}
+  m_AnchoredPosition: {x: 0, y: -0.00004160499}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1257733208
@@ -2405,7 +2413,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 2139287752}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.9999997
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

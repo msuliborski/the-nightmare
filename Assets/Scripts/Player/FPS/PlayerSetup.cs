@@ -24,6 +24,7 @@ public class PlayerSetup : NetworkBehaviour {
             AssignRemoteLayer();
         }
         else {
+            transform.position = new Vector3(transform.position.x, 3.8f, transform.position.z); // hardcoded shit - hack for wrong spawning y before evaluation
             EquipWeapon();
             _sceneCamera = GameObject.Find("SceneCamera").GetComponent<Camera>();
             if (_sceneCamera != null)

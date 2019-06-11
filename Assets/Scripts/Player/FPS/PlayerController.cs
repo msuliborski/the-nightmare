@@ -75,6 +75,7 @@ public class PlayerController : NetworkBehaviour {
 
 
             Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
 
         else {
@@ -82,6 +83,7 @@ public class PlayerController : NetworkBehaviour {
             _motor.Rotate(Vector3.zero);
             _motor.RotateCamera(0f);
             Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
     }
 }
