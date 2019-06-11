@@ -74,7 +74,7 @@ public class PlayerShoot : NetworkBehaviour {
             if (Input.GetKeyUp(KeyCode.G))
             {
                 _grenades--;
-                CmdSpawnGrenade(transform.position, transform.rotation, transform.forward, _grenadeTimer / 3);
+                CmdSpawnGrenade(transform.position, transform.rotation, transform.forward, (_grenadeTimer + 0.5f) / 3);
                 _grenadeTimer = 0f;
             }
             else if (Input.GetKey(KeyCode.G))

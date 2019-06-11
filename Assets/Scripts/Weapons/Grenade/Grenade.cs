@@ -37,7 +37,7 @@ public class Grenade : NetworkBehaviour
     void RpcExlode()
     {
         GameObject explosion = Instantiate(_explosionPrefab, transform.position, transform.rotation);
-        Destroy(explosion, 0.85f);
+        Destroy(explosion, 3f);
     }
 
 }
