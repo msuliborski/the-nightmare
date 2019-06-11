@@ -114,7 +114,7 @@ public class PlacementController : NetworkBehaviour
                         GameManager.TurnOnGridRenders(false);
 
                     Destroy(_currentObject);
-                    CmdPlaceEntity(_currentObject.transform.position, _currentObject.transform.rotation, _currentTag);
+                    CmdPlaceEntity(_currentObject.transform.position, _currentObject.transform.rotation, _currentTag, _placeableIndex);
                     GameManager.Instance.BuildingPoints[posAndTag].Buildable = false;
                     _playerShoot.WasBuilt = true;
                     snares--;
@@ -132,7 +132,7 @@ public class PlacementController : NetworkBehaviour
                         GameManager.TurnOnGridRenders(false);
 
                     Destroy(_currentObject);
-                    CmdPlaceEntity(_currentObject.transform.position, _currentObject.transform.rotation, _currentTag);
+                    CmdPlaceEntity(_currentObject.transform.position, _currentObject.transform.rotation, _currentTag, _placeableIndex);
                     GameManager.Instance.BuildingPoints[posAndTag].Buildable = false;
                     _playerShoot.WasBuilt = true;
                 }
@@ -142,9 +142,9 @@ public class PlacementController : NetworkBehaviour
     }
 
     [Command]
-    void CmdPlaceEntity(Vector3 pos, Quaternion rot, string tag)
+    void CmdPlaceEntity(Vector3 pos, Quaternion rot, string tag, int placeableIndex)
     {
-        NetworkServer.Spawn(Instantiate(_placeableObject[_placeableIndex], pos, rot));
+        NetworkServer.Spawn(Instantiate(_placeableObject[placeableIndex], pos, rot));
         RpcPlaceEntity(pos, rot, tag);
     }
 
