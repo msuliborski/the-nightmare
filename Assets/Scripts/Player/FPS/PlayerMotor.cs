@@ -19,6 +19,8 @@ public class PlayerMotor : NetworkBehaviour {
     [SerializeField] private Transform _rightHand;
 
     void Start() {
+        _leftHand = transform.GetChild(0).GetChild(0).GetChild(2).GetChild(2).GetChild(0).GetChild(0).GetChild(0);
+        _rightHand = transform.GetChild(0).GetChild(0).GetChild(2).GetChild(2).GetChild(0).GetChild(0).GetChild(2);
         _anim = transform.GetChild(0).GetChild(0).GetComponent<Animator>();
         _rb = GetComponent<Rigidbody>();
     }
