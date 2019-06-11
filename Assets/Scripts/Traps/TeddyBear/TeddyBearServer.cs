@@ -104,7 +104,6 @@ public class TeddyBearServer : NetworkBehaviour
                 break;
                 
             case BearState.Running:
-                //TurnOnWalking(true);
                 // chujowy fix:
                 if (!Agent.enabled) Agent.enabled = true;
                 Debug.Log("running");
