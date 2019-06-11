@@ -8,11 +8,20 @@ public class PlayerEquipment : NetworkBehaviour {
     [SerializeField] private Camera _cam;
     [SerializeField] private LayerMask _mask;
     public GameObject pickUp;
+    private PlayerShoot _shoot;
+    private PlacementController _controller;
+    private Chest _chest;
 
     private void Start()
     {
-        pickUp = GameObject.Find("PickUp");
-        pickUp.SetActive(false);
+        if (isLocalPlayer)
+        {
+            pickUp = GameObject.Find("PickUp");
+            pickUp.SetActive(false);
+        }
+        _shoot = GetComponent<PlayerShoot>();
+        _controller = GetComponent<PlacementController>();
+        
     }
 
     private void Update() {
@@ -34,9 +43,30 @@ public class PlayerEquipment : NetworkBehaviour {
                     CmdChangeWeapon(weaponId);
                 }
             }
+            else if (weaponFinder.collider.CompareTag("Chest"))
+            {
+                _chest = weaponFinder.collider.GetComponentInParent<Chest>();
+                if (_chest.active && !_chest.alreadyPicked)
+                {
+                    if(isLocalPlayer)
+                        pickUp.SetActive(true);
+                    if (Input.GetKeyDown(KeyCode.E))
+                    {
+                        _shoot._grenades += _chest.grenades;
+                        _controller.snares += _chest.snares;
+                        _chest.alreadyPicked = true;
+                    }
+                }
+                else
+                {
+                    if(isLocalPlayer)
+                        pickUp.SetActive(false);
+                }
+            }
             else
             {
-                pickUp.SetActive(false);
+                if(isLocalPlayer)
+                    pickUp.SetActive(false);
             }
         }
         

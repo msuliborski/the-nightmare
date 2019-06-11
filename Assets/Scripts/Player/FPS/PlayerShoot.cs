@@ -18,8 +18,9 @@ public class PlayerShoot : NetworkBehaviour {
     private float zoomFOV;
     [SerializeField] private GameObject _grenadePrefab;
     private float _grenadeTimer = 0f;
-    private int _grenades = 3;
-    private int _maxGrenades = 3;
+    public int _maxGrenades = 3;
+    public int _grenades;
+    
     public TextMeshProUGUI _grenadesTM;
 
 
@@ -42,6 +43,7 @@ public class PlayerShoot : NetworkBehaviour {
             IsBuildingOnFly = false;
         }
 
+        _grenades = _maxGrenades;
         _grenadesTM = GameObject.Find("Grenades").GetComponent<TextMeshProUGUI>();
         normalFOV = Cam.fieldOfView;
         zoomFOV = normalFOV - 40;
@@ -53,6 +55,8 @@ public class PlayerShoot : NetworkBehaviour {
 
     void Update()
     {
+        if (_grenades > _maxGrenades)
+            _grenades = _maxGrenades;
         _grenadesTM.text = _grenades.ToString();
         if (crossAccuracy > 1.02) crossAccuracy -= (crossAccuracy * 0.05f + 0.02f);
         else crossAccuracy = 1f;
@@ -70,7 +74,7 @@ public class PlayerShoot : NetworkBehaviour {
             if (Input.GetKeyUp(KeyCode.G))
             {
                 _grenades--;
-                CmdSpawnGrenade(transform.position, transform.rotation, transform.forward, _grenadeTimer / 3);
+                CmdSpawnGrenade(transform.position, transform.rotation, transform.forward, (_grenadeTimer + 0.5f) / 3);
                 _grenadeTimer = 0f;
             }
             else if (Input.GetKey(KeyCode.G))

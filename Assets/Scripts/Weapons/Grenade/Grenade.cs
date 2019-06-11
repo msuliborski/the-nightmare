@@ -9,9 +9,13 @@ public class Grenade : NetworkBehaviour
     [SerializeField] private float _decayTime;
     public float _damage;
     [SerializeField] GameObject _explosionPrefab;
+    private MeshRenderer _renderer;
+    private CapsuleCollider _collider;
 
     void Start()
     {
+        _collider = GetComponent<CapsuleCollider>();
+        _renderer = GetComponent<MeshRenderer>();
         StartCoroutine(Explode());
         if (isServer) transform.GetChild(0).GetComponent<GrenadeCollider>().server = true;
     }
@@ -19,6 +23,8 @@ public class Grenade : NetworkBehaviour
     private IEnumerator Explode()
     {
         yield return new WaitForSeconds(_secsToExplosion);
+        _collider.enabled = false;
+        _renderer.enabled = false;
         transform.GetChild(0).gameObject.SetActive(true);
         if (isServer) RpcExlode();
         StartCoroutine(Decay());
@@ -27,8 +33,6 @@ public class Grenade : NetworkBehaviour
     private IEnumerator Decay()
     {
         yield return new WaitForSeconds(_decayTime);
-        if (isServer) {
-        }
         Destroy(gameObject);
         
     }
@@ -36,8 +40,8 @@ public class Grenade : NetworkBehaviour
     [ClientRpc]
     void RpcExlode()
     {
-        GameObject explosion = Instantiate(_explosionPrefab, transform.position, transform.rotation);
-        Destroy(explosion, 0.85f);
+        GameObject explosion = Instantiate(_explosionPrefab, transform.position + 0.8f * Vector3.up, transform.rotation);
+        Destroy(explosion, 0.87f);
     }
 
 }
