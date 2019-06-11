@@ -29,7 +29,7 @@ public class PlayerEquipment : NetworkBehaviour {
 
     private void Update() {
         RaycastHit weaponFinder;
-        if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out weaponFinder, 10,
+        if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out weaponFinder, 0.75f,
             _mask))
         {
             
@@ -73,7 +73,12 @@ public class PlayerEquipment : NetworkBehaviour {
                     pickUp.SetActive(false);
             }
         }
-        
+        else
+        {
+            if (isLocalPlayer)
+                pickUp.SetActive(false);
+        }
+
     }
 
     public void PlayerShooting() {
