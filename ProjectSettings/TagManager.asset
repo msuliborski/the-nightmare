@@ -15,6 +15,7 @@ TagManager:
   - CaptureArea
   - Floor 0
   - Floor 1
+  - Chest
   layers:
   - Default
   - TransparentFX

@@ -8,10 +8,15 @@ public class PlayerEquipment : NetworkBehaviour {
     [SerializeField] private Camera _cam;
     [SerializeField] private LayerMask _mask;
     public GameObject pickUp;
+    private PlayerShoot _shoot;
+    private PlacementController _controller;
+    private Chest _chest;
 
     private void Start()
     {
         pickUp = GameObject.Find("PickUp");
+        _shoot = GetComponent<PlayerShoot>();
+        _controller = GetComponent<PlacementController>();
         pickUp.SetActive(false);
     }
 
@@ -32,6 +37,16 @@ public class PlayerEquipment : NetworkBehaviour {
                     Weapon = weaponObject.GetComponent<Weapon>();
                     WeaponSound = weaponObject.GetComponent<AudioSource>();
                     CmdChangeWeapon(weaponId);
+                }
+            }
+            else if (weaponFinder.collider.CompareTag("Chest"))
+            {
+                _chest = weaponFinder.collider.GetComponentInParent<Chest>();
+                pickUp.SetActive(true);
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    _shoot._grenades += _chest.grenades;
+                    _controller.snares += _chest.snares;
                 }
             }
             else
