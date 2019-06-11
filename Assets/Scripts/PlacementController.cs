@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -27,6 +28,7 @@ public class PlacementController : NetworkBehaviour
     private bool _isPlacing = false;
     public int maxSnares = 5;
     public int snares;
+    private TextMeshProUGUI _snaresTM;
 
    private PlayerShoot _playerShoot;
 
@@ -39,6 +41,7 @@ public class PlacementController : NetworkBehaviour
     private void Start()
     {
         snares = maxSnares;
+        _snaresTM = GameObject.Find("SnaresCount").GetComponent<TextMeshProUGUI>();
         _playerShoot = GetComponent<PlayerShoot>();
         _reverseGrid = 1f / GridTileSize;
         _buildingCameraHolder = gameObject.transform.Find("BuildingCameraHolder");
@@ -53,6 +56,7 @@ public class PlacementController : NetworkBehaviour
     {
         if (snares > maxSnares)
             snares = maxSnares;
+        _snaresTM.text = snares.ToString();
         HandleKeys();
         if (_currentObject != null)
         {
