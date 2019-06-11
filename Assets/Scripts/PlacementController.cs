@@ -40,8 +40,9 @@ public class PlacementController : NetworkBehaviour
 
     private void Start()
     {
+        if(isLocalPlayer)
+            _snaresTM = GameObject.Find("SnaresCount").GetComponent<TextMeshProUGUI>();
         snares = maxSnares;
-        _snaresTM = GameObject.Find("SnaresCount").GetComponent<TextMeshProUGUI>();
         _playerShoot = GetComponent<PlayerShoot>();
         _reverseGrid = 1f / GridTileSize;
         _buildingCameraHolder = gameObject.transform.Find("BuildingCameraHolder");
@@ -56,7 +57,8 @@ public class PlacementController : NetworkBehaviour
     {
         if (snares > maxSnares)
             snares = maxSnares;
-        _snaresTM.text = snares.ToString();
+        if(isLocalPlayer)
+            _snaresTM.text = snares.ToString();
         HandleKeys();
         if (_currentObject != null)
         {
