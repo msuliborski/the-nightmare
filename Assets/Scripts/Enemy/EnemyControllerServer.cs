@@ -64,7 +64,14 @@ public class EnemyControllerServer : NetworkBehaviour
         switch(_currentState)
         {
             case EnemyState.Walking:
-                if (Dest != null && Dest.gameObject.activeSelf) Agent.SetDestination(Dest.position);
+                if (Dest != null && Dest.gameObject.activeSelf)
+                {
+                    if (!Agent.SetDestination(Dest.position))
+                    {
+                        Agent.isStopped = true;
+                        SetClosestPlayer();
+                    }
+                }
                 else SetClosestPlayer();
                 _screamTimer -= Time.deltaTime;
                 if (Agent.remainingDistance < DIST_TO_SCREAM && _screamTimer <= 0f)
@@ -78,7 +85,14 @@ public class EnemyControllerServer : NetworkBehaviour
                 break;
 
             case EnemyState.Running:
-                if (Dest != null && Dest.gameObject.activeSelf) Agent.SetDestination(Dest.position);
+                if (Dest != null && Dest.gameObject.activeSelf)
+                {
+                    if (!Agent.SetDestination(Dest.position))
+                    {
+                        Agent.isStopped = true;
+                        SetClosestPlayer();
+                    }
+                }
                 else SetClosestPlayer();
                 break;
 
