@@ -44,7 +44,8 @@ public class PlayerShoot : NetworkBehaviour {
         }
 
         _grenades = _maxGrenades;
-        _grenadesTM = GameObject.Find("Grenades").GetComponent<TextMeshProUGUI>();
+        if(isLocalPlayer)
+            _grenadesTM = GameObject.Find("Grenades").GetComponent<TextMeshProUGUI>();
         normalFOV = Cam.fieldOfView;
         zoomFOV = normalFOV - 40;
         currentRecoil = Equipment.Weapon.Recoil;
@@ -57,7 +58,8 @@ public class PlayerShoot : NetworkBehaviour {
     {
         if (_grenades > _maxGrenades)
             _grenades = _maxGrenades;
-        _grenadesTM.text = _grenades.ToString();
+        if(isLocalPlayer)
+            _grenadesTM.text = "x" + _grenades;
         if (crossAccuracy > 1.02) crossAccuracy -= (crossAccuracy * 0.05f + 0.02f);
         else crossAccuracy = 1f;
         Cross.transform.localScale = new Vector3(crossAccuracy, crossAccuracy, crossAccuracy);

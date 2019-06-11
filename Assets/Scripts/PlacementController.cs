@@ -58,7 +58,7 @@ public class PlacementController : NetworkBehaviour
         if (snares > maxSnares)
             snares = maxSnares;
         if(isLocalPlayer)
-            _snaresTM.text = snares.ToString();
+            _snaresTM.text = "x" + snares;
         HandleKeys();
         if (_currentObject != null)
         {
