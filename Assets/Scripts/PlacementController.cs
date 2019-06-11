@@ -25,6 +25,8 @@ public class PlacementController : NetworkBehaviour
     private static float _zoom = 1f;
     private int _placeableIndex = 0;
     private bool _isPlacing = false;
+    public int maxSnares = 5;
+    public int snares;
 
    private PlayerShoot _playerShoot;
 
@@ -36,6 +38,7 @@ public class PlacementController : NetworkBehaviour
 
     private void Start()
     {
+        snares = maxSnares;
         _playerShoot = GetComponent<PlayerShoot>();
         _reverseGrid = 1f / GridTileSize;
         _buildingCameraHolder = gameObject.transform.Find("BuildingCameraHolder");
@@ -48,7 +51,8 @@ public class PlacementController : NetworkBehaviour
 
     private void Update()
     {
-
+        if (snares > maxSnares)
+            snares = maxSnares;
         HandleKeys();
         if (_currentObject != null)
         {
@@ -93,18 +97,40 @@ public class PlacementController : NetworkBehaviour
             
             Vector2 pos = new Vector2(_currentObject.transform.position.x, _currentObject.transform.position.z);
             GameManager.PosAndTag posAndTag = new GameManager.PosAndTag(pos, _currentTag);
-            if (GameManager.Instance.BuildingPoints.ContainsKey(posAndTag)
-                && GameManager.Instance.BuildingPoints[posAndTag].Buildable
-                )
+            if(_placeableIndex == 0 && snares > 0)
             {
-                Debug.Log("clicked");
-                if (GameManager.CurrentState == GameManager.GameState.Fighting)
-                    GameManager.TurnOnGridRenders(false);
+                if (GameManager.Instance.BuildingPoints.ContainsKey(posAndTag)
+                    && GameManager.Instance.BuildingPoints[posAndTag].Buildable
+                    )
+                {
+                    Debug.Log("clicked");
+                    if (GameManager.CurrentState == GameManager.GameState.Fighting)
+                        GameManager.TurnOnGridRenders(false);
 
-                Destroy(_currentObject);
-                CmdPlaceEntity(_currentObject.transform.position, _currentObject.transform.rotation, _currentTag);
-                GameManager.Instance.BuildingPoints[posAndTag].Buildable = false;
-                _playerShoot.WasBuilt = true;
+                    Destroy(_currentObject);
+                    CmdPlaceEntity(_currentObject.transform.position, _currentObject.transform.rotation, _currentTag);
+                    GameManager.Instance.BuildingPoints[posAndTag].Buildable = false;
+                    _playerShoot.WasBuilt = true;
+                    snares--;
+                }
+                    
+            }
+            else if(_placeableIndex != 0)
+            {
+                if (GameManager.Instance.BuildingPoints.ContainsKey(posAndTag)
+                    && GameManager.Instance.BuildingPoints[posAndTag].Buildable
+                )
+                {
+                    Debug.Log("clicked");
+                    if (GameManager.CurrentState == GameManager.GameState.Fighting)
+                        GameManager.TurnOnGridRenders(false);
+
+                    Destroy(_currentObject);
+                    CmdPlaceEntity(_currentObject.transform.position, _currentObject.transform.rotation, _currentTag);
+                    GameManager.Instance.BuildingPoints[posAndTag].Buildable = false;
+                    _playerShoot.WasBuilt = true;
+                }
+                    
             }
         }
     }
