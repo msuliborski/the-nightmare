@@ -68,8 +68,7 @@ public class EnemyControllerServer : NetworkBehaviour
                 {
                     if (!Agent.SetDestination(Dest.position))
                     {
-                        Agent.isStopped = true;
-                        SetClosestPlayer();
+                       SetClosestPlayer();
                     }
                 }
                 else SetClosestPlayer();
@@ -89,8 +88,7 @@ public class EnemyControllerServer : NetworkBehaviour
                 {
                     if (!Agent.SetDestination(Dest.position))
                     {
-                        Agent.isStopped = true;
-                        SetClosestPlayer();
+                       SetClosestPlayer();
                     }
                 }
                 else SetClosestPlayer();
