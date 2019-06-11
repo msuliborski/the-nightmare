@@ -31,7 +31,8 @@ public class PlayerEquipment : NetworkBehaviour {
         {
             
             if (weaponFinder.collider.CompareTag("Weapon")) {
-                pickUp.SetActive(true);
+                if(isLocalPlayer)
+                    pickUp.SetActive(true);
                 if (Input.GetKeyDown(KeyCode.E))
                 {
                     Destroy(_cam.transform.GetChild(0).transform.GetChild(0).gameObject);
