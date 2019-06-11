@@ -11,7 +11,7 @@ public class TeddyBearClient : NetworkBehaviour
     public bool IsWalking { get; set; }
     private Animator _animator;
     
-    void Start()
+    void Awake()
     {
         if (isServer) enabled = false;
         else
