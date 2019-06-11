@@ -14,10 +14,14 @@ public class PlayerEquipment : NetworkBehaviour {
 
     private void Start()
     {
-        pickUp = GameObject.Find("PickUp");
+        if (isLocalPlayer)
+        {
+            pickUp = GameObject.Find("PickUp");
+            pickUp.SetActive(false);
+        }
         _shoot = GetComponent<PlayerShoot>();
         _controller = GetComponent<PlacementController>();
-        pickUp.SetActive(false);
+        
     }
 
     private void Update() {
@@ -44,7 +48,8 @@ public class PlayerEquipment : NetworkBehaviour {
                 _chest = weaponFinder.collider.GetComponentInParent<Chest>();
                 if (_chest.active && !_chest.alreadyPicked)
                 {
-                    pickUp.SetActive(true);
+                    if(isLocalPlayer)
+                        pickUp.SetActive(true);
                     if (Input.GetKeyDown(KeyCode.E))
                     {
                         _shoot._grenades += _chest.grenades;
@@ -54,12 +59,14 @@ public class PlayerEquipment : NetworkBehaviour {
                 }
                 else
                 {
-                    pickUp.SetActive(false);
+                    if(isLocalPlayer)
+                        pickUp.SetActive(false);
                 }
             }
             else
             {
-                pickUp.SetActive(false);
+                if(isLocalPlayer)
+                    pickUp.SetActive(false);
             }
         }
         
