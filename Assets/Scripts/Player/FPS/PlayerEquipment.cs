@@ -42,11 +42,19 @@ public class PlayerEquipment : NetworkBehaviour {
             else if (weaponFinder.collider.CompareTag("Chest"))
             {
                 _chest = weaponFinder.collider.GetComponentInParent<Chest>();
-                pickUp.SetActive(true);
-                if (Input.GetKeyDown(KeyCode.E))
+                if (_chest.active && !_chest.alreadyPicked)
                 {
-                    _shoot._grenades += _chest.grenades;
-                    _controller.snares += _chest.snares;
+                    pickUp.SetActive(true);
+                    if (Input.GetKeyDown(KeyCode.E))
+                    {
+                        _shoot._grenades += _chest.grenades;
+                        _controller.snares += _chest.snares;
+                        _chest.alreadyPicked = true;
+                    }
+                }
+                else
+                {
+                    pickUp.SetActive(false);
                 }
             }
             else
