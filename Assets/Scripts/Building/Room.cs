@@ -20,6 +20,7 @@ public class Room : MonoBehaviour
     private List<GameObject> _enemySpawnPoints = new List<GameObject>();
     public List<GameObject> EnemySpawnPoint { get { return _enemySpawnPoints; } }
     public bool roomCaptured;
+    
 
     private void Start()
     {
@@ -55,12 +56,26 @@ public class Room : MonoBehaviour
             }
         }
 
-        if (check) roomCaptured = true;
-        else roomCaptured = false;
-
-        foreach (GameObject spawn in _enemySpawnPoints)
+        if (check && !roomCaptured)
         {
-            spawn.SetActive(!roomCaptured);
+            roomCaptured = true;
+            foreach (GameObject spawn in _enemySpawnPoints)
+            {
+                GameManager instance = GameManager.Instance;
+                instance.EnemySpawnPoints.Remove(spawn.transform.name);
+                spawn.SetActive(false);
+            }
+        }
+        else if (!check && roomCaptured)
+        {
+            roomCaptured = false;
+            foreach (GameObject spawn in _enemySpawnPoints)
+            {
+                GameManager instance = GameManager.Instance;
+                instance.EnemySpawnPoints.Add(spawn.transform.name, spawn.transform);
+                spawn.SetActive(true);
+            }
+
         }
     }
     

@@ -97,14 +97,18 @@ public class EnemyControllerServer : NetworkBehaviour
 
             case EnemyState.Fighting:
 
-                _damageDest.RpcTakeDamage(Time.deltaTime * _damage);
+
                 if (_damageDest.IsDead || !_damageDest.gameObject.activeSelf)
                 {
                     _damageDest = null;
                     TurnOnWalking(true);
                     SetClosestPlayer();
                     SetAnim("running", true);
+                    _currentState = EnemyState.Walking;
                 }
+                else _damageDest.RpcTakeDamage(Time.deltaTime * _damage);
+                
+
                 break;
 
             case EnemyState.Blocked:
