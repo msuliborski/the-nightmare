@@ -105,6 +105,8 @@ public class TeddyBearServer : NetworkBehaviour
                 
             case BearState.Running:
                 //TurnOnWalking(true);
+                // chujowy fix:
+                if (!Agent.enabled) Agent.enabled = true;
                 Debug.Log("running");
                 if (Dest != null && Dest.gameObject.activeSelf) Agent.SetDestination(Dest.position);
                 else SetClosestPlayer();
