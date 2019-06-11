@@ -19,11 +19,15 @@ public class CaptureArea : NetworkBehaviour
     private List<GameObject> _candles = new List<GameObject>();
     private Sprite[] _sprites = new Sprite[2];
     private SpriteRenderer _renderer;
+    private GameObject Room;
 
     public bool IsCaptured
     {
         get => _isCaptured;
-        set => _isCaptured = value;
+        set
+        {
+            _isCaptured = value;
+        }
     }
 
     void Start()
@@ -76,8 +80,8 @@ public class CaptureArea : NetworkBehaviour
             if (enemy.isActiveAndEnabled)
             {
                 _enemyNum--;
-                if (_enemyNum == 0)
-                    _isLocked = true;
+                //if (_enemyNum == 0)
+                //    _isLocked = true;
             }
         }
     }
@@ -86,6 +90,7 @@ public class CaptureArea : NetworkBehaviour
     public void CmdDecrementEnemies()
     {
         _enemyNum--;
+
     }
 
     [Command]
@@ -134,7 +139,7 @@ public class CaptureArea : NetworkBehaviour
                 if (_progress >= 100)
                 {
                     _progress = 100;
-                    _isCaptured = true;
+                    IsCaptured = true;
                     _isLocked = true;
                     if (_renderer.sprite != _sprites[1])
                         RpcChangeSprite(1);
