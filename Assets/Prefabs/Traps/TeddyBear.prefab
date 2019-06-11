@@ -123,26 +123,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.017408183, y: 0.029207056, z: 0.018121704}
   m_Center: {x: 0.002528292, y: 0.013905764, z: 0.009627254}
---- !u!114 &2686573638451735209
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4863637763325730755}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1590678366, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Animator: {fileID: 4863637763333155963}
-  m_ParameterSendBits: 7
-  param0: 
-  param1: 
-  param2: 
-  param3: 
-  param4: 
-  param5: 
 --- !u!195 &7371400032901168870
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -374,6 +354,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4863637763325625279}
     m_Modifications:
+    - target: {fileID: 100000, guid: 197452b517284b848bb18f16f43dcbef, type: 3}
+      propertyPath: m_Name
+      value: sword+textures
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 197452b517284b848bb18f16f43dcbef, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.00007
@@ -430,10 +414,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.0010000004
       objectReference: {fileID: 0}
-    - target: {fileID: 100000, guid: 197452b517284b848bb18f16f43dcbef, type: 3}
-      propertyPath: m_Name
-      value: sword+textures
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 197452b517284b848bb18f16f43dcbef, type: 3}
 --- !u!1001 &4863637763325761819
@@ -443,6 +423,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8573763338730078801}
     m_Modifications:
+    - target: {fileID: 100056, guid: 81b040ffc2780754bbe1014671e8f946, type: 3}
+      propertyPath: m_Name
+      value: Teddy_Bear@Attack
+      objectReference: {fileID: 0}
     - target: {fileID: 400056, guid: 81b040ffc2780754bbe1014671e8f946, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -499,10 +483,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 100056, guid: 81b040ffc2780754bbe1014671e8f946, type: 3}
-      propertyPath: m_Name
-      value: Teddy_Bear@Attack
-      objectReference: {fileID: 0}
     - target: {fileID: 9500000, guid: 81b040ffc2780754bbe1014671e8f946, type: 3}
       propertyPath: m_Controller
       value: 
@@ -533,12 +513,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 4863637763325761819}
   m_PrefabAsset: {fileID: 0}
---- !u!95 &4863637763333155963 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 9500000, guid: 81b040ffc2780754bbe1014671e8f946,
-    type: 3}
-  m_PrefabInstance: {fileID: 4863637763325761819}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4863637763325625227 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400016, guid: 81b040ffc2780754bbe1014671e8f946,
@@ -558,6 +532,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4863637763325625227}
     m_Modifications:
+    - target: {fileID: 100004, guid: f18277b26d2d4b558adc75853d071544, type: 3}
+      propertyPath: m_Name
+      value: RED_SHIELD
+      objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: f18277b26d2d4b558adc75853d071544, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.00116
@@ -613,10 +591,6 @@ PrefabInstance:
     - target: {fileID: 400004, guid: f18277b26d2d4b558adc75853d071544, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.05
-      objectReference: {fileID: 0}
-    - target: {fileID: 100004, guid: f18277b26d2d4b558adc75853d071544, type: 3}
-      propertyPath: m_Name
-      value: RED_SHIELD
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f18277b26d2d4b558adc75853d071544, type: 3}

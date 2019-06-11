@@ -26,4 +26,9 @@ public class TeddyBearClient : NetworkBehaviour
     {
         if (Dest != null && Dest.gameObject.activeSelf && Agent.enabled) Agent.SetDestination(Dest.position);
     }
+
+    public void SetAnim(string animName, bool isOn)
+    {
+        _animator.SetBool(animName, isOn);
+    }
 }

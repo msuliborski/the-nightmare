@@ -14,25 +14,31 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: screaming
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: die
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: blocked
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
+  - m_Name: waiting
+    m_Type: 4
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -483,7 +489,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Idle
+  m_Name: Injured 1
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -498,7 +504,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: a457922b935ba8f63b7a41a503033645, type: 3}
+  m_Motion: {fileID: 7400000, guid: 08fe2e2c27fc86d43a4550351d0c0f43, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -511,7 +517,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Idle 0
+  m_Name: Injured 1 0
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -526,7 +532,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: a457922b935ba8f63b7a41a503033645, type: 3}
+  m_Motion: {fileID: 7400000, guid: 08fe2e2c27fc86d43a4550351d0c0f43, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -629,10 +635,10 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 1102017647165633818}
-    m_Position: {x: 384, y: 192, z: 0}
+    m_Position: {x: 456, y: 264, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102858359802279060}
-    m_Position: {x: 504, y: 336, z: 0}
+    m_Position: {x: 672, y: 336, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102457080933116352}
     m_Position: {x: 240, y: 12, z: 0}
@@ -644,7 +650,7 @@ AnimatorStateMachine:
     m_Position: {x: 132, y: 360, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102116473759633980}
-    m_Position: {x: 636, y: 120, z: 0}
+    m_Position: {x: 540, y: 144, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102302322073583278}
     m_Position: {x: 540, y: 24, z: 0}

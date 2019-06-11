@@ -76,12 +76,14 @@ public class TeddyBearServer : NetworkBehaviour
         else if (_enemies.Count == 0)
         {
             _currentState = BearState.Waiting;
-            _animator.SetBool("waiting", true);
+            //_animator.SetBool("waiting", true);
+            SetAnim("waiting", true);
         }
         else if(_damageDest == null)
         {
             _currentState = BearState.Running;
-            _animator.SetBool("waiting", false);
+            //_animator.SetBool("waiting", false);
+            SetAnim("waiting", false);
         }
         switch (_currentState)
         {
@@ -94,7 +96,8 @@ public class TeddyBearServer : NetworkBehaviour
                     _currentState = BearState.Running;
                     TurnOnWalking(true);
                     SetClosestPlayer();
-                    _animator.SetBool("fighting", false);
+                    //_animator.SetBool("fighting", false);
+                    SetAnim("fighting", false);
                 } 
                 else _damageDest.CmdTakeDamage(Time.deltaTime * _damage);
                 break;
@@ -139,7 +142,8 @@ public class TeddyBearServer : NetworkBehaviour
             TurnOnWalking(false);
             _damageDest = other.GetComponentInParent<EnemyControllerServer>();
             _currentState = BearState.Fighting;
-            _animator.SetBool("fighting", true);
+            //_animator.SetBool("fighting", true);
+            SetAnim("fighting", true);
         }
     }
     
@@ -149,7 +153,8 @@ public class TeddyBearServer : NetworkBehaviour
         {
             TurnOnWalking(true);
             _damageDest = null;
-            _animator.SetBool("fighting", false);
+            //_animator.SetBool("fighting", false);
+            SetAnim("fighting", false);
             _currentState = BearState.Running;
         }
         if (_enemies.Count == 0 && _damageDest == null)
@@ -207,7 +212,8 @@ public class TeddyBearServer : NetworkBehaviour
     {
         _isDying = true;
         TurnOnWalking(false);
-        _animator.SetBool("death", true);
+        //_animator.SetBool("death", true);
+        SetAnim("death", true);
         StartCoroutine(Die());
     }
 
@@ -283,4 +289,22 @@ public class TeddyBearServer : NetworkBehaviour
             teddyClient.IsWalking = isOn;
         }
     }
+
+
+    public void SetAnim(string animName, bool isOn)
+    {
+        _animator.SetBool(animName, isOn);
+        RpcSetAnim(animName, isOn);
+    }
+
+    [ClientRpc]
+    void RpcSetAnim(string animName, bool isOn)
+    {
+        if (!isServer)
+        {
+            TeddyBearClient teddyBearClient = GetComponent<TeddyBearClient>();
+            teddyBearClient.SetAnim(animName, isOn);
+        }
+    }
+
 }
