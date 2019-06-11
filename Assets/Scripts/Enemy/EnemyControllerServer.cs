@@ -97,8 +97,7 @@ public class EnemyControllerServer : NetworkBehaviour
 
             case EnemyState.Fighting:
 
-
-                if (_damageDest != null && (_damageDest.IsDead || !_damageDest.gameObject.activeSelf))
+                if (_damageDest == null || _damageDest.IsDead || !_damageDest.gameObject.activeSelf))
                 {
                     _damageDest = null;
                     TurnOnWalking(true);
