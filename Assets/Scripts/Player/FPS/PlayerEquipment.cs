@@ -19,6 +19,9 @@ public class PlayerEquipment : NetworkBehaviour {
             pickUp = GameObject.Find("PickUp");
             pickUp.SetActive(false);
         }
+        else {
+            transform.GetChild(4).gameObject.SetActive(false); //turn off camera
+        }
         _shoot = GetComponent<PlayerShoot>();
         _controller = GetComponent<PlacementController>();
         
