@@ -7,13 +7,21 @@ public class PlayerController : NetworkBehaviour {
     [SerializeField] private float _lookSensitivity = 2.5f;
     [SerializeField] private Joystick move;
     [SerializeField] private Joystick look;
+    public float SensitivityScale { get; set; }
+    [SerializeField] private  float _nonZoomSensivity = 0.7f;
+    public float NonZoomSensitivity { get { return _nonZoomSensivity;  } set { _nonZoomSensivity = value; } }
+
+    [SerializeField] private float _zoomSensivity = 0.5f;
+    public float ZoomSensitivity { get { return _zoomSensivity; } set { _zoomSensivity = value; } }
+
+
 
     private PlayerMotor _motor;
     private static readonly int IsSprinting = Animator.StringToHash("isSprinting");
 
     void Start() {
         _motor = GetComponent<PlayerMotor>();
-
+        SensitivityScale = 0.7f;
 #if UNITY_ANDROID
         move = GameObject.Find("Move").GetComponent<Joystick>();
         look = GameObject.Find("Look").GetComponent<Joystick>();
@@ -63,8 +71,8 @@ public class PlayerController : NetworkBehaviour {
 #endif
 
 #if UNITY_STANDALONE
-            yRot = Input.GetAxisRaw("Mouse X");
-            xRot = Input.GetAxis("Mouse Y");
+            yRot = Input.GetAxisRaw("Mouse X") * SensitivityScale;
+            xRot = Input.GetAxis("Mouse Y") * SensitivityScale;
 #endif
 
             Vector3 rotation = new Vector3(0f, yRot, 0f) * _lookSensitivity;
