@@ -543,6 +543,8 @@ MonoBehaviour:
   _lookSensitivity: 5
   move: {fileID: 0}
   look: {fileID: 0}
+  _nonZoomSensivity: 0.7
+  _zoomSensivity: 0.5
 --- !u!114 &3464368295461608135
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -694,6 +696,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74ccc6a7997c8c5b0aa470753a83b221, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _blackeningMaterial: {fileID: 2100000, guid: 7fa5188c3d92f224ea0c06b9e389dda1, type: 2}
   Cross: {fileID: 0}
   _mask:
     serializedVersion: 2

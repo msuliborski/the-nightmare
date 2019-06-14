@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -8,6 +9,10 @@ public class PlayerShoot : NetworkBehaviour {
     public Camera Cam { get; set; }
 
     public PlayerEquipment Equipment { get; set; }
+    private PlayerController _playerController;
+    private List<Material> _originalMaterials;
+    [SerializeField] Material _blackeningMaterial;
+
 
     public GameObject Cross;
 
@@ -43,6 +48,8 @@ public class PlayerShoot : NetworkBehaviour {
             IsBuildingOnFly = false;
         }
 
+        _playerController = GetComponent<PlayerController>();
+
         _grenades = _maxGrenades;
         if(isLocalPlayer)
             _grenadesTM = GameObject.Find("Grenades").GetComponent<TextMeshProUGUI>();
@@ -53,6 +60,32 @@ public class PlayerShoot : NetworkBehaviour {
         if (!isLocalPlayer) Equipment.Weapon.GetComponent<Animator>().enabled = false;
     }
 
+
+    void ChangeMaterial(bool isBlakened)
+    {
+        Transform weaponModelTransform = Equipment.Weapon.transform.transform.GetChild(0).GetChild(0).GetChild(1);
+        if (isBlakened)
+        {
+            _originalMaterials = new List<Material>();
+            for (int i = 0; i < weaponModelTransform.childCount; i++)
+            {
+                Debug.Log("kurwa");
+                MeshRenderer meshRenderer = weaponModelTransform.GetChild(i).GetComponent<MeshRenderer>();
+                _originalMaterials.Add(meshRenderer.material);
+                meshRenderer.material = _blackeningMaterial;
+            }
+        }
+        else
+        {
+            for(int i = 0; i < weaponModelTransform.childCount; i++)
+            {
+                MeshRenderer meshRenderer = weaponModelTransform.GetChild(i).GetComponent<MeshRenderer>();
+                meshRenderer.material = _originalMaterials[i];
+            }
+        }
+        
+
+    }
 
     void Update()
     {
@@ -115,22 +148,27 @@ public class PlayerShoot : NetworkBehaviour {
             }
             Cam.fieldOfView = Mathf.Lerp(Cam.fieldOfView, zoomFOV, 0.6f);
             Cross.gameObject.SetActive(false);
+            _playerController.SensitivityScale = _playerController.ZoomSensitivity;
+
         }
         else {
             currentRecoil = Equipment.Weapon.Recoil;
             if (isLocalPlayer) Equipment.Weapon.GetComponent<Animator>().SetBool(IsAiming, false);
             Cam.fieldOfView = Mathf.Lerp(Cam.fieldOfView, normalFOV, 0.6f);
             Cross.gameObject.SetActive(true);
+            _playerController.SensitivityScale = _playerController.NonZoomSensitivity;
         }
 
     }
 
 
     IEnumerator Reload() {
-        if (isLocalPlayer) Equipment.Weapon.GetComponent<Animator>().SetBool(IsReloading, true);
+        if (isLocalPlayer)  Equipment.Weapon.GetComponent<Animator>().SetBool(IsReloading, true);
+        ChangeMaterial(true);
         Equipment.Weapon.reload();
         yield return new WaitForSeconds(Equipment.Weapon.ReloadTime);
-        if (isLocalPlayer) Equipment.Weapon.GetComponent<Animator>().SetBool(IsReloading, false);
+        ChangeMaterial(false);
+        if (isLocalPlayer)  Equipment.Weapon.GetComponent<Animator>().SetBool(IsReloading, false);
     }
 
     IEnumerator TripleShot() {
