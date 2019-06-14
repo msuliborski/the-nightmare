@@ -110,12 +110,12 @@ public class GameManager : NetworkBehaviour
 
     public static void Win()
     {
-        
+        Debug.Break();
     }
 
     public static void Lose()
     {
-        
+        Debug.Break();
     }
 
     [ClientRpc]
