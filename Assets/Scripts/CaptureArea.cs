@@ -9,7 +9,7 @@ public class CaptureArea : NetworkBehaviour
     [SyncVar] public bool _isCaptured = false;
     [SyncVar] private bool _isLocked = false;
     [SyncVar] private bool _isConflict = false;
-    [SyncVar] public float _progress = 0;
+    [SyncVar] public float _progress = 100;
     [SyncVar] private float _max = 0;
     [SyncVar] [SerializeField] private float _step = 0.2f;
     [SyncVar] private bool _capturing = false;
@@ -43,45 +43,24 @@ public class CaptureArea : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
-        {
-            PlayerManager playerManager = other.GetComponentInParent<PlayerManager>();
-            if (playerManager.isLocalPlayer)
-            {
-                CmdPlayerInsideCaptureZone();
-            }
-        }
-
         if (other.CompareTag("EnemyLegs"))
         {
             EnemyControllerServer enemy = other.GetComponentInParent<EnemyControllerServer>();
             if (enemy.isActiveAndEnabled)
             {
                 _enemyNum++;
-                _isLocked = false;
             }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player"))
-        {
-            PlayerManager playerManager = other.GetComponentInParent<PlayerManager>();
-            if (playerManager.isLocalPlayer)
-            {
-                CmdPlayerOutsideCaputerZone();
-            }
-        }
-
         if (other.CompareTag("EnemyLegs"))
         {
             EnemyControllerServer enemy = other.GetComponentInParent<EnemyControllerServer>();
             if (enemy.isActiveAndEnabled)
             {
                 _enemyNum--;
-                //if (_enemyNum == 0)
-                //    _isLocked = true;
             }
         }
     }
