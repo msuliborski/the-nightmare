@@ -33,7 +33,7 @@ public class PlayerSetup : NetworkBehaviour {
             _healthBar = GameObject.Find("HP").GetComponent<HealthBar>();
             _clipsManager = GameObject.Find("Clips").GetComponent<ClipsManager>();
             GameManager.LocalPlayer = GetComponent<PlayerManager>();
-            _bulletshud.player = GetComponent<PlayerEquipment>();
+            _bulletshud.Equipment = GetComponent<PlayerEquipment>();
             _clipsManager.player = GetComponent<PlayerEquipment>();
             _healthBar.player = GetComponent<PlayerManager>();
             _bulletshud.playerEnabled = true;
@@ -61,9 +61,9 @@ public class PlayerSetup : NetworkBehaviour {
         PlayerShoot shoot = GetComponent<PlayerShoot>();
         shoot.Cam = _actionCamera;
         _equipment = GetComponent<PlayerEquipment>();
-        _equipment.Weapon = weaponObject.GetComponent<Weapon>();
+        _equipment.Weapon1 = weaponObject.GetComponent<Weapon>();
         _equipment.WeaponSound = weaponObject.GetComponent<AudioSource>();
-        _equipment.Weapon.GetComponent<Animator>().enabled = false;
+        _equipment.Weapon1.GetComponent<Animator>().enabled = false;
         shoot.Equipment = _equipment;
 
         _actionCamera.transform.GetChild(1).GetComponent<Camera>().enabled = false;
@@ -76,7 +76,7 @@ public class PlayerSetup : NetworkBehaviour {
         PlayerShoot shoot = GetComponent<PlayerShoot>();
         shoot.Cam = _actionCamera;
         _equipment = GetComponent<PlayerEquipment>();
-        _equipment.Weapon = weaponObject.GetComponent<Weapon>();
+        _equipment.Weapon1 = weaponObject.GetComponent<Weapon>();
         _equipment.WeaponSound = weaponObject.GetComponent<AudioSource>();
         shoot.Equipment = _equipment;
     }

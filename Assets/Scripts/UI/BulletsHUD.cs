@@ -3,19 +3,21 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class BulletsHUD : MonoBehaviour
-{
+public class BulletsHUD : MonoBehaviour {
     private TextMeshProUGUI _text;
-    public PlayerEquipment player;
+    public PlayerEquipment Equipment;
     public bool playerEnabled = false;
 
-    void Start()
-    {
+    void Start() {
         _text = gameObject.GetComponent<TextMeshProUGUI>();
     }
-    void Update()
-    {
-        if(playerEnabled)
-            _text.text = player.Weapon.CurrentMagAmmo + "/" + (player.Weapon.CurrentAmmo - player.Weapon.CurrentMagAmmo);
+
+    void Update() {
+        if (playerEnabled)
+            if (Equipment.getActiveWeapon().CurrentAmmo < 1000)
+                _text.text = Equipment.getActiveWeapon().CurrentMagAmmo + "/" +
+                             (Equipment.getActiveWeapon().CurrentAmmo - Equipment.getActiveWeapon().CurrentMagAmmo);
+            else
+                _text.text = Equipment.getActiveWeapon().CurrentMagAmmo + "/inf.";// + "/\u221E"; //znak infinity nieobsługiwany przez czcionkę
     }
 }

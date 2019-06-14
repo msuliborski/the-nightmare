@@ -36,17 +36,17 @@ public class PlayerMotor : NetworkBehaviour {
             _rb.MovePosition(_rb.position + _velocity * Time.fixedDeltaTime);
             _anim.SetBool("running", true);
             if (isLocalPlayer) {
-                if (Input.GetKey(KeyCode.LeftShift) && transform.GetComponent<PlayerEquipment>().Weapon.State !=
+                if (Input.GetKey(KeyCode.LeftShift) && transform.GetComponent<PlayerEquipment>().getActiveWeapon().State !=
                                                     Weapon.WeaponState.shooting
-                                                    && !transform.GetComponent<PlayerEquipment>().Weapon
+                                                    && !transform.GetComponent<PlayerEquipment>().getActiveWeapon()
                                                         .GetComponent<Animator>().GetBool("isAiming"))
-                    transform.GetComponent<PlayerEquipment>().Weapon.GetComponent<Animator>()
+                    transform.GetComponent<PlayerEquipment>().getActiveWeapon().GetComponent<Animator>()
                         .SetBool(IsSprinting, true);
             }
         }
         else {
             _anim.SetBool("running", false);
-            transform.GetComponent<PlayerEquipment>().Weapon.GetComponent<Animator>().SetBool(IsSprinting, false);
+            transform.GetComponent<PlayerEquipment>().getActiveWeapon().GetComponent<Animator>().SetBool(IsSprinting, false);
         }
     }
 

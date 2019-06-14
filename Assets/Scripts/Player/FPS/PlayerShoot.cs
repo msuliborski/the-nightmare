@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -25,7 +26,7 @@ public class PlayerShoot : NetworkBehaviour {
     private float _grenadeTimer = 0f;
     public int _maxGrenades = 3;
     public int _grenades;
-    
+
     public TextMeshProUGUI _grenadesTM;
 
 
@@ -36,12 +37,13 @@ public class PlayerShoot : NetworkBehaviour {
     private static readonly int IsReloading = Animator.StringToHash("isReloading");
     private static readonly int IsSprinting = Animator.StringToHash("isSprinting");
     private float currentRecoil;
-    
-    
+    private float changeWeaponCooldown = 0;
+    private Weapon activeWeapon = null;
 
 
     // Start is called before the first frame update
     void Start() {
+        activeWeapon = Equipment.Weapon1;
         if (Cam == null) enabled = false;
         else {
             Cross = GameObject.Find("cross");
@@ -51,79 +53,91 @@ public class PlayerShoot : NetworkBehaviour {
         _playerController = GetComponent<PlayerController>();
 
         _grenades = _maxGrenades;
-        if(isLocalPlayer)
+        if (isLocalPlayer)
             _grenadesTM = GameObject.Find("Grenades").GetComponent<TextMeshProUGUI>();
         normalFOV = Cam.fieldOfView;
         zoomFOV = normalFOV - 40;
-        currentRecoil = Equipment.Weapon.Recoil;
+        currentRecoil = activeWeapon.Recoil;
 
-        if (!isLocalPlayer) Equipment.Weapon.GetComponent<Animator>().enabled = false;
+        if (!isLocalPlayer) activeWeapon.GetComponent<Animator>().enabled = false;
     }
 
 
-    void ChangeMaterial(bool isBlakened)
-    {
-        Transform weaponModelTransform = Equipment.Weapon.transform.transform.GetChild(0).GetChild(0).GetChild(1);
-        if (isBlakened)
-        {
+    void ChangeMaterial(bool isBlakened) {
+        Transform weaponModelTransform = Equipment.getActiveWeapon().transform.transform.GetChild(0).GetChild(0).GetChild(1);
+        if (isBlakened) {
             _originalMaterials = new List<Material>();
-            for (int i = 0; i < weaponModelTransform.childCount; i++)
-            {
-                Debug.Log("kurwa");
+            for (int i = 0; i < weaponModelTransform.childCount; i++) {
                 MeshRenderer meshRenderer = weaponModelTransform.GetChild(i).GetComponent<MeshRenderer>();
                 _originalMaterials.Add(meshRenderer.material);
                 meshRenderer.material = _blackeningMaterial;
             }
         }
-        else
-        {
-            for(int i = 0; i < weaponModelTransform.childCount; i++)
-            {
+        else {
+            for (int i = 0; i < weaponModelTransform.childCount; i++) {
                 MeshRenderer meshRenderer = weaponModelTransform.GetChild(i).GetComponent<MeshRenderer>();
                 meshRenderer.material = _originalMaterials[i];
             }
         }
-        
-
     }
 
-    void Update()
-    {
+    void Update() {
+        
+        currentRecoil = Equipment.getActiveWeapon().Recoil;
+//        weaponAnimator = activeWeapon.GetComponent<Animator>();
+        
         if (_grenades > _maxGrenades)
             _grenades = _maxGrenades;
-        if(isLocalPlayer)
+        if (isLocalPlayer)
             _grenadesTM.text = "x" + _grenades;
         if (crossAccuracy > 1.02) crossAccuracy -= (crossAccuracy * 0.05f + 0.02f);
         else crossAccuracy = 1f;
-        Cross.transform.localScale = new Vector3(crossAccuracy, crossAccuracy, crossAccuracy);
+        Cross.transform.GetChild(0).transform.localScale = new Vector3(crossAccuracy, crossAccuracy, crossAccuracy);
+        
+        //changing weapon
+        if (changeWeaponCooldown > 0) changeWeaponCooldown -= Time.deltaTime;
+        if (changeWeaponCooldown <= 0 && Math.Abs(Input.GetAxis("Mouse ScrollWheel")) > 0.01 && Equipment.getActiveWeapon().State == Weapon.WeaponState.idle) {
+            if (Equipment.Weapon2 != null) {
+                if (Equipment.Weapon1.gameObject.activeSelf) {
+                    Equipment.Weapon1.transform.localPosition = new Vector3(0.02f, 0.03f, -0.22f);
+                    Equipment.Weapon1.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
+                    Equipment.Weapon1.gameObject.SetActive(false);
+                    Equipment.Weapon2.gameObject.SetActive(true);
+                }
+                else {
+                    Equipment.Weapon1.gameObject.SetActive(true);
+                    Equipment.Weapon2.transform.localPosition = new Vector3(0.08f, -0.02f, -0.17f);
+                    Equipment.Weapon2.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
+                    Equipment.Weapon2.gameObject.SetActive(false);
+                }
+            }
+        }
+            
+        Debug.Log(Input.GetAxis("Mouse ScrollWheel"));
         //fire mode
-        if (Input.GetKeyDown(KeyCode.B)) Equipment.Weapon.changeFireMode();
+        if (Input.GetKeyDown(KeyCode.B)) Equipment.getActiveWeapon().changeFireMode();
 
         //reloading
-        if (Input.GetKeyDown(KeyCode.R) && Equipment.Weapon.CurrentMagAmmo != Equipment.Weapon.MaxMagAmmo) {
+        if (Input.GetKeyDown(KeyCode.R) && Equipment.getActiveWeapon().CurrentMagAmmo != Equipment.getActiveWeapon().MaxMagAmmo) {
             StartCoroutine(Reload());
         }
 
-        if(_grenades > 0)
-        {
-            if (Input.GetKeyUp(KeyCode.G))
-            {
+        if (_grenades > 0) {
+            if (Input.GetKeyUp(KeyCode.G)) {
                 _grenades--;
                 CmdSpawnGrenade(transform.position, transform.rotation, transform.forward, (_grenadeTimer + 0.5f) / 3);
                 _grenadeTimer = 0f;
             }
-            else if (Input.GetKey(KeyCode.G))
-            {
-                if (_grenadeTimer <= 3f)
-                {
+            else if (Input.GetKey(KeyCode.G)) {
+                if (_grenadeTimer <= 3f) {
                     _grenadeTimer += Time.deltaTime;
                 }
             }
         }
 
         //fireing
-        if (Input.GetButton("Fire1") && Equipment.Weapon.State == Weapon.WeaponState.idle &&
-            !PauseGame.menuActive && Equipment.Weapon.CurrentMagAmmo >= 1 && !IsBuildingOnFly) {
+        if (Input.GetButton("Fire1") && Equipment.getActiveWeapon().State == Weapon.WeaponState.idle &&
+            !PauseGame.menuActive && Equipment.getActiveWeapon().CurrentMagAmmo >= 1 && !IsBuildingOnFly) {
             Shoot();
         }
 
@@ -137,103 +151,115 @@ public class PlayerShoot : NetworkBehaviour {
 
         //aiming
         if (Input.GetButton("Fire2") &&
-            (Equipment.Weapon.State == Weapon.WeaponState.idle ||
-             Equipment.Weapon.State == Weapon.WeaponState.shooting) &&
+            (Equipment.getActiveWeapon().State == Weapon.WeaponState.idle ||
+             Equipment.getActiveWeapon().State == Weapon.WeaponState.shooting) &&
             !PauseGame.menuActive) {
-            currentRecoil = Equipment.Weapon.Recoil * 0.35f;
-            if (isLocalPlayer)
-            {
-                Equipment.Weapon.GetComponent<Animator>().SetBool(IsSprinting, false);
-                Equipment.Weapon.GetComponent<Animator>().SetBool(IsAiming, true);
+            currentRecoil = Equipment.getActiveWeapon().Recoil * 0.35f;
+            if (isLocalPlayer) {
+                Equipment.getActiveWeapon().GetComponent<Animator>().SetBool(IsSprinting, false);
+                Equipment.getActiveWeapon().GetComponent<Animator>().SetBool(IsAiming, true);
             }
+
             Cam.fieldOfView = Mathf.Lerp(Cam.fieldOfView, zoomFOV, 0.6f);
             Cross.gameObject.SetActive(false);
             _playerController.SensitivityScale = _playerController.ZoomSensitivity;
-
         }
         else {
-            currentRecoil = Equipment.Weapon.Recoil;
-            if (isLocalPlayer) Equipment.Weapon.GetComponent<Animator>().SetBool(IsAiming, false);
+            currentRecoil = Equipment.getActiveWeapon().Recoil;
+            if (isLocalPlayer) Equipment.getActiveWeapon().GetComponent<Animator>().SetBool(IsAiming, false);
             Cam.fieldOfView = Mathf.Lerp(Cam.fieldOfView, normalFOV, 0.6f);
             Cross.gameObject.SetActive(true);
             _playerController.SensitivityScale = _playerController.NonZoomSensitivity;
         }
-
     }
 
 
     IEnumerator Reload() {
-        if (isLocalPlayer)  Equipment.Weapon.GetComponent<Animator>().SetBool(IsReloading, true);
+        if (isLocalPlayer) Equipment.getActiveWeapon().GetComponent<Animator>().SetBool(IsReloading, true);
         ChangeMaterial(true);
-        Equipment.Weapon.reload();
-        yield return new WaitForSeconds(Equipment.Weapon.ReloadTime);
+        Equipment.getActiveWeapon().reload();
+        yield return new WaitForSeconds(Equipment.getActiveWeapon().ReloadTime);
         ChangeMaterial(false);
-        if (isLocalPlayer)  Equipment.Weapon.GetComponent<Animator>().SetBool(IsReloading, false);
+        if (isLocalPlayer) Equipment.getActiveWeapon().GetComponent<Animator>().SetBool(IsReloading, false);
     }
 
     IEnumerator TripleShot() {
         PerformWeaponFire();
-        yield return new WaitForSeconds(Equipment.Weapon.FireRate * 0.8f);
+        yield return new WaitForSeconds(Equipment.getActiveWeapon().FireRate * 0.8f);
         PerformWeaponFire();
-        yield return new WaitForSeconds(Equipment.Weapon.FireRate * 0.8f);
+        yield return new WaitForSeconds(Equipment.getActiveWeapon().FireRate * 0.8f);
         PerformWeaponFire();
-        yield return new WaitForSeconds(Equipment.Weapon.FireRate * 0.8f);
+        yield return new WaitForSeconds(Equipment.getActiveWeapon().FireRate * 0.8f);
     }
 
 
-    void Shoot()
-    {
+    void Shoot() {
         crossAccuracy += 2f - crossAccuracy * 0.5f;
-                Equipment.Weapon.GetComponent<Animator>().SetBool(IsSprinting, false);
+        Equipment.getActiveWeapon().GetComponent<Animator>().SetBool(IsSprinting, false);
 
 
-        if (Equipment.Weapon.Mode == Weapon.FireMode.single && !_shootingDone) {
+        if (Equipment.getActiveWeapon().Mode == Weapon.FireMode.single && !_shootingDone) {
             PerformWeaponFire();
             _shootingDone = true;
         }
-        else if (Equipment.Weapon.Mode == Weapon.FireMode.triple && !_shootingDone) {
-            Equipment.Weapon.Recoil = Equipment.Weapon.Recoil / 2;
+        else if (Equipment.getActiveWeapon().Mode == Weapon.FireMode.triple && !_shootingDone) {
+            Equipment.getActiveWeapon().Recoil = Equipment.getActiveWeapon().Recoil / 2;
             StartCoroutine(TripleShot());
-            Equipment.Weapon.Recoil = Equipment.Weapon.Recoil * 2;
+            Equipment.getActiveWeapon().Recoil = Equipment.getActiveWeapon().Recoil * 2;
             _shootingDone = true;
         }
-        else if (Equipment.Weapon.Mode == Weapon.FireMode.continous) {
+        else if (Equipment.getActiveWeapon().Mode == Weapon.FireMode.continous) {
             PerformWeaponFire();
         }
     }
 
 
     void PerformWeaponFire() {
-        if (Equipment.Weapon.CurrentMagAmmo >= 1) {
+        if (Equipment.getActiveWeapon().CurrentMagAmmo >= 1) {
             Equipment.PlayerShooting();
-            Equipment.Weapon.shoot();
+            Equipment.getActiveWeapon().shoot();
             gameObject.GetComponent<PlayerMotor>().IncreaseRecoil(currentRecoil);
             CmdPlayerShooting();
             RaycastHit hit;
-            if (Physics.Raycast(Cam.transform.position, Cam.transform.forward, out hit, Equipment.Weapon.Range,
+            if (Physics.Raycast(Cam.transform.position, Cam.transform.forward, out hit, Equipment.getActiveWeapon().Range,
                 _mask)) {
                 Debug.Log("We hit " + hit.collider.name);
-                if (hit.collider.tag == "Player")
+                if (hit.collider.tag == "Player") { //wylaczamy friendly fire???
+                    StartCoroutine(ShowHitmarker());
                     CmdPlayerShoot(hit.collider.GetComponentInParent<PlayerManager>().transform.name,
-                        Equipment.Weapon.Damage);
-                else if (hit.collider.tag == "EnemyHead")
+                        Equipment.getActiveWeapon().Damage);
+                }
+                else if (hit.collider.tag == "EnemyHead") {
+                    StartCoroutine(ShowHitmarker());
                     CmdEnemyShoot(hit.collider.GetComponentInParent<NavMeshAgent>().transform.name,
-                        3 * Equipment.Weapon.Damage);
-                else if (hit.collider.tag == "EnemyBody")
+                        3 * Equipment.getActiveWeapon().Damage);
+                }
+                else if (hit.collider.tag == "EnemyBody") {
+                    StartCoroutine(ShowHitmarker());
                     CmdEnemyShoot(hit.collider.GetComponentInParent<NavMeshAgent>().transform.name,
-                        2 * Equipment.Weapon.Damage);
-                else if (hit.collider.tag == "EnemyLegs")
+                        2 * Equipment.getActiveWeapon().Damage);
+                }
+                else if (hit.collider.tag == "EnemyLegs") {
+                    StartCoroutine(ShowHitmarker());
                     CmdEnemyShoot(hit.collider.GetComponentInParent<NavMeshAgent>().transform.name,
-                        Equipment.Weapon.Damage);
+                        Equipment.getActiveWeapon().Damage);
+                }
+
 
                 Equipment.DoHitEffect(hit.point, hit.normal);
                 CmdOnHit(hit.point, hit.normal);
             }
 
-            if (Equipment.Weapon.CurrentMagAmmo == 0 && Equipment.Weapon.CurrentAmmo >= 1) StartCoroutine(Reload());
+            if (Equipment.getActiveWeapon().CurrentMagAmmo == 0 && Equipment.getActiveWeapon().CurrentAmmo >= 1) StartCoroutine(Reload());
         }
     }
 
+    IEnumerator ShowHitmarker() {
+        //play hit sound
+        Cross.transform.GetChild(1).gameObject.SetActive(true);
+        yield return new WaitForSeconds(0.15f);
+        Cross.transform.GetChild(1).gameObject.SetActive(false);
+    }
 
     [Command]
     void CmdPlayerShooting() {
@@ -263,12 +289,10 @@ public class PlayerShoot : NetworkBehaviour {
     }
 
     [Command]
-    void CmdSpawnGrenade(Vector3 playerPos, Quaternion playerRot, Vector3 forwardVector, float force)
-    {
+    void CmdSpawnGrenade(Vector3 playerPos, Quaternion playerRot, Vector3 forwardVector, float force) {
         GameObject grenade = Instantiate(_grenadePrefab, playerPos + forwardVector + Vector3.up / 2, playerRot);
         Rigidbody rb = grenade.GetComponent<Rigidbody>();
         rb.velocity = force * (15 * forwardVector + 5 * Vector3.up);
         NetworkServer.Spawn(grenade);
     }
-
 }

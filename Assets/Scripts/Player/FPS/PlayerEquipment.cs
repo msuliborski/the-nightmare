@@ -4,7 +4,8 @@ using UnityEngine.Networking;
 
 public class PlayerEquipment : NetworkBehaviour {
     public AudioSource WeaponSound { get; set; }
-    public Weapon Weapon { get; set; }
+    public Weapon Weapon1 { get; set; }
+    public Weapon Weapon2 { get; set; }
     [SerializeField] private Camera _cam;
     [SerializeField] private LayerMask _mask;
     public GameObject pickUp;
@@ -12,80 +13,101 @@ public class PlayerEquipment : NetworkBehaviour {
     private PlacementController _controller;
     private Chest _chest;
 
-    private void Start()
-    {
-        if (isLocalPlayer)
-        {
+    private void Start() {
+        if (isLocalPlayer) {
             pickUp = GameObject.Find("PickUp");
             pickUp.SetActive(false);
         }
         else {
             transform.GetChild(4).gameObject.SetActive(false); //turn off camera
         }
+
         _shoot = GetComponent<PlayerShoot>();
         _controller = GetComponent<PlacementController>();
-        
+        Weapon2 = null;
+    }
+
+    public Weapon getActiveWeapon() {
+        if (Weapon1.gameObject.activeSelf)
+            return Weapon1;
+        return Weapon2;
     }
 
     private void Update() {
         RaycastHit weaponFinder;
         if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out weaponFinder, 0.75f,
-            _mask))
-        {
-            
+            _mask)) {
             if (weaponFinder.collider.CompareTag("Weapon")) {
-                if(isLocalPlayer)
+                if (isLocalPlayer)
                     pickUp.SetActive(true);
-                if (Input.GetKeyDown(KeyCode.E))
-                {
-                    Destroy(_cam.transform.GetChild(0).transform.GetChild(0).gameObject);
-                    int weaponId = weaponFinder.collider.gameObject.GetComponent<GunSpawnPoint>().WeaponId;
-                    GameObject weaponObject = Instantiate(GameManager.Instance.Weapons[weaponId],
-                        _cam.transform.GetChild(0).transform);
-                    Weapon = weaponObject.GetComponent<Weapon>();
-                    WeaponSound = weaponObject.GetComponent<AudioSource>();
-                    CmdChangeWeapon(weaponId);
+                if (Input.GetKeyDown(KeyCode.E)) {
+                    if (_cam.transform.GetChild(0).transform.childCount <= 1) {
+                        int weaponId = weaponFinder.collider.gameObject.GetComponent<GunSpawnPoint>().WeaponId;
+                        if (weaponId != 0) {
+                            GameObject weaponObject = Instantiate(GameManager.Instance.Weapons[weaponId],
+                                _cam.transform.GetChild(0).transform);
+                            Weapon2 = weaponObject.GetComponent<Weapon>();
+                            Weapon1.transform.localPosition = new Vector3(0.02f, 0.03f, -0.22f);
+                            Weapon1.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
+                            Weapon1.gameObject.SetActive(false);
+                            CmdChangeWeapon(weaponId);
+                        }
+                    }
+                    else {
+                        int weaponId = weaponFinder.collider.gameObject.GetComponent<GunSpawnPoint>().WeaponId;
+                        if (weaponId == 1) {
+                            Weapon2.CurrentAmmo = Weapon2.MaxAmmo;
+                            Weapon2.CurrentMagAmmo = Weapon2.MaxMagAmmo;
+                        }
+                    }
+                    //if has 2 weapons, just refill rifle
+                    //check if we picking up rifle, not pistol
+
+                    //else, add new weapon
+
+
+//                    Destroy(_cam.transform.GetChild(0).transform.GetChild(0).gameObject);
+//                    int weaponId = weaponFinder.collider.gameObject.GetComponent<GunSpawnPoint>().WeaponId;
+//                    GameObject weaponObject = Instantiate(GameManager.Instance.Weapons[weaponId],
+//                        _cam.transform.GetChild(0).transform);
+//                    Weapon = weaponObject.GetComponent<Weapon>();
+//                    WeaponSound = weaponObject.GetComponent<AudioSource>();
+//                    CmdChangeWeapon(weaponId);
                 }
             }
-            else if (weaponFinder.collider.CompareTag("Chest"))
-            {
+            else if (weaponFinder.collider.CompareTag("Chest")) {
                 _chest = weaponFinder.collider.GetComponentInParent<Chest>();
-                if (_chest.active && !_chest.alreadyPicked)
-                {
-                    if(isLocalPlayer)
+                if (_chest.active && !_chest.alreadyPicked) {
+                    if (isLocalPlayer)
                         pickUp.SetActive(true);
-                    if (Input.GetKeyDown(KeyCode.E))
-                    {
+                    if (Input.GetKeyDown(KeyCode.E)) {
                         _shoot._grenades += _chest.grenades;
                         _controller.snares += _chest.snares;
                         _chest.alreadyPicked = true;
                     }
                 }
-                else
-                {
-                    if(isLocalPlayer)
+                else {
+                    if (isLocalPlayer)
                         pickUp.SetActive(false);
                 }
             }
-            else
-            {
-                if(isLocalPlayer)
+            else {
+                if (isLocalPlayer)
                     pickUp.SetActive(false);
             }
         }
-        else
-        {
+        else {
             if (isLocalPlayer)
                 pickUp.SetActive(false);
         }
-
     }
 
     public void PlayerShooting() {
-        Weapon.Flash.Play();
-        WeaponSound.Play();
+        getActiveWeapon().Flash.Play();
+        getActiveWeapon().GetComponent<AudioSource>().Play();
         GameObject smokeEffect =
-            Instantiate(Weapon.Smoke, Weapon.transform.GetChild(0).position, Quaternion.Euler(-90, 0, 0));
+            Instantiate(getActiveWeapon().Smoke, getActiveWeapon().transform.GetChild(0).position,
+                Quaternion.Euler(-90, 0, 0));
         Destroy(smokeEffect, 2f);
     }
 
@@ -100,7 +122,7 @@ public class PlayerEquipment : NetworkBehaviour {
         if (!isLocalPlayer) {
             Transform rightHand = transform.GetChild(0).GetChild(0).GetChild(2).GetChild(2)
                 .GetChild(0).GetChild(0).GetChild(2).GetChild(0).GetChild(0).GetChild(0).transform;
-            Destroy(rightHand.GetChild(5).gameObject);
+//            Destroy(rightHand.GetChild(5).gameObject);
             GameObject weaponObject =
                 Instantiate(GameManager.Instance.Weapons[weaponId],
                     rightHand); //_cam.transform.GetChild(0).transform);//tutaj
@@ -113,11 +135,11 @@ public class PlayerEquipment : NetworkBehaviour {
                 weaponObject.transform.localRotation = Quaternion.Euler(-101.359f, 19.54199f, 79.521f);
             }
 
-            Weapon = weaponObject.GetComponent<Weapon>();
+            Weapon2 = weaponObject.GetComponent<Weapon>();
             WeaponSound = weaponObject.GetComponent<AudioSource>();
-            Weapon.State = Weapon.WeaponState.idle;
-            Weapon.CurrentMagAmmo = Weapon.MaxMagAmmo;
-            Weapon.CurrentAmmo = Weapon.MaxAmmo;
+            Weapon2.State = Weapon.WeaponState.idle;
+            Weapon2.CurrentMagAmmo = Weapon1.MaxMagAmmo;
+            Weapon2.CurrentAmmo = Weapon1.MaxAmmo;
             weaponObject.GetComponent<Animator>().enabled = false;
             GameManager.SetLayerRecursively(weaponObject, "LocalPlayer");
         }
@@ -126,16 +148,17 @@ public class PlayerEquipment : NetworkBehaviour {
     [ClientRpc]
     public void RpcPlayerShooting() {
         if (!isLocalPlayer) {
-            Weapon.Flash.Play();
-            WeaponSound.Play();
-            GameObject smokeEffect = Instantiate(Weapon.Smoke, Weapon.transform.GetChild(0).position,
+            getActiveWeapon().Flash.Play();
+            getActiveWeapon().GetComponent<AudioSource>().Play();
+            GameObject smokeEffect = Instantiate(getActiveWeapon().Smoke,
+                getActiveWeapon().transform.GetChild(0).position,
                 Quaternion.Euler(-90, 0, 0));
             Destroy(smokeEffect, 2f);
         }
     }
 
     public void DoHitEffect(Vector3 hitPoint, Vector3 normal) {
-        GameObject hitEffect = Instantiate(Weapon.HitEffect, hitPoint, Quaternion.LookRotation(normal));
+        GameObject hitEffect = Instantiate(getActiveWeapon().HitEffect, hitPoint, Quaternion.LookRotation(normal));
         Destroy(hitEffect, 2f);
     }
 
@@ -143,7 +166,7 @@ public class PlayerEquipment : NetworkBehaviour {
     [ClientRpc]
     public void RpcDoHitEffect(Vector3 hitPoint, Vector3 normal) {
         if (!isLocalPlayer) {
-            GameObject hitEffect = Instantiate(Weapon.HitEffect, hitPoint, Quaternion.LookRotation(normal));
+            GameObject hitEffect = Instantiate(getActiveWeapon().HitEffect, hitPoint, Quaternion.LookRotation(normal));
             Destroy(hitEffect, 2f);
         }
     }

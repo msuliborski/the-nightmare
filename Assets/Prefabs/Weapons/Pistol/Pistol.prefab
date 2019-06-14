@@ -4819,12 +4819,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _id: 0
+  _weaponFireSound: {fileID: 8300000, guid: a64ec701992d4e563b1427cbf77ec6c6, type: 3}
+  _weaponHitmarkerSound: {fileID: 8300000, guid: f721b9607b73b5a4f808331c53dce5b4,
+    type: 3}
   _name: Pistol
   _damage: 20
   _currentMagAmmo: 7
   _maxMagAmmo: 7
-  _currentAmmo: 35
-  _maxAmmo: 35
+  _currentAmmo: 2000000000
+  _maxAmmo: 2000000000
   _range: 100
   _fireRate: 0.15
   _reloadTime: 2

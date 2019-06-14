@@ -250,7 +250,7 @@ Transform:
   m_GameObject: {fileID: 810605445748957594}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: -0.6053963, y: 0.94705594, z: 0.14445612}
-  m_LocalScale: {x: 0.25, y: 0.25000012, z: 0.25000012}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5302780851991259183}
   m_RootOrder: 1
@@ -839,7 +839,7 @@ Transform:
   m_GameObject: {fileID: 3421888776507064316}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: -0.6053963, y: 0.94705594, z: 0.14445612}
-  m_LocalScale: {x: 0.25, y: 0.25000012, z: 0.25000012}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5302780851991259183}
   m_RootOrder: 0
@@ -1078,6 +1078,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_CullingMask.m_Bits
       value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 2567497335345547796, guid: cc9b7d851085b1441a576a60629784d4,
+        type: 3}
+      propertyPath: orthographic size
+      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cc9b7d851085b1441a576a60629784d4, type: 3}

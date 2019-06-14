@@ -11,7 +11,7 @@ public class PlayerController : NetworkBehaviour {
     [SerializeField] private  float _nonZoomSensivity = 0.7f;
     public float NonZoomSensitivity { get { return _nonZoomSensivity;  } set { _nonZoomSensivity = value; } }
 
-    [SerializeField] private float _zoomSensivity = 0.5f;
+    [SerializeField] private float _zoomSensivity = 0.1f;
     public float ZoomSensitivity { get { return _zoomSensivity; } set { _zoomSensivity = value; } }
 
 
@@ -31,7 +31,7 @@ public class PlayerController : NetworkBehaviour {
 
     private void Update() {
 
-        if (transform.GetComponent<PlayerEquipment>().Weapon.GetComponent<Animator>().GetBool(IsSprinting)) 
+        if (transform.GetComponent<PlayerEquipment>().getActiveWeapon().GetComponent<Animator>().GetBool(IsSprinting)) 
             _speed = 7f;
         else  
             _speed = 2f;

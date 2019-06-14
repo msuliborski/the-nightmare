@@ -4838,6 +4838,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _id: 0
+  _weaponFireSound: {fileID: 8300000, guid: a64ec701992d4e563b1427cbf77ec6c6, type: 3}
+  _weaponHitmarkerSound: {fileID: 8300000, guid: f721b9607b73b5a4f808331c53dce5b4,
+    type: 3}
   _name: Rifle
   _damage: 40
   _currentMagAmmo: 31
