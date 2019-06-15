@@ -152,8 +152,8 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.01
-  m_Center: {x: 0.008, y: 0.062, z: 0.025}
+  m_Radius: 0.012774032
+  m_Center: {x: 0.007999999, y: 0.06231447, z: 0.025000002}
 --- !u!114 &4070787546434483839
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -208,10 +208,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.023816988
-  m_Height: 0.06476406
+  m_Radius: 0.04082326
+  m_Height: 0.08164652
   m_Direction: 1
-  m_Center: {x: 0.0002465695, y: 0.022382032, z: 0.0034915656}
+  m_Center: {x: -0.0019889101, y: 0.022382028, z: 0.0034915656}
 --- !u!114 &1461590147620048152
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -509,10 +509,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.020519707
-  m_Height: 0.05741039
+  m_Radius: 0.033737823
+  m_Height: 0.06747565
   m_Direction: 1
-  m_Center: {x: 0, y: 0.06, z: 0}
+  m_Center: {x: 0.0015961677, y: 0.060000002, z: 0}
 --- !u!1001 &4361791423792975236
 PrefabInstance:
   m_ObjectHideFlags: 0

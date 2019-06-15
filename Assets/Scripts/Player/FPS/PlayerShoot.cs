@@ -13,6 +13,33 @@ public class PlayerShoot : NetworkBehaviour {
     private PlayerController _playerController;
     private List<Material> _originalMaterials;
     [SerializeField] Material _blackeningMaterial;
+    private bool _blackened = false;
+    public bool Blackened {
+        get { return _blackened;  }
+        set
+        {
+            Transform weaponModelTransform = Equipment.getActiveWeapon().transform.transform.GetChild(0).GetChild(0).GetChild(1);
+
+            if (value)
+            {
+                _originalMaterials = new List<Material>();
+                for (int i = 0; i < weaponModelTransform.childCount; i++)
+                {
+                    MeshRenderer meshRenderer = weaponModelTransform.GetChild(i).GetComponent<MeshRenderer>();
+                    _originalMaterials.Add(meshRenderer.material);
+                    meshRenderer.material = _blackeningMaterial;
+                }
+            }
+            else
+            {
+                for (int i = 0; i < weaponModelTransform.childCount; i++)
+                {
+                    MeshRenderer meshRenderer = weaponModelTransform.GetChild(i).GetComponent<MeshRenderer>();
+                    meshRenderer.material = _originalMaterials[i];
+                }
+            }
+        }
+    }
 
 
     public GameObject Cross;
@@ -63,24 +90,6 @@ public class PlayerShoot : NetworkBehaviour {
     }
 
 
-    void ChangeMaterial(bool isBlakened) {
-        Transform weaponModelTransform = Equipment.getActiveWeapon().transform.transform.GetChild(0).GetChild(0).GetChild(1);
-        if (isBlakened) {
-            _originalMaterials = new List<Material>();
-            for (int i = 0; i < weaponModelTransform.childCount; i++) {
-                MeshRenderer meshRenderer = weaponModelTransform.GetChild(i).GetComponent<MeshRenderer>();
-                _originalMaterials.Add(meshRenderer.material);
-                meshRenderer.material = _blackeningMaterial;
-            }
-        }
-        else {
-            for (int i = 0; i < weaponModelTransform.childCount; i++) {
-                MeshRenderer meshRenderer = weaponModelTransform.GetChild(i).GetComponent<MeshRenderer>();
-                meshRenderer.material = _originalMaterials[i];
-            }
-        }
-    }
-
     void Update() {
         
         currentRecoil = Equipment.getActiveWeapon().Recoil;
@@ -98,6 +107,7 @@ public class PlayerShoot : NetworkBehaviour {
         if (changeWeaponCooldown > 0) changeWeaponCooldown -= Time.deltaTime;
         if (changeWeaponCooldown <= 0 && Math.Abs(Input.GetAxis("Mouse ScrollWheel")) > 0.01 && Equipment.getActiveWeapon().State == Weapon.WeaponState.idle) {
             if (Equipment.Weapon2 != null) {
+                if (Blackened) Blackened = false;
                 if (Equipment.Weapon1.gameObject.activeSelf) {
                     Equipment.Weapon1.transform.localPosition = new Vector3(0.02f, 0.03f, -0.22f);
                     Equipment.Weapon1.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
@@ -176,10 +186,10 @@ public class PlayerShoot : NetworkBehaviour {
 
     IEnumerator Reload() {
         if (isLocalPlayer) Equipment.getActiveWeapon().GetComponent<Animator>().SetBool(IsReloading, true);
-        ChangeMaterial(true);
+        Blackened = true;
         Equipment.getActiveWeapon().reload();
         yield return new WaitForSeconds(Equipment.getActiveWeapon().ReloadTime);
-        ChangeMaterial(false);
+        Blackened = false;
         if (isLocalPlayer) Equipment.getActiveWeapon().GetComponent<Animator>().SetBool(IsReloading, false);
     }
 

@@ -16,11 +16,11 @@ public class CapturedRooms : NetworkBehaviour
             rooms.Add(transform.GetChild(i).GetComponent<Room>());
         }
 
-        Transform roomCounter = GameObject.Find("RoomCounters").transform;
-        for (int i = 0; i < roomCounter.childCount; i++)
-        {
-            heads.Add(roomCounter.GetChild(i).GetComponent<Image>());
-        }
+        //Transform roomCounter = GameObject.Find("RoomCounters").transform;
+        //for (int i = 0; i < roomCounter.childCount; i++)
+        //{
+        //    heads.Add(roomCounter.GetChild(i).GetComponent<Image>());
+        //}
     }
     
     void Update()
@@ -40,7 +40,7 @@ public class CapturedRooms : NetworkBehaviour
             }
         }
 
-        CmdTurnHeads(roomsToDisable);
+        //CmdTurnHeads(roomsToDisable);
 
         if (check)
         {
@@ -49,7 +49,7 @@ public class CapturedRooms : NetworkBehaviour
         }
     }
 
-    [Command]
+    /*[Command]
     void CmdTurnHeads(int roomsToDisable)
     {
         RpcTurnHeads(roomsToDisable);
@@ -66,5 +66,5 @@ public class CapturedRooms : NetworkBehaviour
         {
             heads[i].enabled = true;
         }
-    }
+    }*/
 }
