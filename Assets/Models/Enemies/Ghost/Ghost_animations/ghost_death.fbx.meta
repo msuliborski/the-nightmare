@@ -1,0 +1,215 @@
+fileFormatVersion: 2
+guid: ed478cd23872ee546a23c4ade216de84
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: back
+    100002: //RootNode
+    100004: head
+    100006: joint3
+    100008: joint31
+    100010: joint32
+    100012: joint33
+    100014: joint34
+    100016: joint35
+    100018: joint36
+    100020: joint37
+    100022: joint38
+    100024: joint39
+    100026: joint4
+    100028: joint40
+    100030: joint41
+    100032: joint42
+    100034: joint43
+    100036: joint44
+    100038: joint45
+    100040: joint46
+    100042: joint47
+    100044: joint48
+    100046: joint49
+    100048: joint5
+    100050: joint54
+    100052: joint55
+    100054: joint56
+    100056: joint57
+    100058: joint58
+    100060: joint59
+    100062: joint6
+    100064: joint60
+    100066: joint61
+    100068: joint62
+    100070: joint63
+    100072: joint64
+    100074: joint65
+    100076: joint66
+    100078: joint67
+    100080: joint68
+    100082: joint69
+    100084: joint7
+    100086: joint70
+    100088: joint71
+    100090: joint72
+    100092: joint73
+    100094: joint8
+    100096: joint9
+    100098: L_arm
+    100100: L_elbow
+    100102: L_obojczyk
+    100104: L_wrist
+    100106: mostek
+    100108: neck
+    100110: R_arm
+    100112: R_elbow
+    100114: R_obojczyk
+    100116: R_wrist
+    100118: spine
+    100120: tail
+    400000: back
+    400002: //RootNode
+    400004: head
+    400006: joint3
+    400008: joint31
+    400010: joint32
+    400012: joint33
+    400014: joint34
+    400016: joint35
+    400018: joint36
+    400020: joint37
+    400022: joint38
+    400024: joint39
+    400026: joint4
+    400028: joint40
+    400030: joint41
+    400032: joint42
+    400034: joint43
+    400036: joint44
+    400038: joint45
+    400040: joint46
+    400042: joint47
+    400044: joint48
+    400046: joint49
+    400048: joint5
+    400050: joint54
+    400052: joint55
+    400054: joint56
+    400056: joint57
+    400058: joint58
+    400060: joint59
+    400062: joint6
+    400064: joint60
+    400066: joint61
+    400068: joint62
+    400070: joint63
+    400072: joint64
+    400074: joint65
+    400076: joint66
+    400078: joint67
+    400080: joint68
+    400082: joint69
+    400084: joint7
+    400086: joint70
+    400088: joint71
+    400090: joint72
+    400092: joint73
+    400094: joint8
+    400096: joint9
+    400098: L_arm
+    400100: L_elbow
+    400102: L_obojczyk
+    400104: L_wrist
+    400106: mostek
+    400108: neck
+    400110: R_arm
+    400112: R_elbow
+    400114: R_obojczyk
+    400116: R_wrist
+    400118: spine
+    400120: tail
+    7400000: Take 001
+    9500000: //RootNode
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 0.01
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

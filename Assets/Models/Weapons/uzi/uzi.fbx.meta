@@ -1,0 +1,204 @@
+fileFormatVersion: 2
+guid: a5101bb9508aba846a442be6600e09ae
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: klocekx13
+    100002: klocekx2
+    100004: klocekx44
+    100006: klocekx47
+    100008: klocekx48
+    100010: klocekx51
+    100012: klocekx53
+    100014: klocekx57
+    100016: klocekx58
+    100018: klocekx5:klocekx3
+    100020: klocekx6
+    100022: klocekx62
+    100024: klocekx67
+    100026: klocekx76
+    100028: klocekx77
+    100030: klocekx78
+    100032: klocekx7:klocekx3
+    100034: klocekx88
+    100036: klocekx89
+    100038: klocekx90
+    100040: klocekx91
+    100042: //RootNode
+    400000: klocekx13
+    400002: klocekx2
+    400004: klocekx44
+    400006: klocekx47
+    400008: klocekx48
+    400010: klocekx51
+    400012: klocekx53
+    400014: klocekx57
+    400016: klocekx58
+    400018: klocekx5:klocekx3
+    400020: klocekx6
+    400022: klocekx62
+    400024: klocekx67
+    400026: klocekx76
+    400028: klocekx77
+    400030: klocekx78
+    400032: klocekx7:klocekx3
+    400034: klocekx88
+    400036: klocekx89
+    400038: klocekx90
+    400040: klocekx91
+    400042: //RootNode
+    2100000: zielony_plastik
+    2100002: blekitny_plastik
+    2100004: niebieski_plastik
+    2100006: czerwony_plastik
+    2100008: zolty_plastik
+    2100010: rozowy_plastik
+    2300000: klocekx13
+    2300002: klocekx2
+    2300004: klocekx44
+    2300006: klocekx47
+    2300008: klocekx48
+    2300010: klocekx51
+    2300012: klocekx53
+    2300014: klocekx57
+    2300016: klocekx58
+    2300018: klocekx5:klocekx3
+    2300020: klocekx6
+    2300022: klocekx62
+    2300024: klocekx67
+    2300026: klocekx76
+    2300028: klocekx77
+    2300030: klocekx78
+    2300032: klocekx7:klocekx3
+    2300034: klocekx88
+    2300036: klocekx89
+    2300038: klocekx90
+    2300040: klocekx91
+    3300000: klocekx13
+    3300002: klocekx2
+    3300004: klocekx44
+    3300006: klocekx47
+    3300008: klocekx48
+    3300010: klocekx51
+    3300012: klocekx53
+    3300014: klocekx57
+    3300016: klocekx58
+    3300018: klocekx5:klocekx3
+    3300020: klocekx6
+    3300022: klocekx62
+    3300024: klocekx67
+    3300026: klocekx76
+    3300028: klocekx77
+    3300030: klocekx78
+    3300032: klocekx7:klocekx3
+    3300034: klocekx88
+    3300036: klocekx89
+    3300038: klocekx90
+    3300040: klocekx91
+    4300000: klocekx2
+    4300002: klocekx89
+    4300004: klocekx13
+    4300006: klocekx90
+    4300008: klocekx5:klocekx3
+    4300010: klocekx88
+    4300012: klocekx77
+    4300014: klocekx62
+    4300016: klocekx53
+    4300018: klocekx51
+    4300020: klocekx48
+    4300022: klocekx7:klocekx3
+    4300024: klocekx47
+    4300026: klocekx67
+    4300028: klocekx6
+    4300030: klocekx57
+    4300032: klocekx58
+    4300034: klocekx78
+    4300036: klocekx76
+    4300038: klocekx44
+    4300040: klocekx91
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
