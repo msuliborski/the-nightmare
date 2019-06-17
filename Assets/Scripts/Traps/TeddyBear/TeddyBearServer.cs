@@ -152,13 +152,13 @@ public class TeddyBearServer : NetworkBehaviour
     private IEnumerator Die()
     {
         yield return new WaitForSeconds(3.9f);
-        RpcDie();
+        RpcDie(InitialPosAndTag);
      }
 
     [ClientRpc]
-    public void RpcDie()
+    public void RpcDie(string posAndTag)
     {
-        GameManager.Instance.BuildingPoints[InitialPosAndTag].Buildable = true;
+        GameManager.Instance.BuildingPoints[posAndTag].Buildable = true;
         Destroy(gameObject);
     }
     

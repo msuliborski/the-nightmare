@@ -37,7 +37,7 @@ public class CaptureArea : NetworkBehaviour
         for (int i = 0; i < transform.GetChild(0).childCount; i++)
         {
             _candles.Add(transform.GetChild(0).GetChild(i).gameObject);
-            RpcActivateCandle(i, true);
+            if(isServer) RpcActivateCandle(i, true);
         }
     }
 
