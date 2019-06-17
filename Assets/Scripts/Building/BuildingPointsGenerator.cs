@@ -10,6 +10,8 @@ public class BuildingPointsGenerator : MonoBehaviour
     private Canvas _gridCanvas;
     private GameObject _gridPointPrefab;
     private GameObject _areaPrefab;
+    private GameObject _doorsPrefab;
+    private GameObject _chestPrefab;
     
 
 
@@ -29,15 +31,16 @@ public class BuildingPointsGenerator : MonoBehaviour
         empty = new GameObject();
         _gridPointPrefab = (GameObject)Resources.Load("cross", typeof(GameObject));
         _areaPrefab = (GameObject)Resources.Load("CaptureArea", typeof(GameObject));
-        
-
-        
+        //_doorsPrefab = (GameObject)Resources.Load("drzwi", typeof(GameObject));
+        _chestPrefab = (GameObject)Resources.Load("Chest", typeof(GameObject));
         for (int i = 0; i < _rooms.Count; i++)
         {
             Room room = _rooms[i].GetComponent<Room>();
             int halfWidth = Mathf.FloorToInt(room.Width / 2);
             int halfHeight = Mathf.FloorToInt(room.Height / 2);
             GameObject roomCanvas = Instantiate(empty, room.transform.position, room.transform.rotation, room.transform);
+            //Instantiate(_doorsPrefab, room.transform.position, room.transform.rotation, room.transform);
+            if (room.HasChest) Instantiate(_chestPrefab, room.transform.position, room.transform.rotation, room.transform);
             roomCanvas.name = "RoomRender";
             Vector3 renderPosition = roomCanvas.transform.position;
             

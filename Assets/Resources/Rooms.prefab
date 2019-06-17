@@ -1,101 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &178039485249310289
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 544882722409749461}
-  - component: {fileID: 9037054833567502012}
-  m_Layer: 0
-  m_Name: Room2
-  m_TagString: Floor 0
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &544882722409749461
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 178039485249310289}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 15, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 3447686099146004144}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9037054833567502012
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 178039485249310289}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b13bb68c1ed6ab41bc6b4c3fbb4fe84, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _width: 12
-  _height: 16
-  _areas: 1
-  _enemySpawnPointsCounter: 1
-  roomCaptured: 0
---- !u!1 &2523453867745203724
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1087270450401152833}
-  - component: {fileID: 4693093347400884246}
-  m_Layer: 0
-  m_Name: Room3
-  m_TagString: Floor 0
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1087270450401152833
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2523453867745203724}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 23}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 3447686099146004144}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4693093347400884246
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2523453867745203724}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b13bb68c1ed6ab41bc6b4c3fbb4fe84, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _width: 16
-  _height: 12
-  _areas: 1
-  _enemySpawnPointsCounter: 1
-  roomCaptured: 0
 --- !u!1 &3447686099146004145
 GameObject:
   m_ObjectHideFlags: 0
@@ -125,9 +29,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 752077262768741896}
-  - {fileID: 544882722409749461}
-  - {fileID: 1087270450401152833}
-  - {fileID: 4526560564105066332}
   - {fileID: 6666786415443186868}
   - {fileID: 7578380191388823050}
   m_Father: {fileID: 0}
@@ -174,7 +75,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3447686099146004144}
-  m_RootOrder: 5
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5916350013256702352
 MonoBehaviour:
@@ -190,9 +91,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _width: 12
   _height: 16
-  _areas: 1
-  _enemySpawnPointsCounter: 1
+  _areas: 2
+  _enemySpawnPointsCounter: 3
   roomCaptured: 0
+  _hasChest: 1
 --- !u!1 &5031685722654212287
 GameObject:
   m_ObjectHideFlags: 0
@@ -222,7 +124,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3447686099146004144}
-  m_RootOrder: 4
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5893225790588101468
 MonoBehaviour:
@@ -239,56 +141,9 @@ MonoBehaviour:
   _width: 12
   _height: 16
   _areas: 1
-  _enemySpawnPointsCounter: 1
+  _enemySpawnPointsCounter: 2
   roomCaptured: 0
---- !u!1 &6974792206129962312
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4526560564105066332}
-  - component: {fileID: 1599461123775943353}
-  m_Layer: 0
-  m_Name: Room4
-  m_TagString: Floor 0
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4526560564105066332
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6974792206129962312}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -15}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 3447686099146004144}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1599461123775943353
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6974792206129962312}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b13bb68c1ed6ab41bc6b4c3fbb4fe84, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _width: 16
-  _height: 12
-  _areas: 1
-  _enemySpawnPointsCounter: 1
-  roomCaptured: 0
+  _hasChest: 1
 --- !u!1 &8649748113464519917
 GameObject:
   m_ObjectHideFlags: 0
@@ -335,5 +190,6 @@ MonoBehaviour:
   _width: 23
   _height: 23
   _areas: 2
-  _enemySpawnPointsCounter: 3
+  _enemySpawnPointsCounter: 5
   roomCaptured: 0
+  _hasChest: 0

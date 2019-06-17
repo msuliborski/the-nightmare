@@ -20,6 +20,10 @@ public class Room : MonoBehaviour
     private List<GameObject> _enemySpawnPoints = new List<GameObject>();
     public List<GameObject> EnemySpawnPoint { get { return _enemySpawnPoints; } }
     public bool roomCaptured;
+    [SerializeField] private bool _hasChest;
+    public bool HasChest { get { return _hasChest; } set { _hasChest = value; } }
+    
+    
     
 
     private void Start()
