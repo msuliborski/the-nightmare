@@ -8,26 +8,50 @@ public class GameManager : NetworkBehaviour
 {
 
 
-    public struct PosAndTag
+    public class PosAndTag
     {
-        string tag;
-        Vector2 pos;
+        public string tag;
+        public Vector2 pos;
 
         public PosAndTag(Vector2 pos, string tag)
         {
             this.tag = tag;
             this.pos = pos;
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj != null && obj is PosAndTag)
+            { 
+                PosAndTag other = (PosAndTag) obj;
+                if (tag.Equals(other.tag) && pos.Equals(other.pos))
+                    return true;
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return 17 * tag.GetHashCode() + 31 * pos.GetHashCode();
+        }
     }
 
     public static GameManager Instance;
     private List<GameObject> _rooms = new List<GameObject>();
     public List<GameObject> Rooms { get { return _rooms; } }
+    private float _prepareTimer = 45f;
+    private float[] _timers = { 120f, 180f, 300f };
+    private Room _currentRoom;
+    public Room CurrentRoom {get { return _currentRoom; } set { _currentRoom = value; } }
+
     private Dictionary<string, Transform> _enemySpawnPoints = new Dictionary<string, Transform>();
     public Dictionary<string, Transform> EnemySpawnPoints { get { return _enemySpawnPoints; } }
     private List<CaptureArea> _captureAreas = new List<CaptureArea>();
     public List<CaptureArea> CaptureAreas { get { return _captureAreas; } }
     private static List<GameObject> _gridRenderes = new List<GameObject>();
+
+
+
     public static List<GameObject> GridRenderes { get { return _gridRenderes; } }
     [SerializeField] private GameObject _enemyPrefab; 
     [SerializeField] private MatchSettings _matchSettings;
@@ -39,8 +63,8 @@ public class GameManager : NetworkBehaviour
     [SerializeField] private CameraFacing[] _billboards;
     public CameraFacing[] Billboards { get { return _billboards; } set { _billboards = value; } }
     public enum GameState { Building, Fighting }
-    private static GameState _currentState = GameState.Building;
-    //private static GameState _currentState = GameState.Fighting;
+    //private static GameState _currentState = GameState.Building;
+    private static GameState _currentState = GameState.Fighting;
     public static GameState CurrentState
     {
         get { return _currentState; }
@@ -71,6 +95,8 @@ public class GameManager : NetworkBehaviour
 
     void Awake()
     {
+        if (Instance != null) Debug.LogError("More than one GameManager in scene!");
+        else Instance = this;
         Transform rooms = GameObject.Find("Rooms").transform;
         for (int i = 0; i < rooms.childCount; i++)
             _rooms.Add(rooms.GetChild(i).gameObject);
@@ -93,9 +119,13 @@ public class GameManager : NetworkBehaviour
         }
 
        _matchSettings.WaitForSpawn -= _matchSettings.EnemyRespawnTime;
-        if (Instance != null) Debug.LogError("More than one GameManager in scene!");
-        else Instance = this;
-     }
+    }
+
+    private void Start()
+    {
+        TurnOnGridRenders(false);
+        if (Instance.isServer) Instance.StartCoroutine(Instance.SpawnEnemy());
+    }
 
 
     #region Building

@@ -177,6 +177,7 @@ GameObject:
   - component: {fileID: 8913955249550417639}
   - component: {fileID: 6225379518338989298}
   - component: {fileID: 1461590147620048152}
+  - component: {fileID: 5756324356763416536}
   m_Layer: 0
   m_Name: EnemyLegs
   m_TagString: EnemyLegs
@@ -224,6 +225,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d1dbd7f07d85093a8c358c367e4dfa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5756324356763416536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6478945405128599967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 0
+    i1: 0
+    i2: 0
+    i3: 0
+    i4: 0
+    i5: 0
+    i6: 0
+    i7: 0
+    i8: 0
+    i9: 0
+    i10: 0
+    i11: 0
+    i12: 0
+    i13: 0
+    i14: 0
+    i15: 0
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
 --- !u!1 &6513423205020058902
 GameObject:
   m_ObjectHideFlags: 0

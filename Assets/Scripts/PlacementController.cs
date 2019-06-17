@@ -29,6 +29,9 @@ public class PlacementController : NetworkBehaviour
     public int maxSnares = 5;
     public int snares;
     private TextMeshProUGUI _snaresTM;
+    public const int INDEX_OF_SNARES = 0;
+    public const int INDEX_OF_BEAR = 1;
+    public const int INDEX_OF_BARREL = 2;
 
    private PlayerShoot _playerShoot;
 
@@ -46,10 +49,10 @@ public class PlacementController : NetworkBehaviour
         _playerShoot = GetComponent<PlayerShoot>();
         _reverseGrid = 1f / GridTileSize;
         _buildingCameraHolder = gameObject.transform.Find("BuildingCameraHolder");
-        _currentCamera = _buildingCamera = _buildingCameraHolder.GetComponentInChildren<Camera>();
+        _buildingCamera = _buildingCameraHolder.GetComponentInChildren<Camera>();
         _camMaxZoom = _buildingCamera.transform.position.y;
         _camMinZoom = 1f;
-        _actionCamera = gameObject.transform.Find("PlayerCamera").GetComponent<Camera>();
+        _currentCamera = _actionCamera = gameObject.transform.Find("PlayerCamera").GetComponent<Camera>();
         
     }
 
@@ -144,7 +147,21 @@ public class PlacementController : NetworkBehaviour
     [Command]
     void CmdPlaceEntity(Vector3 pos, Quaternion rot, string tag, int placeableIndex)
     {
-        NetworkServer.Spawn(Instantiate(_placeableObject[placeableIndex], pos, rot));
+        GameObject placeableObject = Instantiate(_placeableObject[placeableIndex], pos, rot);
+        switch (placeableIndex)
+        {
+            case INDEX_OF_SNARES:
+                Snares snares = placeableObject.GetComponent<Snares>();
+                snares.InitialPosAndTag = new GameManager.PosAndTag(pos, tag);
+                break;
+            case INDEX_OF_BEAR:
+                TeddyBearServer teddyBearServer = placeableObject.GetComponent<TeddyBearServer>();
+                teddyBearServer.InitialPosAndTag = new GameManager.PosAndTag(pos, tag);
+                break;
+            case INDEX_OF_BARREL:
+                break;
+        }
+        NetworkServer.Spawn(placeableObject);
         RpcPlaceEntity(pos, rot, tag);
     }
 

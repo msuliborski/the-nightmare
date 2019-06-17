@@ -69,9 +69,8 @@ public class PlayerManager : NetworkBehaviour
        _currentHealth = _maxHealth;
         _placementController = GetComponent<PlacementController>();
         if (isLocalPlayer) _cross = GameObject.Find("cross");
-        SetBuildingMode();
-        
-        //SetActionMode();
+        //SetBuildingMode();
+        SetActionMode();
     }
 
     private void SetLayerRecursively(GameObject obj, int newLayer)

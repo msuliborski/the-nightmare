@@ -16,6 +16,7 @@ public class TeddyBearServer : NetworkBehaviour
     [SerializeField] private float _damage = 60f;
     public Transform Dest { get; set; }
     private Animator _animator;
+    public GameManager.PosAndTag InitialPosAndTag;
     
     public enum BearState
     {
@@ -221,12 +222,14 @@ public class TeddyBearServer : NetworkBehaviour
     {
         yield return new WaitForSeconds(3.9f);
         RpcDie();
+        NetworkServer.Destroy(gameObject);
     }
 
     [ClientRpc]
     public void RpcDie()
     {
-        Destroy(gameObject);
+        Debug.Log("KURWAA");
+        GameManager.Instance.BuildingPoints[InitialPosAndTag].Buildable = true;
     }
     
     public void SetClosestPlayer()

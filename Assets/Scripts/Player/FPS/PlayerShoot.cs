@@ -105,7 +105,7 @@ public class PlayerShoot : NetworkBehaviour {
         
         //changing weapon
         if (changeWeaponCooldown > 0) changeWeaponCooldown -= Time.deltaTime;
-        if (changeWeaponCooldown <= 0 && Math.Abs(Input.GetAxis("Mouse ScrollWheel")) > 0.01 && Equipment.getActiveWeapon().State == Weapon.WeaponState.idle) {
+        if (changeWeaponCooldown <= 0 && Math.Abs(Input.GetAxis("Mouse ScrollWheel")) > 0.01 && Equipment.getActiveWeapon().State == Weapon.WeaponState.idle && !IsBuildingOnFly) {
             if (Equipment.Weapon2 != null) {
                 //if (Blackened) Blackened = false;
                 if (Equipment.Weapon1.gameObject.activeSelf) {
@@ -122,8 +122,8 @@ public class PlayerShoot : NetworkBehaviour {
                 }
             }
         }
-            
-        Debug.Log(Input.GetAxis("Mouse ScrollWheel"));
+           
+        
         //fire mode
         if (Input.GetKeyDown(KeyCode.B)) Equipment.getActiveWeapon().changeFireMode();
 
@@ -234,7 +234,7 @@ public class PlayerShoot : NetworkBehaviour {
             if (Physics.Raycast(Cam.transform.position, Cam.transform.forward, out hit, Equipment.getActiveWeapon().Range,
                 _mask)) {
                 Debug.Log("We hit " + hit.collider.name);
-                if (hit.collider.tag == "Player") { //wylaczamy friendly fire???
+                if (hit.collider.tag == "Player") { //wylaczamy friendly fire??? NIE XD
                     StartCoroutine(ShowHitmarker());
                     CmdPlayerShoot(hit.collider.GetComponentInParent<PlayerManager>().transform.name,
                         Equipment.getActiveWeapon().Damage);
