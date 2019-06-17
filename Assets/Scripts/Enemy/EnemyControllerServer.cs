@@ -38,7 +38,7 @@ public class EnemyControllerServer : NetworkBehaviour
         }
     }
 
-  
+    public Snares SnaresToDestroy { get; set; }
 
     private bool _init = false;
 

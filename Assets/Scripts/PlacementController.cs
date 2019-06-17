@@ -104,8 +104,7 @@ public class PlacementController : NetworkBehaviour
         if (Input.GetMouseButton(0))
         {
             
-            Vector2 pos = new Vector2(_currentObject.transform.position.x, _currentObject.transform.position.z);
-            GameManager.PosAndTag posAndTag = new GameManager.PosAndTag(pos, _currentTag);
+            string posAndTag = _currentObject.transform.position.x.ToString() + "_" + _currentObject.transform.position.z.ToString() + "_" + _currentTag;
             if(_placeableIndex == 0 && snares > 0)
             {
                 if (GameManager.Instance.BuildingPoints.ContainsKey(posAndTag)
@@ -147,31 +146,30 @@ public class PlacementController : NetworkBehaviour
     [Command]
     void CmdPlaceEntity(Vector3 pos, Quaternion rot, string tag, int placeableIndex)
     {
+        string posAndTag = pos.x.ToString() + "_" + pos.z.ToString() + "_" + tag;
         GameObject placeableObject = Instantiate(_placeableObject[placeableIndex], pos, rot);
         switch (placeableIndex)
         {
             case INDEX_OF_SNARES:
                 Snares snares = placeableObject.GetComponent<Snares>();
-                snares.InitialPosAndTag = new GameManager.PosAndTag(pos, tag);
+                snares.InitialPosAndTag = posAndTag;
                 break;
             case INDEX_OF_BEAR:
                 TeddyBearServer teddyBearServer = placeableObject.GetComponent<TeddyBearServer>();
-                teddyBearServer.InitialPosAndTag = new GameManager.PosAndTag(pos, tag);
+                teddyBearServer.InitialPosAndTag = posAndTag;
                 break;
             case INDEX_OF_BARREL:
                 break;
         }
         NetworkServer.Spawn(placeableObject);
-        RpcPlaceEntity(pos, rot, tag);
+        RpcPlaceEntity(posAndTag);
     }
 
     [ClientRpc]
-    void RpcPlaceEntity(Vector3 pos, Quaternion rot, string tag)
+    void RpcPlaceEntity(string posAndTag)
     {
         if (!isLocalPlayer)
         {
-            Vector2 pos1 = new Vector2(pos.x, pos.z);
-            GameManager.PosAndTag posAndTag = new GameManager.PosAndTag(pos1, tag);
             GameManager.Instance.BuildingPoints[posAndTag].Buildable = false;
         }
     }

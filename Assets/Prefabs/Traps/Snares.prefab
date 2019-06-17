@@ -70,6 +70,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   freezeTime: 5
+  _enemiesToDestroy: 3
+  InitialPosAndTag: 
 --- !u!54 &393305531075575759
 Rigidbody:
   m_ObjectHideFlags: 0

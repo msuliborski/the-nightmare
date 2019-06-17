@@ -3,7 +3,7 @@ using UnityEngine;
 
 using UnityEngine.Networking;
 
-public class TrapsHandler : NetworkBehaviour
+public class TrapsHandler : MonoBehaviour
 {
     private Snares _snares;
     private EnemyControllerServer _enemyController;
@@ -28,28 +28,12 @@ public class TrapsHandler : NetworkBehaviour
             _snares.EnemiesCounter++;
             if (_snares.EnemiesCounter == _snares.EnemiesToDestroy)
             {
-                Debug.Log("aaaa");
-                if (_snares == null) Debug.Log("eeeee");
-                if (_snares.InitialPosAndTag == null) Debug.Log("iiiiiii");
-                if (_snares.InitialPosAndTag.pos == null) Debug.Log("iiiiiiieeee");
-                if (_snares.InitialPosAndTag.tag == null) Debug.Log("iiiiiiiffffffffff");
-                RpcUnlockSnaresPos(_snares.InitialPosAndTag.pos, _snares.InitialPosAndTag.tag);
-                //Rpcg();
-                //NetworkServer.Destroy(_snares.gameObject);
+                _snares.RpcDestroySnares(_snares.InitialPosAndTag);
             }
         }
     }
 
-    [ClientRpc]
-    public void Rpcg() { Debug.Log("ejjj"); }
-    [ClientRpc]
-    void RpcUnlockSnaresPos(Vector2 pos, string tag)
-    {
-        Debug.Log("oooo");
-        if (GameManager.Instance.BuildingPoints[new GameManager.PosAndTag(pos, tag)] == null) Debug.Log("hhhhh");
-        GameManager.Instance.BuildingPoints[new GameManager.PosAndTag(pos, tag)].Buildable = true;
-        Destroy(gameObject);
-    }
+    
     
     IEnumerator Freeze()
     {

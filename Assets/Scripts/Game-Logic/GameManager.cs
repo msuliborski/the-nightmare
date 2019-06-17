@@ -8,7 +8,7 @@ public class GameManager : NetworkBehaviour
 {
 
 
-    public class PosAndTag
+    /*public class PosAndTag
     {
         public string tag;
         public Vector2 pos;
@@ -34,7 +34,7 @@ public class GameManager : NetworkBehaviour
         {
             return 17 * tag.GetHashCode() + 31 * pos.GetHashCode();
         }
-    }
+    }*/
 
     public static GameManager Instance;
     private List<GameObject> _rooms = new List<GameObject>();
@@ -107,7 +107,7 @@ public class GameManager : NetworkBehaviour
             for (int i = 0; i < points.childCount; i++)
             {
                 Transform point = points.GetChild(i);
-                PosAndTag posAndTag = new PosAndTag(new Vector2(point.transform.position.x, point.transform.position.z), point.tag);
+                string posAndTag = point.transform.position.x.ToString() + "_" + point.transform.position.z.ToString() + "_" +  point.tag;
                 _buildingPoints.Add(posAndTag, point.GetComponent<GridPoint>());
             }
             Transform captureAreas = room.transform.GetChild(2);
@@ -129,8 +129,8 @@ public class GameManager : NetworkBehaviour
 
 
     #region Building
-    private Dictionary<PosAndTag, GridPoint> _buildingPoints = new Dictionary<PosAndTag, GridPoint>();
-    public Dictionary<PosAndTag, GridPoint> BuildingPoints { get { return _buildingPoints; } }
+    private Dictionary<string, GridPoint> _buildingPoints = new Dictionary<string, GridPoint>();
+    public Dictionary<string, GridPoint> BuildingPoints { get { return _buildingPoints; } }
     
     public static void TurnOnGridRenders(bool isOn)
     {

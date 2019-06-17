@@ -22,7 +22,11 @@ public class Room : MonoBehaviour
     public bool roomCaptured;
     [SerializeField] private bool _hasChest;
     public bool HasChest { get { return _hasChest; } set { _hasChest = value; } }
-    
+
+
+    public enum RoomPhase { Prepare, Defend, Collect};
+    private RoomPhase _currentRoomPhase = RoomPhase.Prepare;
+    public RoomPhase CurrentRoomPhase { get { return _currentRoomPhase; } set { _currentRoomPhase = value; } }
     
     
 

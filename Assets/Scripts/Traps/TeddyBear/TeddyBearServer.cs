@@ -8,7 +8,7 @@ using UnityEngine.Networking;
 
 public class TeddyBearServer : NetworkBehaviour
 {
-    [SerializeField] private float _lifespan;
+    //[SerializeField] private float _lifespan;
     private const string NO_DESTINATION = "";
     public NavMeshAgent Agent { get; set; }
     private bool _isDying;
@@ -16,7 +16,9 @@ public class TeddyBearServer : NetworkBehaviour
     [SerializeField] private float _damage = 60f;
     public Transform Dest { get; set; }
     private Animator _animator;
-    public GameManager.PosAndTag InitialPosAndTag;
+    public string InitialPosAndTag;
+    private int _killedEnemies = 0;
+    [SerializeField] private int _enemiesToKill = 5;
     
     public enum BearState
     {
@@ -57,7 +59,7 @@ public class TeddyBearServer : NetworkBehaviour
             Agent = transform.GetChild(1).GetComponent<NavMeshAgent>();
             _isDying = true;
             StartCoroutine(SetClosestPlayerStart());
-            StartCoroutine(Decay());
+            //StartCoroutine(Decay());
         }
     }
 
@@ -65,7 +67,13 @@ public class TeddyBearServer : NetworkBehaviour
 
    void Update()
     {
-        
+
+        //switch (_currentState)
+        //{
+        //}
+
+
+
         foreach (var enemy in _enemies.ToList())
         {
             if (enemy._isDying) _enemies.Remove(enemy);
@@ -92,6 +100,7 @@ public class TeddyBearServer : NetworkBehaviour
                 Debug.Log("fighting");
                 if (_damageDest == null || _damageDest._isDying || !_damageDest.gameObject.activeSelf)
                 {
+                    _killedEnemies++;
                     _enemies.Remove(_damageDest);
                     _damageDest = null;
                     _currentState = BearState.Running;
@@ -99,6 +108,10 @@ public class TeddyBearServer : NetworkBehaviour
                     SetClosestPlayer();
                     //_animator.SetBool("fighting", false);
                     SetAnim("fighting", false);
+                    if (_killedEnemies == _enemiesToKill)
+                    {
+                        CmdDeath();
+                    }
                 } 
                 else _damageDest.CmdTakeDamage(Time.deltaTime * _damage);
                 break;
@@ -138,12 +151,11 @@ public class TeddyBearServer : NetworkBehaviour
 
     public void DamageEntryDetected(Collider other)
     {
-        if (_currentState == BearState.Running)
+        if (enabled && _currentState == BearState.Running)
         {
             TurnOnWalking(false);
             _damageDest = other.GetComponentInParent<EnemyControllerServer>();
             _currentState = BearState.Fighting;
-            //_animator.SetBool("fighting", true);
             SetAnim("fighting", true);
         }
     }
@@ -154,11 +166,10 @@ public class TeddyBearServer : NetworkBehaviour
         {
             TurnOnWalking(true);
             _damageDest = null;
-            //_animator.SetBool("fighting", false);
             SetAnim("fighting", false);
-            _currentState = BearState.Running;
+            _currentState = BearState.Waiting;
         }
-        if (_enemies.Count == 0 && _damageDest == null)
+       if (_enemies.Count == 0 && _damageDest == null)
         {
             _currentState = BearState.Waiting;
         }
@@ -202,11 +213,11 @@ public class TeddyBearServer : NetworkBehaviour
         }
     }
 
-    private IEnumerator Decay()
-    {
-        yield return new WaitForSeconds(_lifespan);
-        CmdDeath();
-    }
+    //private IEnumerator Decay()
+    //{
+    //    yield return new WaitForSeconds(_lifespan);
+    //    CmdDeath();
+    //}
 
     [Command]
     public void CmdDeath()
@@ -222,14 +233,14 @@ public class TeddyBearServer : NetworkBehaviour
     {
         yield return new WaitForSeconds(3.9f);
         RpcDie();
-        NetworkServer.Destroy(gameObject);
-    }
+     }
 
     [ClientRpc]
     public void RpcDie()
     {
         Debug.Log("KURWAA");
         GameManager.Instance.BuildingPoints[InitialPosAndTag].Buildable = true;
+        Destroy(gameObject);
     }
     
     public void SetClosestPlayer()
