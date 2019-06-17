@@ -92,8 +92,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6fc28be2c4e6764693a7d7954a9f5ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _lifespan: 15
-  _damage: 110
+  _damage: 60
+  _enemiesToKill: 5
 --- !u!54 &2225599384135634360
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -121,8 +121,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.017408183, y: 0.029207056, z: 0.018121704}
-  m_Center: {x: 0.002528292, y: 0.013905764, z: 0.009627254}
+  m_Size: {x: 0.026064353, y: 0.029207068, z: 0.025027383}
+  m_Center: {x: 0.0020674537, y: 0.01390577, z: 0.013080095}
 --- !u!195 &7371400032901168870
 NavMeshAgent:
   m_ObjectHideFlags: 0

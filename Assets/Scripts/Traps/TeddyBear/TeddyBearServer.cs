@@ -8,36 +8,30 @@ using UnityEngine.Networking;
 
 public class TeddyBearServer : NetworkBehaviour
 {
-    //[SerializeField] private float _lifespan;
     private const string NO_DESTINATION = "";
     public NavMeshAgent Agent { get; set; }
-    private bool _isDying;
     private EnemyControllerServer _damageDest;
+    private EnemyControllerServer _previousDamageDest;
     [SerializeField] private float _damage = 60f;
     public Transform Dest { get; set; }
     private Animator _animator;
-    public string InitialPosAndTag;
-    private int _killedEnemies = 0;
-    [SerializeField] private int _enemiesToKill = 5;
+    public string InitialPosAndTag { get; set; }
+    private int _beatenEnemies = 0;
+    [SerializeField] private int _beatenEnemiesToDeath = 5;
     
     public enum BearState
     {
         Running,
         Fighting,
         Waiting,
-        Dying
     };
 
-    private BearState _currentState = BearState.Dying;
-    public BearState PreviousState { get; set; }
-
+    private BearState _currentState = BearState.Waiting;
     public BearState CurrentState
     {
         get => _currentState;
         set
         {
-            if (_currentState == BearState.Running)
-                PreviousState = _currentState;
             _currentState = value;
         }
     }
@@ -54,12 +48,9 @@ public class TeddyBearServer : NetworkBehaviour
         else
         {
             _animator = GetComponentInChildren<Animator>();
-            //StartCoroutine(SetClosestPlayerStart());
             _bearTransform = transform.GetChild(1);
             Agent = transform.GetChild(1).GetComponent<NavMeshAgent>();
-            _isDying = true;
-            StartCoroutine(SetClosestPlayerStart());
-            //StartCoroutine(Decay());
+            StartCoroutine(WaitForEndOfEntryAnim());
         }
     }
 
@@ -67,72 +58,41 @@ public class TeddyBearServer : NetworkBehaviour
 
    void Update()
     {
-
-        //switch (_currentState)
-        //{
-        //}
-
-
-
         foreach (var enemy in _enemies.ToList())
         {
-            if (enemy._isDying) _enemies.Remove(enemy);
+            if (enemy == null || enemy._isDying) _enemies.Remove(enemy);
         }
-        if (_isDying)
-        {
-            _currentState = BearState.Dying;
-        }
-        else if (_enemies.Count == 0)
-        {
-            _currentState = BearState.Waiting;
-            //_animator.SetBool("waiting", true);
-            SetAnim("waiting", true);
-        }
-        else if(_damageDest == null)
-        {
-            _currentState = BearState.Running;
-            //_animator.SetBool("waiting", false);
-            SetAnim("waiting", false);
-        }
+
         switch (_currentState)
         {
             case BearState.Fighting:
-                Debug.Log("fighting");
+                
                 if (_damageDest == null || _damageDest._isDying || !_damageDest.gameObject.activeSelf)
                 {
-                    _killedEnemies++;
                     _enemies.Remove(_damageDest);
                     _damageDest = null;
                     _currentState = BearState.Running;
                     TurnOnWalking(true);
-                    SetClosestPlayer();
-                    //_animator.SetBool("fighting", false);
+                    SetClosestEnemy();
                     SetAnim("fighting", false);
-                    if (_killedEnemies == _enemiesToKill)
+                    if (_beatenEnemies == _beatenEnemiesToDeath)
                     {
                         CmdDeath();
                     }
-                } 
+                }
                 else _damageDest.CmdTakeDamage(Time.deltaTime * _damage);
                 break;
 
             case BearState.Waiting:
-                SetClosestPlayer();
+
                 break;
-                
+
             case BearState.Running:
-                // chujowy fix:
-                if (!Agent.enabled) TurnOnWalking(true);
-                Debug.Log("running");
                 if (Dest != null && Dest.gameObject.activeSelf) Agent.SetDestination(Dest.position);
-                else SetClosestPlayer();
-                break;
-            
-            case BearState.Dying:
+                else SetClosestEnemy();
                 break;
         }
-        
-    }
+   }
 
     public void EntryDetected(Collider other)
     {
@@ -143,10 +103,7 @@ public class TeddyBearServer : NetworkBehaviour
     public void ExitDetected(Collider other)
     {
         _enemies.Remove(other.GetComponentInParent<EnemyControllerServer>());
-        if (_enemies.Count == 0)
-        {
-            _currentState = BearState.Waiting;
-        }
+        
     }
 
     public void DamageEntryDetected(Collider other)
@@ -155,6 +112,7 @@ public class TeddyBearServer : NetworkBehaviour
         {
             TurnOnWalking(false);
             _damageDest = other.GetComponentInParent<EnemyControllerServer>();
+            if (_previousDamageDest != _damageDest) _beatenEnemies++;
             _currentState = BearState.Fighting;
             SetAnim("fighting", true);
         }
@@ -165,66 +123,28 @@ public class TeddyBearServer : NetworkBehaviour
         if (enabled && _currentState == BearState.Fighting)
         {
             TurnOnWalking(true);
+            _previousDamageDest = _damageDest;
             _damageDest = null;
             SetAnim("fighting", false);
-            _currentState = BearState.Waiting;
-        }
-       if (_enemies.Count == 0 && _damageDest == null)
-        {
-            _currentState = BearState.Waiting;
+            _currentState = BearState.Running;
         }
     }
     
-    private IEnumerator SetClosestPlayerStart()
+    private IEnumerator WaitForEndOfEntryAnim()
     {
         TurnOnWalking(false);
+        SetAnim("waiting", true);
         yield return new WaitForSeconds(2.97f);
-
-        _isDying = false;
         TurnOnWalking(true);
-
-        Transform tMin = null;
-        float minDist = Mathf.Infinity;
-        Vector3 currentPos = _bearTransform.position;
-        foreach (EnemyControllerServer t in _enemies)
-        {
-            float dist = Vector3.Distance(t.transform.position, currentPos);
-            if (dist < minDist)
-            {
-                tMin = t.transform;
-                minDist = dist;
-            }
-        }
-
-        Dest = tMin;
-
-        if (Dest)
-        {
-            RpcSendDest(Dest.name);
-            _currentState = BearState.Running;
-            
-        }
-        else
-        {
-            RpcSendDest(NO_DESTINATION);
-            _currentState = BearState.Waiting;
-
-            
-        }
+        _currentState = BearState.Running;
     }
 
-    //private IEnumerator Decay()
-    //{
-    //    yield return new WaitForSeconds(_lifespan);
-    //    CmdDeath();
-    //}
-
+    
     [Command]
     public void CmdDeath()
     {
-        _isDying = true;
+        _currentState = BearState.Waiting;
         TurnOnWalking(false);
-        //_animator.SetBool("death", true);
         SetAnim("death", true);
         StartCoroutine(Die());
     }
@@ -238,12 +158,11 @@ public class TeddyBearServer : NetworkBehaviour
     [ClientRpc]
     public void RpcDie()
     {
-        Debug.Log("KURWAA");
         GameManager.Instance.BuildingPoints[InitialPosAndTag].Buildable = true;
         Destroy(gameObject);
     }
     
-    public void SetClosestPlayer()
+    public void SetClosestEnemy()
     {
         Transform tMin = null;
         float minDist = Mathf.Infinity;
@@ -263,14 +182,12 @@ public class TeddyBearServer : NetworkBehaviour
         if (Dest)
         {
             RpcSendDest(Dest.name);
-            _currentState = BearState.Running;
-            
+            SetAnim("waiting", false);
         }
         else
         {
             RpcSendDest(NO_DESTINATION);
-            _currentState = BearState.Waiting;
-            
+            SetAnim("waiting", true);
         }
     }
 
