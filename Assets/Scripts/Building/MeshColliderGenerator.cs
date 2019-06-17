@@ -14,7 +14,7 @@ public class MeshColliderGenerator : MonoBehaviour
     void AddMeshColliderRecursively(Transform obj)
     {
         if (obj == null) return;
-        if (obj.GetComponent<MeshRenderer>() != null) obj.gameObject.AddComponent<MeshCollider>();
+        if (obj.GetComponent<MeshRenderer>() != null) obj.gameObject.AddComponent<BoxCollider>();
         foreach (Transform child in obj.transform)
         {
             if (child == null) continue;
