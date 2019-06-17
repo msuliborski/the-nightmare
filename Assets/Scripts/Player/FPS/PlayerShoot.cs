@@ -11,10 +11,10 @@ public class PlayerShoot : NetworkBehaviour {
 
     public PlayerEquipment Equipment { get; set; }
     private PlayerController _playerController;
-    private List<Material> _originalMaterials;
-    [SerializeField] Material _blackeningMaterial;
-    private bool _blackened = false;
-    public bool Blackened {
+    //private List<Material> _originalMaterials;
+    //[SerializeField] Material _blackeningMaterial;
+    //private bool _blackened = false;
+    /*public bool Blackened {
         get { return _blackened;  }
         set
         {
@@ -39,7 +39,7 @@ public class PlayerShoot : NetworkBehaviour {
                 }
             }
         }
-    }
+    }*/
 
 
     public GameObject Cross;
@@ -107,7 +107,7 @@ public class PlayerShoot : NetworkBehaviour {
         if (changeWeaponCooldown > 0) changeWeaponCooldown -= Time.deltaTime;
         if (changeWeaponCooldown <= 0 && Math.Abs(Input.GetAxis("Mouse ScrollWheel")) > 0.01 && Equipment.getActiveWeapon().State == Weapon.WeaponState.idle) {
             if (Equipment.Weapon2 != null) {
-                if (Blackened) Blackened = false;
+                //if (Blackened) Blackened = false;
                 if (Equipment.Weapon1.gameObject.activeSelf) {
                     Equipment.Weapon1.transform.localPosition = new Vector3(0.02f, 0.03f, -0.22f);
                     Equipment.Weapon1.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
@@ -186,10 +186,10 @@ public class PlayerShoot : NetworkBehaviour {
 
     IEnumerator Reload() {
         if (isLocalPlayer) Equipment.getActiveWeapon().GetComponent<Animator>().SetBool(IsReloading, true);
-        Blackened = true;
+        //Blackened = true;
         Equipment.getActiveWeapon().reload();
         yield return new WaitForSeconds(Equipment.getActiveWeapon().ReloadTime);
-        Blackened = false;
+        //Blackened = false;
         if (isLocalPlayer) Equipment.getActiveWeapon().GetComponent<Animator>().SetBool(IsReloading, false);
     }
 
