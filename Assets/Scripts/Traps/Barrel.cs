@@ -9,12 +9,15 @@ public class Barrel : NetworkBehaviour
     [SerializeField]
     private GameObject _explosionPrefab;
     private MeshRenderer _renderer;
-    private CapsuleCollider _collider;
+    private BoxCollider _collider;
+    public float damage;
 
     private void Start()
     {
-        _collider = GetComponent<CapsuleCollider>();
-        _renderer = GetComponent<MeshRenderer>();    }
+        _collider = GetComponent<BoxCollider>();
+        _renderer = GetComponent<MeshRenderer>();
+        if (isServer) transform.GetChild(0).GetComponent<BarrelCollider>().server = true;
+    }
 
     public void Explode()
     {

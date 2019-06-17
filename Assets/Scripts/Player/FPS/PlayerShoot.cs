@@ -256,7 +256,7 @@ public class PlayerShoot : NetworkBehaviour {
                 }
                 else if (hit.collider.tag == "Barrel")
                 {
-                    Barrel barrel = new Barrel();
+                    Barrel barrel = hit.collider.GetComponent<Barrel>();
                     barrel.Explode();
                 }
 

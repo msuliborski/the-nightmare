@@ -360,6 +360,10 @@ MonoBehaviour:
   _damageDest: {fileID: 0}
   _isDying: 0
   _damage: 2
+  _colliders:
+  - {fileID: 1409245436587229093}
+  - {fileID: 6225379518338989298}
+  - {fileID: 289727786364837483}
 --- !u!114 &1860152029020784033
 MonoBehaviour:
   m_ObjectHideFlags: 0
