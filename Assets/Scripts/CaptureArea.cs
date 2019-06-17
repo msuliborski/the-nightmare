@@ -91,7 +91,7 @@ public class CaptureArea : NetworkBehaviour
             if (_capturing)
             {
                 _progress -= _step;
-                if (_progress < 0)
+                if (_progress <= 0)
                 {
                     _progress = 0;
                     IsCaptured = true;

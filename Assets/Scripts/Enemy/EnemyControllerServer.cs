@@ -22,6 +22,7 @@ public class EnemyControllerServer : NetworkBehaviour
     public PlayerManager _damageDest;
     public bool _isDying;
     [SerializeField] private float _damage = 2f;
+    [SerializeField] private List<Collider> _colliders;
     public Transform Dest { get; set; }
     private Animator _animator;
     private CaptureArea _area;
@@ -239,9 +240,10 @@ public class EnemyControllerServer : NetworkBehaviour
     void RpcRemoveEnemy()
     {
         Transform body = transform.GetChild(0).GetChild(0);
-        body.GetChild(4).gameObject.SetActive(false);
-        body.GetChild(5).gameObject.SetActive(false);
-        body.GetChild(6).gameObject.SetActive(false);
+        foreach (Collider collider in _colliders)
+        {
+            collider.gameObject.SetActive(false);
+        }
         GameManager.Enemies.Remove(transform.name);
     }
 

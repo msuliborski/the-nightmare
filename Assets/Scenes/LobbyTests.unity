@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311992, g: 0.38074034, b: 0.35872713, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -613,7 +613,7 @@ PrefabInstance:
     - target: {fileID: 3041406342502215934, guid: 073947f950d4f2fd599365c522c0559e,
         type: 3}
       propertyPath: m_SpawnPrefabs.Array.size
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 3041406342502215934, guid: 073947f950d4f2fd599365c522c0559e,
         type: 3}
@@ -637,6 +637,12 @@ PrefabInstance:
       propertyPath: m_SpawnPrefabs.Array.data[3]
       value: 
       objectReference: {fileID: 3012633921025596544, guid: 4e88b0833fc1f794780665ba09ba3620,
+        type: 3}
+    - target: {fileID: 3041406342502215934, guid: 073947f950d4f2fd599365c522c0559e,
+        type: 3}
+      propertyPath: m_SpawnPrefabs.Array.data[4]
+      value: 
+      objectReference: {fileID: 6627066607432650789, guid: ae431d7febde62d47bfa4527a9c5ed97,
         type: 3}
     - target: {fileID: 749330305, guid: 073947f950d4f2fd599365c522c0559e, type: 3}
       propertyPath: m_LocalPosition.z
@@ -779,7 +785,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000011092266}
+  m_AnchoredPosition: {x: 0, y: -0.000011855791}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1257733208
@@ -2413,7 +2419,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 2139287752}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.9999998
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

@@ -254,6 +254,11 @@ public class PlayerShoot : NetworkBehaviour {
                     CmdEnemyShoot(hit.collider.GetComponentInParent<NavMeshAgent>().transform.name,
                         Equipment.getActiveWeapon().Damage);
                 }
+                else if (hit.collider.tag == "Barrel")
+                {
+                    Barrel barrel = hit.collider.GetComponent<Barrel>();
+                    barrel.Explode();
+                }
 
 
                 Equipment.DoHitEffect(hit.point, hit.normal);
