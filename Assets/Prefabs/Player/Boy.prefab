@@ -572,7 +572,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &917736756212613217
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -730,8 +730,8 @@ MonoBehaviour:
   _moveSpeedMinZoom: 30
   _moveSpeedMaxZoom: 30
   _rotationSpeedKeyboard: 150
-  maxSnares: 50
-  snares: 0
+  maxPlaceable: 050000000300000005000000
+  placeableCount: 000000000000000000000000
 --- !u!114 &7278791426480694111
 MonoBehaviour:
   m_ObjectHideFlags: 0

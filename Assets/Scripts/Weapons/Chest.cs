@@ -9,6 +9,8 @@ public class Chest : MonoBehaviour
     public bool alreadyPicked;
     public int grenades;
     public int snares;
+    public int teddyBears;
+    public int barrels;
     private Room _room;
 
     private void Start()

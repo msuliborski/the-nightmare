@@ -82,7 +82,20 @@ public class PlayerEquipment : NetworkBehaviour {
                         pickUp.SetActive(true);
                     if (Input.GetKeyDown(KeyCode.E)) {
                         _shoot._grenades += _chest.grenades;
-                        _controller.snares += _chest.snares;
+                        if (_controller.placeableCount[0] + _chest.snares >= _controller.maxPlaceable[0])
+                            _controller.placeableCount[0] = _controller.maxPlaceable[0];
+                        else
+                            _controller.placeableCount[0] += _chest.snares;
+                        
+                        if (_controller.placeableCount[1] + _chest.teddyBears >= _controller.maxPlaceable[1])
+                            _controller.placeableCount[1] = _controller.maxPlaceable[1];
+                        else
+                            _controller.placeableCount[1] += _chest.teddyBears;
+                        
+                        if (_controller.placeableCount[2] + _chest.barrels >= _controller.maxPlaceable[2])
+                            _controller.placeableCount[2] = _controller.maxPlaceable[2];
+                        else
+                            _controller.placeableCount[2] += _chest.barrels;
                         _chest.alreadyPicked = true;
                     }
                 }
