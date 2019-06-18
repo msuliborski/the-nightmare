@@ -26,9 +26,9 @@ public class PlacementController : NetworkBehaviour
     private static float _zoom = 1f;
     private int _placeableIndex = 0;
     private bool _isPlacing = false;
-    public int maxSnares = 5;
-    public int snares;
-    private TextMeshProUGUI _snaresTM;
+    public int[] maxPlaceable = {5, 3, 5};
+    public int[] placeableCount = new int[3];
+    private TextMeshProUGUI[] _placeableTM = new TextMeshProUGUI[3];
     public const int INDEX_OF_SNARES = 0;
     public const int INDEX_OF_BEAR = 1;
     public const int INDEX_OF_BARREL = 2;
@@ -43,9 +43,17 @@ public class PlacementController : NetworkBehaviour
 
     private void Start()
     {
-        if(isLocalPlayer)
-            _snaresTM = GameObject.Find("SnaresCount").GetComponent<TextMeshProUGUI>();
-        snares = maxSnares;
+        if (isLocalPlayer)
+        {
+            _placeableTM[0] = GameObject.Find("SnaresCount").GetComponent<TextMeshProUGUI>();
+            _placeableTM[1] = GameObject.Find("TeddyBearCount").GetComponent<TextMeshProUGUI>();
+            _placeableTM[2] = GameObject.Find("BarrelsCount").GetComponent<TextMeshProUGUI>();
+        }
+
+        for (int i = 0; i < 3; i++)
+        {
+            placeableCount[i] = maxPlaceable[i];
+        }
         _playerShoot = GetComponent<PlayerShoot>();
         _reverseGrid = 1f / GridTileSize;
         _buildingCameraHolder = gameObject.transform.Find("BuildingCameraHolder");
@@ -58,10 +66,12 @@ public class PlacementController : NetworkBehaviour
 
     private void Update()
     {
-        if (snares > maxSnares)
-            snares = maxSnares;
         if(isLocalPlayer)
-            _snaresTM.text = "x" + snares;
+            for (int i = 0; i < 3; i++)
+            {
+                _placeableTM[i].text = "x" + placeableCount[i];
+            }
+            
         HandleKeys();
         if (_currentObject != null)
         {
@@ -103,9 +113,8 @@ public class PlacementController : NetworkBehaviour
     {
         if (Input.GetMouseButton(0))
         {
-            
             string posAndTag = _currentObject.transform.position.x.ToString() + "_" + _currentObject.transform.position.z.ToString() + "_" + _currentTag;
-            if(_placeableIndex == 0 && snares > 0)
+            if(placeableCount[_placeableIndex] > 0)
             {
                 if (GameManager.Instance.BuildingPoints.ContainsKey(posAndTag)
                     && GameManager.Instance.BuildingPoints[posAndTag].Buildable
@@ -119,26 +128,8 @@ public class PlacementController : NetworkBehaviour
                     CmdPlaceEntity(_currentObject.transform.position, _currentObject.transform.rotation, _currentTag, _placeableIndex);
                     GameManager.Instance.BuildingPoints[posAndTag].Buildable = false;
                     _playerShoot.WasBuilt = true;
-                    snares--;
+                    placeableCount[_placeableIndex]--;
                 }
-                    
-            }
-            else if(_placeableIndex != 0)
-            {
-                if (GameManager.Instance.BuildingPoints.ContainsKey(posAndTag)
-                    && GameManager.Instance.BuildingPoints[posAndTag].Buildable
-                )
-                {
-                    Debug.Log("clicked");
-                    if (GameManager.CurrentState == GameManager.GameState.Fighting)
-                        GameManager.TurnOnGridRenders(false);
-
-                    Destroy(_currentObject);
-                    CmdPlaceEntity(_currentObject.transform.position, _currentObject.transform.rotation, _currentTag, _placeableIndex);
-                    GameManager.Instance.BuildingPoints[posAndTag].Buildable = false;
-                    _playerShoot.WasBuilt = true;
-                }
-                    
             }
         }
     }

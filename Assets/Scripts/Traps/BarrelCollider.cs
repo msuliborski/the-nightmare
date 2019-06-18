@@ -13,7 +13,6 @@ public class BarrelCollider : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Trigger");
         if (server)
         {
             Debug.Log("Is server");
