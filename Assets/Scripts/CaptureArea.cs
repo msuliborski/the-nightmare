@@ -46,7 +46,7 @@ public class CaptureArea : NetworkBehaviour
         if (other.CompareTag("EnemyLegs"))
         {
             EnemyControllerServer enemy = other.GetComponentInParent<EnemyControllerServer>();
-            if (enemy.isActiveAndEnabled)
+            if (enemy.isActiveAndEnabled && !enemy.IsTriggerLocked)
             {
                 enemy.CurrentState = EnemyControllerServer.EnemyState.Blocked;
                 enemy.TurnOnWalking(false);
@@ -72,7 +72,7 @@ public class CaptureArea : NetworkBehaviour
                 enemy.TurnOnWalking(true);
                 enemy.CurrentState = EnemyControllerServer.EnemyState.Running;
                 enemy.SetAnim("running", true);
-                enemy.IsTriggerLocked = false;
+                //enemy.IsTriggerLocked = false;
             }
         }
     }
