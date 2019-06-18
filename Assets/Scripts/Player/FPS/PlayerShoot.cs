@@ -10,6 +10,7 @@ public class PlayerShoot : NetworkBehaviour {
     public Camera Cam { get; set; }
 
     public PlayerEquipment Equipment { get; set; }
+
     private PlayerController _playerController;
     //private List<Material> _originalMaterials;
     //[SerializeField] Material _blackeningMaterial;
@@ -63,6 +64,7 @@ public class PlayerShoot : NetworkBehaviour {
     private static readonly int IsAiming = Animator.StringToHash("isAiming");
     private static readonly int IsReloading = Animator.StringToHash("isReloading");
     private static readonly int IsSprinting = Animator.StringToHash("isSprinting");
+    private static readonly int IsHidden = Animator.StringToHash("isHidden");
     private float currentRecoil;
     private float changeWeaponCooldown = 0;
     private Weapon activeWeapon = null;
@@ -91,10 +93,9 @@ public class PlayerShoot : NetworkBehaviour {
 
 
     void Update() {
-        
         currentRecoil = Equipment.getActiveWeapon().Recoil;
 //        weaponAnimator = activeWeapon.GetComponent<Animator>();
-        
+
         if (_grenades > _maxGrenades)
             _grenades = _maxGrenades;
         if (isLocalPlayer)
@@ -102,33 +103,29 @@ public class PlayerShoot : NetworkBehaviour {
         if (crossAccuracy > 1.02) crossAccuracy -= (crossAccuracy * 0.05f + 0.02f);
         else crossAccuracy = 1f;
         Cross.transform.GetChild(0).transform.localScale = new Vector3(crossAccuracy, crossAccuracy, crossAccuracy);
-        
+
         //changing weapon
         if (changeWeaponCooldown > 0) changeWeaponCooldown -= Time.deltaTime;
-        if (changeWeaponCooldown <= 0 && Math.Abs(Input.GetAxis("Mouse ScrollWheel")) > 0.01 && Equipment.getActiveWeapon().State == Weapon.WeaponState.idle && !IsBuildingOnFly) {
+        if (changeWeaponCooldown <= 0 && Math.Abs(Input.GetAxis("Mouse ScrollWheel")) > 0.01 &&
+            Equipment.getActiveWeapon().State == Weapon.WeaponState.idle && !IsBuildingOnFly) {
+            changeWeaponCooldown = 3;
             if (Equipment.Weapon2 != null) {
-                //if (Blackened) Blackened = false;
                 if (Equipment.Weapon1.gameObject.activeSelf) {
-                    Equipment.Weapon1.transform.localPosition = new Vector3(0.02f, 0.03f, -0.22f);
-                    Equipment.Weapon1.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
-                    Equipment.Weapon1.gameObject.SetActive(false);
-                    Equipment.Weapon2.gameObject.SetActive(true);
+                    StartCoroutine(HideWeapon(Equipment.Weapon1.gameObject, Equipment.Weapon2.gameObject));
                 }
                 else {
-                    Equipment.Weapon1.gameObject.SetActive(true);
-                    Equipment.Weapon2.transform.localPosition = new Vector3(0.08f, -0.02f, -0.17f);
-                    Equipment.Weapon2.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
-                    Equipment.Weapon2.gameObject.SetActive(false);
+                    StartCoroutine(HideWeapon(Equipment.Weapon2.gameObject, Equipment.Weapon1.gameObject));
                 }
             }
         }
-           
-        
+
+
         //fire mode
         if (Input.GetKeyDown(KeyCode.B)) Equipment.getActiveWeapon().changeFireMode();
 
         //reloading
-        if (Input.GetKeyDown(KeyCode.R) && Equipment.getActiveWeapon().CurrentMagAmmo != Equipment.getActiveWeapon().MaxMagAmmo) {
+        if (Input.GetKeyDown(KeyCode.R) &&
+            Equipment.getActiveWeapon().CurrentMagAmmo != Equipment.getActiveWeapon().MaxMagAmmo) {
             StartCoroutine(Reload());
         }
 
@@ -182,8 +179,36 @@ public class PlayerShoot : NetworkBehaviour {
             _playerController.SensitivityScale = _playerController.NonZoomSensitivity;
         }
     }
+    
+    IEnumerator HideWeapon(GameObject toHide, GameObject toShow) {
+        toHide.gameObject.SetActive(true);
+        toShow.gameObject.SetActive(true);
+        
+        toHide.transform.GetChild(0).gameObject.SetActive(true);
+        toShow.transform.GetChild(0).gameObject.SetActive(false);
 
+        toHide.transform.GetComponent<Animator>().SetBool(IsHidden, true);
+        toShow.transform.GetComponent<Animator>().SetBool(IsHidden, true);
+        yield return new WaitForSeconds(0.5f);    
+        toHide.transform.GetChild(0).gameObject.SetActive(false);
+        toShow.transform.GetChild(0).gameObject.SetActive(true);
+        yield return new WaitForSeconds(0.5f); 
 
+        if (toShow.transform.GetComponent<Weapon>().Name == "Pistol") {
+            toShow.transform.localPosition = new Vector3(0.02f, 0.03f, -0.22f);
+            toShow.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
+        }
+        else {
+            toShow.transform.localPosition = new Vector3(0.08f, -0.02f, -0.17f);
+            toShow.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
+        }
+        
+        toShow.transform.GetComponent<Animator>().SetBool(IsHidden, false);
+        toHide.transform.GetComponent<Animator>().SetBool(IsHidden, false);
+        toHide.gameObject.SetActive(false);
+        toShow.gameObject.SetActive(true);
+    }
+    
     IEnumerator Reload() {
         if (isLocalPlayer) Equipment.getActiveWeapon().GetComponent<Animator>().SetBool(IsReloading, true);
         //Blackened = true;
@@ -231,7 +256,8 @@ public class PlayerShoot : NetworkBehaviour {
             gameObject.GetComponent<PlayerMotor>().IncreaseRecoil(currentRecoil);
             CmdPlayerShooting();
             RaycastHit hit;
-            if (Physics.Raycast(Cam.transform.position, Cam.transform.forward, out hit, Equipment.getActiveWeapon().Range,
+            if (Physics.Raycast(Cam.transform.position, Cam.transform.forward, out hit,
+                Equipment.getActiveWeapon().Range,
                 _mask)) {
                 Debug.Log("We hit " + hit.collider.name);
                 if (hit.collider.tag == "Player") { //wylaczamy friendly fire??? NIE XD
@@ -254,8 +280,7 @@ public class PlayerShoot : NetworkBehaviour {
                     CmdEnemyShoot(hit.collider.GetComponentInParent<NavMeshAgent>().transform.name,
                         Equipment.getActiveWeapon().Damage);
                 }
-                else if (hit.collider.tag == "Barrel")
-                {
+                else if (hit.collider.tag == "Barrel") {
                     Barrel barrel = hit.collider.GetComponent<Barrel>();
                     barrel.Explode();
                 }
@@ -265,7 +290,8 @@ public class PlayerShoot : NetworkBehaviour {
                 CmdOnHit(hit.point, hit.normal);
             }
 
-            if (Equipment.getActiveWeapon().CurrentMagAmmo == 0 && Equipment.getActiveWeapon().CurrentAmmo >= 1) StartCoroutine(Reload());
+            if (Equipment.getActiveWeapon().CurrentMagAmmo == 0 && Equipment.getActiveWeapon().CurrentAmmo >= 1)
+                StartCoroutine(Reload());
         }
     }
 
