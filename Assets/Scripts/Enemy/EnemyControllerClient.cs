@@ -6,7 +6,6 @@ public class EnemyControllerClient : NetworkBehaviour
 {
 
     public NavMeshAgent Agent { get; set; }
-
     public Transform Dest { get; set; }
 
     private AudioSource _source;

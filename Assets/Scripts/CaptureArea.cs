@@ -48,6 +48,11 @@ public class CaptureArea : NetworkBehaviour
             EnemyControllerServer enemy = other.GetComponentInParent<EnemyControllerServer>();
             if (enemy.isActiveAndEnabled)
             {
+                enemy.CurrentState = EnemyControllerServer.EnemyState.Blocked;
+                enemy.TurnOnWalking(false);
+                //enemy.SetAnim("fighting", true);
+                enemy.SetAnim("running", false);
+                enemy.IsTriggerLocked = true;
                 _enemyNum++;
                 _capturing = true;
             }
@@ -64,6 +69,10 @@ public class CaptureArea : NetworkBehaviour
                 _enemyNum--;
                 if (_enemyNum <= 0)
                     _capturing = false;
+                enemy.TurnOnWalking(true);
+                enemy.CurrentState = EnemyControllerServer.EnemyState.Running;
+                enemy.SetAnim("running", true);
+                enemy.IsTriggerLocked = false;
             }
         }
     }
