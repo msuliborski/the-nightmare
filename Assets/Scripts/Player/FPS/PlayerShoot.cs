@@ -16,6 +16,8 @@ public class PlayerShoot : NetworkBehaviour {
     public AudioClip shot;
     public AudioClip hitMarker;
     public AudioClip reload;
+    public AudioClip pistol;
+    public AudioClip rifle;
     //private List<Material> _originalMaterials;
     //[SerializeField] Material _blackeningMaterial;
     //private bool _blackened = false;
@@ -118,10 +120,10 @@ public class PlayerShoot : NetworkBehaviour {
             changeWeaponCooldown = 2;
             if (Equipment.Weapon2 != null) {
                 if (Equipment.Weapon1.gameObject.activeSelf) {
-                    StartCoroutine(HideWeapon(Equipment.Weapon1.gameObject, Equipment.Weapon2.gameObject));
+                    StartCoroutine(HideWeapon(Equipment.Weapon1.gameObject, Equipment.Weapon2.gameObject));    //show rifle
                 }
                 else {
-                    StartCoroutine(HideWeapon(Equipment.Weapon2.gameObject, Equipment.Weapon1.gameObject));
+                    StartCoroutine(HideWeapon(Equipment.Weapon2.gameObject, Equipment.Weapon1.gameObject));    //show pistol
                 }
             }
         }
@@ -202,6 +204,11 @@ public class PlayerShoot : NetworkBehaviour {
         yield return new WaitForSeconds(0.5f);    
         toHide.transform.GetChild(0).gameObject.SetActive(false);
         toShow.transform.GetChild(0).gameObject.SetActive(true);
+        Debug.Log(toShow.transform.GetComponent<Weapon>().Id);
+        if(toShow.transform.GetComponent<Weapon>().Id == 1)
+            playSound(rifle);
+        else
+            playSound(pistol);
         yield return new WaitForSeconds(0.5f); 
         if (toShow.transform.GetComponent<Weapon>().Id == 0) {
             toShow.transform.localPosition = new Vector3(0.02f, 0.03f, -0.22f);

@@ -16,6 +16,7 @@ public class PlayerSetup : NetworkBehaviour {
     private HealthBar _healthBar;
     private ClipsManager _clipsManager;
     private CapturePointsUI cpUI;
+    private Arrow arrow;
     
     
 
@@ -40,6 +41,8 @@ public class PlayerSetup : NetworkBehaviour {
             GameManager.IsListeningForReady = true;
             cpUI = GameObject.Find("CapturePoints").GetComponent<CapturePointsUI>();
             cpUI.setRoom();
+            arrow = GameManager.LocalPlayer.GetComponentInChildren<Arrow>();
+            arrow.setTarget();
             _bulletshud.Equipment = GetComponent<PlayerEquipment>();
             _clipsManager.player = GetComponent<PlayerEquipment>();
             _healthBar.player = GetComponent<PlayerManager>();
