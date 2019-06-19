@@ -93,7 +93,7 @@ public class PlayerSetup : NetworkBehaviour {
 
     public override void OnStartClient() {
         base.OnStartClient();
-        GameManager.RegisterPlayer(GetComponent<NetworkIdentity>().netId.ToString(), GetComponent<PlayerManager>());
+        GameManager.RegisterPlayer(transform.name, GetComponent<PlayerManager>());
     }
 
     private void AssignRemoteLayer() {
