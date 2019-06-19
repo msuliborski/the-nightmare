@@ -1,4 +1,5 @@
 ﻿using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -39,13 +40,24 @@ public class PlayerEquipment : NetworkBehaviour {
         RaycastHit weaponFinder;
         if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out weaponFinder, 0.75f,
             _mask)) {
-            if (weaponFinder.collider.CompareTag("Weapon")) {
-                if (isLocalPlayer)
+            if (weaponFinder.collider.CompareTag("removableChairs")) {
+                if (isLocalPlayer) {
                     pickUp.SetActive(true);
+                    pickUp.transform.GetComponent<TextMeshProUGUI>().text = "Press E to Remove Chairs";
+                }
+
+                if (Input.GetKeyDown(KeyCode.E)) {
+                    Destroy(weaponFinder.collider.gameObject);
+                }
+            }
+            else if (weaponFinder.collider.CompareTag("Weapon")) {
+                if (isLocalPlayer){
+                    pickUp.SetActive(true);
+                    pickUp.transform.GetComponent<TextMeshProUGUI>().text = "Press E to pick up Rifle";
+                }
                 if (Input.GetKeyDown(KeyCode.E)) {
                     if (_cam.transform.GetChild(0).transform.childCount <= 1) {
                         int weaponId = 1;
-//                        weaponId = weaponFinder.collider.gameObject.GetComponent<GunSpawnPoint>().WeaponId;
                         if (weaponId != 0) {
                             GameObject weaponObject = Instantiate(GameManager.Instance.Weapons[weaponId],
                                 _cam.transform.GetChild(0).transform);
@@ -70,8 +82,10 @@ public class PlayerEquipment : NetworkBehaviour {
                 _chestAlwaysFull = weaponFinder.collider.GetComponentInParent<ChestAlwaysFull>();
                 if (_chestAlwaysFull == null) {
                     if (_chest.active && !_chest.alreadyPicked) {
-                        if (isLocalPlayer)
+                        if (isLocalPlayer){
                             pickUp.SetActive(true);
+                            pickUp.transform.GetComponent<TextMeshProUGUI>().text = "Press E to pick up collectibles";
+                        }
                         if (Input.GetKeyDown(KeyCode.E)) {
                             _shoot._grenades += _chest.grenades;
                             if (_controller.placeableCount[0] + _chest.snares >= _controller.maxPlaceable[0])
@@ -99,8 +113,10 @@ public class PlayerEquipment : NetworkBehaviour {
                 }
                 else {
                     if (_chestAlwaysFull.active && !_chestAlwaysFull.alreadyPicked) {
-                        if (isLocalPlayer)
+                        if (isLocalPlayer){
                             pickUp.SetActive(true);
+                            pickUp.transform.GetComponent<TextMeshProUGUI>().text = "Press E to pick up collectibles";
+                        }
                         if (Input.GetKeyDown(KeyCode.E)) {
                             _shoot._grenades += _chestAlwaysFull.grenades;
                             if (_controller.placeableCount[0] + _chestAlwaysFull.snares >= _controller.maxPlaceable[0])
@@ -125,7 +141,6 @@ public class PlayerEquipment : NetworkBehaviour {
                             pickUp.SetActive(false);
                     }
                 }
-
             }
             else {
                 if (isLocalPlayer)

@@ -197,9 +197,8 @@ public class PlayerShoot : NetworkBehaviour {
         yield return new WaitForSeconds(0.5f);    
         toHide.transform.GetChild(0).gameObject.SetActive(false);
         toShow.transform.GetChild(0).gameObject.SetActive(true);
-        yield return new WaitForSeconds(0.7f); 
-
-        if (toShow.transform.GetComponent<Weapon>().Name == "Pistol") {
+        yield return new WaitForSeconds(0.5f); 
+        if (toShow.transform.GetComponent<Weapon>().Id == 0) {
             toShow.transform.localPosition = new Vector3(0.02f, 0.03f, -0.22f);
             toShow.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
         }
