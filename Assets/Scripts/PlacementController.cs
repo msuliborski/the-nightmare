@@ -102,7 +102,7 @@ public class PlacementController : NetworkBehaviour
             //_currentObject.transform.Rotate(Vector3.up, -90);
         }
     }
-
+   
     void UpdatePlaceable()
     {
         Destroy(_currentObject);
@@ -209,6 +209,12 @@ public class PlacementController : NetworkBehaviour
                     }
 
                 }
+                if (Input.GetKeyDown(KeyCode.R) && GameManager.IsListeningForReady)
+                {
+                    GameManager.IsListeningForReady = false;
+                    CmdRegisterBeingReady();
+
+                }
                 break;
 
             case GameManager.GameState.Building:
@@ -266,11 +272,13 @@ public class PlacementController : NetworkBehaviour
     void RpcRegisterLocalPlayerBeingReady() 
     {
         Debug.Log("aaaa: " + GameManager.LocalPlayer.transform.name);
-        PlacementController localPlayer = GameManager.LocalPlayer.GetComponent<PlacementController>(); // dlatego musimy wyluskac local playera
+        /*PlacementController localPlayer = GameManager.LocalPlayer.GetComponent<PlacementController>(); // dlatego musimy wyluskac local playera
         localPlayer._currentCamera = localPlayer._actionCamera;
         ClockManager.canCount = true;
         if (localPlayer._currentObject != null) Destroy(localPlayer._currentObject);
-        GameManager.CurrentState = GameManager.GameState.Fighting;
+        GameManager.CurrentState = GameManager.GameState.Fighting;*/
+        ClockManager.time = 60f;
+        ClockManager.canCount = true;
     }
 
     void AdjustPositionMouse(float xDelta, float zDelta)

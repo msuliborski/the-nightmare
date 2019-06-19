@@ -31,6 +31,7 @@ public class GameManager : NetworkBehaviour
             _currentCaptureAreas = _currentRoom.CaptureAreas;
         }
     }
+    public static bool IsListeningForReady { get; set; }
     private List<CaptureArea> _currentCaptureAreas = new List<CaptureArea>();
     public List<CaptureArea> CurrentCaptureAreas { get { return _currentCaptureAreas; } }
 

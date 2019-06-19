@@ -185,8 +185,11 @@ public class PlayerShoot : NetworkBehaviour {
             Cross.gameObject.SetActive(true);
             _playerController.SensitivityScale = _playerController.NonZoomSensitivity;
         }
+
+        
+                   
     }
-    
+
     IEnumerator HideWeapon(GameObject toHide, GameObject toShow) {
         toHide.gameObject.SetActive(true);
         toShow.gameObject.SetActive(true);

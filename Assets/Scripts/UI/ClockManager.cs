@@ -19,6 +19,8 @@ public class ClockManager : MonoBehaviour
     {
         _minutesTM = transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         _secondsTM = transform.GetChild(2).GetComponent<TextMeshProUGUI>();
+        canCount = false;
+        time = 0f;
     }
     
     void Update()
