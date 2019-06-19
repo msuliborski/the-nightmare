@@ -28,6 +28,7 @@ public class CaptureArea : NetworkBehaviour
 
     void Start()
     {
+        transform.tag = "CaptureArea";
         _progress = 100;
         _step = 0.05f;
         _sprites[0] = (Sprite) Resources.Load("red", typeof(Sprite));
