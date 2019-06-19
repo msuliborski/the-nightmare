@@ -20,7 +20,7 @@ public class EnemyPlayerDetector : MonoBehaviour
     {
         if (enabled && !_enemyControllerServer.IsTriggerLocked && other.CompareTag("Player"))
         {
-            _enemyControllerServer.PlayerDetected(other.transform);
+            _enemyControllerServer.PlayerDetected(other.GetComponentInParent<PlayerManager>().transform);
         }
     }
 

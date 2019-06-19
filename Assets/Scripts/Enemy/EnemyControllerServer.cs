@@ -147,6 +147,7 @@ public class EnemyControllerServer : NetworkBehaviour
     public void PlayerDetected(Transform playerTransform)
     {
         Dest = playerTransform;
+        
         RpcSendDest(playerTransform.name, false);
         IsTriggerLocked = true;
     }
@@ -306,7 +307,7 @@ public class EnemyControllerServer : NetworkBehaviour
                 EnemyControllerClient enemyControllerClient = GetComponent<EnemyControllerClient>();
                 PlayerManager player = GameManager.GetPlayer(destId);
                 if (player) enemyControllerClient.Dest = player.transform;
-                else { Debug.Log("DUPA"); enemyControllerClient.Dest = null; }
+                else { enemyControllerClient.Dest = null; }
             }
         }
     }
