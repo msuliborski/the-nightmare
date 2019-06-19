@@ -410,6 +410,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97255443c2938e34f82a0258a67652bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  clips:
+  - {fileID: 8300000, guid: 357abf0c1024c8f40a1b1fb8e215469d, type: 3}
+  - {fileID: 8300000, guid: 58a2ef5bda4365c44933358fbf67e760, type: 3}
+  - {fileID: 8300000, guid: fc68b8d4bff4c2e4c949d6cdf12cae86, type: 3}
+  - {fileID: 8300000, guid: f705f5e2aa8f3a04b80a95382b5f36e1, type: 3}
+  - {fileID: 8300000, guid: 9e948e046a068034dad9170dbdf8f616, type: 3}
+  - {fileID: 8300000, guid: 6c450356411f2464a841986f750f176b, type: 3}
 --- !u!82 &6242839686703534753
 AudioSource:
   m_ObjectHideFlags: 0
@@ -558,22 +565,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4475811651341808618}
     m_Modifications:
-    - target: {fileID: 100072, guid: a457922b935ba8f63b7a41a503033645, type: 3}
-      propertyPath: m_Name
-      value: skeleton@Idle
-      objectReference: {fileID: 0}
-    - target: {fileID: 100002, guid: a457922b935ba8f63b7a41a503033645, type: 3}
-      propertyPath: m_Name
-      value: eyes
-      objectReference: {fileID: 0}
-    - target: {fileID: 100002, guid: a457922b935ba8f63b7a41a503033645, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 100070, guid: a457922b935ba8f63b7a41a503033645, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 400072, guid: a457922b935ba8f63b7a41a503033645, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -630,6 +621,22 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 100072, guid: a457922b935ba8f63b7a41a503033645, type: 3}
+      propertyPath: m_Name
+      value: skeleton@Idle
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: a457922b935ba8f63b7a41a503033645, type: 3}
+      propertyPath: m_Name
+      value: eyes
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: a457922b935ba8f63b7a41a503033645, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 100070, guid: a457922b935ba8f63b7a41a503033645, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9500000, guid: a457922b935ba8f63b7a41a503033645, type: 3}
       propertyPath: m_Controller
       value: 
@@ -675,10 +682,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 453661309136460926}
     m_Modifications:
-    - target: {fileID: 100006, guid: 906ef3748a66347cfb2d72de10092732, type: 3}
-      propertyPath: m_Name
-      value: GreenCore
-      objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: 906ef3748a66347cfb2d72de10092732, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.014
@@ -722,6 +725,10 @@ PrefabInstance:
     - target: {fileID: 400006, guid: 906ef3748a66347cfb2d72de10092732, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100006, guid: 906ef3748a66347cfb2d72de10092732, type: 3}
+      propertyPath: m_Name
+      value: GreenCore
       objectReference: {fileID: 0}
     - target: {fileID: 19800002, guid: 906ef3748a66347cfb2d72de10092732, type: 3}
       propertyPath: CollisionModule.enabled
