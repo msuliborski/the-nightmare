@@ -18,6 +18,8 @@ public class TeddyBearServer : NetworkBehaviour
     public string InitialPosAndTag { get; set; }
     private int _beatenEnemies = 0;
     [SerializeField] private int _beatenEnemiesToDeath = 5;
+    SpriteRenderer _spriteRenderer;
+    public SpriteRenderer SpriteRenderer { get { return _spriteRenderer; } }
     
     public enum BearState
     {
@@ -41,6 +43,8 @@ public class TeddyBearServer : NetworkBehaviour
 
     void Start()
     {
+        _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        GameManager.SpriteRenderer.Add(_spriteRenderer);
         if (!isServer)
         {
             enabled = false;
@@ -75,7 +79,7 @@ public class TeddyBearServer : NetworkBehaviour
                     TurnOnWalking(true);
                     SetClosestEnemy();
                     SetAnim("fighting", false);
-                    if (_beatenEnemies == _beatenEnemiesToDeath)
+                    if (_beatenEnemies >= _beatenEnemiesToDeath)
                     {
                         CmdDeath();
                     }
@@ -158,6 +162,7 @@ public class TeddyBearServer : NetworkBehaviour
     [ClientRpc]
     public void RpcDie(string posAndTag)
     {
+        GameManager.SpriteRenderer.Remove(_spriteRenderer);
         GameManager.Instance.BuildingPoints[posAndTag].Buildable = true;
         Destroy(gameObject);
     }

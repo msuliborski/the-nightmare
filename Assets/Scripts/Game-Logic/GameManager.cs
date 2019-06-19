@@ -43,6 +43,8 @@ public class GameManager : NetworkBehaviour
 
 
     public static List<GameObject> GridRenderes { get { return _gridRenderes; } }
+    private static List<SpriteRenderer> _spriteRenderes = new List<SpriteRenderer>();
+    public static List<SpriteRenderer> SpriteRenderer { get { return _spriteRenderes; } }
     [SerializeField] private GameObject _enemyPrefab; 
     [SerializeField] private MatchSettings _matchSettings;
     [SerializeField] private GameObject[] _weapons;
@@ -92,9 +94,12 @@ public class GameManager : NetworkBehaviour
         {
             _rooms.Add(rooms.GetChild(i).gameObject);
             Transform areas = rooms.GetChild(i).GetChild(2);
+            
             for(int k = 0; k < areas.childCount; k++)
             {
-                Transform candles = areas.GetChild(k).GetChild(0);
+                Transform area = areas.GetChild(k);
+                _spriteRenderes.Add(area.GetComponent<SpriteRenderer>());
+                Transform candles = area.GetChild(0);
                 for (int j = 0; j < candles.childCount; j++)
                 {
                     _billboards.Add(candles.GetChild(j).GetChild(0).GetComponent<CameraFacing>());
@@ -136,6 +141,8 @@ public class GameManager : NetworkBehaviour
     {
         foreach (GameObject renderer in GridRenderes)
             renderer.SetActive(isOn);
+        foreach (SpriteRenderer spriteRenderer in SpriteRenderer)
+            spriteRenderer.enabled = isOn;
     }
 
     public static void Win()
