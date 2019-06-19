@@ -12,28 +12,28 @@ public class CapturePointsUI : NetworkBehaviour
     
     void Start()
     {
-        Transform temp = transform.GetChild(0);
-        foreach (Transform counter in temp.transform)
+        foreach (Transform counter in transform)
         {
-            captures.Add(counter.GetComponent<TextMeshProUGUI>());
+            captures.Add(counter.GetChild(0).GetComponent<TextMeshProUGUI>());
         }
     }
     
     void Update()
     {
+        
         if (isSet)
         {
-            RpcUpdateText();
+            for (int i = 0; i < areas.Count; i++)
+            {
+                captures[i].text = ((int)areas[i]._progress).ToString();
+            }
+            //RpcUpdateText();
         }
     }
 
     public void setRoom()
     {
-        Transform temp = GameManager.Instance._currentRoom.transform;
-        foreach (Transform counter in temp.transform)
-        {
-            areas.Add(counter.GetComponent<CaptureArea>());
-        }
+        areas = GameManager.Instance.CurrentRoom.CaptureAreas;
 
         isSet = true;
     }

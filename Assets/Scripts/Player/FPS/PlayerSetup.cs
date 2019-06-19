@@ -15,6 +15,7 @@ public class PlayerSetup : NetworkBehaviour {
     private BulletsHUD _bulletshud;
     private HealthBar _healthBar;
     private ClipsManager _clipsManager;
+    private CapturePointsUI cpUI;
     
     
 
@@ -36,6 +37,8 @@ public class PlayerSetup : NetworkBehaviour {
             _clipsManager = GameObject.Find("Clips").GetComponent<ClipsManager>();
             GameManager.LocalPlayer = GetComponent<PlayerManager>();
             GameManager.Instance.CurrentRoom = GameManager.Instance.Rooms[1].GetComponent<Room>();
+            cpUI = GameObject.Find("CapturePoints").GetComponent<CapturePointsUI>();
+            cpUI.setRoom();
             _bulletshud.Equipment = GetComponent<PlayerEquipment>();
             _clipsManager.player = GetComponent<PlayerEquipment>();
             _healthBar.player = GetComponent<PlayerManager>();

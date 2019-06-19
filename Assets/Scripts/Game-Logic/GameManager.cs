@@ -13,7 +13,7 @@ public class GameManager : NetworkBehaviour
     public List<GameObject> Rooms { get { return _rooms; } }
     private float _prepareTimer = 45f;
     private float[] _timers = { 120f, 180f, 300f };
-    public Room _currentRoom;
+    private Room _currentRoom;
     public Room CurrentRoom {get { return _currentRoom; }
         set
         {
@@ -22,7 +22,7 @@ public class GameManager : NetworkBehaviour
             foreach (GameObject spawnPoint in _currentRoom.EnemySpawnPoint)
             {
                 _enemySpawnPoints.Add(spawnPoint.transform.name, spawnPoint.transform);
-                if (spawnPoint.transform.GetChild(0) != null)
+                if (spawnPoint.transform.childCount > 0)
                 {
                     CameraFacing cameraFacing = spawnPoint.transform.GetChild(0).GetComponent<CameraFacing>();
                     cameraFacing.cameraToLookAt = LocalPlayer.GetComponent<PlayerSetup>().ActionCamera;
