@@ -8,41 +8,26 @@ public class GameManager : NetworkBehaviour
 {
 
 
-    /*public class PosAndTag
-    {
-        public string tag;
-        public Vector2 pos;
-
-        public PosAndTag(Vector2 pos, string tag)
-        {
-            this.tag = tag;
-            this.pos = pos;
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj != null && obj is PosAndTag)
-            { 
-                PosAndTag other = (PosAndTag) obj;
-                if (tag.Equals(other.tag) && pos.Equals(other.pos))
-                    return true;
-            }
-            return false;
-        }
-
-        public override int GetHashCode()
-        {
-            return 17 * tag.GetHashCode() + 31 * pos.GetHashCode();
-        }
-    }*/
-
     public static GameManager Instance;
     private List<GameObject> _rooms = new List<GameObject>();
     public List<GameObject> Rooms { get { return _rooms; } }
     private float _prepareTimer = 45f;
     private float[] _timers = { 120f, 180f, 300f };
     private Room _currentRoom;
-    public Room CurrentRoom {get { return _currentRoom; } set { _currentRoom = value; } }
+    public Room CurrentRoom {get { return _currentRoom; }
+        set
+        {
+            _currentRoom = value;
+            _enemySpawnPoints.Clear();
+            foreach (GameObject spawnPoint in _currentRoom.EnemySpawnPoint)
+            {
+                _enemySpawnPoints.Add(spawnPoint.transform.name, spawnPoint.transform);
+            }
+            _currentCaptureAreas = _currentRoom.CaptureAreas;
+        }
+    }
+    private List<CaptureArea> _currentCaptureAreas = new List<CaptureArea>();
+    public List<CaptureArea> CurrentCaptureAreas { get { return _currentCaptureAreas; } }
 
     private Dictionary<string, Transform> _enemySpawnPoints = new Dictionary<string, Transform>();
     public Dictionary<string, Transform> EnemySpawnPoints { get { return _enemySpawnPoints; } }
@@ -60,8 +45,8 @@ public class GameManager : NetworkBehaviour
     [SerializeField] private int _enemiesAmount;
     [SyncVar] private int _enemiesCounter = 0;
     [SyncVar] private int _spawnedEnemiesCounter = 0;
-    [SerializeField] private CameraFacing[] _billboards;
-    public CameraFacing[] Billboards { get { return _billboards; } set { _billboards = value; } }
+    [SerializeField] private List<CameraFacing> _billboards = new List<CameraFacing>();
+    public List<CameraFacing> Billboards { get { return _billboards; } set { _billboards = value; } }
     public enum GameState { Building, Fighting }
     //private static GameState _currentState = GameState.Building;
     private static GameState _currentState = GameState.Fighting;
@@ -99,8 +84,18 @@ public class GameManager : NetworkBehaviour
         else Instance = this;
         Transform rooms = GameObject.Find("Rooms").transform;
         for (int i = 0; i < rooms.childCount; i++)
+        {
             _rooms.Add(rooms.GetChild(i).gameObject);
-
+            Transform areas = rooms.GetChild(i).GetChild(2);
+            for(int k = 0; k < areas.childCount; k++)
+            {
+                Transform candles = areas.GetChild(k).GetChild(0);
+                for (int j = 0; j < candles.childCount; j++)
+                {
+                    _billboards.Add(candles.GetChild(j).GetChild(0).GetComponent<CameraFacing>());
+                }
+            }
+        }
         foreach (GameObject room in _rooms)
         {
             Transform points = room.transform.GetChild(1);
@@ -124,6 +119,7 @@ public class GameManager : NetworkBehaviour
     private void Start()
     {
         TurnOnGridRenders(false);
+        CurrentRoom = _rooms[1].GetComponent<Room>();
         if (Instance.isServer) Instance.StartCoroutine(Instance.SpawnEnemy());
     }
 
@@ -140,18 +136,18 @@ public class GameManager : NetworkBehaviour
 
     public static void Win()
     {
-        Debug.Break();
+        //Debug.Break();
     }
 
     public static void Lose()
     {
-        Debug.Break();
+        //Debug.Break();
     }
 
     [ClientRpc]
     void RpcPauseGame()
     {
-        Debug.Break();
+        //Debug.Break();
     }
     #endregion
 
@@ -174,7 +170,8 @@ public class GameManager : NetworkBehaviour
             }
             counter++;
         }
-        NetworkServer.Spawn(Instantiate(_enemyPrefab, spawnPoint));
+        GameObject enemy = Instantiate(_enemyPrefab, spawnPoint.position, spawnPoint.rotation);
+        NetworkServer.Spawn(enemy);
         _enemiesCounter++;
         _spawnedEnemiesCounter++;
         StartCoroutine(SpawnEnemy());

@@ -19,6 +19,7 @@ public class EnemyControllerServer : NetworkBehaviour
     [SerializeField] private float _maxHealth = 50f;
     private float _screamTimer = 1f;
     public NavMeshAgent Agent { get; set; }
+    //public NavMeshObstacle Obstacle { get; set; }
     public PlayerManager _damageDest;
     public bool _isDying;
     [SerializeField] private float _damage = 2f;
@@ -41,6 +42,7 @@ public class EnemyControllerServer : NetworkBehaviour
     public Snares SnaresToDestroy { get; set; }
 
     private bool _init = false;
+    public bool IsTriggerLocked { get; set; }
 
     private void Start()
     {
@@ -50,13 +52,14 @@ public class EnemyControllerServer : NetworkBehaviour
         else
         {
             _source = GetComponent<AudioSource>();
-            StartCoroutine(SetClosestPlayerStart());
+            StartCoroutine(SetClosestCaptureAreaStart());
             IsWalking = true;
             _currentHealth = _maxHealth;
             _animator = GetComponentInChildren<Animator>();
             
         }
         Agent = GetComponent<NavMeshAgent>();
+        //Obstacle = GetComponent<NavMeshObstacle>();
         Agent.speed = 2f;
     }
 
@@ -69,10 +72,10 @@ public class EnemyControllerServer : NetworkBehaviour
                 {
                     if (!Agent.SetDestination(Dest.position))
                     {
-                       SetClosestPlayer();
+                        SetClosestCaptureArea();
                     }
                 }
-                else SetClosestPlayer();
+                else SetClosestCaptureArea();
                 _screamTimer -= Time.deltaTime;
                 if (Agent.remainingDistance < DIST_TO_SCREAM && _screamTimer <= 0f)
                 {
@@ -89,10 +92,10 @@ public class EnemyControllerServer : NetworkBehaviour
                 {
                     if (!Agent.SetDestination(Dest.position))
                     {
-                       SetClosestPlayer();
+                        SetClosestCaptureArea();
                     }
                 }
-                else SetClosestPlayer();
+                else SetClosestCaptureArea();
                 break;
 
             case EnemyState.Screaming:
@@ -114,7 +117,7 @@ public class EnemyControllerServer : NetworkBehaviour
                 {
                     _damageDest = null;
                     TurnOnWalking(true);
-                    SetClosestPlayer();
+                    SetClosestCaptureArea();
                     SetAnim("running", true);
                     _currentState = EnemyState.Walking;
                 }
@@ -130,19 +133,28 @@ public class EnemyControllerServer : NetworkBehaviour
     }
 
 
-    /*private IEnumerator SetClosestCaptureArea()
+    public void PlayerDetected(Transform playerTransform)
+    {
+        Dest = playerTransform;
+        IsTriggerLocked = true;
+    }
+
+    private IEnumerator SetClosestCaptureAreaStart()
     {
         yield return new WaitForSeconds(1f);
 
         List<Transform> captureAreas = new List<Transform>();
-
-        foreach (PlayerManager player in GameManager.ActivePlayers.Values)
-            players.Add(player.transform);
+        IsTriggerLocked = false;
+        foreach (CaptureArea captureArea in GameManager.Instance.CurrentCaptureAreas)
+        {
+            captureAreas.Add(captureArea.transform);
+            Debug.Log(captureArea.name);
+        }
 
         Transform tMin = null;
         float minDist = Mathf.Infinity;
         Vector3 currentPos = transform.position;
-        foreach (Transform t in players)
+        foreach (Transform t in captureAreas)
         {
             float dist = Vector3.Distance(t.position, currentPos);
             if (dist < minDist)
@@ -154,11 +166,11 @@ public class EnemyControllerServer : NetworkBehaviour
         Dest = tMin;
         if (Dest) RpcSendDest(Dest.name);
         else RpcSendDest(NO_DESTINATION);
-    }*/
+    }
 
 
 
-    private IEnumerator SetClosestPlayerStart()
+    /*private IEnumerator SetClosestPlayerStart()
     {
         yield return new WaitForSeconds(1f);
 
@@ -182,19 +194,20 @@ public class EnemyControllerServer : NetworkBehaviour
         Dest =  tMin;
         if (Dest) RpcSendDest(Dest.name);
         else RpcSendDest(NO_DESTINATION);
-    }
+    }*/
 
-    public void SetClosestPlayer()
+    public void SetClosestCaptureArea()
     {
-        List<Transform> players = new List<Transform>();
-
-        foreach (PlayerManager player in GameManager.ActivePlayers.Values)
-            players.Add(player.transform);
+        List<Transform> captureAreas = new List<Transform>();
+        IsTriggerLocked = false;
+        foreach (CaptureArea captureArea in GameManager.Instance.CurrentCaptureAreas)
+        { captureAreas.Add(captureArea.transform);
+            Debug.Log(captureArea.name); }
 
         Transform tMin = null;
         float minDist = Mathf.Infinity;
         Vector3 currentPos = transform.position;
-        foreach (Transform t in players)
+        foreach (Transform t in captureAreas)
         {
             float dist = Vector3.Distance(t.position, currentPos);
             if (dist < minDist)
@@ -225,7 +238,7 @@ public class EnemyControllerServer : NetworkBehaviour
         
     }
 
-
+    public
     IEnumerator Die()
     {
         RpcRemoveEnemy();
@@ -326,7 +339,9 @@ public class EnemyControllerServer : NetworkBehaviour
 
     public void TurnOnWalking(bool isOn)
     {
-        Agent.enabled = isOn;
+        Agent.isStopped = !isOn;
+        //Agent.enabled = isOn;
+        //Obstacle.enabled = !isOn;
         RpcTurnOnWalking(isOn);
     }
 
@@ -337,7 +352,9 @@ public class EnemyControllerServer : NetworkBehaviour
         if (!isServer)
         {
             EnemyControllerClient enemyControllerClient = GetComponent<EnemyControllerClient>();
-            enemyControllerClient.Agent.enabled = isOn;
+            //enemyControllerClient.Agent.enabled = isOn;
+            enemyControllerClient.Agent.isStopped = !isOn;
+            //enemyControllerClient.Obstacle.enabled = !isOn;
             enemyControllerClient.IsWalking = isOn;
         }
     }
