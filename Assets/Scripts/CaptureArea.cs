@@ -51,13 +51,31 @@ public class CaptureArea : NetworkBehaviour
             {
                 enemy.CurrentState = EnemyControllerServer.EnemyState.Blocked;
                 enemy.TurnOnWalking(false);
-                //enemy.SetAnim("fighting", true);
+                enemy.SetAnim("blocked", false);
                 enemy.SetAnim("running", false);
                 enemy.IsTriggerLocked = true;
                 _enemyNum++;
                 _capturing = true;
             }
         }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        //if (other.CompareTag("EnemyLegs"))
+        //{
+        //    EnemyControllerServer enemy = other.GetComponentInParent<EnemyControllerServer>();
+        //    if (enemy.isActiveAndEnabled && enemy.CurrentState != EnemyControllerServer.EnemyState.Blocked)
+        //    {
+        //        enemy.CurrentState = EnemyControllerServer.EnemyState.Blocked;
+        //        enemy.TurnOnWalking(false);
+        //        enemy.SetAnim("blocked", false);
+        //        enemy.SetAnim("running", false);
+        //        enemy.IsTriggerLocked = true;
+        //        _enemyNum++;
+        //        _capturing = true;
+         //   }
+        //}
     }
 
     private void OnTriggerExit(Collider other)

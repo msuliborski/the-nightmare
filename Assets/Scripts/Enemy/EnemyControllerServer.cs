@@ -32,8 +32,7 @@ public class EnemyControllerServer : NetworkBehaviour
     public EnemyState CurrentState { get => _currentState;
         set
         {
-            if (_currentState == EnemyState.Walking || _currentState == EnemyState.Running)
-                PreviousState = _currentState;
+            PreviousState = _currentState;
             _currentState = value;
         }
     }

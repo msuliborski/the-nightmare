@@ -39,16 +39,22 @@ public class TrapsHandler : MonoBehaviour
     {
         yield return new WaitForSeconds(_snares.freezeTime);
         _enemyController._damageDest = null;
-        _enemyController.TurnOnWalking(true);
         _enemyController.CurrentState = _enemyController.PreviousState;
         switch (_enemyController.CurrentState)
         {
             case EnemyControllerServer.EnemyState.Running:
                 _enemyController.SetAnim("running", true);
                 _enemyController.SetAnim("blocked", false);
+                _enemyController.TurnOnWalking(true);
+
                 break;
             case EnemyControllerServer.EnemyState.Walking:
                 _enemyController.SetAnim("blocked", false);
+                _enemyController.TurnOnWalking(true);
+                break;
+            case EnemyControllerServer.EnemyState.Blocked:
+                _enemyController.SetAnim("blocked", false);
+                _enemyController.TurnOnWalking(false);
                 break;
         }
     }
