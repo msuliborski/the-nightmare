@@ -18,6 +18,7 @@ public class PlayerManager : NetworkBehaviour
     private PlacementController _placementController;
     private GameObject _cross;
     private Rigidbody _rigidbody;
+    
 
     public void SetBuildingMode()
     {

@@ -11,6 +11,7 @@ public class Barrel : NetworkBehaviour
     private MeshRenderer _renderer;
     private BoxCollider _collider;
     public float damage;
+    public string InitialPosAndTag { get; set; }
 
     private void Start()
     {
@@ -38,7 +39,8 @@ public class Barrel : NetworkBehaviour
     [ClientRpc]
     void RpcExlode()
     {
-        GameObject explosion = Instantiate(_explosionPrefab, transform.position, transform.rotation);
+        GameObject explosion = Instantiate(_explosionPrefab, transform.position, Quaternion.Euler(-90f, 0f, 0f));
         Destroy(explosion, 3f);
+        GameManager.Instance.BuildingPoints[InitialPosAndTag].Buildable = true;
     }
 }
