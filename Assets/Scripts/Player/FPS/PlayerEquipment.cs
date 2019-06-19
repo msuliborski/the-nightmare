@@ -28,6 +28,7 @@ public class PlayerEquipment : NetworkBehaviour {
     }
 
     public Weapon getActiveWeapon() {
+        if (Weapon1 == null) return null;
         if (Weapon1.gameObject.activeSelf)
             return Weapon1;
         return Weapon2;

@@ -108,7 +108,7 @@ public class PlayerShoot : NetworkBehaviour {
         if (changeWeaponCooldown > 0) changeWeaponCooldown -= Time.deltaTime;
         if (changeWeaponCooldown <= 0 && Math.Abs(Input.GetAxis("Mouse ScrollWheel")) > 0.01 &&
             Equipment.getActiveWeapon().State == Weapon.WeaponState.idle && !IsBuildingOnFly) {
-            changeWeaponCooldown = 3;
+            changeWeaponCooldown = 2;
             if (Equipment.Weapon2 != null) {
                 if (Equipment.Weapon1.gameObject.activeSelf) {
                     StartCoroutine(HideWeapon(Equipment.Weapon1.gameObject, Equipment.Weapon2.gameObject));
@@ -192,7 +192,7 @@ public class PlayerShoot : NetworkBehaviour {
         yield return new WaitForSeconds(0.5f);    
         toHide.transform.GetChild(0).gameObject.SetActive(false);
         toShow.transform.GetChild(0).gameObject.SetActive(true);
-        yield return new WaitForSeconds(0.5f); 
+        yield return new WaitForSeconds(0.7f); 
 
         if (toShow.transform.GetComponent<Weapon>().Name == "Pistol") {
             toShow.transform.localPosition = new Vector3(0.02f, 0.03f, -0.22f);
