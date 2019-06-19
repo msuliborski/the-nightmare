@@ -12,6 +12,9 @@ public class PlayerShoot : NetworkBehaviour {
     public PlayerEquipment Equipment { get; set; }
 
     private PlayerController _playerController;
+    private AudioSource source;
+    public AudioClip shot;
+    public AudioClip hitMarker;
     //private List<Material> _originalMaterials;
     //[SerializeField] Material _blackeningMaterial;
     //private bool _blackened = false;
@@ -71,7 +74,9 @@ public class PlayerShoot : NetworkBehaviour {
 
 
     // Start is called before the first frame update
-    void Start() {
+    void Start()
+    {
+        source = GetComponent<AudioSource>();
         activeWeapon = Equipment.Weapon1;
         if (Cam == null) enabled = false;
         else {
@@ -252,13 +257,14 @@ public class PlayerShoot : NetworkBehaviour {
     void PerformWeaponFire() {
         if (Equipment.getActiveWeapon().CurrentMagAmmo >= 1) {
             Equipment.PlayerShooting();
+            playSound(shot);
             Equipment.getActiveWeapon().shoot();
             gameObject.GetComponent<PlayerMotor>().IncreaseRecoil(currentRecoil);
             CmdPlayerShooting();
             RaycastHit hit;
             if (Physics.Raycast(Cam.transform.position, Cam.transform.forward, out hit,
                 Equipment.getActiveWeapon().Range,
-                _mask)) {
+                _mask, QueryTriggerInteraction.Ignore)) {
                 Debug.Log("We hit " + hit.collider.name);
                 if (hit.collider.tag == "Player") { //wylaczamy friendly fire??? NIE XD
                     StartCoroutine(ShowHitmarker());
@@ -295,8 +301,18 @@ public class PlayerShoot : NetworkBehaviour {
         }
     }
 
+    private void playSound(AudioClip clip)
+    {
+//        if (clip == hitMarker)
+//            source.volume = 1.0f;
+//        else
+//            source.volume = 0.7f;
+        source.clip = clip;
+        source.PlayOneShot(source.clip);
+    }
+
     IEnumerator ShowHitmarker() {
-        //play hit sound
+        playSound(hitMarker);
         Cross.transform.GetChild(1).gameObject.SetActive(true);
         yield return new WaitForSeconds(0.15f);
         Cross.transform.GetChild(1).gameObject.SetActive(false);

@@ -15,9 +15,9 @@ public class Grenade : NetworkBehaviour
     void Start()
     {
         _collider = GetComponent<CapsuleCollider>();
-        _renderer = GetComponent<MeshRenderer>();
+        _renderer = transform.GetChild(0).GetChild(0).GetComponent<MeshRenderer>();
         StartCoroutine(Explode());
-        if (isServer) transform.GetChild(0).GetComponent<GrenadeCollider>().server = true;
+        if (isServer) transform.GetChild(1).GetComponent<GrenadeCollider>().server = true;
     }
 
     private IEnumerator Explode()
@@ -25,7 +25,7 @@ public class Grenade : NetworkBehaviour
         yield return new WaitForSeconds(_secsToExplosion);
         _collider.enabled = false;
         _renderer.enabled = false;
-        transform.GetChild(0).gameObject.SetActive(true);
+        transform.GetChild(1).gameObject.SetActive(true);
         if (isServer) RpcExlode();
         StartCoroutine(Decay());
     }
