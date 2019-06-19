@@ -12,6 +12,7 @@ public class PlayerEquipment : NetworkBehaviour {
     private PlayerShoot _shoot;
     private PlacementController _controller;
     private Chest _chest;
+    private ChestAlwaysFull _chestAlwaysFull;
 
     private void Start() {
         if (isLocalPlayer) {
@@ -43,7 +44,8 @@ public class PlayerEquipment : NetworkBehaviour {
                     pickUp.SetActive(true);
                 if (Input.GetKeyDown(KeyCode.E)) {
                     if (_cam.transform.GetChild(0).transform.childCount <= 1) {
-                        int weaponId = weaponFinder.collider.gameObject.GetComponent<GunSpawnPoint>().WeaponId;
+                        int weaponId = 1;
+//                        weaponId = weaponFinder.collider.gameObject.GetComponent<GunSpawnPoint>().WeaponId;
                         if (weaponId != 0) {
                             GameObject weaponObject = Instantiate(GameManager.Instance.Weapons[weaponId],
                                 _cam.transform.GetChild(0).transform);
@@ -61,49 +63,69 @@ public class PlayerEquipment : NetworkBehaviour {
                             Weapon2.CurrentMagAmmo = Weapon2.MaxMagAmmo;
                         }
                     }
-                    //if has 2 weapons, just refill rifle
-                    //check if we picking up rifle, not pistol
-
-                    //else, add new weapon
-
-
-//                    Destroy(_cam.transform.GetChild(0).transform.GetChild(0).gameObject);
-//                    int weaponId = weaponFinder.collider.gameObject.GetComponent<GunSpawnPoint>().WeaponId;
-//                    GameObject weaponObject = Instantiate(GameManager.Instance.Weapons[weaponId],
-//                        _cam.transform.GetChild(0).transform);
-//                    Weapon = weaponObject.GetComponent<Weapon>();
-//                    WeaponSound = weaponObject.GetComponent<AudioSource>();
-//                    CmdChangeWeapon(weaponId);
                 }
             }
             else if (weaponFinder.collider.CompareTag("Chest")) {
                 _chest = weaponFinder.collider.GetComponentInParent<Chest>();
-                if (_chest.active && !_chest.alreadyPicked) {
-                    if (isLocalPlayer)
-                        pickUp.SetActive(true);
-                    if (Input.GetKeyDown(KeyCode.E)) {
-                        _shoot._grenades += _chest.grenades;
-                        if (_controller.placeableCount[0] + _chest.snares >= _controller.maxPlaceable[0])
-                            _controller.placeableCount[0] = _controller.maxPlaceable[0];
-                        else
-                            _controller.placeableCount[0] += _chest.snares;
-                        
-                        if (_controller.placeableCount[1] + _chest.teddyBears >= _controller.maxPlaceable[1])
-                            _controller.placeableCount[1] = _controller.maxPlaceable[1];
-                        else
-                            _controller.placeableCount[1] += _chest.teddyBears;
-                        
-                        if (_controller.placeableCount[2] + _chest.barrels >= _controller.maxPlaceable[2])
-                            _controller.placeableCount[2] = _controller.maxPlaceable[2];
-                        else
-                            _controller.placeableCount[2] += _chest.barrels;
-                        _chest.alreadyPicked = true;
+                _chestAlwaysFull = weaponFinder.collider.GetComponentInParent<ChestAlwaysFull>();
+                if (_chestAlwaysFull == null) {
+                    if (_chest.active && !_chest.alreadyPicked) {
+                        if (isLocalPlayer)
+                            pickUp.SetActive(true);
+                        if (Input.GetKeyDown(KeyCode.E)) {
+                            _shoot._grenades += _chest.grenades;
+                            if (_controller.placeableCount[0] + _chest.snares >= _controller.maxPlaceable[0])
+                                _controller.placeableCount[0] = _controller.maxPlaceable[0];
+                            else
+                                _controller.placeableCount[0] += _chest.snares;
+
+                            if (_controller.placeableCount[1] + _chest.teddyBears >= _controller.maxPlaceable[1])
+                                _controller.placeableCount[1] = _controller.maxPlaceable[1];
+                            else
+                                _controller.placeableCount[1] += _chest.teddyBears;
+
+                            if (_controller.placeableCount[2] + _chest.barrels >= _controller.maxPlaceable[2])
+                                _controller.placeableCount[2] = _controller.maxPlaceable[2];
+                            else
+                                _controller.placeableCount[2] += _chest.barrels;
+                            _chest.alreadyPicked = true;
+                        }
                     }
+                    else {
+                        if (isLocalPlayer)
+                            pickUp.SetActive(false);
+                    }
+
                 }
                 else {
-                    if (isLocalPlayer)
-                        pickUp.SetActive(false);
+                    if (_chestAlwaysFull.active && !_chestAlwaysFull.alreadyPicked) {
+                        if (isLocalPlayer)
+                            pickUp.SetActive(true);
+                        if (Input.GetKeyDown(KeyCode.E)) {
+                            _shoot._grenades += _chestAlwaysFull.grenades;
+                            if (_controller.placeableCount[0] + _chestAlwaysFull.snares >= _controller.maxPlaceable[0])
+                                _controller.placeableCount[0] = _controller.maxPlaceable[0];
+                            else
+                                _controller.placeableCount[0] += _chestAlwaysFull.snares;
+
+                            if (_controller.placeableCount[1] + _chestAlwaysFull.teddyBears >= _controller.maxPlaceable[1])
+                                _controller.placeableCount[1] = _controller.maxPlaceable[1];
+                            else
+                                _controller.placeableCount[1] += _chestAlwaysFull.teddyBears;
+
+                            if (_controller.placeableCount[2] + _chestAlwaysFull.barrels >= _controller.maxPlaceable[2])
+                                _controller.placeableCount[2] = _controller.maxPlaceable[2];
+                            else
+                                _controller.placeableCount[2] += _chestAlwaysFull.barrels;
+                            _chestAlwaysFull.alreadyPicked = true;
+                        }
+                    }
+                    else {
+                        if (isLocalPlayer)
+                            pickUp.SetActive(false);
+                    }
                 }
+
             }
             else {
                 if (isLocalPlayer)
