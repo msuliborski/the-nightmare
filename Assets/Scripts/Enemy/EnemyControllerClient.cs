@@ -12,7 +12,6 @@ public class EnemyControllerClient : NetworkBehaviour
     private AudioSource _source;
     public bool IsWalking { get; set; }
     private Animator _animator;
-
     public List<AudioClip> clips = new List<AudioClip>();
 
     // Start is called before the first frame update
