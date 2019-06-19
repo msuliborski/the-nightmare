@@ -118,7 +118,6 @@ public class PlayerEquipment : NetworkBehaviour {
 
     public void PlayerShooting() {
         getActiveWeapon().Flash.Play();
-        getActiveWeapon().GetComponent<AudioSource>().Play();
         GameObject smokeEffect =
             Instantiate(getActiveWeapon().Smoke, getActiveWeapon().transform.GetChild(0).position,
                 Quaternion.Euler(-90, 0, 0));

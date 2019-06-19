@@ -38,6 +38,7 @@ public class EnemyControllerServer : NetworkBehaviour
             _currentState = value;
         }
     }
+    public List<AudioClip> clips = new List<AudioClip>();
 
     public Snares SnaresToDestroy { get; set; }
 
@@ -362,6 +363,8 @@ public class EnemyControllerServer : NetworkBehaviour
 
     void Scream()
     {
+        int random = Random.Range(0, clips.Count);
+        _source.clip = clips[random];
         _source.PlayOneShot(_source.clip);
 
     }
