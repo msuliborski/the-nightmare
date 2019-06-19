@@ -147,6 +147,7 @@ public class EnemyControllerServer : NetworkBehaviour
     public void PlayerDetected(Transform playerTransform)
     {
         Dest = playerTransform;
+        RpcSendDest(playerTransform.name, false);
         IsTriggerLocked = true;
     }
 
@@ -156,7 +157,7 @@ public class EnemyControllerServer : NetworkBehaviour
 
         List<Transform> captureAreas = new List<Transform>();
         IsTriggerLocked = false;
-        foreach (CaptureArea captureArea in GameManager.Instance.CurrentCaptureAreas)
+        foreach (CaptureArea captureArea in GameManager.Instance.CurrentCaptureAreas.Values)
         {
             captureAreas.Add(captureArea.transform);
             Debug.Log(captureArea.name);
@@ -175,8 +176,12 @@ public class EnemyControllerServer : NetworkBehaviour
             }
         }
         Dest = tMin;
-        if (Dest) RpcSendDest(Dest.name);
-        else RpcSendDest(NO_DESTINATION);
+        if (Dest)
+        {
+            string areaId = Dest.position.x.ToString() + "_" + Dest.position.y.ToString() + "_" + Dest.position.z.ToString();
+            RpcSendDest(areaId, true);
+        }
+        else RpcSendDest(NO_DESTINATION, true);
     }
 
 
@@ -211,7 +216,7 @@ public class EnemyControllerServer : NetworkBehaviour
     {
         List<Transform> captureAreas = new List<Transform>();
         IsTriggerLocked = false;
-        foreach (CaptureArea captureArea in GameManager.Instance.CurrentCaptureAreas)
+        foreach (CaptureArea captureArea in GameManager.Instance.CurrentCaptureAreas.Values)
         { captureAreas.Add(captureArea.transform);
             Debug.Log(captureArea.name); }
 
@@ -228,8 +233,12 @@ public class EnemyControllerServer : NetworkBehaviour
             }
         }
         Dest = tMin;
-        if (Dest) RpcSendDest(Dest.name);
-        else RpcSendDest(NO_DESTINATION);
+        if (Dest)
+        {
+            string areaId = Dest.position.x.ToString() + "_" + Dest.position.y.ToString() + "_"  + Dest.position.z.ToString();
+            RpcSendDest(areaId, true);
+        }
+        else RpcSendDest(NO_DESTINATION, true);
     }
 
     [Command]
@@ -281,14 +290,24 @@ public class EnemyControllerServer : NetworkBehaviour
     }
 
     [ClientRpc]
-    void RpcSendDest(string destId)
+    void RpcSendDest(string destId, bool isArea)
     {
         if (!isServer)
         {
-            EnemyControllerClient enemyControllerClient = GetComponent<EnemyControllerClient>();
-            PlayerManager player = GameManager.GetPlayer(destId);
-            if (player) enemyControllerClient.Dest = player.transform;
-            else enemyControllerClient.Dest = null;
+            if (isArea)
+            {
+                EnemyControllerClient enemyControllerClient = GetComponent<EnemyControllerClient>();
+                CaptureArea captureArea = GameManager.Instance.CurrentCaptureAreas[destId];
+                if (captureArea) enemyControllerClient.Dest = captureArea.transform;
+                else enemyControllerClient.Dest = null;
+            }
+            else
+            {
+                EnemyControllerClient enemyControllerClient = GetComponent<EnemyControllerClient>();
+                PlayerManager player = GameManager.GetPlayer(destId);
+                if (player) enemyControllerClient.Dest = player.transform;
+                else enemyControllerClient.Dest = null;
+            }
         }
     }
 

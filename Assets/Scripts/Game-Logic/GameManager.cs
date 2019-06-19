@@ -30,12 +30,17 @@ public class GameManager : NetworkBehaviour
                     cameraFacing.cameraToLookAt = LocalPlayer.GetComponent<PlayerSetup>().ActionCamera;
                 }
             }
-            _currentCaptureAreas = _currentRoom.CaptureAreas;
+            foreach (CaptureArea captureArea in _currentRoom.CaptureAreas)
+            {
+                Vector3 v = captureArea.transform.position;
+                _currentCaptureAreas.Add(v.x.ToString() + "_" + v.y.ToString() + "_" + v.z.ToString(), captureArea);
+            }
+            
         }
     }
     public static bool IsListeningForReady { get; set; }
-    private List<CaptureArea> _currentCaptureAreas = new List<CaptureArea>();
-    public List<CaptureArea> CurrentCaptureAreas { get { return _currentCaptureAreas; } }
+    private Dictionary<string,CaptureArea> _currentCaptureAreas = new Dictionary<string, CaptureArea>();
+    public Dictionary<string, CaptureArea> CurrentCaptureAreas { get { return _currentCaptureAreas; } }
 
     private Dictionary<string, Transform> _enemySpawnPoints = new Dictionary<string, Transform>();
     public Dictionary<string, Transform> EnemySpawnPoints { get { return _enemySpawnPoints; } }
