@@ -13,7 +13,7 @@ public class GameManager : NetworkBehaviour
     public List<GameObject> Rooms { get { return _rooms; } }
     private float _prepareTimer = 45f;
     private float[] _timers = { 120f, 180f, 300f };
-    private Room _currentRoom;
+    public Room _currentRoom;
     public Room CurrentRoom {get { return _currentRoom; }
         set
         {
