@@ -20,5 +20,6 @@ public class Arrow : MonoBehaviour
     public void setTarget()
     {
         target = GameManager.Instance.CurrentRoom.gameObject;
+        isSet = true;
     }
 }
