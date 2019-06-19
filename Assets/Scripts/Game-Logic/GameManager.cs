@@ -22,6 +22,11 @@ public class GameManager : NetworkBehaviour
             foreach (GameObject spawnPoint in _currentRoom.EnemySpawnPoint)
             {
                 _enemySpawnPoints.Add(spawnPoint.transform.name, spawnPoint.transform);
+                if (spawnPoint.transform.GetChild(0) != null)
+                {
+                    CameraFacing cameraFacing = spawnPoint.transform.GetChild(0).GetComponent<CameraFacing>();
+                    cameraFacing.cameraToLookAt = LocalPlayer.GetComponent<PlayerSetup>().ActionCamera;
+                }
             }
             _currentCaptureAreas = _currentRoom.CaptureAreas;
         }
@@ -119,7 +124,6 @@ public class GameManager : NetworkBehaviour
     private void Start()
     {
         TurnOnGridRenders(false);
-        CurrentRoom = _rooms[1].GetComponent<Room>();
         if (Instance.isServer) Instance.StartCoroutine(Instance.SpawnEnemy());
     }
 

@@ -150,6 +150,8 @@ public class PlacementController : NetworkBehaviour
                 teddyBearServer.InitialPosAndTag = posAndTag;
                 break;
             case INDEX_OF_BARREL:
+                Barrel barrel = placeableObject.GetComponentInChildren<Barrel>();
+                barrel.InitialPosAndTag = posAndTag;
                 break;
         }
         NetworkServer.Spawn(placeableObject);

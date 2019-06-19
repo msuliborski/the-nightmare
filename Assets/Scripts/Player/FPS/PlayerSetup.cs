@@ -8,12 +8,14 @@ public class PlayerSetup : NetworkBehaviour {
     [SerializeField] private Behaviour[] _toDisable;
     [SerializeField] private Camera _buildingCamera;
     [SerializeField] private Camera _actionCamera;
+    public Camera ActionCamera { get { return _actionCamera; } }
     private Camera _sceneCamera;
     [SerializeField] private GameObject _weaponObjectPrefab;
     private PlayerEquipment _equipment;
     private BulletsHUD _bulletshud;
     private HealthBar _healthBar;
     private ClipsManager _clipsManager;
+    
     
 
     // Start is called before the first frame update
@@ -33,6 +35,7 @@ public class PlayerSetup : NetworkBehaviour {
             _healthBar = GameObject.Find("HP").GetComponent<HealthBar>();
             _clipsManager = GameObject.Find("Clips").GetComponent<ClipsManager>();
             GameManager.LocalPlayer = GetComponent<PlayerManager>();
+            GameManager.Instance.CurrentRoom = GameManager.Instance.Rooms[1].GetComponent<Room>();
             _bulletshud.Equipment = GetComponent<PlayerEquipment>();
             _clipsManager.player = GetComponent<PlayerEquipment>();
             _healthBar.player = GetComponent<PlayerManager>();
