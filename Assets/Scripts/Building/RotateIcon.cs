@@ -14,10 +14,6 @@ public class RotateIcon : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         if (GameManager.LocalPlayer != null) _playerIconRotation = GameManager.LocalPlayer.transform.rotation.eulerAngles.y;
-        Debug.Log(_playerIconRotation);
-//        transform.rotation = Quaternion.Euler(_thisRotation.x, _thisRotation.y, _thisRotation.z);
-//        transform.rotation = Quaternion.Euler(_playerIconRotation, _thisRotation.y, _thisRotation.z);
-//        transform.rotation = Quaternion.Euler(_thisRotation.x, _playerIconRotation, _thisRotation.z);
         transform.rotation = Quaternion.Euler(90, _thisRotation.y, -_playerIconRotation);
     }
 }
