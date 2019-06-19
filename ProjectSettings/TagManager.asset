@@ -33,7 +33,7 @@ TagManager:
   - Weapon
   - UnrenderedPlayer
   - Minimap
-  - 
+  - ExcludedFromMinimap
   - 
   - 
   - 

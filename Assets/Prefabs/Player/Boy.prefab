@@ -113,7 +113,7 @@ Transform:
   m_GameObject: {fileID: 251635102117109853}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: -0.6053963, y: 0.94705594, z: 0.14445612}
-  m_LocalScale: {x: 0.25, y: 0.25000012, z: 0.25000012}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5302780851991259183}
   m_RootOrder: 3
@@ -154,7 +154,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 5
   m_Sprite: {fileID: 21300000, guid: 81d8eb500b1c3bd4cb97f937744edd66, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -291,7 +291,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 5
   m_Sprite: {fileID: 21300000, guid: a47a17a07d73c9342bd8c01f8c8d9d6a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -374,7 +374,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3905363846413051306}
   - component: {fileID: 1591897800222303922}
-  m_Layer: 9
+  m_Layer: 14
   m_Name: ArrowGO
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -475,7 +475,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1847
+    m_Bits: 18231
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -949,7 +949,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3030279985954405764}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.6053963, y: 0.052944064, z: -0.14445612}
+  m_LocalPosition: {x: 0.6053963, y: -0.157, z: -0.14445612}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1867988769201286121}
@@ -1026,7 +1026,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 5
   m_Sprite: {fileID: 21300000, guid: f2e349914add450439d0980d58c829db, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1064,7 +1064,7 @@ Transform:
   m_GameObject: {fileID: 6316629194611101801}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: -0.6053963, y: 0.94705594, z: 0.14445612}
-  m_LocalScale: {x: 0.25, y: 0.25000012, z: 0.25000012}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5302780851991259183}
   m_RootOrder: 2
@@ -1105,7 +1105,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 5
   m_Sprite: {fileID: 21300000, guid: c42c791a08986b242b9cbc56c2afa68b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1223,7 +1223,7 @@ PrefabInstance:
     - target: {fileID: 2567497335345547796, guid: cc9b7d851085b1441a576a60629784d4,
         type: 3}
       propertyPath: m_CullingMask.m_Bits
-      value: 4294967295
+      value: 16183
       objectReference: {fileID: 0}
     - target: {fileID: 2567497335345547796, guid: cc9b7d851085b1441a576a60629784d4,
         type: 3}
@@ -1509,6 +1509,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Arrow
+      objectReference: {fileID: 0}
+    - target: {fileID: 8736944822857659526, guid: a88a08a9f11ef544d806c8fb99ac207d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5439435070507139817, guid: a88a08a9f11ef544d806c8fb99ac207d, type: 3}
