@@ -299,14 +299,14 @@ public class EnemyControllerServer : NetworkBehaviour
                 EnemyControllerClient enemyControllerClient = GetComponent<EnemyControllerClient>();
                 CaptureArea captureArea = GameManager.Instance.CurrentCaptureAreas[destId];
                 if (captureArea) enemyControllerClient.Dest = captureArea.transform;
-                else enemyControllerClient.Dest = null;
+                else  enemyControllerClient.Dest = null; 
             }
             else
             {
                 EnemyControllerClient enemyControllerClient = GetComponent<EnemyControllerClient>();
                 PlayerManager player = GameManager.GetPlayer(destId);
                 if (player) enemyControllerClient.Dest = player.transform;
-                else enemyControllerClient.Dest = null;
+                else { Debug.Log("DUPA"); enemyControllerClient.Dest = null; }
             }
         }
     }
