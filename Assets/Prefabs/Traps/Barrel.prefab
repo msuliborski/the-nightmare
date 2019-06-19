@@ -68,6 +68,7 @@ GameObject:
   m_Component:
   - component: {fileID: 792451778357734381}
   - component: {fileID: 8855017851749906755}
+  - component: {fileID: 671815213297354909}
   m_Layer: 13
   m_Name: MinimapMarker
   m_TagString: Untagged
@@ -137,6 +138,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &671815213297354909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 774006861901586064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20ae915e7548ce14197e92bc4e4e0f2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6627066607432650789
 GameObject:
   m_ObjectHideFlags: 0

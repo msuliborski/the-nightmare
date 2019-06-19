@@ -4836,7 +4836,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98e2221d044cb6d478b4f61b23dc1a3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _id: 0
+  _id: 1
   _name: Rifle
   _damage: 40
   _currentMagAmmo: 31
