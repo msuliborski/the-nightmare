@@ -200,8 +200,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.026064353, y: 0.029207068, z: 0.025027383}
-  m_Center: {x: 0.0020674537, y: 0.01390577, z: 0.013080095}
+  m_Size: {x: 0.057973485, y: 0.029207068, z: 0.04450962}
+  m_Center: {x: -0.0018288911, y: 0.01390577, z: 0.013045273}
 --- !u!195 &7371400032901168870
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -433,6 +433,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4863637763325625279}
     m_Modifications:
+    - target: {fileID: 100000, guid: 197452b517284b848bb18f16f43dcbef, type: 3}
+      propertyPath: m_Name
+      value: sword+textures
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 197452b517284b848bb18f16f43dcbef, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.00007
@@ -489,10 +493,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.0010000004
       objectReference: {fileID: 0}
-    - target: {fileID: 100000, guid: 197452b517284b848bb18f16f43dcbef, type: 3}
-      propertyPath: m_Name
-      value: sword+textures
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 197452b517284b848bb18f16f43dcbef, type: 3}
 --- !u!1001 &4863637763325761819
@@ -502,6 +502,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8573763338730078801}
     m_Modifications:
+    - target: {fileID: 100056, guid: 81b040ffc2780754bbe1014671e8f946, type: 3}
+      propertyPath: m_Name
+      value: Teddy_Bear@Attack
+      objectReference: {fileID: 0}
     - target: {fileID: 400056, guid: 81b040ffc2780754bbe1014671e8f946, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -558,10 +562,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 100056, guid: 81b040ffc2780754bbe1014671e8f946, type: 3}
-      propertyPath: m_Name
-      value: Teddy_Bear@Attack
-      objectReference: {fileID: 0}
     - target: {fileID: 9500000, guid: 81b040ffc2780754bbe1014671e8f946, type: 3}
       propertyPath: m_Controller
       value: 
@@ -611,6 +611,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4863637763325625227}
     m_Modifications:
+    - target: {fileID: 100004, guid: f18277b26d2d4b558adc75853d071544, type: 3}
+      propertyPath: m_Name
+      value: RED_SHIELD
+      objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: f18277b26d2d4b558adc75853d071544, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.00116
@@ -666,10 +670,6 @@ PrefabInstance:
     - target: {fileID: 400004, guid: f18277b26d2d4b558adc75853d071544, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.05
-      objectReference: {fileID: 0}
-    - target: {fileID: 100004, guid: f18277b26d2d4b558adc75853d071544, type: 3}
-      propertyPath: m_Name
-      value: RED_SHIELD
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f18277b26d2d4b558adc75853d071544, type: 3}

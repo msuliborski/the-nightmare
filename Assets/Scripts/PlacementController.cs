@@ -209,7 +209,7 @@ public class PlacementController : NetworkBehaviour
                     }
 
                 }
-                if (Input.GetKeyDown(KeyCode.R) && GameManager.IsListeningForReady)
+                if (Input.GetKeyDown(KeyCode.Return) && GameManager.IsListeningForReady)
                 {
                     GameManager.IsListeningForReady = false;
                     CmdRegisterBeingReady();
@@ -277,8 +277,7 @@ public class PlacementController : NetworkBehaviour
         ClockManager.canCount = true;
         if (localPlayer._currentObject != null) Destroy(localPlayer._currentObject);
         GameManager.CurrentState = GameManager.GameState.Fighting;*/
-        ClockManager.time = 60f;
-        ClockManager.canCount = true;
+        GameManager.Instance.StartHordeAttack();
     }
 
     void AdjustPositionMouse(float xDelta, float zDelta)

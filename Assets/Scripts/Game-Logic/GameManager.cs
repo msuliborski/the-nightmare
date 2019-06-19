@@ -19,12 +19,14 @@ public class GameManager : NetworkBehaviour
         {
             _currentRoom = value;
             _enemySpawnPoints.Clear();
+            _enemySpawnMarkers.Clear();
             foreach (GameObject spawnPoint in _currentRoom.EnemySpawnPoint)
             {
                 _enemySpawnPoints.Add(spawnPoint.transform.name, spawnPoint.transform);
                 if (spawnPoint.transform.childCount > 0)
                 {
                     CameraFacing cameraFacing = spawnPoint.transform.GetChild(0).GetComponent<CameraFacing>();
+                    _enemySpawnMarkers.Add(spawnPoint.transform.GetChild(0).GetComponent<ExPointBlink>());
                     cameraFacing.cameraToLookAt = LocalPlayer.GetComponent<PlayerSetup>().ActionCamera;
                 }
             }
@@ -38,6 +40,8 @@ public class GameManager : NetworkBehaviour
     private Dictionary<string, Transform> _enemySpawnPoints = new Dictionary<string, Transform>();
     public Dictionary<string, Transform> EnemySpawnPoints { get { return _enemySpawnPoints; } }
     private List<CaptureArea> _captureAreas = new List<CaptureArea>();
+    private List<ExPointBlink> _enemySpawnMarkers = new List<ExPointBlink>();
+    public List<ExPointBlink> EnemySpawnMarkers { get { return _enemySpawnMarkers; } }
     public List<CaptureArea> CaptureAreas { get { return _captureAreas; } }
     private static List<GameObject> _gridRenderes = new List<GameObject>();
 
@@ -75,7 +79,7 @@ public class GameManager : NetworkBehaviour
                 foreach (PlayerManager player in _players.Values)
                     player.SetActionMode();
                 TurnOnGridRenders(false);
-                if (Instance.isServer) Instance.StartCoroutine(Instance.SpawnEnemy());
+                //if (Instance.isServer) Instance.StartCoroutine(Instance.SpawnEnemy());
             }
             _currentState = value;
         }
@@ -130,9 +134,17 @@ public class GameManager : NetworkBehaviour
     private void Start()
     {
         TurnOnGridRenders(false);
-        if (Instance.isServer) Instance.StartCoroutine(Instance.SpawnEnemy());
+        //if (Instance.isServer) Instance.StartCoroutine(Instance.SpawnEnemy());
     }
 
+    private void Update()
+    {
+        if (ClockManager.time <= 0 && ClockManager.canCount)
+        {
+            
+            StopHordeAttack();
+        }
+    }
 
     #region Building
     private Dictionary<string, GridPoint> _buildingPoints = new Dictionary<string, GridPoint>();
@@ -166,7 +178,7 @@ public class GameManager : NetworkBehaviour
     #region EnemySpawning
 
 
-    private IEnumerator SpawnEnemy()
+    public IEnumerator SpawnEnemy()
     {
         yield return new WaitForSeconds(_matchSettings.EnemyRespawnTime);
         Transform spawnPoint = null;
@@ -203,6 +215,23 @@ public class GameManager : NetworkBehaviour
         }
     }
 
+    public void StartHordeAttack()
+    {
+        ClockManager.time = 60f;
+        ClockManager.canCount = true;
+        foreach (ExPointBlink exPointBlink in _enemySpawnMarkers)
+            exPointBlink.StartBlink();
+        if (isServer) StartCoroutine(SpawnEnemy());
+    }
+
+    public void StopHordeAttack()
+    {
+        ClockManager.canCount = false;
+        ClockManager.time = 0;
+        foreach (ExPointBlink exPointBlink in _enemySpawnMarkers)
+            exPointBlink.StopBlink();
+        if (isServer) StopCoroutine(SpawnEnemy());
+    }
 
     #endregion
 

@@ -18,7 +18,7 @@ public class EnemyPlayerDetector : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (enabled && !_enemyControllerServer.IsTriggerLocked)
+        if (enabled && !_enemyControllerServer.IsTriggerLocked && other.CompareTag("Player"))
         {
             _enemyControllerServer.PlayerDetected(other.transform);
         }
