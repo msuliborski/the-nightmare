@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.AI;
+using System.Collections.Generic;
 
 public class EnemyControllerClient : NetworkBehaviour
 {
@@ -11,6 +12,8 @@ public class EnemyControllerClient : NetworkBehaviour
     private AudioSource _source;
     public bool IsWalking { get; set; }
     private Animator _animator;
+
+    public List<AudioClip> clips = new List<AudioClip>();
 
     // Start is called before the first frame update
     void Start()
@@ -36,8 +39,10 @@ public class EnemyControllerClient : NetworkBehaviour
         _animator.SetBool(animName, isOn);
     }
 
-    public void Scream()
+    public void Scream(int random)
     {
+        _source.PlayOneShot(_source.clip);
+        _source.clip = clips[random];
         _source.PlayOneShot(_source.clip);
 
     }

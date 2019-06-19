@@ -148,8 +148,11 @@ public class PlacementController : NetworkBehaviour
             case INDEX_OF_BEAR:
                 TeddyBearServer teddyBearServer = placeableObject.GetComponent<TeddyBearServer>();
                 teddyBearServer.InitialPosAndTag = posAndTag;
+                teddyBearServer.GetComponentInChildren<SpriteRenderer>().enabled = false;
                 break;
             case INDEX_OF_BARREL:
+                Barrel barrel = placeableObject.GetComponentInChildren<Barrel>();
+                barrel.InitialPosAndTag = posAndTag;
                 break;
         }
         NetworkServer.Spawn(placeableObject);
@@ -246,8 +249,7 @@ public class PlacementController : NetworkBehaviour
 
                 }
 
-                if (Input.GetKeyDown(KeyCode.R))
-                    CmdRegisterBeingReady();
+                
                 break;
         }
     }

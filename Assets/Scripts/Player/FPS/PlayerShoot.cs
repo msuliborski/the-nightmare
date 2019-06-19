@@ -15,6 +15,7 @@ public class PlayerShoot : NetworkBehaviour {
     private AudioSource source;
     public AudioClip shot;
     public AudioClip hitMarker;
+    public AudioClip reload;
     //private List<Material> _originalMaterials;
     //[SerializeField] Material _blackeningMaterial;
     //private bool _blackened = false;
@@ -71,6 +72,7 @@ public class PlayerShoot : NetworkBehaviour {
     private float currentRecoil;
     private float changeWeaponCooldown = 0;
     private Weapon activeWeapon = null;
+    
 
 
     // Start is called before the first frame update
@@ -217,6 +219,7 @@ public class PlayerShoot : NetworkBehaviour {
         if (isLocalPlayer) Equipment.getActiveWeapon().GetComponent<Animator>().SetBool(IsReloading, true);
         //Blackened = true;
         Equipment.getActiveWeapon().reload();
+        playSound(reload);
         yield return new WaitForSeconds(Equipment.getActiveWeapon().ReloadTime);
         //Blackened = false;
         if (isLocalPlayer) Equipment.getActiveWeapon().GetComponent<Animator>().SetBool(IsReloading, false);

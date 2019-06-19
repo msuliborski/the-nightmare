@@ -19,7 +19,6 @@ public class EnemyControllerServer : NetworkBehaviour
     [SerializeField] private float _maxHealth = 50f;
     private float _screamTimer = 1f;
     public NavMeshAgent Agent { get; set; }
-    //public NavMeshObstacle Obstacle { get; set; }
     public PlayerManager _damageDest;
     public bool _isDying;
     [SerializeField] private float _damage = 2f;
@@ -45,6 +44,7 @@ public class EnemyControllerServer : NetworkBehaviour
     private bool _init = false;
     public bool IsTriggerLocked { get; set; }
 
+    public bool ShouldScream { get; set; }
     private void Start()
     {
         transform.name = ENEMY_ID_PREFIX + GameManager.EnemyIdCounter++;
@@ -52,6 +52,8 @@ public class EnemyControllerServer : NetworkBehaviour
         if (!isServer) enabled = false;
         else
         {
+            int randInt = Random.RandomRange(0, 5);
+            if (randInt == 0) ShouldScream = true;
             _source = GetComponent<AudioSource>();
             StartCoroutine(SetClosestCaptureAreaStart());
             IsWalking = true;
@@ -80,11 +82,20 @@ public class EnemyControllerServer : NetworkBehaviour
                 _screamTimer -= Time.deltaTime;
                 if (Agent.remainingDistance < DIST_TO_SCREAM && _screamTimer <= 0f)
                 {
-                    _currentState = EnemyState.Screaming;
-                    Scream();
-                    TurnOnWalking(false);
-                    SetAnim("screaming", true);
-                    _screamTimer = 0f;
+                    if (ShouldScream)
+                    {
+                        _currentState = EnemyState.Screaming;
+                        Scream();
+                        TurnOnWalking(false);
+                        SetAnim("screaming", true);
+                        _screamTimer = 0f;
+                    }
+                    else
+                    {
+                        SetAnim("running", true);
+                        _currentState = EnemyState.Running;
+                        SetAgentSpeed(3.5f);
+                    }
                 }
                 break;
 
@@ -261,6 +272,8 @@ public class EnemyControllerServer : NetworkBehaviour
         GameManager.Enemies.Remove(transform.name);
     }
 
+    
+
     [ClientRpc]
     void RpcDie()
     {
@@ -337,6 +350,7 @@ public class EnemyControllerServer : NetworkBehaviour
         }
     }
 
+   
 
     public void TurnOnWalking(bool isOn)
     {
@@ -366,6 +380,7 @@ public class EnemyControllerServer : NetworkBehaviour
         int random = Random.Range(0, clips.Count);
         _source.clip = clips[random];
         _source.PlayOneShot(_source.clip);
+        RpcScream(random);
 
     }
 
@@ -389,12 +404,12 @@ public class EnemyControllerServer : NetworkBehaviour
 
 
     [ClientRpc]
-    void RpcScream()
+    void RpcScream(int random)
     {
         if (!isServer)
         {
             EnemyControllerClient enemyControllerClient = GetComponent<EnemyControllerClient>();
-            enemyControllerClient.Scream();
+            enemyControllerClient.Scream(random);
         }
     }
 

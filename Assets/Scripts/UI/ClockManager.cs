@@ -7,7 +7,7 @@ using UnityEngine;
 public class ClockManager : MonoBehaviour
 {
     public static bool canCount;
-    public float time;
+    public static float time;
     private TextMeshProUGUI _minutesTM;
     private TextMeshProUGUI _secondsTM;
 
