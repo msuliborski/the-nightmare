@@ -747,6 +747,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shot: {fileID: 8300000, guid: a64ec701992d4e563b1427cbf77ec6c6, type: 3}
   hitMarker: {fileID: 8300000, guid: f721b9607b73b5a4f808331c53dce5b4, type: 3}
+  reload: {fileID: 8300000, guid: 854c24c065c346a4aacd07023b2e64fc, type: 3}
   Cross: {fileID: 0}
   _mask:
     serializedVersion: 2
