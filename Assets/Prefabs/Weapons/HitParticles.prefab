@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 468241387988648667}
   - component: {fileID: 468241388003854235}
   - component: {fileID: 468241388003835451}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Sparks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4637,7 +4637,7 @@ GameObject:
   - component: {fileID: 468241387988648669}
   - component: {fileID: 468241388003854239}
   - component: {fileID: 468241388003835455}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: HitParticles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9265,7 +9265,7 @@ GameObject:
   - component: {fileID: 468241387988648671}
   - component: {fileID: 468241388003854233}
   - component: {fileID: 468241388003835449}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Smoke
   m_TagString: Untagged
   m_Icon: {fileID: 0}

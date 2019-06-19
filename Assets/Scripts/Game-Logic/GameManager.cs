@@ -22,7 +22,7 @@ public class GameManager : NetworkBehaviour
             foreach (GameObject spawnPoint in _currentRoom.EnemySpawnPoint)
             {
                 _enemySpawnPoints.Add(spawnPoint.transform.name, spawnPoint.transform);
-                if (spawnPoint.transform.GetChild(0) != null)
+                if (spawnPoint.transform.childCount > 0)
                 {
                     CameraFacing cameraFacing = spawnPoint.transform.GetChild(0).GetComponent<CameraFacing>();
                     cameraFacing.cameraToLookAt = LocalPlayer.GetComponent<PlayerSetup>().ActionCamera;

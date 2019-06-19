@@ -23,6 +23,7 @@ public class HealthBar : MonoBehaviour
         if (playerEnabled)
         {
             ratio = player._currentHealth / player._maxHealth;
+            if (ratio < 0) ratio = 0;
             percentage.text = ((int)(ratio * 100)).ToString();// + "%";
             full.localScale = new Vector3(ratio, full.localScale.y, full.localScale.z);
         }
