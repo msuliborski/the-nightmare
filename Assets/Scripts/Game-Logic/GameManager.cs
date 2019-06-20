@@ -302,7 +302,10 @@ public class GameManager : NetworkBehaviour
 
     public void CallCmd(string name)
     {
-        CmdRevive(name);
+        if(isServer)
+            RpcRevive(name);
+        else
+            CmdRevive(name);
     }
     
     [Command]
