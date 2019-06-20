@@ -209,12 +209,12 @@ public class PlacementController : NetworkBehaviour
                     }
 
                 }
-                if (Input.GetKeyDown(KeyCode.Return) && GameManager.IsListeningForReady)
-                {
-                    GameManager.IsListeningForReady = false;
-                    CmdRegisterBeingReady();
+                //if (Input.GetKeyDown(KeyCode.Return) && GameManager.IsListeningForReady)
+                //{
+                //    GameManager.IsListeningForReady = false;
+                //    CmdRegisterBeingReady();
 
-                }
+                //}
                 break;
 
             case GameManager.GameState.Building:

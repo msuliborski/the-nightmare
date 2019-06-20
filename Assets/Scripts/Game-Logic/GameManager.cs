@@ -49,7 +49,7 @@ public class GameManager : NetworkBehaviour
     public List<ExPointBlink> EnemySpawnMarkers { get { return _enemySpawnMarkers; } }
     public List<CaptureArea> CaptureAreas { get { return _captureAreas; } }
     private static List<GameObject> _gridRenderes = new List<GameObject>();
-
+    [SerializeField] GameObject[] _doors;
 
 
     public static List<GameObject> GridRenderes { get { return _gridRenderes; } }
@@ -65,6 +65,52 @@ public class GameManager : NetworkBehaviour
     private Coroutine _spawnEnemy; 
     [SerializeField] private List<CameraFacing> _billboards = new List<CameraFacing>();
     public List<CameraFacing> Billboards { get { return _billboards; } set { _billboards = value; } }
+    public enum MatchState { Lobby, Room1Prepare, Room1Fight, Room2Prepare, Room2Fight, Room3Prepare, Room3Fight, Win, Lose}
+    private MatchState _currentMatchState = MatchState.Room1Prepare;
+    public MatchState CurrentMachState
+    {
+        get { return _currentMatchState; }
+        set
+        {
+            _currentMatchState = value;
+            switch (value)
+            {
+                case MatchState.Room1Prepare:
+                    
+                    Instance.CurrentRoom = Instance.Rooms[1].GetComponent<Room>();
+                    ClockManager.time = 30f;
+                    ClockManager.canCount = true;
+                    break;
+                case MatchState.Room1Fight:
+                   
+                    StartHordeAttack();
+                    ClockManager.time = _timers[0];
+                    ClockManager.canCount = true;
+                   
+                    break;
+                case MatchState.Room2Prepare:
+                    StopHordeAttack();
+                    _doors[0].SetActive(false);
+                    ClockManager.time = 30f;
+                    ClockManager.canCount = true;
+                    break;
+
+                case MatchState.Room2Fight:
+                    StartHordeAttack();
+                    ClockManager.time = _timers[1];
+                    ClockManager.canCount = true;
+                    break;
+
+                case MatchState.Win:
+
+                    break;
+
+                case MatchState.Lose:
+
+                    break;
+            }
+        }
+    }
     public enum GameState { Building, Fighting }
     //private static GameState _currentState = GameState.Building;
     private static GameState _currentState = GameState.Fighting;
@@ -147,8 +193,16 @@ public class GameManager : NetworkBehaviour
     {
         if (ClockManager.time <= 0 && ClockManager.canCount)
         {
-            
-            StopHordeAttack();
+            switch (_currentMatchState)
+            {
+                case MatchState.Room1Prepare:
+                    CurrentMachState = MatchState.Room1Fight;
+                    break;
+                case MatchState.Room1Fight:
+                    CurrentMachState = MatchState.Room2Prepare;
+                   
+                    break;
+            }
         }
     }
 
@@ -223,8 +277,6 @@ public class GameManager : NetworkBehaviour
 
     public void StartHordeAttack()
     {
-        ClockManager.time = 60f;
-        ClockManager.canCount = true;
         foreach (ExPointBlink exPointBlink in _enemySpawnMarkers)
             exPointBlink.StartBlink();
         if (isServer) _spawnEnemy = StartCoroutine(SpawnEnemy());

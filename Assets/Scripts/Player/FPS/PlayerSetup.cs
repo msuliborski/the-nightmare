@@ -37,8 +37,7 @@ public class PlayerSetup : NetworkBehaviour {
             _healthBar = GameObject.Find("HP").GetComponent<HealthBar>();
             _clipsManager = GameObject.Find("Clips").GetComponent<ClipsManager>();
             GameManager.LocalPlayer = GetComponent<PlayerManager>();
-            GameManager.Instance.CurrentRoom = GameManager.Instance.Rooms[1].GetComponent<Room>();
-            GameManager.IsListeningForReady = true;
+            GameManager.Instance.CurrentMachState = GameManager.MatchState.Room1Prepare;
             cpUI = GameObject.Find("CapturePoints").GetComponent<CapturePointsUI>();
             cpUI.setRoom();
             arrow = GameManager.LocalPlayer.GetComponentInChildren<Arrow>();
