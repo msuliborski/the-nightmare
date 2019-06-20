@@ -149,15 +149,8 @@ public class PlayerManager : NetworkBehaviour
     {
         
     }
-
-    [Command]
-    public void CmdRevive()
-    {
-        RpcRevive();
-    }
     
-    [ClientRpc]
-    public void RpcRevive()
+    public void Revive()
     {
         Debug.Log("reviving shit");
         isRevived = false;

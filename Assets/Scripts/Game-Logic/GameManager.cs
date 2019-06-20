@@ -1,8 +1,10 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Random = UnityEngine.Random;
 
 public class GameManager : NetworkBehaviour
 {
@@ -296,6 +298,18 @@ public class GameManager : NetworkBehaviour
     {
         foreach (CameraFacing cameraFacing in _billboards)
             cameraFacing.cameraToLookAt = cam;
+    }
+
+    [Command]
+    public void CmdRevive(string name)
+    {
+        RpcRevive(name);
+    }
+
+    [ClientRpc]
+    private void RpcRevive(string name)
+    {
+        _players[name].Revive();
     }
 
     #endregion
