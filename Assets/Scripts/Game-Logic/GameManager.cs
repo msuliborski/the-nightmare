@@ -300,25 +300,5 @@ public class GameManager : NetworkBehaviour
             cameraFacing.cameraToLookAt = cam;
     }
 
-    public void CallCmd(string name)
-    {
-        if(isServer)
-            RpcRevive(name);
-        else
-            CmdRevive(name);
-    }
-    
-    [Command]
-    public void CmdRevive(string name)
-    {
-        RpcRevive(name);
-    }
-
-    [ClientRpc]
-    private void RpcRevive(string name)
-    {
-        _players[name].Revive();
-    }
-
     #endregion
 }

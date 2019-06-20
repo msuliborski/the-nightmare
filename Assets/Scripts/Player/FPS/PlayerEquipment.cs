@@ -82,7 +82,7 @@ public class PlayerEquipment : NetworkBehaviour {
                     pickUp.text = "Press E to revive";
                 }
                 if (Input.GetKeyDown(KeyCode.E)) {
-                    GameManager.Instance.CallCmd(weaponFinder.collider.GetComponentInParent<PlayerManager>().transform.name);
+                    CmdCallRevive(weaponFinder.collider.GetComponentInParent<PlayerManager>().transform.name);
                 }
             }
             else if (weaponFinder.collider.CompareTag("Chest")) {
@@ -162,6 +162,18 @@ public class PlayerEquipment : NetworkBehaviour {
         }
     }
 
+    [Command]
+    private void CmdCallRevive(string name)
+    {
+        RpcCallRevive(name);
+    }
+
+    [ClientRpc]
+    private void RpcCallRevive(string name)
+    {
+        GameManager.Players[name].Revive();
+    }
+    
     public void PlayerShooting() {
         getActiveWeapon().Flash.Play();
         GameObject smokeEffect =
