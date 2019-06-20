@@ -575,7 +575,7 @@ GameObject:
   - component: {fileID: 2896951668785230134}
   - component: {fileID: 4371665320065314336}
   - component: {fileID: 6047913895816031888}
-  - component: {fileID: 3281001168023763903}
+  - component: {fileID: 3121853921023881965}
   m_Layer: 9
   m_Name: Boy
   m_TagString: Untagged
@@ -971,8 +971,8 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!65 &3281001168023763903
-BoxCollider:
+--- !u!136 &3121853921023881965
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -981,9 +981,10 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 0.12509656, z: 1}
-  m_Center: {x: 0, y: 0.19512188, z: 0}
+  m_Radius: 0.2687687
+  m_Height: 0.5375374
+  m_Direction: 1
+  m_Center: {x: -0.02330944, y: 0.16968504, z: 0}
 --- !u!1 &3030279985954405764
 GameObject:
   m_ObjectHideFlags: 0
@@ -1218,6 +1219,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: MinimapCamera
+      objectReference: {fileID: 0}
+    - target: {fileID: 5071737452651778898, guid: cc9b7d851085b1441a576a60629784d4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8450331667043058331, guid: cc9b7d851085b1441a576a60629784d4,
         type: 3}

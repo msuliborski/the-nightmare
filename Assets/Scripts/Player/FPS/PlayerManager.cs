@@ -44,7 +44,6 @@ public class PlayerManager : NetworkBehaviour
 
     public void SetActionMode()
     {
-
         _rigidbody.useGravity = true;
         for (int i = 0; i < 3; i++) transform.GetChild(i).gameObject.SetActive(true);
         if (isLocalPlayer)
@@ -55,7 +54,7 @@ public class PlayerManager : NetworkBehaviour
                 floor.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
                 floor.GetComponent<MeshCollider>().enabled = true;
             }
-            transform.GetChild(3).gameObject.SetActive(false);
+//            transform.GetChild(3).gameObject.SetActive(false);
             for (int i = 0; i < _disableOnDeath.Length; i++)
                 _disableOnDeath[i].enabled = _wasEnabled[i];
             _cross.SetActive(true);
