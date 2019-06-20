@@ -9,7 +9,7 @@ public class PlayerEquipment : NetworkBehaviour {
     public Weapon Weapon2 { get; set; }
     [SerializeField] private Camera _cam;
     [SerializeField] private LayerMask _mask;
-    public GameObject pickUp;
+    private TextMeshProUGUI pickUp;
     private PlayerShoot _shoot;
     private PlacementController _controller;
     private Chest _chest;
@@ -17,13 +17,12 @@ public class PlayerEquipment : NetworkBehaviour {
 
     private void Start() {
         if (isLocalPlayer) {
-            pickUp = GameObject.Find("PickUp");
-            pickUp.SetActive(false);
+            pickUp = GameObject.Find("PlayerUI").transform.GetChild(1).GetComponent<TextMeshProUGUI>();
         }
         else {
             transform.GetChild(4).gameObject.SetActive(false); //turn off camera
         }
-
+        
         _shoot = GetComponent<PlayerShoot>();
         _controller = GetComponent<PlacementController>();
         Weapon2 = null;
@@ -42,8 +41,8 @@ public class PlayerEquipment : NetworkBehaviour {
             _mask)) {
             if (weaponFinder.collider.CompareTag("removableChairs")) {
                 if (isLocalPlayer) {
-                    pickUp.SetActive(true);
-                    pickUp.transform.GetComponent<TextMeshProUGUI>().text = "Press E to Remove Chairs";
+                    pickUp.enabled = true;
+                    pickUp.text = "Press E to Remove Chairs";
                 }
 
                 if (Input.GetKeyDown(KeyCode.E)) {
@@ -52,8 +51,8 @@ public class PlayerEquipment : NetworkBehaviour {
             }
             else if (weaponFinder.collider.CompareTag("Weapon")) {
                 if (isLocalPlayer){
-                    pickUp.SetActive(true);
-                    pickUp.transform.GetComponent<TextMeshProUGUI>().text = "Press E to pick up Rifle";
+                    pickUp.enabled = true;
+                    pickUp.text = "Press E to pick up Rifle";
                 }
                 if (Input.GetKeyDown(KeyCode.E)) {
                     if (_cam.transform.GetChild(0).transform.childCount <= 1) {
@@ -83,8 +82,8 @@ public class PlayerEquipment : NetworkBehaviour {
                 if (_chestAlwaysFull == null) {
                     if (_chest.active && !_chest.alreadyPicked) {
                         if (isLocalPlayer){
-                            pickUp.SetActive(true);
-                            pickUp.transform.GetComponent<TextMeshProUGUI>().text = "Press E to pick up collectibles";
+                            pickUp.enabled = true;
+                            pickUp.text = "Press E to pick up collectibles";
                         }
                         if (Input.GetKeyDown(KeyCode.E)) {
                             _shoot._grenades += _chest.grenades;
@@ -107,15 +106,24 @@ public class PlayerEquipment : NetworkBehaviour {
                     }
                     else {
                         if (isLocalPlayer)
-                            pickUp.SetActive(false);
+                            pickUp.enabled = false;
                     }
 
+                }
+                else if (weaponFinder.collider.CompareTag("reviving")) {
+                    if (isLocalPlayer){
+                        pickUp.enabled = true;
+                        pickUp.text = "Press E to revive";
+                    }
+                    if (Input.GetKeyDown(KeyCode.E)) {
+                        weaponFinder.collider.GetComponentInParent<PlayerManager>().Revive();
+                    }
                 }
                 else {
                     if (_chestAlwaysFull.active && !_chestAlwaysFull.alreadyPicked) {
                         if (isLocalPlayer){
-                            pickUp.SetActive(true);
-                            pickUp.transform.GetComponent<TextMeshProUGUI>().text = "Press E to pick up collectibles";
+                            pickUp.enabled = true;
+                            pickUp.text = "Press E to pick up collectibles";
                         }
                         if (Input.GetKeyDown(KeyCode.E)) {
                             _shoot._grenades += _chestAlwaysFull.grenades;
@@ -138,18 +146,18 @@ public class PlayerEquipment : NetworkBehaviour {
                     }
                     else {
                         if (isLocalPlayer)
-                            pickUp.SetActive(false);
+                            pickUp.enabled = false;
                     }
                 }
             }
             else {
                 if (isLocalPlayer)
-                    pickUp.SetActive(false);
+                    pickUp.enabled = false;
             }
         }
         else {
             if (isLocalPlayer)
-                pickUp.SetActive(false);
+                pickUp.enabled = false;
         }
     }
 
