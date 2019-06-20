@@ -82,7 +82,7 @@ public class PlayerEquipment : NetworkBehaviour {
                     pickUp.text = "Press E to revive";
                 }
                 if (Input.GetKeyDown(KeyCode.E)) {
-                    weaponFinder.collider.GetComponentInParent<PlayerManager>().Revive();
+                    weaponFinder.collider.GetComponentInParent<PlayerManager>().CmdRevive();
                 }
             }
             else if (weaponFinder.collider.CompareTag("Chest")) {
