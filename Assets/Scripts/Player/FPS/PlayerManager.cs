@@ -97,13 +97,26 @@ public class PlayerManager : NetworkBehaviour
         _currentHealth = _maxHealth;
 
         for (int i = 0; i < _disableOnDeath.Length; i++)
-            _disableOnDeath[i].enabled = _wasEnabled[i];
+            _disableOnDeath[i].enabled = true;//_wasEnabled[i];
 
-        //transform.GetChild(0).gameObject.SetActive(true);
-        transform.GetChild(1).gameObject.SetActive(false);
         
+        CmdSwitchColliders(true);
     }
 
+    [Command]
+    void CmdSwitchColliders(bool isOn)
+    {
+        RpcSwitchColliders(isOn);
+    }
+
+    [ClientRpc]
+    void RpcSwitchColliders(bool isOn)
+    {
+        transform.GetChild(0).GetChild(0).GetChild(7).gameObject.SetActive(isOn);
+        transform.GetChild(0).GetChild(0).GetChild(8).gameObject.SetActive(!isOn);
+        Debug.Log("switching colliders");
+    }
+    
     [ClientRpc]
     public void RpcTakeDamage(float damage)
     {
@@ -125,21 +138,21 @@ public class PlayerManager : NetworkBehaviour
         foreach (Behaviour behaviour in _disableOnDeath)
             behaviour.enabled = false;
         
-        //transform.GetChild(0).gameObject.SetActive(false);
-        transform.GetChild(1).gameObject.SetActive(true);
+        CmdSwitchColliders(false);
         GameManager.DeactivatePlayer(transform.name);
         ChangeCamera();
         isRevived = true;
-        //StartCoroutine(Respawn());
     }
+    
 
     private void ChangeCamera()
     {
         
     }
-
+    
     public void Revive()
     {
+        Debug.Log("reviving shit");
         isRevived = false;
         _playerAnimator.SetBool("revive", true);
         //yield return new WaitForSeconds(GameManager.Instance.MatchSettings.RespawnTime);
