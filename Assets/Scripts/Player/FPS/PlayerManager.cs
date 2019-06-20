@@ -142,7 +142,6 @@ public class PlayerManager : NetworkBehaviour
         GameManager.DeactivatePlayer(transform.name);
         ChangeCamera();
         isRevived = true;
-        //StartCoroutine(Respawn());
     }
     
 
@@ -153,6 +152,7 @@ public class PlayerManager : NetworkBehaviour
 
     public void Revive()
     {
+        Debug.Log("reviving shit");
         isRevived = false;
         _playerAnimator.SetBool("revive", true);
         //yield return new WaitForSeconds(GameManager.Instance.MatchSettings.RespawnTime);
