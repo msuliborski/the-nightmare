@@ -87,6 +87,51 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   profile: {fileID: 11400000, guid: 48f37b2f0c826ac4b877bfdeb7ff8e3b, type: 2}
+--- !u!1 &242067511171883426
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2409434470524334071}
+  - component: {fileID: 4706420230986118394}
+  m_Layer: 9
+  m_Name: RespawnCollider
+  m_TagString: reviving
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &2409434470524334071
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 242067511171883426}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.88, z: 0.422}
+  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_Children: []
+  m_Father: {fileID: 6051463397893318836}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &4706420230986118394
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 242067511171883426}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.31711775
+  m_Height: 1.1447747
+  m_Direction: 1
+  m_Center: {x: -0.0145299435, y: 0.06684983, z: -0.19389051}
 --- !u!1 &251635102117109853
 GameObject:
   m_ObjectHideFlags: 0
@@ -191,11 +236,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 512380352185882247}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.44, z: 0.211}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0.88, z: 0.422}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children: []
-  m_Father: {fileID: 9001549871963986359}
-  m_RootOrder: 1
+  m_Father: {fileID: 6051463397893318836}
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &6974692887593171844
 CapsuleCollider:
@@ -362,7 +407,7 @@ Transform:
   m_Children:
   - {fileID: 2370268052889161346}
   m_Father: {fileID: 9001549871963986359}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1962557365754011845
 GameObject:
@@ -442,7 +487,7 @@ Transform:
   - {fileID: 499796165}
   - {fileID: 3905363846413051306}
   m_Father: {fileID: 9001549871963986359}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &3344707091803307947
 Camera:
@@ -549,7 +594,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4953134542706898467}
-  - {fileID: 210504386333101747}
   - {fileID: 9174905864252739898}
   - {fileID: 7269480700307546784}
   - {fileID: 5508906465864958877}
@@ -791,7 +835,6 @@ MonoBehaviour:
   _mask:
     serializedVersion: 2
     m_Bits: 4294967295
-  pickUp: {fileID: 0}
 --- !u!95 &2896951668785230134
 Animator:
   serializedVersion: 3
@@ -959,7 +1002,7 @@ Transform:
   - {fileID: 7556450960561820878}
   - {fileID: 6629290936954365831}
   m_Father: {fileID: 9001549871963986359}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3421888776507064316
 GameObject:
@@ -1200,7 +1243,7 @@ PrefabInstance:
     - target: {fileID: 8450331667043058331, guid: cc9b7d851085b1441a576a60629784d4,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8450331667043058331, guid: cc9b7d851085b1441a576a60629784d4,
         type: 3}
@@ -1266,6 +1309,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_CullingMask.m_Bits
       value: 7991
+      objectReference: {fileID: 0}
+    - target: {fileID: 5667848497323826834, guid: 7d917871d8c970a45a02188b364bfcb6,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2187590114338708699, guid: 7d917871d8c970a45a02188b364bfcb6,
         type: 3}

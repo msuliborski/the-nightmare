@@ -26,13 +26,14 @@ public class EnemyControllerServer : NetworkBehaviour
     public Transform Dest { get; set; }
     private Animator _animator;
     private CaptureArea _area;
-    public enum EnemyState { Walking, Screaming, Running, Fighting, Blocked};
+    public enum EnemyState { Walking, Screaming, Running, Fighting, Blocked, InZone};
     private EnemyState _currentState = EnemyState.Walking;
     public EnemyState PreviousState { get; set; }
     public EnemyState CurrentState { get => _currentState;
         set
         {
-            PreviousState = _currentState;
+            if (CurrentState == EnemyState.Running || CurrentState == EnemyState.Walking)
+                PreviousState = _currentState;
             _currentState = value;
         }
     }
@@ -138,6 +139,10 @@ public class EnemyControllerServer : NetworkBehaviour
                 break;
 
             case EnemyState.Blocked:
+
+                break;
+
+            case EnemyState.InZone:
 
                 break;
         }

@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -18,7 +20,9 @@ public class PlayerManager : NetworkBehaviour
     private PlacementController _placementController;
     private GameObject _cross;
     private Rigidbody _rigidbody;
-    
+    private Animator _playerAnimator;
+    private static bool isRevived = false;
+
 
     public void SetBuildingMode()
     {
@@ -64,6 +68,7 @@ public class PlayerManager : NetworkBehaviour
         if (isLocalPlayer) SetLayerRecursively(gameObject.transform.GetChild(0).gameObject, 12);
         _rigidbody = GetComponent<Rigidbody>();
         _wasEnabled = new bool[_disableOnDeath.Length];
+        _playerAnimator = transform.GetChild(0).GetChild(0).GetComponent<Animator>();
 
         for (int i = 0; i < _wasEnabled.Length; i++) _wasEnabled[i] = _disableOnDeath[i].enabled;
 
@@ -73,7 +78,7 @@ public class PlayerManager : NetworkBehaviour
         //SetBuildingMode();
         SetActionMode();
     }
-
+    
     private void SetLayerRecursively(GameObject obj, int newLayer)
     {
         if (obj == null) return;
@@ -92,13 +97,26 @@ public class PlayerManager : NetworkBehaviour
         _currentHealth = _maxHealth;
 
         for (int i = 0; i < _disableOnDeath.Length; i++)
-            _disableOnDeath[i].enabled = _wasEnabled[i];
+            _disableOnDeath[i].enabled = true;//_wasEnabled[i];
 
-        transform.GetChild(0).gameObject.SetActive(true);
-        transform.GetChild(1).gameObject.SetActive(true);
         
+        CmdSwitchColliders(true);
     }
 
+    [Command]
+    void CmdSwitchColliders(bool isOn)
+    {
+        RpcSwitchColliders(isOn);
+    }
+
+    [ClientRpc]
+    void RpcSwitchColliders(bool isOn)
+    {
+        transform.GetChild(0).GetChild(0).GetChild(7).gameObject.SetActive(isOn);
+        transform.GetChild(0).GetChild(0).GetChild(8).gameObject.SetActive(!isOn);
+        Debug.Log("switching colliders");
+    }
+    
     [ClientRpc]
     public void RpcTakeDamage(float damage)
     {
@@ -106,28 +124,45 @@ public class PlayerManager : NetworkBehaviour
 
         _currentHealth -= damage;
 
-        Debug.Log(transform.name + " now has " + _currentHealth + " health.");
+        //Debug.Log(transform.name + " now has " + _currentHealth + " health.");
 
         if (_currentHealth <= 0) Die();
     }
 
     private void Die()
     {
+        _playerAnimator.SetTrigger("die");
+        _playerAnimator.SetBool("revive", false);
         _isDead = true;
 
         foreach (Behaviour behaviour in _disableOnDeath)
             behaviour.enabled = false;
-
-        transform.GetChild(0).gameObject.SetActive(false);
-        transform.GetChild(1).gameObject.SetActive(false);
+        
+        CmdSwitchColliders(false);
         GameManager.DeactivatePlayer(transform.name);
-        StartCoroutine(Respawn());
+        ChangeCamera();
+        isRevived = true;
+    }
+    
+
+    private void ChangeCamera()
+    {
+        
     }
 
-
-    private IEnumerator Respawn()
+    [Command]
+    public void CmdRevive()
     {
-        yield return new WaitForSeconds(GameManager.Instance.MatchSettings.RespawnTime);
+        RpcRevive();
+    }
+    
+    [ClientRpc]
+    public void RpcRevive()
+    {
+        Debug.Log("reviving shit");
+        isRevived = false;
+        _playerAnimator.SetBool("revive", true);
+        //yield return new WaitForSeconds(GameManager.Instance.MatchSettings.RespawnTime);
         SetDefaults();
         Transform spawnPoint = NetworkManager.singleton.GetStartPosition();
         transform.position = spawnPoint.position;

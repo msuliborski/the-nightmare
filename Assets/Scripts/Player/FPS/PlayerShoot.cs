@@ -74,6 +74,7 @@ public class PlayerShoot : NetworkBehaviour {
     private float currentRecoil;
     private float changeWeaponCooldown = 0;
     private Weapon activeWeapon = null;
+    private Animator _playerAnimator;
     
 
 
@@ -88,6 +89,7 @@ public class PlayerShoot : NetworkBehaviour {
             IsBuildingOnFly = false;
         }
 
+        _playerAnimator = transform.GetChild(0).GetChild(0).GetComponent<Animator>();
         _playerController = GetComponent<PlayerController>();
 
         _grenades = _maxGrenades;
@@ -142,6 +144,7 @@ public class PlayerShoot : NetworkBehaviour {
             if (Input.GetKeyUp(KeyCode.G)) {
                 _grenades--;
                 CmdSpawnGrenade(transform.position, transform.rotation, transform.forward, (_grenadeTimer + 0.5f) / 3);
+                _playerAnimator.SetTrigger("throwing");
                 _grenadeTimer = 0f;
             }
             else if (Input.GetKey(KeyCode.G)) {

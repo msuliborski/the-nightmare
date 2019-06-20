@@ -16,7 +16,7 @@ public class TrapsHandler : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Snares") && _enemyController.enabled)
+        if (other.CompareTag("Snares") && _enemyController.enabled && _enemyController.CurrentState != EnemyControllerServer.EnemyState.Blocked)
         {
 
             Debug.Log("Snares kurwa");
@@ -51,10 +51,6 @@ public class TrapsHandler : MonoBehaviour
             case EnemyControllerServer.EnemyState.Walking:
                 _enemyController.SetAnim("blocked", false);
                 _enemyController.TurnOnWalking(true);
-                break;
-            case EnemyControllerServer.EnemyState.Blocked:
-                _enemyController.SetAnim("blocked", false);
-                _enemyController.TurnOnWalking(false);
                 break;
         }
     }

@@ -41,4 +41,9 @@ public class GridPoint : MonoBehaviour
         }
             
     }
+
+    public SpriteRenderer getSpriteRenderer()
+    {
+        return _sprite;
+    }
 }
