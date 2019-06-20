@@ -125052,6 +125052,11 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 4294967294
       objectReference: {fileID: 0}
+    - target: {fileID: 1935081692465568857, guid: 957b2f0d0cf0adb43b12b8c3d927f1fb,
+        type: 3}
+      propertyPath: m_TagString
+      value: SlowDownWall
+      objectReference: {fileID: 0}
     - target: {fileID: 7651510569406216151, guid: 957b2f0d0cf0adb43b12b8c3d927f1fb,
         type: 3}
       propertyPath: m_IsActive
@@ -125061,6 +125066,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_StaticEditorFlags
       value: 4294967294
+      objectReference: {fileID: 0}
+    - target: {fileID: 7651510569406216151, guid: 957b2f0d0cf0adb43b12b8c3d927f1fb,
+        type: 3}
+      propertyPath: m_TagString
+      value: SlowDownWall
       objectReference: {fileID: 0}
     - target: {fileID: 9057469980821688133, guid: 957b2f0d0cf0adb43b12b8c3d927f1fb,
         type: 3}
@@ -125216,6 +125226,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_StaticEditorFlags
       value: 4294967294
+      objectReference: {fileID: 0}
+    - target: {fileID: 2349225406514574925, guid: 957b2f0d0cf0adb43b12b8c3d927f1fb,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 2349225406514574925, guid: 957b2f0d0cf0adb43b12b8c3d927f1fb,
+        type: 3}
+      propertyPath: m_TagString
+      value: SlowDownWall
       objectReference: {fileID: 0}
     - target: {fileID: 1803276952605569505, guid: 957b2f0d0cf0adb43b12b8c3d927f1fb,
         type: 3}
@@ -125376,6 +125396,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_StaticEditorFlags
       value: 4294967294
+      objectReference: {fileID: 0}
+    - target: {fileID: 4685418431787783397, guid: 957b2f0d0cf0adb43b12b8c3d927f1fb,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4685418431787783397, guid: 957b2f0d0cf0adb43b12b8c3d927f1fb,
+        type: 3}
+      propertyPath: m_TagString
+      value: SlowDownWall
       objectReference: {fileID: 0}
     - target: {fileID: 7301233526308629973, guid: 957b2f0d0cf0adb43b12b8c3d927f1fb,
         type: 3}

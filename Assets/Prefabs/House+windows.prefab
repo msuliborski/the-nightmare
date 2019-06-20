@@ -1984,7 +1984,7 @@ GameObject:
   - component: {fileID: 7733098921108443672}
   - component: {fileID: 6738009656981573861}
   - component: {fileID: 6399354894540836500}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: parter_sciany
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7195,7 +7195,7 @@ GameObject:
   - component: {fileID: 5613054971296129445}
   - component: {fileID: 4292906296312943959}
   - component: {fileID: 6640794595443174338}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: pietro_sciany
   m_TagString: Untagged
   m_Icon: {fileID: 0}

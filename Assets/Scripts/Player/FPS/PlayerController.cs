@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Networking;
 
 [RequireComponent(typeof(PlayerMotor))]
@@ -8,13 +9,22 @@ public class PlayerController : NetworkBehaviour {
     [SerializeField] private Joystick move;
     [SerializeField] private Joystick look;
     public float SensitivityScale { get; set; }
-    [SerializeField] private  float _nonZoomSensivity = 0.7f;
-    public float NonZoomSensitivity { get { return _nonZoomSensivity;  } set { _nonZoomSensivity = value; } }
+    [SerializeField] private float _nonZoomSensivity = 0.7f;
+
+    public float NonZoomSensitivity {
+        get { return _nonZoomSensivity; }
+        set { _nonZoomSensivity = value; }
+    }
 
     [SerializeField] private float _zoomSensivity = 0.1f;
-    public float ZoomSensitivity { get { return _zoomSensivity; } set { _zoomSensivity = value; } }
 
+    public float ZoomSensitivity {
+        get { return _zoomSensivity; }
+        set { _zoomSensivity = value; }
+    }
 
+    private float _speedSlow = 2f;
+    private float _speedFast = 7f;
 
     private PlayerMotor _motor;
     private static readonly int IsSprinting = Animator.StringToHash("isSprinting");
@@ -30,13 +40,13 @@ public class PlayerController : NetworkBehaviour {
 
 
     private void Update() {
+        if (transform.GetComponent<PlayerEquipment>().getActiveWeapon().GetComponent<Animator>().GetBool(IsSprinting))
+            _speed = _speedFast;
+        else
+            _speed = _speedSlow;
 
-        if (transform.GetComponent<PlayerEquipment>().getActiveWeapon().GetComponent<Animator>().GetBool(IsSprinting)) 
-            _speed = 7f;
-        else  
-            _speed = 2f;
-        
-        
+
+//        Debug.Log(_speed);
         if (!PauseGame.menuActive) {
             float xMov = 0;
             float zMov = 0;
@@ -84,7 +94,6 @@ public class PlayerController : NetworkBehaviour {
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-
         }
 
         else {
@@ -93,6 +102,20 @@ public class PlayerController : NetworkBehaviour {
             _motor.RotateCamera(0f);
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+        }
+    }
+
+    void OnCollisionEnter(Collision col) {
+        if (col.gameObject.CompareTag("SlowDownWall")) {
+            _speedSlow = 1f;
+            _speedFast = 1f;
+        }
+    }    
+    
+    void OnCollisionExit(Collision col) {
+        if (col.gameObject.CompareTag("SlowDownWall")) {
+            _speedSlow = 2f;
+            _speedFast = 7f;
         }
     }
 }
