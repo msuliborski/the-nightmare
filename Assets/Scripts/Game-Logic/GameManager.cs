@@ -300,6 +300,11 @@ public class GameManager : NetworkBehaviour
             cameraFacing.cameraToLookAt = cam;
     }
 
+    public void CallCmd(string name)
+    {
+        CmdRevive(name);
+    }
+    
     [Command]
     public void CmdRevive(string name)
     {
