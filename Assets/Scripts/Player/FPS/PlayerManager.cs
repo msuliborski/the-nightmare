@@ -99,11 +99,23 @@ public class PlayerManager : NetworkBehaviour
         for (int i = 0; i < _disableOnDeath.Length; i++)
             _disableOnDeath[i].enabled = _wasEnabled[i];
 
-        transform.GetChild(0).GetChild(0).GetChild(7).gameObject.SetActive(true);
-        transform.GetChild(0).GetChild(0).GetChild(8).gameObject.SetActive(false);
         
+        CmdSwitchColliders(true);
     }
 
+    [Command]
+    void CmdSwitchColliders(bool isOn)
+    {
+        RpcSwitchColliders(isOn);
+    }
+
+    [ClientRpc]
+    void RpcSwitchColliders(bool isOn)
+    {
+        transform.GetChild(0).GetChild(0).GetChild(7).gameObject.SetActive(isOn);
+        transform.GetChild(0).GetChild(0).GetChild(8).gameObject.SetActive(!isOn);
+    }
+    
     [ClientRpc]
     public void RpcTakeDamage(float damage)
     {
@@ -125,8 +137,7 @@ public class PlayerManager : NetworkBehaviour
         foreach (Behaviour behaviour in _disableOnDeath)
             behaviour.enabled = false;
         
-        transform.GetChild(0).GetChild(0).GetChild(7).gameObject.SetActive(false);
-        transform.GetChild(0).GetChild(0).GetChild(8).gameObject.SetActive(true);
+        CmdSwitchColliders(false);
         GameManager.DeactivatePlayer(transform.name);
         ChangeCamera();
         isRevived = true;
