@@ -45,7 +45,11 @@ public class JoinGame : MonoBehaviour
       {
          GameObject roomListItemGO = Instantiate(_roomListInst);
          roomListItemGO.transform.SetParent(_roomListParent);
-
+         
+//         
+//         roomListItemGO.transform.GetComponent<RectTransform>().anchorMin = new Vector2(0, 0.5f);
+//         roomListItemGO.transform.GetComponent<RectTransform>().anchorMax = new Vector2(1, 0.5f);
+//         roomListItemGO.transform.GetComponent<RectTransform>().pivot = new Vector2(0, 1);
          ServerListItem item = roomListItemGO.GetComponent<ServerListItem>();
          if (item != null)
          {
