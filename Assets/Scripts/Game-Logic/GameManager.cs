@@ -62,6 +62,7 @@ public class GameManager : NetworkBehaviour
     [SerializeField] private int _enemiesAmount;
     [SyncVar] private int _enemiesCounter = 0;
     [SyncVar] private int _spawnedEnemiesCounter = 0;
+    private Coroutine _spawnEnemy; 
     [SerializeField] private List<CameraFacing> _billboards = new List<CameraFacing>();
     public List<CameraFacing> Billboards { get { return _billboards; } set { _billboards = value; } }
     public enum GameState { Building, Fighting }
@@ -203,7 +204,7 @@ public class GameManager : NetworkBehaviour
         NetworkServer.Spawn(enemy);
         _enemiesCounter++;
         _spawnedEnemiesCounter++;
-        StartCoroutine(SpawnEnemy());
+        _spawnEnemy = StartCoroutine(SpawnEnemy());
     }
 
 
@@ -226,7 +227,7 @@ public class GameManager : NetworkBehaviour
         ClockManager.canCount = true;
         foreach (ExPointBlink exPointBlink in _enemySpawnMarkers)
             exPointBlink.StartBlink();
-        if (isServer) StartCoroutine(SpawnEnemy());
+        if (isServer) _spawnEnemy = StartCoroutine(SpawnEnemy());
     }
 
     public void StopHordeAttack()
@@ -235,7 +236,7 @@ public class GameManager : NetworkBehaviour
         ClockManager.time = 0;
         foreach (ExPointBlink exPointBlink in _enemySpawnMarkers)
             exPointBlink.StopBlink();
-        if (isServer) StopCoroutine(SpawnEnemy());
+        if (isServer) StopCoroutine(_spawnEnemy);
     }
 
     #endregion
