@@ -114,6 +114,7 @@ public class PlayerManager : NetworkBehaviour
     {
         transform.GetChild(0).GetChild(0).GetChild(7).gameObject.SetActive(isOn);
         transform.GetChild(0).GetChild(0).GetChild(8).gameObject.SetActive(!isOn);
+        Debug.Log("switching colliders");
     }
     
     [ClientRpc]
