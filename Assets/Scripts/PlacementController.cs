@@ -277,7 +277,7 @@ public class PlacementController : NetworkBehaviour
         ClockManager.canCount = true;
         if (localPlayer._currentObject != null) Destroy(localPlayer._currentObject);
         GameManager.CurrentState = GameManager.GameState.Fighting;*/
-        GameManager.Instance.StartHordeAttack();
+        GameManager.Instance.CurrentMachState = GameManager.MatchState.Room1Prepare;
     }
 
     void AdjustPositionMouse(float xDelta, float zDelta)

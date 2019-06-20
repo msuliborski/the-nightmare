@@ -68,7 +68,7 @@ public class GameManager : NetworkBehaviour
     [SerializeField] private List<CameraFacing> _billboards = new List<CameraFacing>();
     public List<CameraFacing> Billboards { get { return _billboards; } set { _billboards = value; } }
     public enum MatchState { Lobby, Room1Prepare, Room1Fight, Room2Prepare, Room2Fight, Room3Prepare, Room3Fight, Win, Lose}
-    private MatchState _currentMatchState = MatchState.Room1Prepare;
+    private MatchState _currentMatchState = MatchState.Lobby;
     public MatchState CurrentMachState
     {
         get { return _currentMatchState; }
@@ -92,8 +92,9 @@ public class GameManager : NetworkBehaviour
                     break;
                 case MatchState.Room2Prepare:
                     StopHordeAttack();
+                    Instance.CurrentRoom = Instance.Rooms[2].GetComponent<Room>();
                     _doors[0].SetActive(false);
-                    ClockManager.time = 30f;
+                    ClockManager.time = 45f;
                     ClockManager.canCount = true;
                     break;
 
@@ -103,8 +104,24 @@ public class GameManager : NetworkBehaviour
                     ClockManager.canCount = true;
                     break;
 
-                case MatchState.Win:
+                case MatchState.Room3Prepare:
+                    StopHordeAttack();
+                    Instance.CurrentRoom = Instance.Rooms[0].GetComponent<Room>();
+                    _doors[1].SetActive(false);
+                    ClockManager.time = 60f;
+                    ClockManager.canCount = true;
+                    break;
 
+                case MatchState.Room3Fight:
+                    StartHordeAttack();
+                    ClockManager.time = _timers[2];
+                    ClockManager.canCount = true;
+                    break;
+
+                case MatchState.Win:
+                    StopHordeAttack();
+                    ClockManager.time = 0f;
+                    ClockManager.canCount = false;
                     break;
 
                 case MatchState.Lose:
@@ -202,7 +219,18 @@ public class GameManager : NetworkBehaviour
                     break;
                 case MatchState.Room1Fight:
                     CurrentMachState = MatchState.Room2Prepare;
-                   
+                  break;
+                case MatchState.Room2Prepare:
+                    CurrentMachState = MatchState.Room2Fight;
+                    break;
+                case MatchState.Room2Fight:
+                    CurrentMachState = MatchState.Room3Prepare;
+                    break;
+                case MatchState.Room3Prepare:
+                    CurrentMachState = MatchState.Room3Fight;
+                    break;
+                case MatchState.Room3Fight:
+                    CurrentMachState = MatchState.Win;
                     break;
             }
         }
