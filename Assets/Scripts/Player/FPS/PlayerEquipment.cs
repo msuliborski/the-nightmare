@@ -2,6 +2,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 public class PlayerEquipment : NetworkBehaviour {
     public AudioSource WeaponSound { get; set; }
@@ -20,7 +21,7 @@ public class PlayerEquipment : NetworkBehaviour {
             pickUp = GameObject.Find("PlayerUI").transform.GetChild(1).GetComponent<TextMeshProUGUI>();
         }
         else {
-            transform.GetChild(4).gameObject.SetActive(false); //turn off camera
+            transform.GetChild(3).gameObject.SetActive(false);//turn off camera
         }
         
         _shoot = GetComponent<PlayerShoot>();

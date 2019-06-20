@@ -23,7 +23,7 @@ public class PlayerController : NetworkBehaviour {
         set { _zoomSensivity = value; }
     }
 
-    private float _speedSlow = 2f;
+    private float _speedSlow = 3f;
     private float _speedFast = 7f;
 
     private PlayerMotor _motor;
@@ -107,14 +107,14 @@ public class PlayerController : NetworkBehaviour {
 
     void OnCollisionEnter(Collision col) {
         if (col.gameObject.CompareTag("SlowDownWall")) {
-            _speedSlow = 1f;
-            _speedFast = 1f;
+            _speedSlow = 3f;
+            _speedFast = 3f;
         }
     }    
     
     void OnCollisionExit(Collision col) {
         if (col.gameObject.CompareTag("SlowDownWall")) {
-            _speedSlow = 2f;
+            _speedSlow = 3f;
             _speedFast = 7f;
         }
     }

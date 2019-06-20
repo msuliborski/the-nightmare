@@ -22,6 +22,8 @@ public class PlayerManager : NetworkBehaviour
     private Rigidbody _rigidbody;
     private Animator _playerAnimator;
     private static bool isRevived = false;
+    private GameObject _cameraReviving;
+    private GameObject _camera;
 
 
     public void SetBuildingMode()
@@ -44,7 +46,6 @@ public class PlayerManager : NetworkBehaviour
 
     public void SetActionMode()
     {
-
         _rigidbody.useGravity = true;
         for (int i = 0; i < 3; i++) transform.GetChild(i).gameObject.SetActive(true);
         if (isLocalPlayer)
@@ -55,7 +56,7 @@ public class PlayerManager : NetworkBehaviour
                 floor.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
                 floor.GetComponent<MeshCollider>().enabled = true;
             }
-            transform.GetChild(3).gameObject.SetActive(false);
+//            transform.GetChild(3).gameObject.SetActive(false);
             for (int i = 0; i < _disableOnDeath.Length; i++)
                 _disableOnDeath[i].enabled = _wasEnabled[i];
             _cross.SetActive(true);
@@ -72,6 +73,8 @@ public class PlayerManager : NetworkBehaviour
 
         for (int i = 0; i < _wasEnabled.Length; i++) _wasEnabled[i] = _disableOnDeath[i].enabled;
 
+        _cameraReviving = transform.GetChild(5).gameObject;
+        _camera = transform.GetChild(1).gameObject;
        _currentHealth = _maxHealth;
         _placementController = GetComponent<PlacementController>();
         if (isLocalPlayer) _cross = GameObject.Find("cross");
@@ -114,7 +117,6 @@ public class PlayerManager : NetworkBehaviour
     {
         transform.GetChild(0).GetChild(0).GetChild(7).gameObject.SetActive(isOn);
         transform.GetChild(0).GetChild(0).GetChild(8).gameObject.SetActive(!isOn);
-        Debug.Log("switching colliders");
     }
     
     [ClientRpc]
@@ -140,26 +142,31 @@ public class PlayerManager : NetworkBehaviour
         
         CmdSwitchColliders(false);
         GameManager.DeactivatePlayer(transform.name);
-        ChangeCamera();
+        ChangeCamera(true);
         isRevived = true;
     }
     
 
-    private void ChangeCamera()
+    private void ChangeCamera(bool isRevivng)
     {
-        
+        if (isLocalPlayer)
+        {
+            _camera.SetActive(!isRevivng);
+            _cameraReviving.SetActive(isRevivng);
+        }
     }
     
     public void Revive()
     {
         Debug.Log("reviving shit");
         isRevived = false;
+        ChangeCamera(false);
         _playerAnimator.SetBool("revive", true);
         //yield return new WaitForSeconds(GameManager.Instance.MatchSettings.RespawnTime);
         SetDefaults();
         Transform spawnPoint = NetworkManager.singleton.GetStartPosition();
-        transform.position = spawnPoint.position;
-        transform.rotation = spawnPoint.rotation;
+//        transform.position = spawnPoint.position;
+//        transform.rotation = spawnPoint.rotation;
         GameManager.ActivatePlayer(transform.name, this);
     }
 
