@@ -97,7 +97,7 @@ public class PlayerManager : NetworkBehaviour
         _currentHealth = _maxHealth;
 
         for (int i = 0; i < _disableOnDeath.Length; i++)
-            _disableOnDeath[i].enabled = _wasEnabled[i];
+            _disableOnDeath[i].enabled = true;//_wasEnabled[i];
 
         
         CmdSwitchColliders(true);
