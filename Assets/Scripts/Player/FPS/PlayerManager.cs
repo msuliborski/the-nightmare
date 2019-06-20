@@ -149,8 +149,11 @@ public class PlayerManager : NetworkBehaviour
 
     private void ChangeCamera(bool isRevivng)
     {
-        _camera.SetActive(!isRevivng);
-        _cameraReviving.SetActive(isRevivng);
+        if (isLocalPlayer)
+        {
+            _camera.SetActive(!isRevivng);
+            _cameraReviving.SetActive(isRevivng);
+        }
     }
     
     public void Revive()
