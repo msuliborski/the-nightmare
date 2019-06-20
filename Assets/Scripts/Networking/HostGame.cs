@@ -1,9 +1,11 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.Networking;
 
 public class HostGame : MonoBehaviour
 {
     [SerializeField] private uint _roomSize = 4;
+    [SerializeField] private GameObject _panel;
     private string _roomName;
     private string _password;
     private NetworkManager _networkManager;
@@ -31,7 +33,8 @@ public class HostGame : MonoBehaviour
     {
         if (_roomName != "" && _roomName != null)
         {
-            Debug.Log("Creating Room: "+_roomName+" for "+_roomSize+" players");
+            _panel.SetActive(true);
+            _panel.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Creating room " + _roomName + "...";
             _networkManager.matchMaker.CreateMatch(_roomName, _roomSize, true, "", "", "", 0, 0, _networkManager.OnMatchCreate);
         }
     }

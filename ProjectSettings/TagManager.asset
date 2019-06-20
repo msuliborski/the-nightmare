@@ -20,6 +20,7 @@ TagManager:
   - removableChairs
   - reviving
   - SlowDownWall
+  - Grenade
   layers:
   - Default
   - TransparentFX

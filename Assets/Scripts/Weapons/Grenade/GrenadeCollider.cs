@@ -27,6 +27,10 @@ public class GrenadeCollider : NetworkBehaviour
             {
                 other.GetComponentInParent<PlayerManager>().RpcTakeDamage(_damage);
             }
+            else if (other.CompareTag("Barrel"))
+            {
+                other.GetComponent<Barrel>().Explode();
+            }
         }
     }
 }

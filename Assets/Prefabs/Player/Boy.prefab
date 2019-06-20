@@ -821,6 +821,8 @@ MonoBehaviour:
   _disableOnDeath:
   - {fileID: 917736756212613217}
   - {fileID: 7278791426480694111}
+  _aliveCollider: {fileID: 512380352185882247}
+  _reviveCollider: {fileID: 242067511171883426}
 --- !u!114 &3654204675247675900
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1398,26 +1400,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: BuildingCamera
       objectReference: {fileID: 0}
-    - target: {fileID: 5667848497323826834, guid: 7d917871d8c970a45a02188b364bfcb6,
-        type: 3}
-      propertyPath: m_RenderingPath
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5667848497323826834, guid: 7d917871d8c970a45a02188b364bfcb6,
-        type: 3}
-      propertyPath: m_AllowMSAA
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5667848497323826834, guid: 7d917871d8c970a45a02188b364bfcb6,
-        type: 3}
-      propertyPath: m_CullingMask.m_Bits
-      value: 7991
-      objectReference: {fileID: 0}
-    - target: {fileID: 5667848497323826834, guid: 7d917871d8c970a45a02188b364bfcb6,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2187590114338708699, guid: 7d917871d8c970a45a02188b364bfcb6,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1473,6 +1455,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5667848497323826834, guid: 7d917871d8c970a45a02188b364bfcb6,
+        type: 3}
+      propertyPath: m_RenderingPath
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5667848497323826834, guid: 7d917871d8c970a45a02188b364bfcb6,
+        type: 3}
+      propertyPath: m_AllowMSAA
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5667848497323826834, guid: 7d917871d8c970a45a02188b364bfcb6,
+        type: 3}
+      propertyPath: m_CullingMask.m_Bits
+      value: 7991
+      objectReference: {fileID: 0}
+    - target: {fileID: 5667848497323826834, guid: 7d917871d8c970a45a02188b364bfcb6,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d917871d8c970a45a02188b364bfcb6, type: 3}
 --- !u!20 &8076992145364159691 stripped
@@ -1500,14 +1502,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4953134542706898467}
     m_Modifications:
-    - target: {fileID: 100000, guid: f79548a34281b2a3c9f20247331e913c, type: 3}
-      propertyPath: m_Name
-      value: BOY@Pistol Idle
-      objectReference: {fileID: 0}
     - target: {fileID: 9500000, guid: f79548a34281b2a3c9f20247331e913c, type: 3}
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 3d8e25823d0fa151a84882d4122d057d, type: 2}
+    - target: {fileID: 100000, guid: f79548a34281b2a3c9f20247331e913c, type: 3}
+      propertyPath: m_Name
+      value: BOY@Pistol Idle
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: f79548a34281b2a3c9f20247331e913c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1593,16 +1595,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3905363846413051306}
     m_Modifications:
-    - target: {fileID: 8736944822857659526, guid: a88a08a9f11ef544d806c8fb99ac207d,
-        type: 3}
-      propertyPath: m_Name
-      value: Arrow
-      objectReference: {fileID: 0}
-    - target: {fileID: 8736944822857659526, guid: a88a08a9f11ef544d806c8fb99ac207d,
-        type: 3}
-      propertyPath: m_Layer
-      value: 11
-      objectReference: {fileID: 0}
     - target: {fileID: 8736944822857361574, guid: a88a08a9f11ef544d806c8fb99ac207d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1667,6 +1659,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.82379
+      objectReference: {fileID: 0}
+    - target: {fileID: 8736944822857659526, guid: a88a08a9f11ef544d806c8fb99ac207d,
+        type: 3}
+      propertyPath: m_Name
+      value: Arrow
+      objectReference: {fileID: 0}
+    - target: {fileID: 8736944822857659526, guid: a88a08a9f11ef544d806c8fb99ac207d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5439435070507139817, guid: a88a08a9f11ef544d806c8fb99ac207d, type: 3}

@@ -24,6 +24,8 @@ public class PlayerManager : NetworkBehaviour
     private static bool isRevived = false;
     private GameObject _cameraReviving;
     private GameObject _camera;
+    [SerializeField] private GameObject _aliveCollider;
+    [SerializeField] private GameObject _reviveCollider;
 
 
     public void SetBuildingMode()
@@ -115,8 +117,8 @@ public class PlayerManager : NetworkBehaviour
     [ClientRpc]
     void RpcSwitchColliders(bool isOn)
     {
-        transform.GetChild(0).GetChild(0).GetChild(7).gameObject.SetActive(isOn);
-        transform.GetChild(0).GetChild(0).GetChild(8).gameObject.SetActive(!isOn);
+        _aliveCollider.SetActive(isOn);
+        _reviveCollider.SetActive(!isOn);
     }
     
     [ClientRpc]

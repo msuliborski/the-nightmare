@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine.Networking;
 using UnityEngine.Networking.Match;
 using UnityEngine.Serialization;
@@ -10,6 +11,7 @@ public class JoinGame : MonoBehaviour
    [SerializeField] private GameObject _roomListInst;
    [FormerlySerializedAs("status")] [SerializeField] private Text _status;
    [SerializeField] private Transform _roomListParent;
+   [SerializeField] private GameObject _panel;
    private List<GameObject> _roomList = new List<GameObject>();
    private NetworkManager _networkManager;
 
@@ -80,6 +82,7 @@ public class JoinGame : MonoBehaviour
    {
       _networkManager.matchMaker.JoinMatch(match.networkId, "", "", "", 0, 0, _networkManager.OnMatchJoined);
       ClearRoomList();
-      _status.text = "Joining...";
+      _panel.SetActive(true);
+      _panel.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Joining room...";
    }
 }
