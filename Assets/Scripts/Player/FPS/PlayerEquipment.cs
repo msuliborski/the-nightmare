@@ -76,6 +76,15 @@ public class PlayerEquipment : NetworkBehaviour {
                     }
                 }
             }
+            else if (weaponFinder.collider.CompareTag("reviving")) {
+                if (isLocalPlayer){
+                    pickUp.enabled = true;
+                    pickUp.text = "Press E to revive";
+                }
+                if (Input.GetKeyDown(KeyCode.E)) {
+                    weaponFinder.collider.GetComponentInParent<PlayerManager>().Revive();
+                }
+            }
             else if (weaponFinder.collider.CompareTag("Chest")) {
                 _chest = weaponFinder.collider.GetComponentInParent<Chest>();
                 _chestAlwaysFull = weaponFinder.collider.GetComponentInParent<ChestAlwaysFull>();
@@ -110,15 +119,7 @@ public class PlayerEquipment : NetworkBehaviour {
                     }
 
                 }
-                else if (weaponFinder.collider.CompareTag("reviving")) {
-                    if (isLocalPlayer){
-                        pickUp.enabled = true;
-                        pickUp.text = "Press E to revive";
-                    }
-                    if (Input.GetKeyDown(KeyCode.E)) {
-                        weaponFinder.collider.GetComponentInParent<PlayerManager>().Revive();
-                    }
-                }
+                
                 else {
                     if (_chestAlwaysFull.active && !_chestAlwaysFull.alreadyPicked) {
                         if (isLocalPlayer){
