@@ -252,10 +252,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.31711775
-  m_Height: 1.1447747
+  m_Radius: 0.22122511
+  m_Height: 0.9263634
   m_Direction: 1
-  m_Center: {x: -0.0145299435, y: 0.06684983, z: -0.19389051}
+  m_Center: {x: -0.015832886, y: -0.042355806, z: -0.15780738}
 --- !u!114 &3953590870183607671
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -519,7 +519,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 18231
+    m_Bits: 50999
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -575,6 +575,7 @@ GameObject:
   - component: {fileID: 2896951668785230134}
   - component: {fileID: 4371665320065314336}
   - component: {fileID: 6047913895816031888}
+  - component: {fileID: 3121853921023881965}
   m_Layer: 9
   m_Name: Boy
   m_TagString: Untagged
@@ -971,6 +972,20 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!136 &3121853921023881965
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2361017057787199711}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.2687687
+  m_Height: 0.5375374
+  m_Direction: 1
+  m_Center: {x: -0.02330944, y: 0.16968504, z: 0}
 --- !u!1 &3030279985954405764
 GameObject:
   m_ObjectHideFlags: 0
