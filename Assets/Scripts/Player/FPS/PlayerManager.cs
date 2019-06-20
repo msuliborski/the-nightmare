@@ -99,8 +99,8 @@ public class PlayerManager : NetworkBehaviour
         for (int i = 0; i < _disableOnDeath.Length; i++)
             _disableOnDeath[i].enabled = _wasEnabled[i];
 
-        //transform.GetChild(0).gameObject.SetActive(true);
-        transform.GetChild(1).gameObject.SetActive(false);
+        transform.GetChild(0).GetChild(0).GetChild(7).gameObject.SetActive(true);
+        transform.GetChild(0).GetChild(0).GetChild(8).gameObject.SetActive(false);
         
     }
 
@@ -125,13 +125,14 @@ public class PlayerManager : NetworkBehaviour
         foreach (Behaviour behaviour in _disableOnDeath)
             behaviour.enabled = false;
         
-        //transform.GetChild(0).gameObject.SetActive(false);
-        transform.GetChild(1).gameObject.SetActive(true);
+        transform.GetChild(0).GetChild(0).GetChild(7).gameObject.SetActive(false);
+        transform.GetChild(0).GetChild(0).GetChild(8).gameObject.SetActive(true);
         GameManager.DeactivatePlayer(transform.name);
         ChangeCamera();
         isRevived = true;
         //StartCoroutine(Respawn());
     }
+    
 
     private void ChangeCamera()
     {
