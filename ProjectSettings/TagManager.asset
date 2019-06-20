@@ -18,6 +18,7 @@ TagManager:
   - Chest
   - Barrel
   - removableChairs
+  - reviving
   layers:
   - Default
   - TransparentFX
