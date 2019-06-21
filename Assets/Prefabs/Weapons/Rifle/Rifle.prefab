@@ -4852,7 +4852,7 @@ MonoBehaviour:
     type: 3}
   _smoke: {fileID: 7640579246655775121, guid: 3990f0794274d4645896970959b59ed5, type: 3}
   _state: 0
-  allowTriple: 0
+  allowTriple: 1
   allowContinous: 1
   _defaultFireMode: 2
   _fireMode: 2
