@@ -103,7 +103,7 @@ public class PlayerManager : NetworkBehaviour
         _currentHealth = _maxHealth;
 
         for (int i = 0; i < _disableOnDeath.Length; i++)
-            _disableOnDeath[i].enabled = true;//_wasEnabled[i];
+            _disableOnDeath[i].enabled = _wasEnabled[i];
 
         
         CmdSwitchColliders(true);
@@ -139,10 +139,10 @@ public class PlayerManager : NetworkBehaviour
         _playerAnimator.SetTrigger("die");
         _playerAnimator.SetBool("revive", false);
         _isDead = true;
+        for (int i = 0; i < _disableOnDeath.Length; i++)
+            _disableOnDeath[i].enabled = !_wasEnabled[i];
+        _rigidbody.isKinematic = true;
 
-        foreach (Behaviour behaviour in _disableOnDeath)
-            behaviour.enabled = false;
-        
         CmdSwitchColliders(false);
         GameManager.DeactivatePlayer(transform.name);
         ChangeCamera(true);
@@ -162,6 +162,7 @@ public class PlayerManager : NetworkBehaviour
     public void Revive()
     {
         Debug.Log("reviving shit");
+        _rigidbody.isKinematic = false;
         isRevived = false;
         ChangeCamera(false);
         _playerAnimator.SetBool("revive", true);

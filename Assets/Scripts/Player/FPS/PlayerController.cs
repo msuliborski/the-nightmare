@@ -10,6 +10,7 @@ public class PlayerController : NetworkBehaviour {
     [SerializeField] private Joystick look;
     public float SensitivityScale { get; set; }
     [SerializeField] private float _nonZoomSensivity = 0.7f;
+    Quaternion _prevRot;
 
     public float NonZoomSensitivity {
         get { return _nonZoomSensivity; }
@@ -27,10 +28,12 @@ public class PlayerController : NetworkBehaviour {
     private float _speedFast = 7f;
 
     private PlayerMotor _motor;
+    private PlayerManager _playerManager;
     private static readonly int IsSprinting = Animator.StringToHash("isSprinting");
 
     void Start() {
         _motor = GetComponent<PlayerMotor>();
+        _playerManager = GetComponent<PlayerManager>();
         SensitivityScale = 0.7f;
 #if UNITY_ANDROID
         move = GameObject.Find("Move").GetComponent<Joystick>();
@@ -38,6 +41,7 @@ public class PlayerController : NetworkBehaviour {
 #endif
     }
 
+   
 
     private void Update() {
         if (transform.GetComponent<PlayerEquipment>().getActiveWeapon().GetComponent<Animator>().GetBool(IsSprinting))
@@ -47,7 +51,16 @@ public class PlayerController : NetworkBehaviour {
 
 
 //        Debug.Log(_speed);
-        if (!PauseGame.menuActive) {
+        if (PauseGame.menuActive) {
+            
+
+            _motor.Move(Vector3.zero);
+            _motor.Rotate(Vector3.zero);
+            _motor.RotateCamera(0f);
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        else {
             float xMov = 0;
             float zMov = 0;
 
@@ -94,14 +107,8 @@ public class PlayerController : NetworkBehaviour {
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-        }
 
-        else {
-            _motor.Move(Vector3.zero);
-            _motor.Rotate(Vector3.zero);
-            _motor.RotateCamera(0f);
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
+            _prevRot = transform.rotation;
         }
     }
 

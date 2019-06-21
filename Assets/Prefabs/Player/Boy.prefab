@@ -821,6 +821,7 @@ MonoBehaviour:
   _disableOnDeath:
   - {fileID: 917736756212613217}
   - {fileID: 7278791426480694111}
+  - {fileID: 7381497835903766135}
   _aliveCollider: {fileID: 512380352185882247}
   _reviveCollider: {fileID: 242067511171883426}
 --- !u!114 &3654204675247675900
@@ -1222,6 +1223,7 @@ GameObject:
   - component: {fileID: 6493309992662314870}
   - component: {fileID: 4470840750701174308}
   - component: {fileID: 1493568512325877592}
+  - component: {fileID: 208831581284531958}
   m_Layer: 0
   m_Name: CameraReviving
   m_TagString: Untagged
@@ -1273,7 +1275,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 22327
+    m_Bits: 55095
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -1293,6 +1295,19 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9162862087349896103}
   m_Enabled: 1
+--- !u!114 &208831581284531958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9162862087349896103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff26db721962cdf4a8edcdfa9a767d2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  profile: {fileID: 11400000, guid: ba12f8c07e01f534fb3453fd2dcf1769, type: 2}
 --- !u!1001 &4122494463525110022
 PrefabInstance:
   m_ObjectHideFlags: 0

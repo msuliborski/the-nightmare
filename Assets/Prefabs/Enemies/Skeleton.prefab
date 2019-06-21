@@ -123,8 +123,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2.1868837, y: 0.41121733, z: 2.220223}
-  m_Center: {x: -0.12315118, y: 0.3438192, z: 0.11681783}
+  m_Size: {x: 2.5961509, y: 0.41121733, z: 3.22678}
+  m_Center: {x: -0.08559847, y: 0.3438192, z: 0.5213437}
 --- !u!114 &7264628750177825023
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -268,7 +268,7 @@ GameObject:
   - component: {fileID: 1860152029020784033}
   - component: {fileID: 6242839686703534753}
   m_Layer: 0
-  m_Name: ZombieFather
+  m_Name: Skeleton
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -357,8 +357,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.3992293, y: 0.9751215, z: 0.98900914}
-  m_Center: {x: -0.0097157955, y: 0.012439251, z: 0.29950798}
+  m_Size: {x: 0.6951893, y: 0.9751215, z: 1.092802}
+  m_Center: {x: 0.008427769, y: 0.012439251, z: 0.35140443}
 --- !u!114 &290730769035761863
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -565,6 +565,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4475811651341808618}
     m_Modifications:
+    - target: {fileID: 100072, guid: a457922b935ba8f63b7a41a503033645, type: 3}
+      propertyPath: m_Name
+      value: skeleton@Idle
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: a457922b935ba8f63b7a41a503033645, type: 3}
+      propertyPath: m_Name
+      value: eyes
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: a457922b935ba8f63b7a41a503033645, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 100070, guid: a457922b935ba8f63b7a41a503033645, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 400072, guid: a457922b935ba8f63b7a41a503033645, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -621,22 +637,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 8
       objectReference: {fileID: 0}
-    - target: {fileID: 100072, guid: a457922b935ba8f63b7a41a503033645, type: 3}
-      propertyPath: m_Name
-      value: skeleton@Idle
-      objectReference: {fileID: 0}
-    - target: {fileID: 100002, guid: a457922b935ba8f63b7a41a503033645, type: 3}
-      propertyPath: m_Name
-      value: eyes
-      objectReference: {fileID: 0}
-    - target: {fileID: 100002, guid: a457922b935ba8f63b7a41a503033645, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 100070, guid: a457922b935ba8f63b7a41a503033645, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 9500000, guid: a457922b935ba8f63b7a41a503033645, type: 3}
       propertyPath: m_Controller
       value: 
@@ -682,6 +682,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 453661309136460926}
     m_Modifications:
+    - target: {fileID: 100006, guid: 906ef3748a66347cfb2d72de10092732, type: 3}
+      propertyPath: m_Name
+      value: GreenCore
+      objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: 906ef3748a66347cfb2d72de10092732, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.014
@@ -725,10 +729,6 @@ PrefabInstance:
     - target: {fileID: 400006, guid: 906ef3748a66347cfb2d72de10092732, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 100006, guid: 906ef3748a66347cfb2d72de10092732, type: 3}
-      propertyPath: m_Name
-      value: GreenCore
       objectReference: {fileID: 0}
     - target: {fileID: 19800002, guid: 906ef3748a66347cfb2d72de10092732, type: 3}
       propertyPath: CollisionModule.enabled
