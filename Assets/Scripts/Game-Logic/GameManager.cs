@@ -16,12 +16,14 @@ public class GameManager : NetworkBehaviour
     private float _prepareTimer = 45f;
     private float[] _timers = { 120f, 180f, 300f };
     private Room _currentRoom;
+    
     public Room CurrentRoom {get { return _currentRoom; }
         set
         {
             _currentRoom = value;
             _enemySpawnPoints.Clear();
             _enemySpawnMarkers.Clear();
+            _currentCaptureAreas.Clear();
             foreach (GameObject spawnPoint in _currentRoom.EnemySpawnPoint)
             {
                 _enemySpawnPoints.Add(spawnPoint.transform.name, spawnPoint.transform);
@@ -67,8 +69,8 @@ public class GameManager : NetworkBehaviour
     private Coroutine _spawnEnemy; 
     [SerializeField] private List<CameraFacing> _billboards = new List<CameraFacing>();
     public List<CameraFacing> Billboards { get { return _billboards; } set { _billboards = value; } }
-    public enum MatchState { Lobby, Room1Prepare, Room1Fight, Room2Prepare, Room2Fight, Room3Prepare, Room3Fight, Win, Lose}
-    private MatchState _currentMatchState = MatchState.Lobby;
+    public enum MatchState { None, Lobby, Room1Prepare, Room1Fight, Room2Prepare, Room2Fight, Room3Prepare, Room3Fight, Win, Lose}
+    private MatchState _currentMatchState = MatchState.None;
 
    
 
@@ -81,13 +83,14 @@ public class GameManager : NetworkBehaviour
             switch (value)
             {
                 case MatchState.Lobby:
-
+                    _arrow.gameObject.SetActive(false);
                     break;
 
                 case MatchState.Room1Prepare:
                     
                     Instance.CurrentRoom = Instance.Rooms[1].GetComponent<Room>();
                     _cpUI.setRoom();
+                    _arrow.setTarget();
                     ClockManager.time = 30f;
                     ClockManager.canCount = true;
                     break;
@@ -101,6 +104,7 @@ public class GameManager : NetworkBehaviour
                 case MatchState.Room2Prepare:
                     StopHordeAttack();
                     Instance.CurrentRoom = Instance.Rooms[2].GetComponent<Room>();
+                    _arrow.setTarget();
                     _cpUI.setRoom();
                     _doors[0].SetActive(false);
                     ClockManager.time = 45f;
@@ -116,6 +120,7 @@ public class GameManager : NetworkBehaviour
                 case MatchState.Room3Prepare:
                     StopHordeAttack();
                     Instance.CurrentRoom = Instance.Rooms[0].GetComponent<Room>();
+                    _arrow.setTarget();
                     _cpUI.setRoom();
                     _doors[1].SetActive(false);
                     ClockManager.time = 60f;
@@ -338,7 +343,17 @@ public class GameManager : NetworkBehaviour
 
     private const string PLAYER_ID_PREFIX = "Player ";
 
-    public static PlayerManager LocalPlayer { get; set; }
+    private static Arrow _arrow;
+    private static PlayerManager _localPlayer;
+    public static PlayerManager LocalPlayer {
+        get { return _localPlayer; }
+        set
+        {
+            _localPlayer = value;
+            _arrow = _localPlayer.GetComponentInChildren<Arrow>();
+            if (_arrow == null) Debug.Log("honk");
+        }
+    }
     private static Dictionary<string, PlayerManager> _players = new Dictionary<string, PlayerManager>();
     private static Dictionary<string, PlayerManager> _activePlayers = new Dictionary<string, PlayerManager>();
     public static Dictionary<string, PlayerManager> Players { get { return _players; } }

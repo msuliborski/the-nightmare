@@ -16,7 +16,7 @@ public class PlayerSetup : NetworkBehaviour {
     private HealthBar _healthBar;
     private ClipsManager _clipsManager;
     
-    private Arrow arrow;
+    
     
     
 
@@ -26,9 +26,9 @@ public class PlayerSetup : NetworkBehaviour {
             EquipWeaponNotLocal();
             DisableComponents();
             AssignRemoteLayer();
+            GetComponentInChildren<Arrow>().gameObject.SetActive(false);
         }
         else {
-            //transform.position = new Vector3(transform.position.x, 3.8f, transform.position.z); // hardcoded shit - hack for wrong spawning y before evaluation
             EquipWeapon();
             _sceneCamera = GameObject.Find("SceneCamera").GetComponent<Camera>();
             if (_sceneCamera != null)
@@ -37,11 +37,16 @@ public class PlayerSetup : NetworkBehaviour {
             _healthBar = GameObject.Find("HP").GetComponent<HealthBar>();
             _clipsManager = GameObject.Find("Clips").GetComponent<ClipsManager>();
             GameManager.LocalPlayer = GetComponent<PlayerManager>();
-            GameManager.Instance.CurrentMachState = GameManager.MatchState.Lobby;
-           
+            if (GameManager.Instance.CurrentMachState == GameManager.MatchState.None)
+            {
+                GameManager.Instance.CurrentMachState = GameManager.MatchState.Lobby;
+                GameManager.IsListeningForReady = true;
+            }
+            else
+            {
+                GameManager.Instance.CurrentMachState = GameManager.MatchState.Room1Prepare;
+            }
             
-            //arrow = GameManager.LocalPlayer.GetComponentInChildren<Arrow>();
-            //arrow.setTarget();
             _bulletshud.Equipment = GetComponent<PlayerEquipment>();
             _clipsManager.player = GetComponent<PlayerEquipment>();
             _healthBar.player = GetComponent<PlayerManager>();
@@ -81,6 +86,7 @@ public class PlayerSetup : NetworkBehaviour {
     }
 
     void EquipWeapon() {
+        
         GameObject weaponObject = Instantiate(_weaponObjectPrefab, _actionCamera.transform.GetChild(0));
         PlayerShoot shoot = GetComponent<PlayerShoot>();
         shoot.Cam = _actionCamera;
@@ -106,12 +112,17 @@ public class PlayerSetup : NetworkBehaviour {
     }
 
     private void OnDisable() {
-        if (isLocalPlayer) {
-            if (_sceneCamera != null)
-                _sceneCamera.gameObject.SetActive(true);
-        }
+        if (GameManager.Players.ContainsKey(transform.name))
+        {
 
-        GameManager.UnregisterPlayer(transform.name);
+            if (isLocalPlayer)
+            {
+                if (_sceneCamera != null)
+                    _sceneCamera.gameObject.SetActive(true);
+            }
+
+            GameManager.UnregisterPlayer(transform.name);
+        }
     }
 
     private void OnEnable() {
