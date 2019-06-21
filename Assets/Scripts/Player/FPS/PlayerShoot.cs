@@ -326,6 +326,11 @@ public class PlayerShoot : NetworkBehaviour {
         source.PlayOneShot(source.clip);
     }
 
+    public void playSootSound()
+    {
+        playSound(shot);
+    }
+
     IEnumerator ShowHitmarker() {
         playSound(hitMarker);
         Cross.transform.GetChild(1).gameObject.SetActive(true);

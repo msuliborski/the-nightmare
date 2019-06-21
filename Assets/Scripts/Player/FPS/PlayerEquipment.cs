@@ -179,6 +179,7 @@ public class PlayerEquipment : NetworkBehaviour {
     [ClientRpc]
     public void RpcPlayerShooting() {
         if (!isLocalPlayer) {
+            _shoot.playSootSound();
             getActiveWeapon().Flash.Play();
             GameObject smokeEffect = Instantiate(getActiveWeapon().Smoke,
                 getActiveWeapon().transform.GetChild(0).position,
