@@ -140,7 +140,7 @@ public class PlayerManager : NetworkBehaviour
         _playerAnimator.SetBool("revive", false);
         _isDead = true;
         for (int i = 0; i < _disableOnDeath.Length; i++)
-            _disableOnDeath[i].enabled = !_wasEnabled[i];
+            _disableOnDeath[i].enabled = false;
         _rigidbody.collisionDetectionMode = CollisionDetectionMode.Discrete;
         _rigidbody.isKinematic = true;
 
