@@ -141,6 +141,7 @@ public class PlayerManager : NetworkBehaviour
         _isDead = true;
         for (int i = 0; i < _disableOnDeath.Length; i++)
             _disableOnDeath[i].enabled = !_wasEnabled[i];
+        _rigidbody.collisionDetectionMode = CollisionDetectionMode.Discrete;
         _rigidbody.isKinematic = true;
 
         CmdSwitchColliders(false);
@@ -163,6 +164,7 @@ public class PlayerManager : NetworkBehaviour
     {
         Debug.Log("reviving shit");
         _rigidbody.isKinematic = false;
+        _rigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
         isRevived = false;
         ChangeCamera(false);
         _playerAnimator.SetBool("revive", true);
