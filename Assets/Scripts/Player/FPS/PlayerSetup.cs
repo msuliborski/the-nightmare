@@ -15,7 +15,7 @@ public class PlayerSetup : NetworkBehaviour {
     private BulletsHUD _bulletshud;
     private HealthBar _healthBar;
     private ClipsManager _clipsManager;
-    private CapturePointsUI cpUI;
+    
     private Arrow arrow;
     
     
@@ -28,7 +28,7 @@ public class PlayerSetup : NetworkBehaviour {
             AssignRemoteLayer();
         }
         else {
-            transform.position = new Vector3(transform.position.x, 3.8f, transform.position.z); // hardcoded shit - hack for wrong spawning y before evaluation
+            //transform.position = new Vector3(transform.position.x, 3.8f, transform.position.z); // hardcoded shit - hack for wrong spawning y before evaluation
             EquipWeapon();
             _sceneCamera = GameObject.Find("SceneCamera").GetComponent<Camera>();
             if (_sceneCamera != null)
@@ -37,11 +37,11 @@ public class PlayerSetup : NetworkBehaviour {
             _healthBar = GameObject.Find("HP").GetComponent<HealthBar>();
             _clipsManager = GameObject.Find("Clips").GetComponent<ClipsManager>();
             GameManager.LocalPlayer = GetComponent<PlayerManager>();
-            GameManager.Instance.CurrentMachState = GameManager.MatchState.Room1Prepare;
-            cpUI = GameObject.Find("CapturePoints").GetComponent<CapturePointsUI>();
-            cpUI.setRoom();
-            arrow = GameManager.LocalPlayer.GetComponentInChildren<Arrow>();
-            arrow.setTarget();
+            GameManager.Instance.CurrentMachState = GameManager.MatchState.Lobby;
+           
+            
+            //arrow = GameManager.LocalPlayer.GetComponentInChildren<Arrow>();
+            //arrow.setTarget();
             _bulletshud.Equipment = GetComponent<PlayerEquipment>();
             _clipsManager.player = GetComponent<PlayerEquipment>();
             _healthBar.player = GetComponent<PlayerManager>();

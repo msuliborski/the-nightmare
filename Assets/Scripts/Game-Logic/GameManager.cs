@@ -52,7 +52,7 @@ public class GameManager : NetworkBehaviour
     public List<CaptureArea> CaptureAreas { get { return _captureAreas; } }
     private static List<GameObject> _gridRenderes = new List<GameObject>();
     [SerializeField] GameObject[] _doors;
-
+    private CapturePointsUI _cpUI;
 
     public static List<GameObject> GridRenderes { get { return _gridRenderes; } }
     private static List<SpriteRenderer> _spriteRenderes = new List<SpriteRenderer>();
@@ -69,6 +69,9 @@ public class GameManager : NetworkBehaviour
     public List<CameraFacing> Billboards { get { return _billboards; } set { _billboards = value; } }
     public enum MatchState { Lobby, Room1Prepare, Room1Fight, Room2Prepare, Room2Fight, Room3Prepare, Room3Fight, Win, Lose}
     private MatchState _currentMatchState = MatchState.Lobby;
+
+   
+
     public MatchState CurrentMachState
     {
         get { return _currentMatchState; }
@@ -77,9 +80,14 @@ public class GameManager : NetworkBehaviour
             _currentMatchState = value;
             switch (value)
             {
+                case MatchState.Lobby:
+
+                    break;
+
                 case MatchState.Room1Prepare:
                     
                     Instance.CurrentRoom = Instance.Rooms[1].GetComponent<Room>();
+                    _cpUI.setRoom();
                     ClockManager.time = 30f;
                     ClockManager.canCount = true;
                     break;
@@ -93,6 +101,7 @@ public class GameManager : NetworkBehaviour
                 case MatchState.Room2Prepare:
                     StopHordeAttack();
                     Instance.CurrentRoom = Instance.Rooms[2].GetComponent<Room>();
+                    _cpUI.setRoom();
                     _doors[0].SetActive(false);
                     ClockManager.time = 45f;
                     ClockManager.canCount = true;
@@ -107,6 +116,7 @@ public class GameManager : NetworkBehaviour
                 case MatchState.Room3Prepare:
                     StopHordeAttack();
                     Instance.CurrentRoom = Instance.Rooms[0].GetComponent<Room>();
+                    _cpUI.setRoom();
                     _doors[1].SetActive(false);
                     ClockManager.time = 60f;
                     ClockManager.canCount = true;
@@ -198,8 +208,8 @@ public class GameManager : NetworkBehaviour
                 _captureAreas.Add(captureArea.GetComponent<CaptureArea>());
             }
         }
-
-       _matchSettings.WaitForSpawn -= _matchSettings.EnemyRespawnTime;
+        _cpUI = GameObject.Find("CapturePoints").GetComponent<CapturePointsUI>();
+        _matchSettings.WaitForSpawn -= _matchSettings.EnemyRespawnTime;
     }
 
     private void Start()

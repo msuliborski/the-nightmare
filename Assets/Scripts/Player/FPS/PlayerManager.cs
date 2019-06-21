@@ -26,6 +26,7 @@ public class PlayerManager : NetworkBehaviour
     private GameObject _camera;
     [SerializeField] private GameObject _aliveCollider;
     [SerializeField] private GameObject _reviveCollider;
+    public GameObject Prefab { get; set; }
 
 
     public void SetBuildingMode()

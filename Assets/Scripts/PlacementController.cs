@@ -32,8 +32,10 @@ public class PlacementController : NetworkBehaviour
     public const int INDEX_OF_SNARES = 0;
     public const int INDEX_OF_BEAR = 1;
     public const int INDEX_OF_BARREL = 2;
+    private CustomNetworkManager _customNetworkManager;
 
-   private PlayerShoot _playerShoot;
+    private PlayerShoot _playerShoot;
+    private PlayerManager _playerManager;
 
     public GameObject CurrentObject
     {
@@ -45,6 +47,7 @@ public class PlacementController : NetworkBehaviour
     {
         if (isLocalPlayer)
         {
+            _customNetworkManager = GameObject.Find("NetworkManager").GetComponent<CustomNetworkManager>();
             _placeableTM[0] = GameObject.Find("SnaresCount").GetComponent<TextMeshProUGUI>();
             _placeableTM[1] = GameObject.Find("TeddyBearCount").GetComponent<TextMeshProUGUI>();
             _placeableTM[2] = GameObject.Find("BarrelsCount").GetComponent<TextMeshProUGUI>();
@@ -55,6 +58,7 @@ public class PlacementController : NetworkBehaviour
             placeableCount[i] = maxPlaceable[i];
         }
         _playerShoot = GetComponent<PlayerShoot>();
+        _playerManager = GetComponent<PlayerManager>();
         _reverseGrid = 1f / GridTileSize;
         _buildingCameraHolder = gameObject.transform.Find("BuildingCameraHolder");
         _buildingCamera = _buildingCameraHolder.GetComponentInChildren<Camera>();
@@ -209,12 +213,12 @@ public class PlacementController : NetworkBehaviour
                     }
 
                 }
-                //if (Input.GetKeyDown(KeyCode.Return) && GameManager.IsListeningForReady)
-                //{
-                //    GameManager.IsListeningForReady = false;
-                //    CmdRegisterBeingReady();
+                if (Input.GetKeyDown(KeyCode.Return) && GameManager.IsListeningForReady)
+                {
+                    GameManager.IsListeningForReady = false;
+                    CmdRegisterBeingReady();
 
-                //}
+                }
                 break;
 
             case GameManager.GameState.Building:
@@ -277,6 +281,7 @@ public class PlacementController : NetworkBehaviour
         ClockManager.canCount = true;
         if (localPlayer._currentObject != null) Destroy(localPlayer._currentObject);
         GameManager.CurrentState = GameManager.GameState.Fighting;*/
+        //_customNetworkManager.Teleport(_playerManager);
         GameManager.Instance.CurrentMachState = GameManager.MatchState.Room1Prepare;
     }
 
