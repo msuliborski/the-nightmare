@@ -35,18 +35,18 @@ public class PlayerSetup : NetworkBehaviour {
             _healthBar = GameObject.Find("HP").GetComponent<HealthBar>();
             _clipsManager = GameObject.Find("Clips").GetComponent<ClipsManager>();
             GameManager.LocalPlayer = GetComponent<PlayerManager>();
-            if (GameManager.Instance.CurrentMachState == GameManager.MatchState.None)
-            {
+            //if (GameManager.Instance.CurrentMachState == GameManager.MatchState.None)
+            //{
                 _sceneCamera = GameObject.Find("SceneCamera").GetComponent<Camera>();
                 if (_sceneCamera != null)
                     _sceneCamera.gameObject.SetActive(false);
                 GameManager.Instance.CurrentMachState = GameManager.MatchState.Lobby;
                 GameManager.IsListeningForReady = true;
-            }
-            else
-            {
-                GameManager.Instance.CurrentMachState = GameManager.MatchState.Room1Prepare;
-            }
+            //}
+            //else
+            //{
+            //    GameManager.Instance.CurrentMachState = GameManager.MatchState.Room1Prepare;
+            //}
             
             _bulletshud.Equipment = GetComponent<PlayerEquipment>();
             _clipsManager.player = GetComponent<PlayerEquipment>();

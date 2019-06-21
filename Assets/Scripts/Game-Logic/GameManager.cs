@@ -423,5 +423,15 @@ public class GameManager : NetworkBehaviour
             cameraFacing.cameraToLookAt = cam;
     }
 
+    public static void Teleport(PlayerManager playerManager)
+    {
+        LocalPlayer.transform.position = new Vector3(-1.693f, 3.21f, 0f);
+       
+        TurnOnGridRenders(false);
+        PlayerEquipment playerEquipment = LocalPlayer.GetComponentInChildren<PlayerEquipment>();
+        if (playerEquipment.Weapon2 != null) Destroy(playerEquipment.Weapon2.gameObject);
+        playerEquipment.Weapon1.resetAmmo();
+    }
+
     #endregion
 }
