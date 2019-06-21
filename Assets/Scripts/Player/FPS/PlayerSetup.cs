@@ -30,15 +30,16 @@ public class PlayerSetup : NetworkBehaviour {
         }
         else {
             EquipWeapon();
-            _sceneCamera = GameObject.Find("SceneCamera").GetComponent<Camera>();
-            if (_sceneCamera != null)
-                _sceneCamera.gameObject.SetActive(false);
+           
             _bulletshud = GameObject.Find("bulletsNumber").GetComponent<BulletsHUD>();
             _healthBar = GameObject.Find("HP").GetComponent<HealthBar>();
             _clipsManager = GameObject.Find("Clips").GetComponent<ClipsManager>();
             GameManager.LocalPlayer = GetComponent<PlayerManager>();
             if (GameManager.Instance.CurrentMachState == GameManager.MatchState.None)
             {
+                _sceneCamera = GameObject.Find("SceneCamera").GetComponent<Camera>();
+                if (_sceneCamera != null)
+                    _sceneCamera.gameObject.SetActive(false);
                 GameManager.Instance.CurrentMachState = GameManager.MatchState.Lobby;
                 GameManager.IsListeningForReady = true;
             }
