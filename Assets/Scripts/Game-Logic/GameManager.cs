@@ -423,11 +423,13 @@ public class GameManager : NetworkBehaviour
             cameraFacing.cameraToLookAt = cam;
     }
 
-    public static void Teleport()
+    public void Teleport()
     {
+        CurrentMachState = MatchState.Room1Prepare;
+        Vector3 pos = CurrentRoom.CaptureAreas[0].transform.position;
         float randX = Random.Range(-2f, 2f);
         float randZ = Random.Range(-2f, 2f);
-        LocalPlayer.transform.position = new Vector3(-1.693f + randX, 3.21f, 0f + randZ);
+        LocalPlayer.transform.position = new Vector3(pos.x + randX, pos.y + 1f, pos.z + randZ);
         TurnOnGridRenders(false);
         PlayerEquipment playerEquipment = LocalPlayer.GetComponentInChildren<PlayerEquipment>();
         if (playerEquipment.Weapon2 != null) Destroy(playerEquipment.Weapon2.gameObject);
