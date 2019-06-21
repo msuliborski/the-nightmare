@@ -347,17 +347,35 @@ public class GameManager : NetworkBehaviour
     public static Dictionary<string, EnemyControllerServer> Enemies { get { return _enemies; } }
     private static int _enemyIdCounter = 0;
     public static int EnemyIdCounter { get { return _enemyIdCounter; } set { _enemyIdCounter = value; } }
-
+    
+    private static List<int> arrowIndexList = new List<int>() {0, 1, 2, 3};
     public static void RegisterPlayer(string netId, PlayerManager player)
     {
         string playerId = PLAYER_ID_PREFIX + netId;
         _players.Add(playerId, player);
         _activePlayers.Add(playerId, player);
         player.transform.name = playerId;
+        
+        player.transform.GetChild(4).GetChild(0).gameObject.SetActive(false);
+        
+        player.transform.GetChild(4).GetChild(arrowIndexList[0]).gameObject.SetActive(true);
+        arrowIndexList.Remove(0);
     }
 
-    public static void UnregisterPlayer(string playerId)
-    {
+    public static void UnregisterPlayer(string playerId) {
+        int index = -1;
+        if (_players[playerId].transform.GetChild(4).GetChild(0).gameObject.activeSelf) 
+            index = 0;
+        else if (_players[playerId].transform.GetChild(4).GetChild(1).gameObject.activeSelf)
+            index = 1;
+        else if (_players[playerId].transform.GetChild(4).GetChild(1).gameObject.activeSelf)
+            index = 2;
+        else
+            index = 3;
+        
+        arrowIndexList.Add(index);
+        arrowIndexList.Sort();
+            
         _players.Remove(playerId);
         if (_activePlayers.ContainsKey(playerId)) _activePlayers.Remove(playerId);
     }
