@@ -281,7 +281,7 @@ public class PlacementController : NetworkBehaviour
         ClockManager.canCount = true;
         if (localPlayer._currentObject != null) Destroy(localPlayer._currentObject);
         GameManager.CurrentState = GameManager.GameState.Fighting;*/
-        GameObject.Find("NetworkManager").GetComponent<CustomNetworkManager>().Teleport(_playerManager);
+        GameObject.Find("NetworkManager").GetComponent<CustomNetworkManager>().Teleport(GameManager.LocalPlayer);
         GameManager.Instance.CurrentMachState = GameManager.MatchState.Room1Prepare;
     }
 
