@@ -79598,7 +79598,7 @@ PrefabInstance:
         type: 3}
       propertyPath: players.Array.data[1]
       value: 
-      objectReference: {fileID: 2361017057787199711, guid: 45cbbf4ff84df544faad07f5ac31f11a,
+      objectReference: {fileID: 2361017057787199711, guid: c3ce8b8bd4727824c98c24dd0411c3a7,
         type: 3}
     - target: {fileID: 749330305, guid: 073947f950d4f2fd599365c522c0559e, type: 3}
       propertyPath: m_LocalPosition.z
