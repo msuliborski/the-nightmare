@@ -425,7 +425,9 @@ public class GameManager : NetworkBehaviour
 
     public static void Teleport()
     {
-        LocalPlayer.transform.position = new Vector3(-1.693f, 3.21f, 0f);
+        float randX = Random.Range(-2f, 2f);
+        float randZ = Random.Range(-2f, 2f);
+        LocalPlayer.transform.position = new Vector3(-1.693f + randX, 3.21f, 0f + randZ);
         TurnOnGridRenders(false);
         PlayerEquipment playerEquipment = LocalPlayer.GetComponentInChildren<PlayerEquipment>();
         if (playerEquipment.Weapon2 != null) Destroy(playerEquipment.Weapon2.gameObject);
