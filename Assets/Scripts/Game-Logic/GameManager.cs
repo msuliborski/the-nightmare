@@ -434,6 +434,7 @@ public class GameManager : NetworkBehaviour
         PlayerEquipment playerEquipment = LocalPlayer.GetComponentInChildren<PlayerEquipment>();
         if (playerEquipment.Weapon2 != null) Destroy(playerEquipment.Weapon2.gameObject);
         playerEquipment.Weapon1.resetAmmo();
+        playerEquipment.Weapon1.gameObject.SetActive(true);
     }
 
     #endregion
