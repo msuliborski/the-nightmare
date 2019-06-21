@@ -56,7 +56,7 @@ public class PlayerSetup : NetworkBehaviour {
             _clipsManager.playerEnabled = true;
             GameManager.Instance.SetCameraForBillboards(_actionCamera);
         }
-
+        
         GetComponent<PlayerManager>().Setup();
     }
 
@@ -74,6 +74,7 @@ public class PlayerSetup : NetworkBehaviour {
         }
 
         PlayerShoot shoot = GetComponent<PlayerShoot>();
+        shoot.source = GetComponent<AudioSource>();
         shoot.Cam = _actionCamera;
         _equipment = GetComponent<PlayerEquipment>();
         _equipment.Weapon1 = weaponObject.GetComponent<Weapon>();

@@ -12,42 +12,13 @@ public class PlayerShoot : NetworkBehaviour {
     public PlayerEquipment Equipment { get; set; }
 
     private PlayerController _playerController;
-    private AudioSource source;
+    public AudioSource source { get; set; }
     public AudioClip shot;
     public AudioClip hitMarker;
     public AudioClip reload;
     public AudioClip pistol;
     public AudioClip rifle;
-    //private List<Material> _originalMaterials;
-    //[SerializeField] Material _blackeningMaterial;
-    //private bool _blackened = false;
-    /*public bool Blackened {
-        get { return _blackened;  }
-        set
-        {
-            Transform weaponModelTransform = Equipment.getActiveWeapon().transform.transform.GetChild(0).GetChild(0).GetChild(1);
-
-            if (value)
-            {
-                _originalMaterials = new List<Material>();
-                for (int i = 0; i < weaponModelTransform.childCount; i++)
-                {
-                    MeshRenderer meshRenderer = weaponModelTransform.GetChild(i).GetComponent<MeshRenderer>();
-                    _originalMaterials.Add(meshRenderer.material);
-                    meshRenderer.material = _blackeningMaterial;
-                }
-            }
-            else
-            {
-                for (int i = 0; i < weaponModelTransform.childCount; i++)
-                {
-                    MeshRenderer meshRenderer = weaponModelTransform.GetChild(i).GetComponent<MeshRenderer>();
-                    meshRenderer.material = _originalMaterials[i];
-                }
-            }
-        }
-    }*/
-
+  
 
     public GameObject Cross;
 
