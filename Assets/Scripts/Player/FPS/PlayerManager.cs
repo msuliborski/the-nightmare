@@ -174,6 +174,17 @@ public class PlayerManager : NetworkBehaviour
 //        transform.position = spawnPoint.position;
 //        transform.rotation = spawnPoint.rotation;
         GameManager.ActivatePlayer(transform.name, this);
+
+        if (transform.GetComponent<PlayerEquipment>().getActiveWeapon().Id == 0)
+        {
+            transform.GetComponent<PlayerEquipment>().getActiveWeapon().transform.localPosition = new Vector3(0.02f, 0.03f, -0.22f);
+            transform.GetComponent<PlayerEquipment>().getActiveWeapon().transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
+        }
+        else
+        {
+            transform.GetComponent<PlayerEquipment>().getActiveWeapon().transform.localPosition = new Vector3(0.08f, -0.02f, -0.17f);
+            transform.GetComponent<PlayerEquipment>().getActiveWeapon().transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
+        }
     }
 
     public override void OnDeserialize(NetworkReader reader, bool initialState)
