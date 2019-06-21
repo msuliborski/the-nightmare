@@ -13,8 +13,7 @@ public class PlayerEquipment : NetworkBehaviour {
     private TextMeshProUGUI pickUp;
     private PlayerShoot _shoot;
     private PlacementController _controller;
-    private Chest _chest;
-    private ChestAlwaysFull _chestAlwaysFull;
+    private ChestAlwaysFull _chest;
 
     private void Start() {
         if (isLocalPlayer) {
@@ -58,23 +57,17 @@ public class PlayerEquipment : NetworkBehaviour {
                 }
                 if (Input.GetKeyDown(KeyCode.E)) {
                     if (_cam.transform.GetChild(0).transform.childCount <= 1) {
-                        int weaponId = 1;
-                        if (weaponId != 0) {
-                            GameObject weaponObject = Instantiate(GameManager.Instance.Weapons[weaponId],
+                        GameObject weaponObject = Instantiate(GameManager.Instance.Weapons[1],
                                 _cam.transform.GetChild(0).transform);
                             Weapon2 = weaponObject.GetComponent<Weapon>();
                             Weapon1.transform.localPosition = new Vector3(0.02f, 0.03f, -0.22f);
                             Weapon1.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
                             Weapon1.gameObject.SetActive(false);
-                            CmdChangeWeapon(weaponId);
-                        }
+                            CmdChangeWeapon(1);
                     }
                     else {
-                        int weaponId = weaponFinder.collider.gameObject.GetComponent<GunSpawnPoint>().WeaponId;
-                        if (weaponId == 1) {
-                            Weapon2.CurrentAmmo = Weapon2.MaxAmmo;
-                            Weapon2.CurrentMagAmmo = Weapon2.MaxMagAmmo;
-                        }
+                        Weapon2.CurrentAmmo = Weapon2.MaxAmmo + (Weapon2.MaxMagAmmo - Weapon2.CurrentMagAmmo);
+//                        Weapon2.CurrentMagAmmo = Weapon2.MaxMagAmmo;
                     }
                 }
             }
@@ -88,9 +81,7 @@ public class PlayerEquipment : NetworkBehaviour {
                 }
             }
             else if (weaponFinder.collider.CompareTag("Chest")) {
-                _chest = weaponFinder.collider.GetComponentInParent<Chest>();
-                _chestAlwaysFull = weaponFinder.collider.GetComponentInParent<ChestAlwaysFull>();
-                if (_chestAlwaysFull == null) {
+                _chest = weaponFinder.collider.GetComponentInParent<ChestAlwaysFull>();
                     if (_chest.active && !_chest.alreadyPicked) {
                         if (isLocalPlayer){
                             pickUp.enabled = true;
@@ -119,39 +110,6 @@ public class PlayerEquipment : NetworkBehaviour {
                         if (isLocalPlayer)
                             pickUp.enabled = false;
                     }
-
-                }
-                
-                else {
-                    if (_chestAlwaysFull.active && !_chestAlwaysFull.alreadyPicked) {
-                        if (isLocalPlayer){
-                            pickUp.enabled = true;
-                            pickUp.text = "Press E to pick up collectibles";
-                        }
-                        if (Input.GetKeyDown(KeyCode.E)) {
-                            _shoot._grenades += _chestAlwaysFull.grenades;
-                            if (_controller.placeableCount[0] + _chestAlwaysFull.snares >= _controller.maxPlaceable[0])
-                                _controller.placeableCount[0] = _controller.maxPlaceable[0];
-                            else
-                                _controller.placeableCount[0] += _chestAlwaysFull.snares;
-
-                            if (_controller.placeableCount[1] + _chestAlwaysFull.teddyBears >= _controller.maxPlaceable[1])
-                                _controller.placeableCount[1] = _controller.maxPlaceable[1];
-                            else
-                                _controller.placeableCount[1] += _chestAlwaysFull.teddyBears;
-
-                            if (_controller.placeableCount[2] + _chestAlwaysFull.barrels >= _controller.maxPlaceable[2])
-                                _controller.placeableCount[2] = _controller.maxPlaceable[2];
-                            else
-                                _controller.placeableCount[2] += _chestAlwaysFull.barrels;
-                            _chestAlwaysFull.alreadyPicked = true;
-                        }
-                    }
-                    else {
-                        if (isLocalPlayer)
-                            pickUp.enabled = false;
-                    }
-                }
             }
             else {
                 if (isLocalPlayer)

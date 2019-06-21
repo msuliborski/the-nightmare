@@ -11,7 +11,6 @@ public class Chest : MonoBehaviour
     public int snares;
     public int teddyBears;
     public int barrels;
-    private Room _room;
     private Transform _lidClosed;
     private Transform _lidOpen;
     private GameObject _lid;
@@ -23,14 +22,12 @@ public class Chest : MonoBehaviour
         _lid = transform.GetChild(0).GetChild(2).gameObject;
         _lidClosed = transform.GetChild(3);
         _lidOpen = transform.GetChild(2);
-        _room = GetComponentInParent<Room>();
         _lid.transform.localPosition = _lidClosed.transform.localPosition;
         _lid.transform.localRotation = _lidClosed.transform.localRotation;
     }
 
     private void Update()
     {
-        active = _room.roomCaptured;
         if (active && !_isSet)
         {
             _lid.transform.position = _lidOpen.transform.position;

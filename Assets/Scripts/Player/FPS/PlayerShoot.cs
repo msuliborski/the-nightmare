@@ -135,7 +135,7 @@ public class PlayerShoot : NetworkBehaviour {
         if (Input.GetKeyDown(KeyCode.B)) Equipment.getActiveWeapon().changeFireMode();
 
         //reloading
-        if (Input.GetKeyDown(KeyCode.R) &&
+        if (Input.GetKeyDown(KeyCode.R) && Equipment.getActiveWeapon().State != Weapon.WeaponState.reloading &&
             Equipment.getActiveWeapon().CurrentMagAmmo != Equipment.getActiveWeapon().MaxMagAmmo) {
             StartCoroutine(Reload());
         }
