@@ -169,4 +169,8 @@ public class Weapon : NetworkBehaviour {
         if (!allowTriple && _fireMode == FireMode.triple) _fireMode = FireMode.continous;
         else if (!allowContinous && _fireMode == FireMode.continous) _fireMode = FireMode.single;
     }
+    public void resetAmmo() {
+        _currentAmmo = MaxAmmo;
+        _currentMagAmmo = MaxMagAmmo;
+    }
 }
