@@ -22,6 +22,7 @@ public class PlayerEquipment : NetworkBehaviour {
         }
         else {
             transform.GetChild(3).gameObject.SetActive(false);//turn off camera
+            transform.GetChild(1).GetChild(2).gameObject.SetActive(false);//turn off arrow
         }
         
         _shoot = GetComponent<PlayerShoot>();
