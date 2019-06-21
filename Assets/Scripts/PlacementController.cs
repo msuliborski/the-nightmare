@@ -47,7 +47,7 @@ public class PlacementController : NetworkBehaviour
     {
         if (isLocalPlayer)
         {
-            _customNetworkManager = GameObject.Find("NetworkManager").GetComponent<CustomNetworkManager>();
+            //_customNetworkManager = GameObject.Find("NetworkManager").GetComponent<CustomNetworkManager>();
             _placeableTM[0] = GameObject.Find("SnaresCount").GetComponent<TextMeshProUGUI>();
             _placeableTM[1] = GameObject.Find("TeddyBearCount").GetComponent<TextMeshProUGUI>();
             _placeableTM[2] = GameObject.Find("BarrelsCount").GetComponent<TextMeshProUGUI>();
@@ -281,7 +281,7 @@ public class PlacementController : NetworkBehaviour
         ClockManager.canCount = true;
         if (localPlayer._currentObject != null) Destroy(localPlayer._currentObject);
         GameManager.CurrentState = GameManager.GameState.Fighting;*/
-        _customNetworkManager.Teleport(_playerManager);
+        GameObject.Find("NetworkManager").GetComponent<CustomNetworkManager>().Teleport(_playerManager);
         GameManager.Instance.CurrentMachState = GameManager.MatchState.Room1Prepare;
     }
 
