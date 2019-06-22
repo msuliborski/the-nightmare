@@ -1,0 +1,188 @@
+fileFormatVersion: 2
+guid: 62f5ec0ccabc4164b9d669b30f63a93b
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: A
+    100002: A1
+    100004: A2
+    100006: A3
+    100008: A4
+    100010: //RootNode
+    100012: Cube
+    100014: Cube.001
+    100016: Cube.002
+    100018: Cube.003
+    100020: Cube.004
+    100022: Cube.005
+    100024: group4
+    100026: transform10
+    100028: transform11
+    100030: transform12
+    100032: transform13
+    100034: transform14
+    100036: transform15
+    100038: transform16
+    100040: transform17
+    100042: transform18
+    100044: transform19
+    100046: transform20
+    100048: transform21
+    100050: transform22
+    100052: transform23
+    100054: transform24
+    100056: transform25
+    100058: transform26
+    100060: transform27
+    100062: transform28
+    100064: transform29
+    100066: transform30
+    100068: typeMesh1
+    100070: typeMesh10
+    100072: typeMesh2
+    100074: typeMesh3
+    100076: typeMesh4
+    100078: typeMesh4 1
+    100080: typeMesh5
+    100082: typeMesh6
+    100084: typeMesh7
+    100086: typeMesh8
+    100088: typeMesh9
+    400000: A
+    400002: A1
+    400004: A2
+    400006: A3
+    400008: A4
+    400010: //RootNode
+    400012: Cube
+    400014: Cube.001
+    400016: Cube.002
+    400018: Cube.003
+    400020: Cube.004
+    400022: Cube.005
+    400024: group4
+    400026: transform10
+    400028: transform11
+    400030: transform12
+    400032: transform13
+    400034: transform14
+    400036: transform15
+    400038: transform16
+    400040: transform17
+    400042: transform18
+    400044: transform19
+    400046: transform20
+    400048: transform21
+    400050: transform22
+    400052: transform23
+    400054: transform24
+    400056: transform25
+    400058: transform26
+    400060: transform27
+    400062: transform28
+    400064: transform29
+    400066: transform30
+    400068: typeMesh1
+    400070: typeMesh10
+    400072: typeMesh2
+    400074: typeMesh3
+    400076: typeMesh4
+    400078: typeMesh4 1
+    400080: typeMesh5
+    400082: typeMesh6
+    400084: typeMesh7
+    400086: typeMesh8
+    400088: typeMesh9
+    2100000: lambert3
+    2100002: lambert1
+    2100004: lambert5
+    2100006: zielony
+    2300000: typeMesh4
+    3300000: typeMesh4
+    4300000: typeMesh4
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
