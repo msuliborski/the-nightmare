@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
+using Random = System.Random;
 
 public class PlayerManager : NetworkBehaviour
 {
@@ -26,6 +27,9 @@ public class PlayerManager : NetworkBehaviour
     private GameObject _camera;
     [SerializeField] private GameObject _aliveCollider;
     [SerializeField] private GameObject _reviveCollider;
+    private GameObject boy;
+    private GameObject girl;
+    private NetworkAnimator _netAnim;
     
 
 
@@ -69,10 +73,13 @@ public class PlayerManager : NetworkBehaviour
 
     public void Setup()
     {
-        if (isLocalPlayer) SetLayerRecursively(gameObject.transform.GetChild(0).gameObject, 12);
+        _netAnim = GetComponent<NetworkAnimator>();
+        boy = transform.GetChild(0).GetChild(0).gameObject;
+        girl = transform.GetChild(0).GetChild(1).gameObject;
+        setModel();
+        if (isLocalPlayer) SetLayerRecursively(transform.GetChild(0).gameObject, 12);
         _rigidbody = GetComponent<Rigidbody>();
         _wasEnabled = new bool[_disableOnDeath.Length];
-        _playerAnimator = transform.GetChild(0).GetChild(0).GetComponent<Animator>();
 
         for (int i = 0; i < _wasEnabled.Length; i++) _wasEnabled[i] = _disableOnDeath[i].enabled;
         
@@ -82,6 +89,30 @@ public class PlayerManager : NetworkBehaviour
         if (isLocalPlayer) _cross = GameObject.Find("cross");
         //SetBuildingMode();
         SetActionMode();
+    }
+
+    private void setModel()
+    {
+        int rand = UnityEngine.Random.Range(0, 2);
+        if (rand == 0)
+        {
+            boy.SetActive(true);
+            girl.SetActive(false);
+            _netAnim.animator = boy.GetComponent<Animator>();
+            _playerAnimator = boy.GetComponent<Animator>();
+        }
+        else if (rand == 1)
+        {
+            boy.SetActive(false);
+            girl.SetActive(true);
+            _netAnim.animator = girl.GetComponent<Animator>();
+            _playerAnimator = girl.GetComponent<Animator>();
+        }
+
+        for (int i = 0; i < 4; i++)
+        {
+            _netAnim.SetParameterAutoSend(i, true);
+        }
     }
     
     private void SetLayerRecursively(GameObject obj, int newLayer)
