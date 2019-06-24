@@ -6,13 +6,11 @@ using UnityEngine.Video;
 
 public class PlayMenuVideo : MonoBehaviour
 {
-    private RawImage _image;
-    private VideoPlayer _player;
+    [SerializeField] private RawImage _image;
+    [SerializeField] private VideoPlayer _player;
     
     void Start()
     {
-        _image = GameObject.Find("Background").GetComponent<RawImage>();
-        _player = GetComponent<VideoPlayer>();
         StartCoroutine(PlayVideo());
     }
 

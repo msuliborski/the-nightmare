@@ -17,7 +17,10 @@ public class PlayerMotor : NetworkBehaviour {
     private static readonly int IsAiming = Animator.StringToHash("isAiming");
 
     void Start() {
-        _anim = transform.GetChild(0).GetChild(0).GetComponent<Animator>();
+        if(transform.GetChild(0).GetChild(0).gameObject.activeSelf)
+            _anim = transform.GetChild(0).GetChild(0).GetComponent<Animator>();
+        else 
+            _anim = transform.GetChild(0).GetChild(1).GetComponent<Animator>();
         _rb = GetComponent<Rigidbody>();
     }
 
