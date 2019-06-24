@@ -60,7 +60,10 @@ public class PlayerShoot : NetworkBehaviour {
             IsBuildingOnFly = false;
         }
 
-        _playerAnimator = transform.GetChild(0).GetChild(0).GetComponent<Animator>();
+        if(transform.GetChild(0).GetChild(0).gameObject.activeSelf)
+            _playerAnimator = transform.GetChild(0).GetChild(0).GetComponent<Animator>();
+        else
+            _playerAnimator = transform.GetChild(0).GetChild(1).GetComponent<Animator>();
         _playerController = GetComponent<PlayerController>();
 
         _grenades = _maxGrenades;
