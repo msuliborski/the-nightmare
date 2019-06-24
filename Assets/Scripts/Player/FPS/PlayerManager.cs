@@ -22,7 +22,7 @@ public class PlayerManager : NetworkBehaviour
     private Rigidbody _rigidbody;
     private Animator _playerAnimator;
     private static bool isRevived = false;
-    private GameObject _cameraReviving;
+    [SerializeField] private GameObject _cameraReviving;
     private GameObject _camera;
     [SerializeField] private GameObject _aliveCollider;
     [SerializeField] private GameObject _reviveCollider;
@@ -75,8 +75,7 @@ public class PlayerManager : NetworkBehaviour
         _playerAnimator = transform.GetChild(0).GetChild(0).GetComponent<Animator>();
 
         for (int i = 0; i < _wasEnabled.Length; i++) _wasEnabled[i] = _disableOnDeath[i].enabled;
-
-        _cameraReviving = transform.GetChild(5).gameObject;
+        
         _camera = transform.GetChild(1).gameObject;
        _currentHealth = _maxHealth;
         _placementController = GetComponent<PlacementController>();

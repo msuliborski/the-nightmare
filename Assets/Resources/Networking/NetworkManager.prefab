@@ -138,9 +138,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1250475252818553949}
-  - component: {fileID: 3041406342502215934}
   - component: {fileID: 132920175}
   - component: {fileID: 5066969031249784106}
+  - component: {fileID: 8769869101659370329}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -165,7 +165,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3041406342502215934
+--- !u!114 &132920175
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -174,7 +174,39 @@ MonoBehaviour:
   m_GameObject: {fileID: 210125983785559080}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10e66068d9290094b9fbe6d56b4c4154, type: 3}
+  m_Script: {fileID: 227461547, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  manager: {fileID: 0}
+  showGUI: 1
+  offsetX: 0
+  offsetY: 0
+--- !u!114 &5066969031249784106
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 210125983785559080}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f000284a7bee25b41b9e428cf34c4467, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HostMigration: 1
+  m_ShowGUI: 1
+  m_OffsetX: 10
+  m_OffsetY: 300
+--- !u!114 &8769869101659370329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 210125983785559080}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -822479833, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_NetworkPort: 7777
@@ -194,10 +226,10 @@ MonoBehaviour:
   m_OnlineScene: ExtremeHomeMakeover
   m_SpawnPrefabs:
   - {fileID: 6513423205020058902, guid: 53776c2a44fce1c488312695240e7217, type: 3}
-  - {fileID: 3012633921025596544, guid: 4e88b0833fc1f794780665ba09ba3620, type: 3}
   - {fileID: 6627066607432650789, guid: ae431d7febde62d47bfa4527a9c5ed97, type: 3}
   - {fileID: 3905061388165123986, guid: 64529fe2fad73d485b75f22ac03f1ff2, type: 3}
   - {fileID: 940214644287376405, guid: fff42774a33b7704f8d83ea810557ad6, type: 3}
+  - {fileID: 3012633921025596544, guid: 4e88b0833fc1f794780665ba09ba3620, type: 3}
   m_CustomConfig: 0
   m_MaxConnections: 4
   m_ConnectionConfig:
@@ -253,38 +285,3 @@ MonoBehaviour:
   matchSize: 4
   isNetworkActive: 0
   matchMaker: {fileID: 0}
-  players:
-  - {fileID: 2361017057787199711, guid: c3ce8b8bd4727824c98c24dd0411c3a7, type: 3}
-  - {fileID: 2361017057787199711, guid: 45cbbf4ff84df544faad07f5ac31f11a, type: 3}
---- !u!114 &132920175
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 210125983785559080}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 227461547, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  manager: {fileID: 0}
-  showGUI: 1
-  offsetX: 0
-  offsetY: 0
---- !u!114 &5066969031249784106
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 210125983785559080}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f000284a7bee25b41b9e428cf34c4467, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_HostMigration: 1
-  m_ShowGUI: 1
-  m_OffsetX: 10
-  m_OffsetY: 300
