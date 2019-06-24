@@ -215,6 +215,10 @@ public class GameManager : NetworkBehaviour
         }
         _cpUI = GameObject.Find("CapturePoints").GetComponent<CapturePointsUI>();
         _matchSettings.WaitForSpawn -= _matchSettings.EnemyRespawnTime;
+        foreach (GameObject room in Rooms)
+        {
+            room.GetComponent<Room>().Setup();
+        }
     }
 
     private void Start()

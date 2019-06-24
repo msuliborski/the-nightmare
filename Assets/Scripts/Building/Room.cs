@@ -30,7 +30,7 @@ public class Room : MonoBehaviour
     
     
 
-    private void Start()
+    public void Setup()
     {
         Transform points = transform.GetChild(1);
         for (int i = 0; i < points.childCount; i++)
@@ -54,7 +54,7 @@ public class Room : MonoBehaviour
 
     void Update()
     {
-        bool check = true;
+       /* bool check = true;
         foreach (CaptureArea capture in _captureAreas)
         {
             if (!capture._isCaptured)
@@ -80,11 +80,11 @@ public class Room : MonoBehaviour
             foreach (GameObject spawn in _enemySpawnPoints)
             {
                 GameManager instance = GameManager.Instance;
-                instance.EnemySpawnPoints.Add(spawn.transform.name, spawn.transform);
+                if (!instance.EnemySpawnPoints.ContainsKey(spawn.transform.name)) instance.EnemySpawnPoints.Add(spawn.transform.name, spawn.transform);
                 spawn.SetActive(true);
             }
 
-        }
+        }*/
     }
     
 }
