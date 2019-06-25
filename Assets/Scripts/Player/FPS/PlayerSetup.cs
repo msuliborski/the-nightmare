@@ -29,6 +29,7 @@ public class PlayerSetup : NetworkBehaviour {
             GetComponentInChildren<Arrow>().gameObject.SetActive(false);
         }
         else {
+            Application.targetFrameRate = 50;
             EquipWeapon();
            
             _bulletshud = GameObject.Find("bulletsNumber").GetComponent<BulletsHUD>();
