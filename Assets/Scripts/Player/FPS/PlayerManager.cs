@@ -74,9 +74,11 @@ public class PlayerManager : NetworkBehaviour
     public void Setup()
     {
         _netAnim = GetComponent<NetworkAnimator>();
+        
         boy = transform.GetChild(0).GetChild(0).gameObject;
         girl = transform.GetChild(0).GetChild(1).gameObject;
 //        setModel();
+        _playerAnimator = boy.GetComponent<Animator>();
         if (isLocalPlayer) SetLayerRecursively(transform.GetChild(0).gameObject, 12);
         _rigidbody = GetComponent<Rigidbody>();
         _wasEnabled = new bool[_disableOnDeath.Length];
@@ -122,7 +124,7 @@ public class PlayerManager : NetworkBehaviour
         {
             boy.SetActive(false);
             girl.SetActive(true);
-            _netAnim.animator = girl.GetComponent<Animator>();
+            _netAnim.animator = girl.GetComponent<Animator>();s
             _playerAnimator = girl.GetComponent<Animator>();
         }
 
