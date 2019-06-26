@@ -73,7 +73,7 @@ public class PlacementController : NetworkBehaviour
         if(isLocalPlayer)
             for (int i = 0; i < 3; i++)
             {
-                _placeableTM[i].text = "x" + placeableCount[i];
+                _placeableTM[i].text = placeableCount[i].ToString();
             }
             
         HandleKeys();
