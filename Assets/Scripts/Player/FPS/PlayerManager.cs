@@ -124,7 +124,7 @@ public class PlayerManager : NetworkBehaviour
         {
             boy.SetActive(false);
             girl.SetActive(true);
-            _netAnim.animator = girl.GetComponent<Animator>();s
+            _netAnim.animator = girl.GetComponent<Animator>();
             _playerAnimator = girl.GetComponent<Animator>();
         }
 
