@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Net.Mime;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Experimental.UIElements;
 using UnityEngine.Networking;
 
 public class CapturePointsUI : NetworkBehaviour
@@ -12,6 +14,7 @@ public class CapturePointsUI : NetworkBehaviour
     private bool isSet = false;
     private bool hasPlayed = false;
     private AudioSource source;
+    [SerializeField] private Image _red; 
     
     void Start()
     {
@@ -34,7 +37,8 @@ public class CapturePointsUI : NetworkBehaviour
                 {
                     if (areas[i]._progress < 20)
                     {
-                        source.PlayOneShot(source.clip);
+                        captureBG[i].GetComponent<Image>().image = _red.image;
+                        source.Play();
                         hasPlayed = true;
                     }
                 }
