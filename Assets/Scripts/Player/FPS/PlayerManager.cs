@@ -76,7 +76,7 @@ public class PlayerManager : NetworkBehaviour
         _netAnim = GetComponent<NetworkAnimator>();
         boy = transform.GetChild(0).GetChild(0).gameObject;
         girl = transform.GetChild(0).GetChild(1).gameObject;
-        setModel();
+//        setModel();
         if (isLocalPlayer) SetLayerRecursively(transform.GetChild(0).gameObject, 12);
         _rigidbody = GetComponent<Rigidbody>();
         _wasEnabled = new bool[_disableOnDeath.Length];
