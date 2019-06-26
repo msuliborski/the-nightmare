@@ -44,25 +44,27 @@ public class PlayerController : NetworkBehaviour {
    
 
     private void Update() {
-        if (transform.GetComponent<PlayerEquipment>().getActiveWeapon().GetComponent<Animator>().GetBool(IsSprinting))
-            _speed = _speedFast;
-        else
-            _speed = _speedSlow;
+        if (ButtonsControll.screensOver)
+        {
+            if (transform.GetComponent<PlayerEquipment>().getActiveWeapon().GetComponent<Animator>().GetBool(IsSprinting))
+                _speed = _speedFast;
+            else
+                _speed = _speedSlow;
 
 
 //        Debug.Log(_speed);
-        if (PauseGame.menuActive) {
+            if (PauseGame.menuActive) {
             
 
-            _motor.Move(Vector3.zero);
-            _motor.Rotate(Vector3.zero);
-            _motor.RotateCamera(0f);
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-        }
-        else {
-            float xMov = 0;
-            float zMov = 0;
+                _motor.Move(Vector3.zero);
+                _motor.Rotate(Vector3.zero);
+                _motor.RotateCamera(0f);
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+            else {
+                float xMov = 0;
+                float zMov = 0;
 
 #if UNITY_ANDROID
             if(Mathf.Abs(move.Horizontal) >= 0.2)
@@ -72,19 +74,19 @@ public class PlayerController : NetworkBehaviour {
 #endif
 
 #if UNITY_STANDALONE
-            xMov = Input.GetAxisRaw("Horizontal");
-            zMov = Input.GetAxisRaw("Vertical");
+                xMov = Input.GetAxisRaw("Horizontal");
+                zMov = Input.GetAxisRaw("Vertical");
 #endif
 
-            Vector3 moveHorizontal = transform.right * xMov;
-            Vector3 moveVertical = transform.forward * zMov;
+                Vector3 moveHorizontal = transform.right * xMov;
+                Vector3 moveVertical = transform.forward * zMov;
 
-            Vector3 velocity = (moveHorizontal + moveVertical).normalized * _speed;
+                Vector3 velocity = (moveHorizontal + moveVertical).normalized * _speed;
 
-            _motor.Move(velocity);
+                _motor.Move(velocity);
 
-            float yRot = 0;
-            float xRot = 0;
+                float yRot = 0;
+                float xRot = 0;
 
 #if UNITY_ANDROID
             if(Mathf.Abs(look.Horizontal) >= 0.2)
@@ -94,22 +96,26 @@ public class PlayerController : NetworkBehaviour {
 #endif
 
 #if UNITY_STANDALONE
-            yRot = Input.GetAxisRaw("Mouse X") * SensitivityScale;
-            xRot = Input.GetAxis("Mouse Y") * SensitivityScale;
+                yRot = Input.GetAxisRaw("Mouse X") * SensitivityScale;
+                xRot = Input.GetAxis("Mouse Y") * SensitivityScale;
 #endif
 
-            Vector3 rotation = new Vector3(0f, yRot, 0f) * _lookSensitivity;
-            _motor.Rotate(rotation);
+                Vector3 rotation = new Vector3(0f, yRot, 0f) * _lookSensitivity;
+                _motor.Rotate(rotation);
 
-            float cameraRotationX = xRot * _lookSensitivity;
-            _motor.RotateCamera(cameraRotationX);
+                float cameraRotationX = xRot * _lookSensitivity;
+                _motor.RotateCamera(cameraRotationX);
 
 
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+        
+            
 
-            _prevRot = transform.rotation;
+                _prevRot = transform.rotation;
+            }
         }
+        
     }
 
     void OnCollisionEnter(Collision col) {
