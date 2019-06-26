@@ -76,7 +76,7 @@ public class PlayerManager : NetworkBehaviour
         _netAnim = GetComponent<NetworkAnimator>();
         boy = transform.GetChild(0).GetChild(0).gameObject;
         girl = transform.GetChild(0).GetChild(1).gameObject;
-        setModel();
+//        setModel();
         if (isLocalPlayer) SetLayerRecursively(transform.GetChild(0).gameObject, 12);
         _rigidbody = GetComponent<Rigidbody>();
         _wasEnabled = new bool[_disableOnDeath.Length];
@@ -89,6 +89,28 @@ public class PlayerManager : NetworkBehaviour
         if (isLocalPlayer) _cross = GameObject.Find("cross");
         //SetBuildingMode();
         SetActionMode();
+    }
+
+    void Update() {
+        //changing weapon
+        PlayerShoot t = transform.GetComponent<PlayerShoot>();
+        if (!isLocalPlayer) {
+            if (t.changeWeaponCooldown > 0) t.changeWeaponCooldown -= Time.deltaTime;
+            if (t. changeWeaponCooldown <= 0 && Math.Abs(Input.GetAxis("Mouse ScrollWheel")) > 0.01 &&
+                transform.GetComponent<PlayerEquipment>().getActiveWeapon().State == Weapon.WeaponState.idle && !t.IsBuildingOnFly) {
+                t.changeWeaponCooldown = 2;
+                if (transform.GetComponent<PlayerEquipment>().Weapon2 != null) {
+                    if (transform.GetComponent<PlayerEquipment>().Weapon1.gameObject.activeSelf) {
+                        StartCoroutine(t.HideWeapon(transform.GetComponent<PlayerEquipment>().Weapon1.gameObject,
+                            transform.GetComponent<PlayerEquipment>().Weapon2.gameObject)); //show rifle
+                    }
+                    else {
+                        StartCoroutine(t.HideWeapon(transform.GetComponent<PlayerEquipment>().Weapon2.gameObject,
+                            transform.GetComponent<PlayerEquipment>().Weapon1.gameObject)); //show pistol
+                    }
+                }
+            }
+        }
     }
 
     private void setModel()
@@ -152,6 +174,8 @@ public class PlayerManager : NetworkBehaviour
         _reviveCollider.SetActive(!isOn);
     }
     
+    
+    
     [ClientRpc]
     public void RpcTakeDamage(float damage)
     {
@@ -179,6 +203,11 @@ public class PlayerManager : NetworkBehaviour
         GameManager.DeactivatePlayer(transform.name);
         ChangeCamera(true);
         isRevived = true;
+        
+        transform.GetComponent<PlayerEquipment>().getActiveWeapon().transform.GetComponent<Animator>().SetBool("isHidden", false);
+        transform.GetComponent<PlayerEquipment>().getActiveWeapon().transform.GetComponent<Animator>().SetBool("isSprinting", false);
+        transform.GetComponent<PlayerEquipment>().getActiveWeapon().transform.GetComponent<Animator>().SetBool("isAiming", false);
+        transform.GetComponent<PlayerEquipment>().getActiveWeapon().transform.GetComponent<Animator>().SetBool("isReloading", false);
     }
     
 
@@ -205,6 +234,7 @@ public class PlayerManager : NetworkBehaviour
 //        transform.position = spawnPoint.position;
 //        transform.rotation = spawnPoint.rotation;
         GameManager.ActivatePlayer(transform.name, this);
+        
 
         if (transform.GetComponent<PlayerEquipment>().getActiveWeapon().Id == 0)
         {
