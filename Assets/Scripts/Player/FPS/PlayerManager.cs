@@ -179,6 +179,11 @@ public class PlayerManager : NetworkBehaviour
         GameManager.DeactivatePlayer(transform.name);
         ChangeCamera(true);
         isRevived = true;
+        
+        transform.GetComponent<PlayerEquipment>().getActiveWeapon().transform.GetComponent<Animator>().SetBool("isHidden", false);
+        transform.GetComponent<PlayerEquipment>().getActiveWeapon().transform.GetComponent<Animator>().SetBool("isSprinting", false);
+        transform.GetComponent<PlayerEquipment>().getActiveWeapon().transform.GetComponent<Animator>().SetBool("isAiming", false);
+        transform.GetComponent<PlayerEquipment>().getActiveWeapon().transform.GetComponent<Animator>().SetBool("isReloading", false);
     }
     
 
@@ -205,6 +210,7 @@ public class PlayerManager : NetworkBehaviour
 //        transform.position = spawnPoint.position;
 //        transform.rotation = spawnPoint.rotation;
         GameManager.ActivatePlayer(transform.name, this);
+        
 
         if (transform.GetComponent<PlayerEquipment>().getActiveWeapon().Id == 0)
         {
