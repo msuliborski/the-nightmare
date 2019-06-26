@@ -92,25 +92,20 @@ public class PlayerManager : NetworkBehaviour
     }
 
     void Update() {
-        //changing weapon
-        PlayerShoot t = transform.GetComponent<PlayerShoot>();
-        if (!isLocalPlayer) {
-            if (t.changeWeaponCooldown > 0) t.changeWeaponCooldown -= Time.deltaTime;
-            if (t. changeWeaponCooldown <= 0 && Math.Abs(Input.GetAxis("Mouse ScrollWheel")) > 0.01 &&
-                transform.GetComponent<PlayerEquipment>().getActiveWeapon().State == Weapon.WeaponState.idle && !t.IsBuildingOnFly) {
-                t.changeWeaponCooldown = 2;
-                if (transform.GetComponent<PlayerEquipment>().Weapon2 != null) {
-                    if (transform.GetComponent<PlayerEquipment>().Weapon1.gameObject.activeSelf) {
-                        StartCoroutine(t.HideWeapon(transform.GetComponent<PlayerEquipment>().Weapon1.gameObject,
-                            transform.GetComponent<PlayerEquipment>().Weapon2.gameObject)); //show rifle
-                    }
-                    else {
-                        StartCoroutine(t.HideWeapon(transform.GetComponent<PlayerEquipment>().Weapon2.gameObject,
-                            transform.GetComponent<PlayerEquipment>().Weapon1.gameObject)); //show pistol
-                    }
-                }
-            }
-        }
+//        //changing weapon
+//        PlayerShoot t = transform.GetComponent<PlayerShoot>();
+//        if (!isLocalPlayer) {
+//            if (t.changeWeaponCooldown > 0) t.changeWeaponCooldown -= Time.deltaTime;
+//            if (t. changeWeaponCooldown <= 0 && Math.Abs(Input.GetAxis("Mouse ScrollWheel")) > 0.01 &&
+//                transform.GetComponent<PlayerEquipment>().getActiveWeapon().State == Weapon.WeaponState.idle && !t.IsBuildingOnFly) {
+//                t.changeWeaponCooldown = 2;
+//                if (transform.GetComponent<PlayerEquipment>().getActiveWeapon().Id == 0)
+//                    transform.GetComponent<PlayerEquipment>().CmdChangeWeapon(1);
+//                else
+//                    transform.GetComponent<PlayerEquipment>().CmdChangeWeapon(0);
+//
+//            }
+//        }
     }
 
     private void setModel()
