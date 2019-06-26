@@ -43,7 +43,7 @@ public class PlayerShoot : NetworkBehaviour {
     private static readonly int IsSprinting = Animator.StringToHash("isSprinting");
     private static readonly int IsHidden = Animator.StringToHash("isHidden");
     private float currentRecoil;
-    private float changeWeaponCooldown = 0;
+    public float changeWeaponCooldown = 0;
     private Weapon activeWeapon = null;
     private Animator _playerAnimator;
     
@@ -169,7 +169,7 @@ public class PlayerShoot : NetworkBehaviour {
                    
     }
 
-    IEnumerator HideWeapon(GameObject toHide, GameObject toShow) {
+    public IEnumerator HideWeapon(GameObject toHide, GameObject toShow) {
         toHide.gameObject.SetActive(true);
         toShow.gameObject.SetActive(true);
         

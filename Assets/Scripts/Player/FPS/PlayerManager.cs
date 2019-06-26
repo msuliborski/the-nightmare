@@ -91,6 +91,28 @@ public class PlayerManager : NetworkBehaviour
         SetActionMode();
     }
 
+    void Update() {
+        //changing weapon
+        PlayerShoot t = transform.GetComponent<PlayerShoot>();
+        if (!isLocalPlayer) {
+            if (t.changeWeaponCooldown > 0) t.changeWeaponCooldown -= Time.deltaTime;
+            if (t. changeWeaponCooldown <= 0 && Math.Abs(Input.GetAxis("Mouse ScrollWheel")) > 0.01 &&
+                transform.GetComponent<PlayerEquipment>().getActiveWeapon().State == Weapon.WeaponState.idle && !t.IsBuildingOnFly) {
+                t.changeWeaponCooldown = 2;
+                if (transform.GetComponent<PlayerEquipment>().Weapon2 != null) {
+                    if (transform.GetComponent<PlayerEquipment>().Weapon1.gameObject.activeSelf) {
+                        StartCoroutine(t.HideWeapon(transform.GetComponent<PlayerEquipment>().Weapon1.gameObject,
+                            transform.GetComponent<PlayerEquipment>().Weapon2.gameObject)); //show rifle
+                    }
+                    else {
+                        StartCoroutine(t.HideWeapon(transform.GetComponent<PlayerEquipment>().Weapon2.gameObject,
+                            transform.GetComponent<PlayerEquipment>().Weapon1.gameObject)); //show pistol
+                    }
+                }
+            }
+        }
+    }
+
     private void setModel()
     {
         int rand = UnityEngine.Random.Range(0, 2);
@@ -151,6 +173,8 @@ public class PlayerManager : NetworkBehaviour
         _aliveCollider.SetActive(isOn);
         _reviveCollider.SetActive(!isOn);
     }
+    
+    
     
     [ClientRpc]
     public void RpcTakeDamage(float damage)
