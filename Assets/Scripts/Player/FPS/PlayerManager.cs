@@ -110,7 +110,7 @@ public class PlayerManager : NetworkBehaviour
 
     private void setModel()
     {
-        int rand = UnityEngine.Random.Range(0, 2);
+        int rand = UnityEngine.Random.Range(0, 1);
         if (rand == 0)
         {
             boy.SetActive(true);
