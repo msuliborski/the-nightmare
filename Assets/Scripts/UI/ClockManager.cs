@@ -17,8 +17,8 @@ public class ClockManager : MonoBehaviour
     
     void Start()
     {
-        _minutesTM = transform.GetChild(0).GetComponent<TextMeshProUGUI>();
-        _secondsTM = transform.GetChild(2).GetComponent<TextMeshProUGUI>();
+        _minutesTM = transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>();
+        _secondsTM = transform.GetChild(0).GetChild(2).GetComponent<TextMeshProUGUI>();
         canCount = false;
         time = 0f;
     }

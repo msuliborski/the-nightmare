@@ -43,7 +43,7 @@ public class PlayerShoot : NetworkBehaviour {
     private static readonly int IsSprinting = Animator.StringToHash("isSprinting");
     private static readonly int IsHidden = Animator.StringToHash("isHidden");
     private float currentRecoil;
-    private float changeWeaponCooldown = 0;
+    public float changeWeaponCooldown = 0;
     private Weapon activeWeapon = null;
     private Animator _playerAnimator;
     
@@ -78,98 +78,98 @@ public class PlayerShoot : NetworkBehaviour {
 
 
     void Update() {
-        currentRecoil = Equipment.getActiveWeapon().Recoil;
+        if (ButtonsControll.screensOver)
+        { 
+            currentRecoil = Equipment.getActiveWeapon().Recoil;
 //        weaponAnimator = activeWeapon.GetComponent<Animator>();
 
-        if (_grenades > _maxGrenades)
-            _grenades = _maxGrenades;
-        if (isLocalPlayer)
-            _grenadesTM.text = "x" + _grenades;
-        if (crossAccuracy > 1.02) crossAccuracy -= (crossAccuracy * 0.05f + 0.02f);
-        else crossAccuracy = 1f;
-        Cross.transform.GetChild(0).transform.localScale = new Vector3(crossAccuracy, crossAccuracy, crossAccuracy);
+            if (_grenades > _maxGrenades)
+                _grenades = _maxGrenades;
+            if (isLocalPlayer)
+                _grenadesTM.text = _grenades.ToString();
+            if (crossAccuracy > 1.02) crossAccuracy -= (crossAccuracy * 0.05f + 0.02f);
+            else crossAccuracy = 1f;
+            Cross.transform.GetChild(0).transform.localScale = new Vector3(crossAccuracy, crossAccuracy, crossAccuracy);
 
-        //changing weapon
-        if (changeWeaponCooldown > 0) changeWeaponCooldown -= Time.deltaTime;
-        if (changeWeaponCooldown <= 0 && Math.Abs(Input.GetAxis("Mouse ScrollWheel")) > 0.01 &&
-            Equipment.getActiveWeapon().State == Weapon.WeaponState.idle && !IsBuildingOnFly) {
-            changeWeaponCooldown = 2;
-            if (Equipment.Weapon2 != null) {
-                if (Equipment.Weapon1.gameObject.activeSelf) {
-                    StartCoroutine(HideWeapon(Equipment.Weapon1.gameObject, Equipment.Weapon2.gameObject));    //show rifle
-                }
-                else {
-                    StartCoroutine(HideWeapon(Equipment.Weapon2.gameObject, Equipment.Weapon1.gameObject));    //show pistol
-                }
-            }
-        }
-
-
-        //fire mode
-        if (Input.GetKeyDown(KeyCode.B)) Equipment.getActiveWeapon().changeFireMode();
-
-        //reloading
-        if (Input.GetKeyDown(KeyCode.R) && Equipment.getActiveWeapon().State != Weapon.WeaponState.reloading &&
-            Equipment.getActiveWeapon().CurrentMagAmmo != Equipment.getActiveWeapon().MaxMagAmmo) {
-            StartCoroutine(Reload());
-        }
-
-        if (_grenades > 0) {
-            if (Input.GetKeyUp(KeyCode.G)) {
-                _grenades--;
-                CmdSpawnGrenade(transform.position, transform.rotation, transform.forward, (_grenadeTimer + 0.5f) / 3);
-                _playerAnimator.SetTrigger("throwing");
-                _grenadeTimer = 0f;
-            }
-            else if (Input.GetKey(KeyCode.G)) {
-                if (_grenadeTimer <= 3f) {
-                    _grenadeTimer += Time.deltaTime;
+            //changing weapon
+            if (changeWeaponCooldown > 0) changeWeaponCooldown -= Time.deltaTime;
+            if (changeWeaponCooldown <= 0 && Math.Abs(Input.GetAxis("Mouse ScrollWheel")) > 0.01 &&
+                Equipment.getActiveWeapon().State == Weapon.WeaponState.idle && !IsBuildingOnFly) {
+                changeWeaponCooldown = 2;
+                if (Equipment.Weapon2 != null) {
+                    if (Equipment.Weapon1.gameObject.activeSelf) {
+                        StartCoroutine(HideWeapon(Equipment.Weapon1.gameObject, Equipment.Weapon2.gameObject));    //show rifle
+                    }
+                    else {
+                        StartCoroutine(HideWeapon(Equipment.Weapon2.gameObject, Equipment.Weapon1.gameObject));    //show pistol
+                    }
                 }
             }
-        }
 
-        //fireing
-        if (Input.GetButton("Fire1") && Equipment.getActiveWeapon().State == Weapon.WeaponState.idle &&
-            !PauseGame.menuActive && Equipment.getActiveWeapon().CurrentMagAmmo >= 1 && !IsBuildingOnFly) {
-            Shoot();
-        }
 
-        if (Input.GetButtonUp("Fire1")) {
-            _shootingDone = false;
-            if (WasBuilt) {
-                IsBuildingOnFly = false;
-                WasBuilt = false;
-            }
-        }
+            //fire mode
+            if (Input.GetKeyDown(KeyCode.B)) Equipment.getActiveWeapon().changeFireMode();
 
-        //aiming
-        if (Input.GetButton("Fire2") &&
-            (Equipment.getActiveWeapon().State == Weapon.WeaponState.idle ||
-             Equipment.getActiveWeapon().State == Weapon.WeaponState.shooting) &&
-            !PauseGame.menuActive) {
-            currentRecoil = Equipment.getActiveWeapon().Recoil * 0.35f;
-            if (isLocalPlayer) {
-                Equipment.getActiveWeapon().GetComponent<Animator>().SetBool(IsSprinting, false);
-                Equipment.getActiveWeapon().GetComponent<Animator>().SetBool(IsAiming, true);
+            //reloading
+            if (Input.GetKeyDown(KeyCode.R) && Equipment.getActiveWeapon().State != Weapon.WeaponState.reloading &&
+                Equipment.getActiveWeapon().CurrentMagAmmo != Equipment.getActiveWeapon().MaxMagAmmo) {
+                StartCoroutine(Reload());
             }
 
-            Cam.fieldOfView = Mathf.Lerp(Cam.fieldOfView, zoomFOV, 0.6f);
-            Cross.gameObject.SetActive(false);
-            _playerController.SensitivityScale = _playerController.ZoomSensitivity;
-        }
-        else {
-            currentRecoil = Equipment.getActiveWeapon().Recoil;
-            if (isLocalPlayer) Equipment.getActiveWeapon().GetComponent<Animator>().SetBool(IsAiming, false);
-            Cam.fieldOfView = Mathf.Lerp(Cam.fieldOfView, normalFOV, 0.6f);
-            Cross.gameObject.SetActive(true);
-            _playerController.SensitivityScale = _playerController.NonZoomSensitivity;
-        }
+            if (_grenades > 0) {
+                if (Input.GetKeyUp(KeyCode.G)) {
+                    _grenades--;
+                    CmdSpawnGrenade(transform.position, transform.rotation, transform.forward, (_grenadeTimer + 0.5f) / 3);
+                    _playerAnimator.SetTrigger("throwing");
+                    _grenadeTimer = 0f;
+                }
+                else if (Input.GetKey(KeyCode.G)) {
+                    if (_grenadeTimer <= 3f) {
+                        _grenadeTimer += Time.deltaTime;
+                    }
+                }
+            }
 
-        
-                   
+            //fireing
+            if (Input.GetButton("Fire1") && Equipment.getActiveWeapon().State == Weapon.WeaponState.idle &&
+                !PauseGame.menuActive && Equipment.getActiveWeapon().CurrentMagAmmo >= 1 && !IsBuildingOnFly) {
+                Shoot();
+            }
+
+            if (Input.GetButtonUp("Fire1")) {
+                _shootingDone = false;
+                if (WasBuilt) {
+                    IsBuildingOnFly = false;
+                    WasBuilt = false;
+                }
+            }
+
+            //aiming
+            if (Input.GetButton("Fire2") &&
+                (Equipment.getActiveWeapon().State == Weapon.WeaponState.idle ||
+                 Equipment.getActiveWeapon().State == Weapon.WeaponState.shooting) &&
+                !PauseGame.menuActive) {
+                currentRecoil = Equipment.getActiveWeapon().Recoil * 0.35f;
+                if (isLocalPlayer) {
+                    Equipment.getActiveWeapon().GetComponent<Animator>().SetBool(IsSprinting, false);
+                    Equipment.getActiveWeapon().GetComponent<Animator>().SetBool(IsAiming, true);
+                }
+
+                Cam.fieldOfView = Mathf.Lerp(Cam.fieldOfView, zoomFOV, 0.6f);
+                Cross.gameObject.SetActive(false);
+                _playerController.SensitivityScale = _playerController.ZoomSensitivity;
+            }
+            else {
+                currentRecoil = Equipment.getActiveWeapon().Recoil;
+                if (isLocalPlayer) Equipment.getActiveWeapon().GetComponent<Animator>().SetBool(IsAiming, false);
+                Cam.fieldOfView = Mathf.Lerp(Cam.fieldOfView, normalFOV, 0.6f);
+                Cross.gameObject.SetActive(true);
+                _playerController.SensitivityScale = _playerController.NonZoomSensitivity;
+            }
+        }
     }
 
-    IEnumerator HideWeapon(GameObject toHide, GameObject toShow) {
+    public IEnumerator HideWeapon(GameObject toHide, GameObject toShow) {
         toHide.gameObject.SetActive(true);
         toShow.gameObject.SetActive(true);
         

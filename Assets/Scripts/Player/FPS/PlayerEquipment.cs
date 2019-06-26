@@ -56,18 +56,44 @@ public class PlayerEquipment : NetworkBehaviour {
                     pickUp.text = "Press E to pick up Rifle";
                 }
                 if (Input.GetKeyDown(KeyCode.E)) {
-                    if (_cam.transform.GetChild(0).transform.childCount <= 1) {
-                        GameObject weaponObject = Instantiate(GameManager.Instance.Weapons[1],
+                    if (isLocalPlayer) {
+                        if (_cam.transform.GetChild(0).transform.childCount <= 1) {
+                            GameObject weaponObject = Instantiate(GameManager.Instance.Weapons[1],
                                 _cam.transform.GetChild(0).transform);
                             Weapon2 = weaponObject.GetComponent<Weapon>();
                             Weapon1.transform.localPosition = new Vector3(0.02f, 0.03f, -0.22f);
                             Weapon1.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
                             Weapon1.gameObject.SetActive(false);
-                            CmdChangeWeapon(1);
+//                            CmdChangeWeapon(1);
+                        }
+                        else {
+                            Weapon2.CurrentAmmo = Weapon2.MaxAmmo + (Weapon2.MaxMagAmmo - Weapon2.CurrentMagAmmo);
+//                        Weapon2.CurrentMagAmmo = Weapon2.MaxMagAmmo;
+                        }
                     }
                     else {
-                        Weapon2.CurrentAmmo = Weapon2.MaxAmmo + (Weapon2.MaxMagAmmo - Weapon2.CurrentMagAmmo);
-//                        Weapon2.CurrentMagAmmo = Weapon2.MaxMagAmmo;
+                        Transform rightHand = transform.GetChild(0).GetChild(0).GetChild(2).GetChild(2)
+                            .GetChild(0).GetChild(0).GetChild(2).GetChild(0).GetChild(0).GetChild(0).transform;
+
+                        GameObject weaponObject = null;
+                        if (rightHand.childCount == 6) {
+                            weaponObject = Instantiate(GameManager.Instance.Weapons[1], rightHand);
+                            
+                            PlayerShoot shoot = GetComponent<PlayerShoot>();
+                            shoot.source = GetComponent<AudioSource>();
+                            PlayerEquipment _equipment = GetComponent<PlayerEquipment>();
+                            _equipment.Weapon2 = weaponObject.GetComponent<Weapon>();
+                            _equipment.WeaponSound = weaponObject.GetComponent<AudioSource>();
+                            _equipment.Weapon2.GetComponent<Animator>().enabled = false;
+                            shoot.Equipment = _equipment;
+                        }
+                        else {
+                            weaponObject = transform.GetComponent<PlayerEquipment>().Weapon2.gameObject;
+//                            weaponObject.GetComponent<Weapon>().resetAmmo();
+                            
+                            weaponObject.GetComponent<Weapon>().CurrentAmmo = weaponObject.GetComponent<Weapon>().MaxAmmo + (weaponObject.GetComponent<Weapon>().MaxMagAmmo - weaponObject.GetComponent<Weapon>().CurrentMagAmmo);
+                        }
+
                     }
                 }
             }
@@ -144,7 +170,7 @@ public class PlayerEquipment : NetworkBehaviour {
 
 
     [Command]
-    void CmdChangeWeapon(int weaponId) {
+    public void CmdChangeWeapon(int weaponId) {
         RpcChangeWeapon(weaponId);
     }
 
@@ -153,7 +179,14 @@ public class PlayerEquipment : NetworkBehaviour {
         if (!isLocalPlayer) {
             Transform rightHand = transform.GetChild(0).GetChild(0).GetChild(2).GetChild(2)
                 .GetChild(0).GetChild(0).GetChild(2).GetChild(0).GetChild(0).GetChild(0).transform;
-//            Destroy(rightHand.GetChild(5).gameObject);
+            if (weaponId == 1) {
+                rightHand.GetChild(5).gameObject.SetActive(false);
+                rightHand.GetChild(6).gameObject.SetActive(true);
+            } else {
+                rightHand.GetChild(5).gameObject.SetActive(true);
+                rightHand.GetChild(6).gameObject.SetActive(false);
+            }
+
             GameObject weaponObject =
                 Instantiate(GameManager.Instance.Weapons[weaponId],
                     rightHand); //_cam.transform.GetChild(0).transform);//tutaj
