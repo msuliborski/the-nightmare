@@ -78,28 +78,27 @@ public class PlayerEquipment : NetworkBehaviour {
                         }
                     }
                     else {
-                        Transform rightHand = transform.GetChild(0).GetChild(0).GetChild(2).GetChild(2)
-                            .GetChild(0).GetChild(0).GetChild(2).GetChild(0).GetChild(0).GetChild(0).transform;
-
-                        GameObject weaponObject = null;
-                        if (rightHand.childCount == 6) {
-                            weaponObject = Instantiate(GameManager.Instance.Weapons[1], rightHand);
-                            
-                            PlayerShoot shoot = GetComponent<PlayerShoot>();
-                            shoot.source = GetComponent<AudioSource>();
-                            PlayerEquipment _equipment = GetComponent<PlayerEquipment>();
-                            _equipment.Weapon2 = weaponObject.GetComponent<Weapon>();
-                            _equipment.WeaponSound = weaponObject.GetComponent<AudioSource>();
-                            _equipment.Weapon2.GetComponent<Animator>().enabled = false;
-                            shoot.Equipment = _equipment;
-                        }
-                        else {
-                            weaponObject = transform.GetComponent<PlayerEquipment>().Weapon2.gameObject;
-//                            weaponObject.GetComponent<Weapon>().resetAmmo();
-                            
-                            weaponObject.GetComponent<Weapon>().CurrentAmmo = weaponObject.GetComponent<Weapon>().MaxAmmo + (weaponObject.GetComponent<Weapon>().MaxMagAmmo - weaponObject.GetComponent<Weapon>().CurrentMagAmmo);
-                        }
-
+//                        Transform rightHand = transform.GetChild(0).GetChild(0).GetChild(2).GetChild(2)
+//                            .GetChild(0).GetChild(0).GetChild(2).GetChild(0).GetChild(0).GetChild(0).transform;
+//
+//                        GameObject weaponObject = null;
+//                        if (rightHand.childCount == 6) {
+//                            weaponObject = Instantiate(GameManager.Instance.Weapons[1], rightHand);
+//                            
+//                            PlayerShoot shoot = GetComponent<PlayerShoot>();
+//                            shoot.source = GetComponent<AudioSource>();
+//                            PlayerEquipment _equipment = GetComponent<PlayerEquipment>();
+//                            _equipment.Weapon2 = weaponObject.GetComponent<Weapon>();
+//                            _equipment.WeaponSound = weaponObject.GetComponent<AudioSource>();
+//                            _equipment.Weapon2.GetComponent<Animator>().enabled = false;
+//                            shoot.Equipment = _equipment;
+//                        }
+//                        else {
+//                            weaponObject = transform.GetComponent<PlayerEquipment>().Weapon2.gameObject;
+////                            weaponObject.GetComponent<Weapon>().resetAmmo();
+//                            
+//                            weaponObject.GetComponent<Weapon>().CurrentAmmo = weaponObject.GetComponent<Weapon>().MaxAmmo + (weaponObject.GetComponent<Weapon>().MaxMagAmmo - weaponObject.GetComponent<Weapon>().CurrentMagAmmo);
+//                        }
                     }
                 }
             }
