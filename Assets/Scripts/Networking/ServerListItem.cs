@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.Networking.Match;
 using UnityEngine.UI;
 
@@ -6,7 +7,7 @@ public class ServerListItem : MonoBehaviour
 {
     public delegate void JoinRoomDelegate(MatchInfoSnapshot match);
     private JoinRoomDelegate _joinRoomCallback; 
-    [SerializeField] private Text _roomNameText;
+    [SerializeField] private TextMeshProUGUI _roomNameText;
     private MatchInfoSnapshot _match;
 
     public void Setup(MatchInfoSnapshot match, JoinRoomDelegate joinRoomCallback)
