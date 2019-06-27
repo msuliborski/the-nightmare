@@ -223,8 +223,13 @@ public class EnemyControllerServer : NetworkBehaviour
         List<Transform> captureAreas = new List<Transform>();
         IsTriggerLocked = false;
         foreach (CaptureArea captureArea in GameManager.Instance.CurrentCaptureAreas.Values)
-        { captureAreas.Add(captureArea.transform);
-            Debug.Log(captureArea.name); }
+        {
+            if (captureArea.EnemyNum < 7)
+            {
+                captureAreas.Add(captureArea.transform);
+                Debug.Log(captureArea.name);
+            }
+        }
 
         Transform tMin = null;
         float minDist = Mathf.Infinity;
