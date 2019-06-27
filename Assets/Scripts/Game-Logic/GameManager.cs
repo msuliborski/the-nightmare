@@ -107,14 +107,17 @@ public class GameManager : NetworkBehaviour
                    
                     break;
                 case MatchState.Room2Prepare:
-                    
+                    Debug.Log("AAAAKURWA");
                     Instance.CurrentRoom = Instance.Rooms[2].GetComponent<Room>();
                     _cpUI.setRoom();
+
                     _arrow.gameObject.SetActive(true);
                     _arrow.setTarget();
-                    _doors[0].SetActive(false);
+
                     ClockManager.time = 45f;
                     ClockManager.canCount = true;
+                    _doors[0].SetActive(false);
+                   
                     break;
 
                 case MatchState.Room2Fight:
@@ -409,8 +412,8 @@ public class GameManager : NetworkBehaviour
 
     public void StopHordeAttack()
     {
-        ClockManager.canCount = false;
-        ClockManager.time = 0;
+        //ClockManager.canCount = false;
+        //ClockManager.time = 0;
         foreach (ExPointBlink exPointBlink in _enemySpawnMarkers)
             exPointBlink.StopBlink();
         if (isServer) StopCoroutine(_spawnEnemy);
@@ -503,7 +506,7 @@ public class GameManager : NetworkBehaviour
             cameraFacing.cameraToLookAt = cam;
     }
 
-    public void Teleport()
+    public void TeleportToRoom1()
     {
         CurrentMachState = MatchState.Room1Prepare;
         Vector3 pos = CurrentRoom.CaptureAreas[0].transform.position;
@@ -524,11 +527,12 @@ public class GameManager : NetworkBehaviour
         playerEquipment.Weapon1.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
 
         //delete placeable
-//        _localPlayer.GetComponent<PlacementController>().placeableCount[0] = 0;
-//        _localPlayer.GetComponent<PlacementController>().placeableCount[1] = 0;
-//        _localPlayer.GetComponent<PlacementController>().placeableCount[2] = 0;
-//        _localPlayer.GetComponent<PlayerShoot>()._grenades = 0;
+        _localPlayer.GetComponent<PlacementController>().placeableCount[0] = 0;
+        _localPlayer.GetComponent<PlacementController>().placeableCount[1] = 0;
+        _localPlayer.GetComponent<PlacementController>().placeableCount[2] = 0;
+        _localPlayer.GetComponent<PlayerShoot>()._grenades = 0;
     }
+
 
     #endregion
 }

@@ -293,7 +293,7 @@ public class PlacementController : NetworkBehaviour
         ClockManager.canCount = true;
         if (localPlayer._currentObject != null) Destroy(localPlayer._currentObject);
         GameManager.CurrentState = GameManager.GameState.Fighting;*/
-        GameManager.Instance.Teleport();
+        GameManager.Instance.TeleportToRoom1();
         
     }
 
