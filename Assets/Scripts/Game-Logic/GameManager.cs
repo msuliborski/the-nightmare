@@ -506,9 +506,11 @@ public class GameManager : NetworkBehaviour
         float randX = Random.Range(-2f, 2f);
         float randZ = Random.Range(-2f, 2f);
         Rigidbody rigidbody = LocalPlayer.GetComponent<Rigidbody>();
+        rigidbody.collisionDetectionMode = CollisionDetectionMode.Discrete;
         rigidbody.isKinematic = true;
         LocalPlayer.transform.position = new Vector3(pos.x + randX, pos.y + 1f, pos.z + randZ);
         rigidbody.isKinematic = false;
+        rigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
         TurnOnGridRenders(false);
         PlayerEquipment playerEquipment = LocalPlayer.GetComponentInChildren<PlayerEquipment>();
         if (playerEquipment.Weapon2 != null) Destroy(playerEquipment.Weapon2.gameObject);
