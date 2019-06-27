@@ -28,12 +28,7 @@ public class ClockManager : MonoBehaviour
         _zero = "";
         _minutes = (int) time / 60;
         _seconds = (int) time % 60;
-
-        if (_minutes == 0 && _seconds == 0)
-        {
-            //WARUNEK PREZGRYWAJACY
-            GameManager.Lose();
-        }
+        
 
         if (_minutes < 10)
             _zero = "0";

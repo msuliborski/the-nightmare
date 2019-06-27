@@ -122,6 +122,7 @@ public class PlayerManager : NetworkBehaviour
                 Cursor.visible = false;
             }
         }
+        
     }
 
     private void setModel()

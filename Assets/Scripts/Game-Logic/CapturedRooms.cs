@@ -44,8 +44,7 @@ public class CapturedRooms : NetworkBehaviour
 
         if (check)
         {
-            //WARUNEK WYGRYWANIA
-            GameManager.Win();
+//            GameManager.Instance.CurrentMachState = GameManager.MatchState.Lose;
         }
     }
 

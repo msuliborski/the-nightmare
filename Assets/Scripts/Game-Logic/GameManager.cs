@@ -4,6 +4,7 @@ using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 public class GameManager : NetworkBehaviour
@@ -142,10 +143,14 @@ public class GameManager : NetworkBehaviour
                     StopHordeAttack();
                     ClockManager.time = 0f;
                     ClockManager.canCount = false;
+                    SceneManager.LoadScene("Win");
                     break;
 
                 case MatchState.Lose:
-
+                    StopHordeAttack();
+                    ClockManager.time = 0f;
+                    ClockManager.canCount = false;
+                    SceneManager.LoadScene("Lose");
                     break;
             }
         }
@@ -234,6 +239,14 @@ public class GameManager : NetworkBehaviour
 
     private void Update()
     {
+        foreach (PlayerManager player in _players.Values)
+        {
+            if (player._currentHealth <= 0f)
+            {
+                CurrentMachState = MatchState.Lose;
+            }
+        }
+        
         if (ClockManager.canCount)
         {
             if (ClockManager.time <= 0)
