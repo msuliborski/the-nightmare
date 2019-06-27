@@ -591,11 +591,13 @@ public class GameManager : NetworkBehaviour
         rigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
         TurnOnGridRenders(false);
         PlayerEquipment playerEquipment = LocalPlayer.GetComponentInChildren<PlayerEquipment>();
+        Destroy(playerEquipment.Weapon1.gameObject);
         if (playerEquipment.Weapon2 != null) Destroy(playerEquipment.Weapon2.gameObject);
-        playerEquipment.Weapon1.resetAmmo();
-        playerEquipment.Weapon1.gameObject.SetActive(true);
-        playerEquipment.Weapon1.transform.localPosition = new Vector3(0.02f, 0.03f, -0.22f);
-        playerEquipment.Weapon1.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
+        LocalPlayer.gameObject.GetComponent<PlayerSetup>().EquipWeapon();
+//        playerEquipment.Weapon1.resetAmmo();
+//        playerEquipment.Weapon1.gameObject.SetActive(true);
+//        playerEquipment.Weapon1.transform.localPosition = new Vector3(0.02f, 0.03f, -0.22f);
+//        playerEquipment.Weapon1.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
 
         //delete placeable
         _localPlayer.GetComponent<PlacementController>().placeableCount[0] = 0;

@@ -103,7 +103,7 @@ public class PlayerSetup : NetworkBehaviour {
         GameManager.SetLayerRecursively(rightHand.GetChild(5).gameObject, "LocalPlayer");
     }
 
-    void EquipWeapon() {
+    public void EquipWeapon() {
         GameObject weaponObject = Instantiate(_weaponObjectPrefab, _actionCamera.transform.GetChild(0));
         PlayerShoot shoot = GetComponent<PlayerShoot>();
         shoot.Cam = _actionCamera;
