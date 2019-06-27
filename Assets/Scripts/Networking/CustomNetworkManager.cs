@@ -8,8 +8,10 @@ public class CustomNetworkManager : NetworkManager {
 
     public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId) {
         int random = Random.Range(0, players.Count);
-        Transform startPosition = GetStartPosition();
-        GameObject player = (GameObject) Instantiate(players[random], startPosition.position, Quaternion.identity);
+//        Transform startPosition = GetStartPosition();
+        Vector3 lobbySpawn = GameObject.Find("LobbySpawn").transform.position;
+        Vector3 randomStartPositio = new Vector3(lobbySpawn.x + Random.Range(-1, 1), lobbySpawn.y, lobbySpawn.z + Random.Range(-1, 1));
+        GameObject player = (GameObject) Instantiate(players[random], randomStartPositio, Quaternion.identity);
         PlayerManager playerManager = player.GetComponent<PlayerManager>();
         NetworkServer.AddPlayerForConnection(conn, player, playerControllerId);
     }
