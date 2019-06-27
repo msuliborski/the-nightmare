@@ -99,7 +99,7 @@ public class GameManager : NetworkBehaviour
                     
                     _cpUI.setRoom();
                     //_arrow.setTarget();
-                    ClockManager.time = 30f;
+                    ClockManager.time = 40f;
                     ClockManager.canCount = true;
                     StartCoroutine(PickUpPrepareFirst());
                     break;
@@ -119,13 +119,14 @@ public class GameManager : NetworkBehaviour
                     _arrow.gameObject.SetActive(true);
                     _arrow.setTarget();
 
-                    ClockManager.time = 45f;
+                    ClockManager.time = 60f;
                     ClockManager.canCount = true;
                     _doors[0].SetActive(false);
                     StartCoroutine(PickUpPrepare());
                     break;
 
                 case MatchState.Room2Fight:
+                    _nameOfPreviousSpawn = null;
                     _arrow.gameObject.SetActive(false);
                     _enemyPrefab = _enemiesPrefabs[1];
                     StartHordeAttack();
@@ -141,12 +142,13 @@ public class GameManager : NetworkBehaviour
                     _arrow.gameObject.SetActive(true);
                     _arrow.setTarget();
                     _doors[1].SetActive(false);
-                    ClockManager.time = 60f;
+                    ClockManager.time = 90f;
                     ClockManager.canCount = true;
                     StartCoroutine(PickUpPrepare());
                     break;
 
                 case MatchState.Room3Fight:
+                    _nameOfPreviousSpawn = null;
                     _arrow.gameObject.SetActive(false);
                     _enemyPrefab = _enemiesPrefabs[2];
                     StartHordeAttack();
