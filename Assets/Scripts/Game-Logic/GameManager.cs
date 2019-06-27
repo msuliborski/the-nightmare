@@ -9,7 +9,7 @@ using Random = UnityEngine.Random;
 public class GameManager : NetworkBehaviour
 {
 
-
+    
     public static GameManager Instance;
     private List<GameObject> _rooms = new List<GameObject>();
     public List<GameObject> Rooms { get { return _rooms; } }
@@ -45,8 +45,9 @@ public class GameManager : NetworkBehaviour
     public static bool IsListeningForReady { get; set; }
     private Dictionary<string,CaptureArea> _currentCaptureAreas = new Dictionary<string, CaptureArea>();
     public Dictionary<string, CaptureArea> CurrentCaptureAreas { get { return _currentCaptureAreas; } }
-
+    private MusicManager _musicManager;
     private Dictionary<string, Transform> _enemySpawnPoints = new Dictionary<string, Transform>();
+    private string _nameOfPreviousSpawn;
     public Dictionary<string, Transform> EnemySpawnPoints { get { return _enemySpawnPoints; } }
     private List<CaptureArea> _captureAreas = new List<CaptureArea>();
     private List<ExPointBlink> _enemySpawnMarkers = new List<ExPointBlink>();
@@ -90,20 +91,21 @@ public class GameManager : NetworkBehaviour
                 case MatchState.Room1Prepare:
                     
                     Instance.CurrentRoom = Instance.Rooms[1].GetComponent<Room>();
+                    
                     _cpUI.setRoom();
                     _arrow.setTarget();
                     ClockManager.time = 30f;
                     ClockManager.canCount = true;
                     break;
                 case MatchState.Room1Fight:
-                   
+                    _enemyPrefab = _enemiesPrefabs[0];
                     StartHordeAttack();
                     ClockManager.time = _timers[0];
                     ClockManager.canCount = true;
                    
                     break;
                 case MatchState.Room2Prepare:
-                    StopHordeAttack();
+                    
                     Instance.CurrentRoom = Instance.Rooms[2].GetComponent<Room>();
                     _arrow.setTarget();
                     _cpUI.setRoom();
@@ -113,13 +115,14 @@ public class GameManager : NetworkBehaviour
                     break;
 
                 case MatchState.Room2Fight:
+                    _enemyPrefab = _enemiesPrefabs[1];
                     StartHordeAttack();
                     ClockManager.time = _timers[1];
                     ClockManager.canCount = true;
                     break;
 
                 case MatchState.Room3Prepare:
-                    StopHordeAttack();
+                    
                     Instance.CurrentRoom = Instance.Rooms[0].GetComponent<Room>();
                     _arrow.setTarget();
                     _cpUI.setRoom();
@@ -129,6 +132,7 @@ public class GameManager : NetworkBehaviour
                     break;
 
                 case MatchState.Room3Fight:
+                    _enemyPrefab = _enemiesPrefabs[2];
                     StartHordeAttack();
                     ClockManager.time = _timers[2];
                     ClockManager.canCount = true;
@@ -215,11 +219,11 @@ public class GameManager : NetworkBehaviour
             }
         }
         _cpUI = GameObject.Find("CapturePoints").GetComponent<CapturePointsUI>();
-        _matchSettings.WaitForSpawn -= _matchSettings.EnemyRespawnTime;
         foreach (GameObject room in Rooms)
         {
             room.GetComponent<Room>().Setup();
         }
+        _musicManager = GetComponent<MusicManager>();
     }
 
     private void Start()
@@ -230,30 +234,56 @@ public class GameManager : NetworkBehaviour
 
     private void Update()
     {
-        if (ClockManager.time <= 0 && ClockManager.canCount)
+        if (ClockManager.canCount)
         {
-            switch (_currentMatchState)
+            if (ClockManager.time <= 0)
             {
-                case MatchState.Room1Prepare:
-                    CurrentMachState = MatchState.Room1Fight;
-                    break;
-                case MatchState.Room1Fight:
-                    CurrentMachState = MatchState.Room2Prepare;
-                  break;
-                case MatchState.Room2Prepare:
-                    CurrentMachState = MatchState.Room2Fight;
-                    break;
-                case MatchState.Room2Fight:
-                    CurrentMachState = MatchState.Room3Prepare;
-                    break;
-                case MatchState.Room3Prepare:
-                    CurrentMachState = MatchState.Room3Fight;
-                    break;
-                case MatchState.Room3Fight:
-                    CurrentMachState = MatchState.Win;
-                    break;
+                switch (_currentMatchState)
+                {
+                    case MatchState.Room1Prepare:
+                        CurrentMachState = MatchState.Room1Fight;
+                        break;
+                    case MatchState.Room1Fight:
+                        _musicManager.ChangeClip(false);
+                        CurrentMachState = MatchState.Room2Prepare;
+                        break;
+                    case MatchState.Room2Prepare:
+                        _musicManager.ChangeClip(true);
+                        CurrentMachState = MatchState.Room2Fight;
+                        break;
+                    case MatchState.Room2Fight:
+                        _musicManager.ChangeClip(false);
+                        CurrentMachState = MatchState.Room3Prepare;
+                        break;
+                    case MatchState.Room3Prepare:
+                        _musicManager.ChangeClip(true);
+                        CurrentMachState = MatchState.Room3Fight;
+                        break;
+                    case MatchState.Room3Fight:
+                        _musicManager.ChangeClip(false);
+                        CurrentMachState = MatchState.Win;
+                        break;
+                }
+            }
+            else if (ClockManager.time <= 10f)
+            {
+                switch (_currentMatchState)
+                {
+                    case MatchState.Room1Fight:
+                        StopHordeAttack();
+                        break;
+
+                    case MatchState.Room2Fight:
+                        StopHordeAttack();
+                        break;
+
+                    case MatchState.Room3Fight:
+                        StopHordeAttack();
+                        break;
+                }
             }
         }
+        
     }
 
     #region Building
@@ -290,8 +320,32 @@ public class GameManager : NetworkBehaviour
 
     public IEnumerator SpawnEnemy()
     {
-        yield return new WaitForSeconds(_matchSettings.EnemyRespawnTime);
+        float upperTimeBound;
+        switch (_activePlayers.Count)
+        {
+            case 1:
+                upperTimeBound = 9f;
+                break;
+            case 2:
+                upperTimeBound = 7f;
+                break;
+            case 3:
+                upperTimeBound = 5f;
+                break;
+            default:
+                upperTimeBound = 3f;
+                break;
+        }
+
+        float randTime = Random.Range(1f, upperTimeBound);
+        yield return new WaitForSeconds(randTime);
         Transform spawnPoint = null;
+        Transform previousSpawn = null;
+        if (_nameOfPreviousSpawn != null)
+        {
+            previousSpawn = EnemySpawnPoints[_nameOfPreviousSpawn];
+            EnemySpawnPoints.Remove(_nameOfPreviousSpawn);
+        }
         int randIndex = Random.Range(0, EnemySpawnPoints.Keys.Count);
         int counter = 0;
         foreach (KeyValuePair<string, Transform> entry in _enemySpawnPoints)
@@ -300,6 +354,8 @@ public class GameManager : NetworkBehaviour
             {
                 //Debug.Log(counter);
                 spawnPoint = entry.Value;
+                if (_nameOfPreviousSpawn != null) _enemySpawnPoints.Add(_nameOfPreviousSpawn, previousSpawn);
+                _nameOfPreviousSpawn = spawnPoint.name;
                 break;
             }
             counter++;

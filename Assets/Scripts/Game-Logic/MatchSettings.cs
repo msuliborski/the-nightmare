@@ -2,9 +2,10 @@
 [System.Serializable]
 public class MatchSettings
 {
-    public float RespawnTime = 3f;
+    public float RespawnTimeLower = 1f;
 
-    public float EnemyRespawnTime = 7f;
+    public float EnemyRespawnTImeUpper = 5f;
 
     public float WaitForSpawn = 10f;
+
 }
