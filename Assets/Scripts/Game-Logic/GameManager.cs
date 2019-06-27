@@ -4,6 +4,7 @@ using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 public class GameManager : NetworkBehaviour
@@ -73,6 +74,7 @@ public class GameManager : NetworkBehaviour
     public List<CameraFacing> Billboards { get { return _billboards; } set { _billboards = value; } }
     public enum MatchState { None, Lobby, Room1Prepare, Room1Fight, Room2Prepare, Room2Fight, Room3Prepare, Room3Fight, Win, Lose}
     private MatchState _currentMatchState = MatchState.None;
+    private WinLoseScreens _screens;
 
    
 
@@ -139,13 +141,17 @@ public class GameManager : NetworkBehaviour
                     break;
 
                 case MatchState.Win:
-                    StopHordeAttack();
+                    //StopHordeAttack();
                     ClockManager.time = 0f;
                     ClockManager.canCount = false;
+                    _screens.ActivateScreen(true);
                     break;
 
                 case MatchState.Lose:
-
+                    //StopHordeAttack();
+                    ClockManager.time = 0f;
+                    ClockManager.canCount = false;
+                    _screens.ActivateScreen(false);
                     break;
             }
         }
@@ -224,6 +230,7 @@ public class GameManager : NetworkBehaviour
             room.GetComponent<Room>().Setup();
         }
         _musicManager = GetComponent<MusicManager>();
+        _screens = GameObject.Find("Win_Lose").GetComponent<WinLoseScreens>();
     }
 
     private void Start()
@@ -234,6 +241,14 @@ public class GameManager : NetworkBehaviour
 
     private void Update()
     {
+        foreach (PlayerManager player in _players.Values)
+        {
+            if (player._currentHealth <= 0f)
+            {
+                CurrentMachState = MatchState.Lose;
+            }
+        }
+        
         if (ClockManager.canCount)
         {
             if (ClockManager.time <= 0)

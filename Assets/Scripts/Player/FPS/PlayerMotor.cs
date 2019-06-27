@@ -29,9 +29,12 @@ public class PlayerMotor : NetworkBehaviour {
     }
 
     void FixedUpdate() {
-        PerformMovement();
-        PerformRotation();
-        DecreaseRecoil();
+        if (ButtonsControll.screensOver && !WinLoseScreens.winLoseActive)
+        {
+            PerformMovement();
+            PerformRotation();
+            DecreaseRecoil();
+        }
     }
 
     private void PerformMovement() {

@@ -120,7 +120,7 @@ public class CaptureArea : NetworkBehaviour
                 {
                     _progress = 0;
                     IsCaptured = true;
-                    GameManager.Lose();
+                    GameManager.Instance.CurrentMachState = GameManager.MatchState.Lose;
                     if (_renderer.sprite != _sprites[1])
                         RpcChangeSprite(0);
                 }

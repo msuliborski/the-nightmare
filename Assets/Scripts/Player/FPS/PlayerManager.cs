@@ -111,7 +111,7 @@ public class PlayerManager : NetworkBehaviour
 
         if (ButtonsControll.screensOver)
         {
-            if (PauseGame.menuActive)
+            if (PauseGame.menuActive || WinLoseScreens.winLoseActive)
             {
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
@@ -122,6 +122,7 @@ public class PlayerManager : NetworkBehaviour
                 Cursor.visible = false;
             }
         }
+        
     }
 
     private void setModel()
