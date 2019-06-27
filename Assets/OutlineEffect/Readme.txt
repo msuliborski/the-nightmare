@@ -9,19 +9,19 @@ Outline Width : Outline's width.
 
 Body Alpha : The body's alpha value, used to controll body's transparancy.
 
-脰脨脦脛:
-赂脙虏脛脰脢脛脺禄忙脰脝脛拢脨脥卤脽驴貌拢卢脥卢脢卤卤拢鲁脰脛拢脨脥碌脛脥赂脙梅露脠拢卢虏禄脢脟禄霉脫脷潞贸麓娄脌铆脡卯露脠脥录碌脛脙猫卤脽
+中文:
+该材质能绘制模型边框，同时保持模型的透明度，不是基于后处理深度图的描边
 
-Unity AssetStore (脙芒路脩) 脧脗脭脴脕麓陆脫:https://www.assetstore.unity3d.com/#!/content/86481
+Unity AssetStore (免费) 下载链接:https://www.assetstore.unity3d.com/#!/content/86481
 
-脰搂鲁脰Unity掳忙卤戮: Unity 5.6.0+
+支持Unity版本: Unity 5.6.0+
 
-Unity碌脛脧脿鹿脴Shader虏没脢枚脠莽脧脗:
+Unity的相关Shader阐述如下:
 
-Outline Color : 脙猫卤脽碌脛脩脮脡芦
+Outline Color : 描边的颜色
 
-Outline Factor : 露漏碌楼路陆脧貌潞脥路篓脧貌脕驴路陆脧貌碌脛虏氓脰碌
+Outline Factor : 订单方向和法向量方向的插值
 
-Outline Width : 卤脽碌脛驴铆露脠
+Outline Width : 边的宽度
 
-Body Alpha : 脛拢脨脥脳脭脡铆碌脛脥赂脙梅露脠
+Body Alpha : 模型自身的透明度
