@@ -781,6 +781,7 @@ MonoBehaviour:
   maxPlaceable: 050000000300000005000000
   placeableCount: 000000000000000000000000
   bop: {fileID: 8300000, guid: 8cee24b587d728f4ea3c867fb7baecfc, type: 3}
+  nono: {fileID: 8300000, guid: b6d3825c91c4a3c42a02936b9810372b, type: 3}
 --- !u!114 &7278791426480694111
 MonoBehaviour:
   m_ObjectHideFlags: 0

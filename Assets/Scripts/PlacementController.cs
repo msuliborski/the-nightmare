@@ -39,6 +39,7 @@ public class PlacementController : NetworkBehaviour
 
     private AudioSource _source;
     [SerializeField] private AudioClip bop;
+    [SerializeField] private AudioClip nono;
 
     public GameObject CurrentObject
     {
@@ -141,7 +142,11 @@ public class PlacementController : NetworkBehaviour
                     _playerShoot.WasBuilt = true;
                     placeableCount[_placeableIndex]--;
                 }
+                else
+                    PlaySound(nono);
             }
+            else 
+                PlaySound(nono);
         }
     }
 
