@@ -15,5 +15,6 @@ public class ButtonsControll : MonoBehaviour
     {
         transform.GetChild(1).gameObject.SetActive(false);
         screensOver = true;
+        GameManager.IsListeningForReady = true;
     }
 }

@@ -96,7 +96,7 @@ public class GameManager : NetworkBehaviour
                     
                     _cpUI.setRoom();
                     //_arrow.setTarget();
-                    ClockManager.time = 30f;
+                    ClockManager.time = 3f;
                     ClockManager.canCount = true;
                     break;
                 case MatchState.Room1Fight:
@@ -263,22 +263,23 @@ public class GameManager : NetworkBehaviour
                 switch (_currentMatchState)
                 {
                     case MatchState.Room1Prepare:
+                        _musicManager.ChangeClip(false);
                         CurrentMachState = MatchState.Room1Fight;
                         break;
                     case MatchState.Room1Fight:
-                        //_musicManager.ChangeClip(false);
+                        _musicManager.ChangeClip(true);
                         CurrentMachState = MatchState.Room2Prepare;
                         break;
                     case MatchState.Room2Prepare:
-                        _musicManager.ChangeClip(true);
+                        _musicManager.ChangeClip(false);
                         CurrentMachState = MatchState.Room2Fight;
                         break;
                     case MatchState.Room2Fight:
-                        _musicManager.ChangeClip(false);
+                        _musicManager.ChangeClip(true);
                         CurrentMachState = MatchState.Room3Prepare;
                         break;
                     case MatchState.Room3Prepare:
-                        _musicManager.ChangeClip(true);
+                        _musicManager.ChangeClip(false);
                         CurrentMachState = MatchState.Room3Fight;
                         break;
                     case MatchState.Room3Fight:

@@ -16,13 +16,16 @@ public class MusicManager : MonoBehaviour
 
     public void ChangeClip(bool isSlow)
     {
+        Debug.Log("muzyczka");
         if (!isSlow)
         {
+            _source.Stop();
             _source.clip = _fast;
             _source.Play();
         }
         else
         {
+            _source.Stop();
             _source.clip = _slow;
             _source.Play();
         }

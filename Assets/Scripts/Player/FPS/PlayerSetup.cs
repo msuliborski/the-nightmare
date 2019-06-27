@@ -42,7 +42,7 @@ public class PlayerSetup : NetworkBehaviour {
                 if (_sceneCamera != null)
                     _sceneCamera.gameObject.SetActive(false);
                 GameManager.Instance.CurrentMachState = GameManager.MatchState.Lobby;
-                GameManager.IsListeningForReady = true;
+                //GameManager.IsListeningForReady = true;
             //}
             //else
             //{
