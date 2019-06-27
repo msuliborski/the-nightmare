@@ -107,13 +107,14 @@ public class GameManager : NetworkBehaviour
                    
                     break;
                 case MatchState.Room2Prepare:
-                    
+                    Debug.Log("AAAAKURWA");
                     Instance.CurrentRoom = Instance.Rooms[2].GetComponent<Room>();
                     _arrow.setTarget();
                     _cpUI.setRoom();
-                    _doors[0].SetActive(false);
                     ClockManager.time = 45f;
                     ClockManager.canCount = true;
+                    _doors[0].SetActive(false);
+                   
                     break;
 
                 case MatchState.Room2Fight:
@@ -405,8 +406,8 @@ public class GameManager : NetworkBehaviour
 
     public void StopHordeAttack()
     {
-        ClockManager.canCount = false;
-        ClockManager.time = 0;
+        //ClockManager.canCount = false;
+        //ClockManager.time = 0;
         foreach (ExPointBlink exPointBlink in _enemySpawnMarkers)
             exPointBlink.StopBlink();
         if (isServer) StopCoroutine(_spawnEnemy);
