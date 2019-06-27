@@ -7,6 +7,7 @@ using UnityEngine.Video;
 public class Skip : MonoBehaviour
 {
     [SerializeField] private GameObject _player;
+    [SerializeField] private AudioSource _source; 
 
     private void Start()
     {
@@ -24,6 +25,7 @@ public class Skip : MonoBehaviour
     private void Kill(VideoPlayer vp)
     {
         Destroy(_player);
+        _source.enabled = true;
         Destroy(gameObject);
     }
 }
