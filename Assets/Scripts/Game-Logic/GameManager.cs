@@ -503,7 +503,26 @@ public class GameManager : NetworkBehaviour
         player.transform.name = playerId;
         
         player.transform.GetChild(4).GetChild(0).gameObject.SetActive(false);
-        
+        if (!player.isLocalPlayer)
+        {
+            Outline outline = player.GetComponentInChildren<Outline>();
+            outline.enabled = true;
+            switch (arrowIndexList[0])
+            {
+                case 0:
+                    outline.OutlineColor = Color.green;
+                    break;
+                case 1:
+                    outline.OutlineColor = Color.yellow;
+                    break;
+                case 2:
+                    outline.OutlineColor = Color.blue;
+                    break;
+                case 3:
+                    outline.OutlineColor = Color.red;
+                    break;
+            }
+        }
         player.transform.GetChild(4).GetChild(arrowIndexList[0]).gameObject.SetActive(true);
         arrowIndexList.Remove(0);
     }
