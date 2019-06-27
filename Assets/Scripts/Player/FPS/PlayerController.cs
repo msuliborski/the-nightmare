@@ -44,7 +44,7 @@ public class PlayerController : NetworkBehaviour {
    
 
     private void Update() {
-        if (ButtonsControll.screensOver)
+        if (ButtonsControll.screensOver && !WinLoseScreens.winLoseActive)
         {
             if (transform.GetComponent<PlayerEquipment>().getActiveWeapon().GetComponent<Animator>().GetBool(IsSprinting))
                 _speed = _speedFast;

@@ -74,6 +74,7 @@ public class GameManager : NetworkBehaviour
     public List<CameraFacing> Billboards { get { return _billboards; } set { _billboards = value; } }
     public enum MatchState { None, Lobby, Room1Prepare, Room1Fight, Room2Prepare, Room2Fight, Room3Prepare, Room3Fight, Win, Lose}
     private MatchState _currentMatchState = MatchState.None;
+    private WinLoseScreens _screens;
 
    
 
@@ -140,17 +141,17 @@ public class GameManager : NetworkBehaviour
                     break;
 
                 case MatchState.Win:
-                    StopHordeAttack();
+                    //StopHordeAttack();
                     ClockManager.time = 0f;
                     ClockManager.canCount = false;
-                    SceneManager.LoadScene("Win");
+                    _screens.ActivateScreen(true);
                     break;
 
                 case MatchState.Lose:
-                    StopHordeAttack();
+                    //StopHordeAttack();
                     ClockManager.time = 0f;
                     ClockManager.canCount = false;
-                    SceneManager.LoadScene("Lose");
+                    _screens.ActivateScreen(false);
                     break;
             }
         }
@@ -229,6 +230,7 @@ public class GameManager : NetworkBehaviour
             room.GetComponent<Room>().Setup();
         }
         _musicManager = GetComponent<MusicManager>();
+        _screens = GameObject.Find("Win_Lose").GetComponent<WinLoseScreens>();
     }
 
     private void Start()

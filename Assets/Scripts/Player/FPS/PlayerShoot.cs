@@ -77,7 +77,7 @@ public class PlayerShoot : NetworkBehaviour {
 
 
     void Update() {
-        if (ButtonsControll.screensOver)
+        if (ButtonsControll.screensOver && !WinLoseScreens.winLoseActive)
         { 
             currentRecoil = Equipment.getActiveWeapon().Recoil;
 //        weaponAnimator = activeWeapon.GetComponent<Animator>();
