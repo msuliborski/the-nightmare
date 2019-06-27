@@ -847,6 +847,8 @@ MonoBehaviour:
   _mask:
     serializedVersion: 2
     m_Bits: 4294967295
+  _pick: {fileID: 8300000, guid: bf7e24bedb267c14ebb940153e79b378, type: 3}
+  _pickRifle: {fileID: 8300000, guid: 985eefe10aeffa54b9e14b15e7dfaf19, type: 3}
 --- !u!95 &2896951668785230134
 Animator:
   serializedVersion: 3
