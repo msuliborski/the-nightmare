@@ -17,7 +17,7 @@ MonoBehaviour:
   grenades: 0
   snares: 0
   teddyBears: 0
-  barrels: 1
+  barrels: 10
 --- !u!114 &3180133330117256378
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -248,17 +248,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7872269728732046455, guid: bbd9f2940b6b15c44b62abeccaa75498,
-        type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 2d55bfa262814184fbc41d02d637a9ba,
-        type: 3}
-    - target: {fileID: 360469302237709677, guid: bbd9f2940b6b15c44b62abeccaa75498,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4718849638285014658, guid: bbd9f2940b6b15c44b62abeccaa75498,
         type: 3}
       propertyPath: m_TagString
@@ -278,6 +267,17 @@ PrefabInstance:
         type: 3}
       propertyPath: m_TagString
       value: Chest
+      objectReference: {fileID: 0}
+    - target: {fileID: 7872269728732046455, guid: bbd9f2940b6b15c44b62abeccaa75498,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 2d55bfa262814184fbc41d02d637a9ba,
+        type: 3}
+    - target: {fileID: 360469302237709677, guid: bbd9f2940b6b15c44b62abeccaa75498,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 360469302237709677, guid: bbd9f2940b6b15c44b62abeccaa75498, type: 3}
