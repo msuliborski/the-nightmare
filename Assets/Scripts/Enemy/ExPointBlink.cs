@@ -7,7 +7,8 @@ public class ExPointBlink : MonoBehaviour
 
     private SpriteRenderer _spriteRenderer;
     public SpriteRenderer SpriteRenderer { get { return _spriteRenderer; } }
-    private Color _prepareColor = new Color(0, 0, 0, 125);
+    private Color _prepareColor = new Color(255f, 140f, 0f);
+    private Color _baseColor = Color.red;
     private Coroutine _blink;
     // Start is called before the first frame update
     void Start()
@@ -28,7 +29,7 @@ public class ExPointBlink : MonoBehaviour
 
     public void  StartBlink()
     {
-        _spriteRenderer.color = Color.white;
+        _spriteRenderer.color = _baseColor;
         _blink = StartCoroutine(Blink());
     }
 
