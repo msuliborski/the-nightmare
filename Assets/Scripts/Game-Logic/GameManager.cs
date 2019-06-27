@@ -59,7 +59,8 @@ public class GameManager : NetworkBehaviour
     public static List<GameObject> GridRenderes { get { return _gridRenderes; } }
     private static List<SpriteRenderer> _spriteRenderes = new List<SpriteRenderer>();
     public static List<SpriteRenderer> SpriteRenderer { get { return _spriteRenderes; } }
-    [SerializeField] private GameObject _enemyPrefab; 
+    private GameObject _enemyPrefab;
+    [SerializeField] private GameObject[] _enemiesPrefabs;
     [SerializeField] private MatchSettings _matchSettings;
     [SerializeField] private GameObject[] _weapons;
     [SerializeField] private int _waves;
