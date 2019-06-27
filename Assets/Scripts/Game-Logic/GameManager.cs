@@ -495,7 +495,7 @@ public class GameManager : NetworkBehaviour
     private static int _enemyIdCounter = 0;
     public static int EnemyIdCounter { get { return _enemyIdCounter; } set { _enemyIdCounter = value; } }
     
-    private static List<int> arrowIndexList = new List<int>() {0, 1, 2, 3};
+    private static List<int> arrowIndexList = new List<int> {0, 1, 2, 3};
     public static void RegisterPlayer(string netId, PlayerManager player)
     {
         string playerId = PLAYER_ID_PREFIX + netId;
@@ -524,8 +524,9 @@ public class GameManager : NetworkBehaviour
                     break;
             }
         }
-        player.transform.GetChild(4).GetChild(arrowIndexList[0]).gameObject.SetActive(true);
-        arrowIndexList.Remove(0);
+        int tempIndex = Random.Range(0, arrowIndexList.Count - 1);
+        player.transform.GetChild(4).GetChild(arrowIndexList[tempIndex]).gameObject.SetActive(true);
+        arrowIndexList.Remove(tempIndex);
     }
 
     public static void UnregisterPlayer(string playerId) {
