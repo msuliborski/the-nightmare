@@ -30,7 +30,7 @@ public class PlayerManager : NetworkBehaviour
     private GameObject boy;
     private GameObject girl;
     private NetworkAnimator _netAnim;
-    
+
 
 
     public void SetBuildingMode()
@@ -108,6 +108,20 @@ public class PlayerManager : NetworkBehaviour
 //
 //            }
 //        }
+
+        if (ButtonsControll.screensOver)
+        {
+            if (PauseGame.menuActive)
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
+        }
     }
 
     private void setModel()
