@@ -9,7 +9,7 @@ using UnityEngine.Serialization;
 public class JoinGame : MonoBehaviour
 {
    [SerializeField] private GameObject _roomListInst;
-   [FormerlySerializedAs("status")] [SerializeField] private Text _status;
+   [FormerlySerializedAs("status")] [SerializeField] private TextMeshProUGUI _status;
    [SerializeField] private Transform _roomListParent;
    [SerializeField] private GameObject _panel;
    private List<GameObject> _roomList = new List<GameObject>();
@@ -45,7 +45,7 @@ public class JoinGame : MonoBehaviour
 
       foreach (MatchInfoSnapshot response in responsedata)
       {
-         GameObject roomListItemGO = Instantiate(_roomListInst);
+         GameObject roomListItemGO = Instantiate(_roomListInst, _roomListParent, false);
          roomListItemGO.transform.SetParent(_roomListParent);
          
 //         

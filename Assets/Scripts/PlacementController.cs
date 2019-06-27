@@ -37,6 +37,9 @@ public class PlacementController : NetworkBehaviour
     private PlayerShoot _playerShoot;
     private PlayerManager _playerManager;
 
+    private AudioSource _source;
+    [SerializeField] private AudioClip bop;
+
     public GameObject CurrentObject
     {
         get => _currentObject;
@@ -45,6 +48,7 @@ public class PlacementController : NetworkBehaviour
 
     private void Start()
     {
+        _source = GetComponent<AudioSource>();
         if (isLocalPlayer)
         {
             //_customNetworkManager = GameObject.Find("NetworkManager").GetComponent<CustomNetworkManager>();
@@ -86,6 +90,12 @@ public class PlacementController : NetworkBehaviour
         
     }
 
+    private void PlaySound(AudioClip clip)
+    {
+        _source.clip = clip;
+        _source.PlayOneShot(_source.clip);
+    }
+
     void RotateWheel()
     {
         _mouseWheelRotation = 0;
@@ -125,6 +135,7 @@ public class PlacementController : NetworkBehaviour
                     )
                 {
                     Debug.Log("clicked");
+                    PlaySound(bop);
                     if (GameManager.CurrentState == GameManager.GameState.Fighting)
                         GameManager.TurnOnGridRenders(false);
 

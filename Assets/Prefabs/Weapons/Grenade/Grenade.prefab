@@ -124,7 +124,7 @@ Transform:
   m_GameObject: {fileID: 3012633921025596544}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 3.34, y: 0.002, z: 2.626}
-  m_LocalScale: {x: 0.11, y: 0.1, z: 0.11}
+  m_LocalScale: {x: 0.22, y: 0.2, z: 0.22}
   m_Children:
   - {fileID: 5032352737912610636}
   - {fileID: 4660473156675104878}
@@ -315,6 +315,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5032352737912610636}
     m_Modifications:
+    - target: {fileID: 100000, guid: 2b0fd020351977e4b910b663bc0bf6f6, type: 3}
+      propertyPath: m_Name
+      value: Football
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 2b0fd020351977e4b910b663bc0bf6f6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -370,10 +374,6 @@ PrefabInstance:
     - target: {fileID: 400000, guid: 2b0fd020351977e4b910b663bc0bf6f6, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.41274714
-      objectReference: {fileID: 0}
-    - target: {fileID: 100000, guid: 2b0fd020351977e4b910b663bc0bf6f6, type: 3}
-      propertyPath: m_Name
-      value: Football
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2b0fd020351977e4b910b663bc0bf6f6, type: 3}
