@@ -499,7 +499,7 @@ public class GameManager : NetworkBehaviour
             cameraFacing.cameraToLookAt = cam;
     }
 
-    public void Teleport()
+    public void TeleportToRoom1()
     {
         CurrentMachState = MatchState.Room1Prepare;
         Vector3 pos = CurrentRoom.CaptureAreas[0].transform.position;
@@ -520,11 +520,12 @@ public class GameManager : NetworkBehaviour
         playerEquipment.Weapon1.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
 
         //delete placeable
-//        _localPlayer.GetComponent<PlacementController>().placeableCount[0] = 0;
-//        _localPlayer.GetComponent<PlacementController>().placeableCount[1] = 0;
-//        _localPlayer.GetComponent<PlacementController>().placeableCount[2] = 0;
-//        _localPlayer.GetComponent<PlayerShoot>()._grenades = 0;
+        _localPlayer.GetComponent<PlacementController>().placeableCount[0] = 0;
+        _localPlayer.GetComponent<PlacementController>().placeableCount[1] = 0;
+        _localPlayer.GetComponent<PlacementController>().placeableCount[2] = 0;
+        _localPlayer.GetComponent<PlayerShoot>()._grenades = 0;
     }
+
 
     #endregion
 }
