@@ -16,6 +16,7 @@ public class CaptureArea : NetworkBehaviour
     private Sprite[] _sprites = new Sprite[2];
     private SpriteRenderer _renderer;
     private GameObject Room;
+    private float _scale;
 
     public bool IsCaptured
     {
@@ -91,18 +92,30 @@ public class CaptureArea : NetworkBehaviour
     {
         if (isServer)
         {
-            if (_enemyNum <= 0)
+            _capturing = true;
+            if (_enemyNum >= 4)
+            {
+                _scale = 3;
+            }
+            else if (_enemyNum >= 2)
+            {
+                _scale = 2;
+            }
+            else if (_enemyNum > 0)
+            {
+                _scale = 1;
+            }
+            else
             {
                 _enemyNum = 0;
                 _capturing = false;
             }
-            else
-                _capturing = true;
+            
                
             
             if (_capturing)
             {
-                _progress -= _step;
+                _progress -= _step*_scale;
                 if (_progress <= 0)
                 {
                     _progress = 0;

@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Experimental.UIElements;
 using UnityEngine.Networking;
+using Image = UnityEngine.UI.Image;
 
 public class CapturePointsUI : NetworkBehaviour
 {
@@ -37,7 +38,7 @@ public class CapturePointsUI : NetworkBehaviour
                 {
                     if (areas[i]._progress < 20)
                     {
-                        captureBG[i].GetComponent<Image>().image = _red.texture;
+                        captureBG[i].GetComponent<Image>().sprite = _red;
                         source.Play();
                         hasPlayed = true;
                     }
