@@ -26,7 +26,7 @@ public class PlacementController : NetworkBehaviour
     private static float _zoom = 1f;
     private int _placeableIndex = 0;
     private bool _isPlacing = false;
-    public int[] maxPlaceable = {5, 3, 5};
+    public int[] maxPlaceable = {3, 1, 3};
     public int[] placeableCount = new int[3];
     private TextMeshProUGUI[] _placeableTM = new TextMeshProUGUI[3];
     public const int INDEX_OF_SNARES = 0;
@@ -57,10 +57,6 @@ public class PlacementController : NetworkBehaviour
             _placeableTM[2] = GameObject.Find("BarrelsCount").GetComponent<TextMeshProUGUI>();
         }
 
-        for (int i = 0; i < 3; i++)
-        {
-            placeableCount[i] = maxPlaceable[i];
-        }
         _playerShoot = GetComponent<PlayerShoot>();
         _playerManager = GetComponent<PlayerManager>();
         _reverseGrid = 1f / GridTileSize;

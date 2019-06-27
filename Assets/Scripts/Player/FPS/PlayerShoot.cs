@@ -50,8 +50,8 @@ public class PlayerShoot : NetworkBehaviour {
 
 
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start() {
+        _grenades = 0;
         source = GetComponent<AudioSource>();
         activeWeapon = Equipment.Weapon1;
         if (Cam == null) enabled = false;
@@ -66,7 +66,6 @@ public class PlayerShoot : NetworkBehaviour {
             _playerAnimator = transform.GetChild(0).GetChild(1).GetComponent<Animator>();
         _playerController = GetComponent<PlayerController>();
 
-        _grenades = _maxGrenades;
         if (isLocalPlayer)
             _grenadesTM = GameObject.Find("Grenades").GetComponent<TextMeshProUGUI>();
         normalFOV = Cam.fieldOfView;
