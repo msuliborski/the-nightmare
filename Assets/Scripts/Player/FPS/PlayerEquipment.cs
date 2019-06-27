@@ -17,7 +17,7 @@ public class PlayerEquipment : NetworkBehaviour {
 
     private void Start() {
         if (isLocalPlayer) {
-            pickUp = GameObject.Find("PlayerUI").transform.GetChild(1).GetComponent<TextMeshProUGUI>();
+            pickUp = GameObject.Find("PlayerUI").transform.GetChild(2).GetComponent<TextMeshProUGUI>();
         }
         else {
             transform.GetChild(3).gameObject.SetActive(false);//turn off camera

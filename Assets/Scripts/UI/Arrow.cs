@@ -19,7 +19,7 @@ public class Arrow : MonoBehaviour
 
     public void setTarget()
     {
-        target = GameManager.Instance.CurrentRoom.gameObject;
+        target = GameManager.Instance.currentChest;
         isSet = true;
     }
 }

@@ -15,9 +15,11 @@ public class GameManager : NetworkBehaviour
     private List<GameObject> _rooms = new List<GameObject>();
     public List<GameObject> Rooms { get { return _rooms; } }
     private float _prepareTimer = 45f;
-    private float[] _timers = { 12f, 180f, 300f };
+    private float[] _timers = { 120f, 180f, 300f };
     private Room _currentRoom;
-    
+    [SerializeField] private GameObject[] _chests = new GameObject[2];
+    public GameObject currentChest;
+
     public Room CurrentRoom {get { return _currentRoom; }
         set
         {
@@ -97,7 +99,7 @@ public class GameManager : NetworkBehaviour
                     
                     _cpUI.setRoom();
                     //_arrow.setTarget();
-                    ClockManager.time = 10f;
+                    ClockManager.time = 30f;
                     ClockManager.canCount = true;
                     StartCoroutine(PickUpPrepareFirst());
                     break;
@@ -109,6 +111,7 @@ public class GameManager : NetworkBehaviour
                     StartCoroutine(PickUpFight());
                     break;
                 case MatchState.Room2Prepare:
+                    currentChest = _chests[0];
                     Debug.Log("AAAAKURWA");
                     Instance.CurrentRoom = Instance.Rooms[2].GetComponent<Room>();
                     _cpUI.setRoom();
@@ -132,7 +135,7 @@ public class GameManager : NetworkBehaviour
                     break;
 
                 case MatchState.Room3Prepare:
-                    
+                    currentChest = _chests[1];
                     Instance.CurrentRoom = Instance.Rooms[0].GetComponent<Room>();
                     _cpUI.setRoom();
                     _arrow.gameObject.SetActive(true);
@@ -198,6 +201,7 @@ public class GameManager : NetworkBehaviour
     public MatchSettings MatchSettings { get { return _matchSettings; } set { _matchSettings = value; } }
     [SerializeField] private GameObject[] _floorsToDisable;
     public GameObject[] FloorsToDisable { get { return _floorsToDisable; }  set { _floorsToDisable = value; } }
+    private TextMeshProUGUI _readyPlayers;
 
     void Awake()
     {
@@ -244,6 +248,7 @@ public class GameManager : NetworkBehaviour
         _musicManager = GetComponent<MusicManager>();
         _screens = GameObject.Find("Win_Lose").GetComponent<WinLoseScreens>();
         _pickUp = GameObject.Find("Instructions").GetComponent<TextMeshProUGUI>();
+        _readyPlayers = GameObject.Find("ReadyNumber").GetComponent<TextMeshProUGUI>();
     }
 
     private void Start()
@@ -255,6 +260,15 @@ public class GameManager : NetworkBehaviour
 
     private void Update()
     {
+        if (_currentMatchState == MatchState.Lobby)
+        {
+            _readyPlayers.enabled = true;
+            _readyPlayers.text = ReadyPlayersCnt + "/" + _players.Count + " Players ready";
+        }
+        else
+        {
+            _readyPlayers.enabled = false;
+        }
         foreach (PlayerManager player in _players.Values)
         {
             if (player._currentHealth <= 0f)
