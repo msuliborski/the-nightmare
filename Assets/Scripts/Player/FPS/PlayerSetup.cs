@@ -104,7 +104,6 @@ public class PlayerSetup : NetworkBehaviour {
     }
 
     void EquipWeapon() {
-        
         GameObject weaponObject = Instantiate(_weaponObjectPrefab, _actionCamera.transform.GetChild(0));
         PlayerShoot shoot = GetComponent<PlayerShoot>();
         shoot.Cam = _actionCamera;
