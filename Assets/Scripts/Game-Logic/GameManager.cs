@@ -394,16 +394,16 @@ public class GameManager : NetworkBehaviour
         switch (_activePlayers.Count)
         {
             case 1:
-                upperTimeBound = 9f;
-                break;
-            case 2:
                 upperTimeBound = 7f;
                 break;
-            case 3:
+            case 2:
                 upperTimeBound = 5f;
                 break;
-            default:
+            case 3:
                 upperTimeBound = 3f;
+                break;
+            default:
+                upperTimeBound = 2f;
                 break;
         }
 
