@@ -15,7 +15,7 @@ public class GameManager : NetworkBehaviour
     private List<GameObject> _rooms = new List<GameObject>();
     public List<GameObject> Rooms { get { return _rooms; } }
     private float _prepareTimer = 45f;
-    private float[] _timers = { 120f, 180f, 300f };
+    private float[] _timers = { 12f, 180f, 300f };
     private Room _currentRoom;
     
     public Room CurrentRoom {get { return _currentRoom; }
@@ -75,6 +75,7 @@ public class GameManager : NetworkBehaviour
     public enum MatchState { None, Lobby, Room1Prepare, Room1Fight, Room2Prepare, Room2Fight, Room3Prepare, Room3Fight, Win, Lose}
     private MatchState _currentMatchState = MatchState.None;
     private WinLoseScreens _screens;
+    private TextMeshProUGUI _pickUp;
 
    
 
@@ -95,50 +96,60 @@ public class GameManager : NetworkBehaviour
                     Instance.CurrentRoom = Instance.Rooms[1].GetComponent<Room>();
                     
                     _cpUI.setRoom();
-                    _arrow.setTarget();
-                    ClockManager.time = 30f;
+                    //_arrow.setTarget();
+                    ClockManager.time = 10f;
                     ClockManager.canCount = true;
+                    StartCoroutine(PickUpPrepareFirst());
                     break;
                 case MatchState.Room1Fight:
                     _enemyPrefab = _enemiesPrefabs[0];
                     StartHordeAttack();
                     ClockManager.time = _timers[0];
                     ClockManager.canCount = true;
-                   
+                    StartCoroutine(PickUpFight());
                     break;
                 case MatchState.Room2Prepare:
                     Debug.Log("AAAAKURWA");
                     Instance.CurrentRoom = Instance.Rooms[2].GetComponent<Room>();
-                    _arrow.setTarget();
                     _cpUI.setRoom();
+
+                    _arrow.gameObject.SetActive(true);
+                    _arrow.setTarget();
+
                     ClockManager.time = 45f;
                     ClockManager.canCount = true;
                     _doors[0].SetActive(false);
-                   
+                    StartCoroutine(PickUpPrepare());
                     break;
 
                 case MatchState.Room2Fight:
+                    _arrow.gameObject.SetActive(false);
                     _enemyPrefab = _enemiesPrefabs[1];
                     StartHordeAttack();
                     ClockManager.time = _timers[1];
                     ClockManager.canCount = true;
+                    StartCoroutine(PickUpFight());
                     break;
 
                 case MatchState.Room3Prepare:
                     
                     Instance.CurrentRoom = Instance.Rooms[0].GetComponent<Room>();
-                    _arrow.setTarget();
                     _cpUI.setRoom();
+                    _arrow.gameObject.SetActive(true);
+                    _arrow.setTarget();
                     _doors[1].SetActive(false);
                     ClockManager.time = 60f;
                     ClockManager.canCount = true;
+                    StartCoroutine(PickUpPrepare());
                     break;
 
                 case MatchState.Room3Fight:
+                    _arrow.gameObject.SetActive(false);
                     _enemyPrefab = _enemiesPrefabs[2];
                     StartHordeAttack();
                     ClockManager.time = _timers[2];
                     ClockManager.canCount = true;
+                    StartCoroutine(PickUpFight());
                     break;
 
                 case MatchState.Win:
@@ -232,11 +243,13 @@ public class GameManager : NetworkBehaviour
         }
         _musicManager = GetComponent<MusicManager>();
         _screens = GameObject.Find("Win_Lose").GetComponent<WinLoseScreens>();
+        _pickUp = GameObject.Find("Instructions").GetComponent<TextMeshProUGUI>();
     }
 
     private void Start()
     {
         TurnOnGridRenders(false);
+        
         //if (Instance.isServer) Instance.StartCoroutine(Instance.SpawnEnemy());
     }
 
@@ -257,22 +270,23 @@ public class GameManager : NetworkBehaviour
                 switch (_currentMatchState)
                 {
                     case MatchState.Room1Prepare:
+                        _musicManager.ChangeClip(false);
                         CurrentMachState = MatchState.Room1Fight;
                         break;
                     case MatchState.Room1Fight:
-                        _musicManager.ChangeClip(false);
+                        _musicManager.ChangeClip(true);
                         CurrentMachState = MatchState.Room2Prepare;
                         break;
                     case MatchState.Room2Prepare:
-                        _musicManager.ChangeClip(true);
+                        _musicManager.ChangeClip(false);
                         CurrentMachState = MatchState.Room2Fight;
                         break;
                     case MatchState.Room2Fight:
-                        _musicManager.ChangeClip(false);
+                        _musicManager.ChangeClip(true);
                         CurrentMachState = MatchState.Room3Prepare;
                         break;
                     case MatchState.Room3Prepare:
-                        _musicManager.ChangeClip(true);
+                        _musicManager.ChangeClip(false);
                         CurrentMachState = MatchState.Room3Fight;
                         break;
                     case MatchState.Room3Fight:
@@ -300,6 +314,32 @@ public class GameManager : NetworkBehaviour
             }
         }
         
+    }
+    
+    private IEnumerator PickUpPrepareFirst()
+    {
+        _pickUp.enabled = true;
+        _pickUp.text = "Pick up equipment from the chests!";
+        yield return new WaitForSeconds(7);
+        _pickUp.text = "Fortify the area!";
+    }
+    
+    private IEnumerator PickUpPrepare()
+    {
+        Debug.Log("Second prepare");
+        _pickUp.enabled = true;
+        _pickUp.text = "Follow the arrow to the next room!";
+        yield return new WaitForSeconds(7);
+        _pickUp.text = "Pick up equipment from the chests!";
+        yield return new WaitForSeconds(7);
+        _pickUp.text = "Fortify the area!";
+    }
+
+    private IEnumerator PickUpFight()
+    {
+        _pickUp.text = "Defend the area!";
+        yield return new WaitForSeconds(5);
+        _pickUp.enabled = false;
     }
 
     #region Building
