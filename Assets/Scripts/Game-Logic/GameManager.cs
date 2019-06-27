@@ -271,10 +271,11 @@ public class GameManager : NetworkBehaviour
         }
         foreach (PlayerManager player in _players.Values)
         {
-            if (player._currentHealth <= 0f)
+            if (player._currentHealth > 0f)
             {
-                CurrentMachState = MatchState.Lose;
+                break;
             }
+            CurrentMachState = MatchState.Lose;
         }
         
         if (ClockManager.canCount)
