@@ -95,7 +95,7 @@ public class GameManager : NetworkBehaviour
                     Instance.CurrentRoom = Instance.Rooms[1].GetComponent<Room>();
                     
                     _cpUI.setRoom();
-                    _arrow.setTarget();
+                    //_arrow.setTarget();
                     ClockManager.time = 30f;
                     ClockManager.canCount = true;
                     break;
@@ -109,14 +109,16 @@ public class GameManager : NetworkBehaviour
                 case MatchState.Room2Prepare:
                     
                     Instance.CurrentRoom = Instance.Rooms[2].GetComponent<Room>();
-                    _arrow.setTarget();
                     _cpUI.setRoom();
+                    _arrow.gameObject.SetActive(true);
+                    _arrow.setTarget();
                     _doors[0].SetActive(false);
                     ClockManager.time = 45f;
                     ClockManager.canCount = true;
                     break;
 
                 case MatchState.Room2Fight:
+                    _arrow.gameObject.SetActive(false);
                     _enemyPrefab = _enemiesPrefabs[1];
                     StartHordeAttack();
                     ClockManager.time = _timers[1];
@@ -126,14 +128,16 @@ public class GameManager : NetworkBehaviour
                 case MatchState.Room3Prepare:
                     
                     Instance.CurrentRoom = Instance.Rooms[0].GetComponent<Room>();
-                    _arrow.setTarget();
                     _cpUI.setRoom();
+                    _arrow.gameObject.SetActive(true);
+                    _arrow.setTarget();
                     _doors[1].SetActive(false);
                     ClockManager.time = 60f;
                     ClockManager.canCount = true;
                     break;
 
                 case MatchState.Room3Fight:
+                    _arrow.gameObject.SetActive(false);
                     _enemyPrefab = _enemiesPrefabs[2];
                     StartHordeAttack();
                     ClockManager.time = _timers[2];
@@ -259,7 +263,7 @@ public class GameManager : NetworkBehaviour
                         CurrentMachState = MatchState.Room1Fight;
                         break;
                     case MatchState.Room1Fight:
-                        _musicManager.ChangeClip(false);
+                        //_musicManager.ChangeClip(false);
                         CurrentMachState = MatchState.Room2Prepare;
                         break;
                     case MatchState.Room2Prepare:

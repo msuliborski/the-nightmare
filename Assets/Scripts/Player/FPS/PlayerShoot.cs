@@ -18,6 +18,7 @@ public class PlayerShoot : NetworkBehaviour {
     public AudioClip reload;
     public AudioClip pistol;
     public AudioClip rifle;
+    public AudioClip nono;
   
 
     public GameObject Cross;
@@ -115,19 +116,25 @@ public class PlayerShoot : NetworkBehaviour {
                 StartCoroutine(Reload());
             }
 
-            if (_grenades > 0) {
-                if (Input.GetKeyUp(KeyCode.G)) {
-                    _grenades--;
-                    CmdSpawnGrenade(transform.position, transform.rotation, transform.forward, (_grenadeTimer + 0.5f) / 3);
-                    _playerAnimator.SetTrigger("throwing");
-                    _grenadeTimer = 0f;
-                }
-                else if (Input.GetKey(KeyCode.G)) {
-                    if (_grenadeTimer <= 3f) {
+            if (Input.GetKey(KeyCode.G)) {
+                if (_grenades > 0)
+                {
+                    if (_grenadeTimer <= 3f)
+                    {
                         _grenadeTimer += Time.deltaTime;
                     }
+                    if (Input.GetKeyUp(KeyCode.G)) {
+                        _grenades--;
+                        CmdSpawnGrenade(transform.position, transform.rotation, transform.forward, (_grenadeTimer + 0.5f) / 3);
+                        _playerAnimator.SetTrigger("throwing");
+                        _grenadeTimer = 0f;
+                    }
                 }
+                else
+                    playSound(nono);
             }
+            
+            
 
             //fireing
             if (Input.GetButton("Fire1") && Equipment.getActiveWeapon().State == Weapon.WeaponState.idle &&
