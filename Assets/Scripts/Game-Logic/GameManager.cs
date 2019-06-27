@@ -505,12 +505,13 @@ public class GameManager : NetworkBehaviour
         _activePlayers.Add(playerId, player);
         player.transform.name = playerId;
         
+        int tempIndex = Random.Range(0, arrowIndexList.Count);
         player.transform.GetChild(4).GetChild(0).gameObject.SetActive(false);
         if (!player.isLocalPlayer)
         {
             Outline outline = player.GetComponentInChildren<Outline>();
             outline.enabled = true;
-            switch (arrowIndexList[0])
+            switch (arrowIndexList[tempIndex])
             {
                 case 0:
                     outline.OutlineColor = Color.green;
@@ -526,7 +527,6 @@ public class GameManager : NetworkBehaviour
                     break;
             }
         }
-        int tempIndex = Random.Range(0, arrowIndexList.Count - 1);
         player.transform.GetChild(4).GetChild(arrowIndexList[tempIndex]).gameObject.SetActive(true);
         arrowIndexList.Remove(tempIndex);
     }
