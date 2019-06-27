@@ -14,6 +14,9 @@ public class PlayerEquipment : NetworkBehaviour {
     private PlayerShoot _shoot;
     private PlacementController _controller;
     private ChestAlwaysFull _chest;
+    private AudioSource _source;
+    [SerializeField] private AudioClip _pick;
+    [SerializeField] private AudioClip _pickRifle;
 
     private void Start() {
         if (isLocalPlayer) {
@@ -27,6 +30,7 @@ public class PlayerEquipment : NetworkBehaviour {
         _shoot = GetComponent<PlayerShoot>();
         _controller = GetComponent<PlacementController>();
         Weapon2 = null;
+        _source = GetComponent<AudioSource>();
     }
 
     public Weapon getActiveWeapon() {
@@ -57,6 +61,8 @@ public class PlayerEquipment : NetworkBehaviour {
                 }
                 if (Input.GetKeyDown(KeyCode.E)) {
                     if (isLocalPlayer) {
+                        _source.clip = _pickRifle;
+                        _source.PlayOneShot(_source.clip);
                         if (_cam.transform.GetChild(0).transform.childCount <= 1) {
                             GameObject weaponObject = Instantiate(GameManager.Instance.Weapons[1],
                                 _cam.transform.GetChild(0).transform);
@@ -113,7 +119,10 @@ public class PlayerEquipment : NetworkBehaviour {
                             pickUp.enabled = true;
                             pickUp.text = "Press E to pick up collectibles";
                         }
-                        if (Input.GetKeyDown(KeyCode.E)) {
+                        if (Input.GetKeyDown(KeyCode.E))
+                        {
+                            _source.clip = _pick;
+                            _source.PlayOneShot(_source.clip);
                             _shoot._grenades += _chest.grenades;
                             if (_controller.placeableCount[0] + _chest.snares >= _controller.maxPlaceable[0])
                                 _controller.placeableCount[0] = _controller.maxPlaceable[0];
