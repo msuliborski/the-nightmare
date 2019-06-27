@@ -117,23 +117,27 @@ public class PlayerShoot : NetworkBehaviour {
             }
 
             if (Input.GetKey(KeyCode.G)) {
+                if (_grenadeTimer <= 3f) {
+                    _grenadeTimer += Time.deltaTime;
+                }
+            }
+            if (Input.GetKeyUp(KeyCode.G)) {
                 if (_grenades > 0)
                 {
-                    if (_grenadeTimer <= 3f)
-                    {
-                        _grenadeTimer += Time.deltaTime;
-                    }
-                    if (Input.GetKeyUp(KeyCode.G)) {
-                        _grenades--;
-                        CmdSpawnGrenade(transform.position, transform.rotation, transform.forward, (_grenadeTimer + 0.5f) / 3);
-                        _playerAnimator.SetTrigger("throwing");
-                        _grenadeTimer = 0f;
-                    }
+                    _grenades--;
+                    CmdSpawnGrenade(transform.position, transform.rotation, transform.forward,
+                        (_grenadeTimer + 0.5f) / 3);
+                    _playerAnimator.SetTrigger("throwing");
+                    _grenadeTimer = 0f;
                 }
                 else
-                    playSound(nono);
+                {
+
+                    source.clip = nono;
+                    source.PlayOneShot(source.clip);
+                    Debug.Log("nono");
+                }
             }
-            
             
 
             //fireing

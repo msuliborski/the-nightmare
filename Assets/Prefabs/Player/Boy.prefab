@@ -799,6 +799,7 @@ MonoBehaviour:
   reload: {fileID: 8300000, guid: 854c24c065c346a4aacd07023b2e64fc, type: 3}
   pistol: {fileID: 8300000, guid: bf7e24bedb267c14ebb940153e79b378, type: 3}
   rifle: {fileID: 8300000, guid: 985eefe10aeffa54b9e14b15e7dfaf19, type: 3}
+  nono: {fileID: 8300000, guid: b6d3825c91c4a3c42a02936b9810372b, type: 3}
   Cross: {fileID: 0}
   _mask:
     serializedVersion: 2
@@ -1322,6 +1323,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 9001549871963986359}
     m_Modifications:
+    - target: {fileID: 5071737452651778898, guid: cc9b7d851085b1441a576a60629784d4,
+        type: 3}
+      propertyPath: m_Name
+      value: MinimapCamera
+      objectReference: {fileID: 0}
+    - target: {fileID: 5071737452651778898, guid: cc9b7d851085b1441a576a60629784d4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8450331667043058331, guid: cc9b7d851085b1441a576a60629784d4,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1377,16 +1388,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5071737452651778898, guid: cc9b7d851085b1441a576a60629784d4,
-        type: 3}
-      propertyPath: m_Name
-      value: MinimapCamera
-      objectReference: {fileID: 0}
-    - target: {fileID: 5071737452651778898, guid: cc9b7d851085b1441a576a60629784d4,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2567497335345547796, guid: cc9b7d851085b1441a576a60629784d4,
         type: 3}
       propertyPath: near clip plane
@@ -1417,6 +1418,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7269480700307546784}
     m_Modifications:
+    - target: {fileID: 4131442063337385902, guid: 7d917871d8c970a45a02188b364bfcb6,
+        type: 3}
+      propertyPath: m_Name
+      value: BuildingCamera
+      objectReference: {fileID: 0}
     - target: {fileID: 5667848497323826834, guid: 7d917871d8c970a45a02188b364bfcb6,
         type: 3}
       propertyPath: m_RenderingPath
@@ -1436,11 +1442,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Enabled
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4131442063337385902, guid: 7d917871d8c970a45a02188b364bfcb6,
-        type: 3}
-      propertyPath: m_Name
-      value: BuildingCamera
       objectReference: {fileID: 0}
     - target: {fileID: 2187590114338708699, guid: 7d917871d8c970a45a02188b364bfcb6,
         type: 3}
@@ -1524,10 +1525,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4953134542706898467}
     m_Modifications:
-    - target: {fileID: 9500000, guid: f79548a34281b2a3c9f20247331e913c, type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 3d8e25823d0fa151a84882d4122d057d, type: 2}
     - target: {fileID: 100000, guid: f79548a34281b2a3c9f20247331e913c, type: 3}
       propertyPath: m_Name
       value: BOY@Pistol Idle
@@ -1536,6 +1533,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 9500000, guid: f79548a34281b2a3c9f20247331e913c, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 3d8e25823d0fa151a84882d4122d057d, type: 2}
     - target: {fileID: 400000, guid: f79548a34281b2a3c9f20247331e913c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1621,6 +1622,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4953134542706898467}
     m_Modifications:
+    - target: {fileID: 100000, guid: 206133cdf8d98e649bac85f4824c27a5, type: 3}
+      propertyPath: m_Name
+      value: Girl_model@Pistol Idle
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 206133cdf8d98e649bac85f4824c27a5, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 206133cdf8d98e649bac85f4824c27a5, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1677,14 +1686,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 10
       objectReference: {fileID: 0}
-    - target: {fileID: 100000, guid: 206133cdf8d98e649bac85f4824c27a5, type: 3}
-      propertyPath: m_Name
-      value: Girl_model@Pistol Idle
-      objectReference: {fileID: 0}
-    - target: {fileID: 100000, guid: 206133cdf8d98e649bac85f4824c27a5, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 9500000, guid: 206133cdf8d98e649bac85f4824c27a5, type: 3}
       propertyPath: m_Controller
       value: 
@@ -1720,6 +1721,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3905363846413051306}
     m_Modifications:
+    - target: {fileID: 8736944822857659526, guid: a88a08a9f11ef544d806c8fb99ac207d,
+        type: 3}
+      propertyPath: m_Name
+      value: Arrow
+      objectReference: {fileID: 0}
+    - target: {fileID: 8736944822857659526, guid: a88a08a9f11ef544d806c8fb99ac207d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
     - target: {fileID: 8736944822857361574, guid: a88a08a9f11ef544d806c8fb99ac207d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1784,16 +1795,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.82379
-      objectReference: {fileID: 0}
-    - target: {fileID: 8736944822857659526, guid: a88a08a9f11ef544d806c8fb99ac207d,
-        type: 3}
-      propertyPath: m_Name
-      value: Arrow
-      objectReference: {fileID: 0}
-    - target: {fileID: 8736944822857659526, guid: a88a08a9f11ef544d806c8fb99ac207d,
-        type: 3}
-      propertyPath: m_Layer
-      value: 11
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5439435070507139817, guid: a88a08a9f11ef544d806c8fb99ac207d, type: 3}
