@@ -11,6 +11,7 @@ public class CaptureArea : NetworkBehaviour
     [SyncVar] [SerializeField] private float _step = 0.2f;
     [SyncVar] private bool _capturing = false;
     [SyncVar] private int _enemyNum = 0;
+    public int EnemyNum { get { return _enemyNum; } }
     private int candlesToLight;
     private List<GameObject> _candles = new List<GameObject>();
     private Sprite[] _sprites = new Sprite[2];
