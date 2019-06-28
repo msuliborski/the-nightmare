@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using Random = System.Random;
 using UnityEngine.SceneManagement;
+using UnityEngine.Networking.Match;
 
 public class PlayerManager : NetworkBehaviour
 {
@@ -31,6 +32,7 @@ public class PlayerManager : NetworkBehaviour
     private GameObject boy;
     private GameObject girl;
     private NetworkAnimator _netAnim;
+    private NetworkManager _networkManager;
 
 
 
@@ -74,6 +76,7 @@ public class PlayerManager : NetworkBehaviour
 
     public void Setup()
     {
+        _networkManager = GameObject.Find("NetworkManager").GetComponent<NetworkManager>();
         _netAnim = GetComponent<NetworkAnimator>();
         
         boy = transform.GetChild(0).GetChild(0).gameObject;
@@ -128,6 +131,9 @@ public class PlayerManager : NetworkBehaviour
         {
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
+            MatchInfo info = _networkManager.matchInfo;
+            _networkManager.matchMaker.DropConnection(info.networkId, info.nodeId, 0, _networkManager.OnDropConnection);
+            _networkManager.StopHost();
             SceneManager.LoadScene(0);
         }
         

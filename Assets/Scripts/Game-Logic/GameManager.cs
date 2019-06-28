@@ -17,7 +17,7 @@ public class GameManager : NetworkBehaviour
     private float _prepareTimer = 45f;
     private float[] _timers = { 120f, 180f, 300f };
     private Room _currentRoom;
-    [SerializeField] private GameObject[] _chests = new GameObject[2];
+    [SerializeField] private GameObject[] _chests = new GameObject[3];
     public GameObject currentChest;
 
     public Room CurrentRoom {get { return _currentRoom; }
@@ -94,24 +94,26 @@ public class GameManager : NetworkBehaviour
                     break;
 
                 case MatchState.Room1Prepare:
-                    
+                    currentChest = _chests[0];
                     Instance.CurrentRoom = Instance.Rooms[1].GetComponent<Room>();
                     
                     _cpUI.setRoom();
-                    //_arrow.setTarget();
+                    _arrow.gameObject.SetActive(true);
+                    _arrow.setTarget();
                     ClockManager.time = 40f;
                     ClockManager.canCount = true;
                     StartCoroutine(PickUpPrepareFirst());
                     break;
                 case MatchState.Room1Fight:
                     _enemyPrefab = _enemiesPrefabs[0];
+                    _arrow.gameObject.SetActive(false);
                     StartHordeAttack();
                     ClockManager.time = _timers[0];
                     ClockManager.canCount = true;
                     StartCoroutine(PickUpFight());
                     break;
                 case MatchState.Room2Prepare:
-                    currentChest = _chests[0];
+                    currentChest = _chests[1];
                     Debug.Log("AAAAKURWA");
                     Instance.CurrentRoom = Instance.Rooms[2].GetComponent<Room>();
                     _cpUI.setRoom();
@@ -136,7 +138,7 @@ public class GameManager : NetworkBehaviour
                     break;
 
                 case MatchState.Room3Prepare:
-                    currentChest = _chests[1];
+                    currentChest = _chests[2];
                     Instance.CurrentRoom = Instance.Rooms[0].GetComponent<Room>();
                     _cpUI.setRoom();
                     _arrow.gameObject.SetActive(true);
