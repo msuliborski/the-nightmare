@@ -305,7 +305,7 @@ public class PlayerShoot : NetworkBehaviour {
     }
 
     [Command]
-    public void ExplodeBarrel(NetworkInstanceId objectId)
+    public void CmdExplodeBarrel(NetworkInstanceId objectId)
     {
         var Barrel = NetworkServer.FindLocalObject(objectId).GetComponent<Barrel>();
     }
