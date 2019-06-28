@@ -287,8 +287,9 @@ public class PlayerShoot : NetworkBehaviour {
                 }
                 else if (hit.collider.tag == "Barrel") {
                     Barrel barrel = hit.collider.GetComponent<Barrel>();
-                    CmdSetAuth(barrel.netId, GetComponent<NetworkIdentity>());
-                    barrel.Explode();
+                    //CmdSetAuthAndExplode(barrel.netId, GetComponent<NetworkIdentity>());
+                    ExplodeBarrel(barrel.netId);
+                //barrel.Explode();
                     //barrel.CmdExplodeBarrel(barrel.InitialPosAndTag);
 
                 }
@@ -303,16 +304,24 @@ public class PlayerShoot : NetworkBehaviour {
         }
     }
 
+    [Command]
+    public void ExplodeBarrel(NetworkInstanceId objectId)
+    {
+        var Barrel = NetworkServer.FindLocalObject(objectId).GetComponent<Barrel>();
+    }
+
 
     [Command]
-    public void CmdSetAuth(NetworkInstanceId objectId, NetworkIdentity player)
+    public void CmdSetAuthAndExplode(NetworkInstanceId objectId, NetworkIdentity player)
     {
         var iObject = NetworkServer.FindLocalObject(objectId);
+        Debug.Log(iObject.name);
         var networkIdentity = iObject.GetComponent<NetworkIdentity>();
         var otherOwner = networkIdentity.clientAuthorityOwner;
-
+        Debug.Log(otherOwner.connectionId);
         if (otherOwner == player.connectionToClient)
         {
+            Debug.Log("ZAJEBSICIE");
             return;
         }
         else
@@ -322,6 +331,10 @@ public class PlayerShoot : NetworkBehaviour {
                 networkIdentity.RemoveClientAuthority(otherOwner);
             }
             networkIdentity.AssignClientAuthority(player.connectionToClient);
+            Debug.Log("DOWOD ZODNOSCI: ");
+            Debug.Log(networkIdentity.clientAuthorityOwner.ToString());
+
+            Debug.Log(player.connectionToClient.ToString());
         }
     }
 
