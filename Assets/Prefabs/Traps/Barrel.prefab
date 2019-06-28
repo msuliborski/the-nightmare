@@ -162,8 +162,8 @@ GameObject:
   - component: {fileID: 172749978756227617}
   - component: {fileID: 7352269032720017451}
   - component: {fileID: 4538087993596541322}
-  - component: {fileID: 1219346628264603499}
   - component: {fileID: 2396151932420422939}
+  - component: {fileID: 1219346628264603499}
   - component: {fileID: 5056425274243534237}
   m_Layer: 0
   m_Name: Barrel
@@ -247,20 +247,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.7595874, y: 1.330368, z: 0.7577851}
   m_Center: {x: 0.004144907, y: 0.67, z: 0.010092378}
---- !u!114 &1219346628264603499
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6627066607432650789}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a4005bac5bab3442846787bd047eaac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _explosionPrefab: {fileID: 1880067411, guid: 572ec1a2df8b4d1439102db538221fbf, type: 3}
-  damage: 150
 --- !u!114 &2396151932420422939
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -293,7 +279,21 @@ MonoBehaviour:
     i14: 0
     i15: 0
   m_ServerOnly: 0
-  m_LocalPlayerAuthority: 0
+  m_LocalPlayerAuthority: 1
+--- !u!114 &1219346628264603499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6627066607432650789}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a4005bac5bab3442846787bd047eaac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _explosionPrefab: {fileID: 1880067411, guid: 572ec1a2df8b4d1439102db538221fbf, type: 3}
+  damage: 150
 --- !u!54 &5056425274243534237
 Rigidbody:
   m_ObjectHideFlags: 0
