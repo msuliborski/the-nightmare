@@ -22,9 +22,11 @@ public class Barrel : NetworkBehaviour
 
     public void Explode()
     {
-        
+        _collider.enabled = false;
+        _renderer.enabled = false;
+        transform.GetChild(0).gameObject.SetActive(true);
         CmdExplode();
-        
+        StartCoroutine(Decay());
     }
     
     private IEnumerator Decay()
@@ -43,10 +45,7 @@ public class Barrel : NetworkBehaviour
     [ClientRpc]
     void RpcExlode()
     {
-        _collider.enabled = false;
-        _renderer.enabled = false;
-        transform.GetChild(0).gameObject.SetActive(true);
-        StartCoroutine(Decay());
+        Debug.Log("AAAAA");
         GameObject explosion = Instantiate(_explosionPrefab, transform.position, Quaternion.Euler(-90f, 0f, 0f));
         Destroy(explosion, 3f);
         GameManager.Instance.BuildingPoints[InitialPosAndTag].Buildable = true;
