@@ -34,7 +34,7 @@ public class Barrel : NetworkBehaviour
     private IEnumerator Decay()
     {
         yield return new WaitForSeconds(0.2f);
-        Destroy(gameObject);
+        NetworkServer.Destroy(gameObject);
         
     }
 
@@ -51,6 +51,7 @@ public class Barrel : NetworkBehaviour
         Debug.Log("AAAAA");
         GameObject explosion = Instantiate(_explosionPrefab, transform.position, Quaternion.Euler(-90f, 0f, 0f));
         Destroy(explosion, 3f);
+       
         GameManager.Instance.BuildingPoints[posAndTag].Buildable = true;
     }
 
