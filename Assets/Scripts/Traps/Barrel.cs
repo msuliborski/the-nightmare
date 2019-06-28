@@ -25,7 +25,7 @@ public class Barrel : NetworkBehaviour
         _collider.enabled = false;
         _renderer.enabled = false;
         transform.GetChild(0).gameObject.SetActive(true);
-        if (isServer) RpcExlode();//CmdExplode();
+        CmdExplode(InitialPosAndTag);
         StartCoroutine(Decay());
     }
     
@@ -37,18 +37,18 @@ public class Barrel : NetworkBehaviour
     }
 
     [Command]
-    void CmdExplode()
+    void CmdExplode(string posAndTag)
     {
-        RpcExlode();
+        RpcExlode(posAndTag);
     }
 
     [ClientRpc]
-    void RpcExlode()
+    void RpcExlode(string posAndTag)
     {
         Debug.Log("AAAAA");
         GameObject explosion = Instantiate(_explosionPrefab, transform.position, Quaternion.Euler(-90f, 0f, 0f));
         Destroy(explosion, 3f);
-        GameManager.Instance.BuildingPoints[InitialPosAndTag].Buildable = true;
+        GameManager.Instance.BuildingPoints[posAndTag].Buildable = true;
     }
 
     
