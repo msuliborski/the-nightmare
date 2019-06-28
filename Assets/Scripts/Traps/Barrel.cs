@@ -49,4 +49,6 @@ public class Barrel : NetworkBehaviour
         Destroy(explosion, 3f);
         GameManager.Instance.BuildingPoints[InitialPosAndTag].Buildable = true;
     }
+
+    
 }
