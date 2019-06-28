@@ -286,9 +286,9 @@ public class PlayerShoot : NetworkBehaviour {
                         Equipment.getActiveWeapon().Damage);
                 }
                 else if (hit.collider.tag == "Barrel") {
-                    Debug.Log("OOOO");
                     Barrel barrel = hit.collider.GetComponent<Barrel>();
                     barrel.Explode();
+                    barrel.CmdExplodeBarrel(barrel.InitialPosAndTag);
                 }
 
 

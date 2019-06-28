@@ -27,7 +27,6 @@ public class Barrel : NetworkBehaviour
         transform.GetChild(0).gameObject.SetActive(true);
         Debug.Log("EEEEE");
         gameObject.GetComponent<NetworkIdentity>().AssignClientAuthority(this.GetComponent<NetworkIdentity>().connectionToClient);
-        CmdExplodeBarrel(InitialPosAndTag);
         StartCoroutine(Decay());
     }
     
