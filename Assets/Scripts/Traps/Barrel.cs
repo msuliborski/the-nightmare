@@ -27,21 +27,22 @@ public class Barrel : NetworkBehaviour
         transform.GetChild(0).gameObject.SetActive(true);
         Debug.Log("EEEEE");
         gameObject.GetComponent<NetworkIdentity>().AssignClientAuthority(this.GetComponent<NetworkIdentity>().connectionToClient);
+        CmdExplodeBarrel();
         StartCoroutine(Decay());
     }
     
     private IEnumerator Decay()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.2f);
         Destroy(gameObject);
         
     }
 
     [Command]
-    public void CmdExplodeBarrel(string posAndTag)
+    public void CmdExplodeBarrel()
     {
         Debug.Log("IIIII");
-        RpcExlodeBarrel(posAndTag);
+        RpcExlodeBarrel(InitialPosAndTag);
     }
 
     [ClientRpc]
