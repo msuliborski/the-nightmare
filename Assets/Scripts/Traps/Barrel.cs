@@ -40,6 +40,7 @@ public class Barrel : NetworkBehaviour
     [Command]
     public void CmdExplodeBarrel(string posAndTag)
     {
+        Debug.Log("IIIII");
         RpcExlodeBarrel(posAndTag);
     }
 
