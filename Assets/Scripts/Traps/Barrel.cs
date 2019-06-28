@@ -37,13 +37,13 @@ public class Barrel : NetworkBehaviour
     }
 
     [Command]
-    void CmdExplodeBarrel(string posAndTag)
+    public void CmdExplodeBarrel(string posAndTag)
     {
         RpcExlodeBarrel(posAndTag);
     }
 
     [ClientRpc]
-    void RpcExlodeBarrel(string posAndTag)
+    public void RpcExlodeBarrel(string posAndTag)
     {
         Debug.Log("AAAAA");
         GameObject explosion = Instantiate(_explosionPrefab, transform.position, Quaternion.Euler(-90f, 0f, 0f));
