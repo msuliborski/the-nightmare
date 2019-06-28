@@ -288,7 +288,7 @@ public class PlayerShoot : NetworkBehaviour {
                 else if (hit.collider.tag == "Barrel") {
                     Barrel barrel = hit.collider.GetComponent<Barrel>();
                     //CmdSetAuthAndExplode(barrel.netId, GetComponent<NetworkIdentity>());
-                    ExplodeBarrel(barrel.netId);
+                    CmdExplodeBarrel(barrel.netId);
                 //barrel.Explode();
                     //barrel.CmdExplodeBarrel(barrel.InitialPosAndTag);
 
