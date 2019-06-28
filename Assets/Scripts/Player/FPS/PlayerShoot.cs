@@ -287,7 +287,7 @@ public class PlayerShoot : NetworkBehaviour {
                 }
                 else if (hit.collider.tag == "Barrel") {
                     Barrel barrel = hit.collider.GetComponent<Barrel>();
-
+                    CmdSetAuth(barrel.netId, GetComponent<NetworkIdentity>());
                     barrel.Explode();
                     //barrel.CmdExplodeBarrel(barrel.InitialPosAndTag);
 
@@ -300,6 +300,28 @@ public class PlayerShoot : NetworkBehaviour {
 
             if (Equipment.getActiveWeapon().CurrentMagAmmo == 0 && Equipment.getActiveWeapon().CurrentAmmo >= 1)
                 StartCoroutine(Reload());
+        }
+    }
+
+
+    [Command]
+    public void CmdSetAuth(NetworkInstanceId objectId, NetworkIdentity player)
+    {
+        var iObject = NetworkServer.FindLocalObject(objectId);
+        var networkIdentity = iObject.GetComponent<NetworkIdentity>();
+        var otherOwner = networkIdentity.clientAuthorityOwner;
+
+        if (otherOwner == player.connectionToClient)
+        {
+            return;
+        }
+        else
+        {
+            if (otherOwner != null)
+            {
+                networkIdentity.RemoveClientAuthority(otherOwner);
+            }
+            networkIdentity.AssignClientAuthority(player.connectionToClient);
         }
     }
 
