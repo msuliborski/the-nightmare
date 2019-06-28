@@ -25,7 +25,7 @@ public class Barrel : NetworkBehaviour
         _collider.enabled = false;
         _renderer.enabled = false;
         transform.GetChild(0).gameObject.SetActive(true);
-        CmdExplode();
+        if (isServer) RpcExlode();//CmdExplode();
         StartCoroutine(Decay());
     }
     
