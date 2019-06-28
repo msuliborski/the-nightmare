@@ -171,7 +171,7 @@ public class PlacementController : NetworkBehaviour
                 barrel.InitialPosAndTag = posAndTag;
                 break;
         }
-        NetworkServer.Spawn(placeableObject);
+        NetworkServer.SpawnWithClientAuthority(placeableObject, connectionToClient);
         RpcPlaceEntity(posAndTag);
     }
 
