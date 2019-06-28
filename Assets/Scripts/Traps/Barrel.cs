@@ -31,7 +31,7 @@ public class Barrel : NetworkBehaviour
     
     private IEnumerator Decay()
     {
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(1f);
         Destroy(gameObject);
         
     }
