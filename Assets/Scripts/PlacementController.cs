@@ -204,7 +204,7 @@ public class PlacementController : NetworkBehaviour
                     GameManager.Instance.BuildingPoints[posAndTag].Buildable = false;
                     _playerShoot.WasBuilt = true;
                     placeableCount[_placeableIndex]--;
-                    if (placeableCount[_placeableIndex] == 0) {
+                    if (!hasNoPlaceable() && placeableCount[_placeableIndex] == 0) {
                         _placeableIndex = returnFirstAvailableBiggerIndex();
                     }
                 }
@@ -281,7 +281,7 @@ public class PlacementController : NetworkBehaviour
                     if (!_playerShoot.IsBuildingOnFly)
                     {
                         GameManager.TurnOnGridRenders(true);
-                        if (placeableCount[0] != 0) _currentObject = Instantiate(_placeableObjectModels[_placeableIndex]);
+                        if (!hasNoPlaceable()) _currentObject = Instantiate(_placeableObjectModels[_placeableIndex]);
                         _playerShoot.IsBuildingOnFly = true;
                     }
                     else
@@ -326,7 +326,7 @@ public class PlacementController : NetworkBehaviour
 
                 if (Input.GetKeyDown(KeyCode.T))
                 {
-                    if (placeableCount[0] != 0)
+                    if (!hasNoPlaceable())
                     {
                         if (_currentObject == null)
                         {
