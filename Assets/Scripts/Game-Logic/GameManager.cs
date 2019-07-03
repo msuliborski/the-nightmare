@@ -100,7 +100,7 @@ public class GameManager : NetworkBehaviour
                     _cpUI.setRoom();
                     _arrow.gameObject.SetActive(true);
                     _arrow.setTarget();
-                    ClockManager.time = 40f;
+                    ClockManager.time = 60f;
                     ClockManager.canCount = true;
                     StartCoroutine(PickUpPrepareFirst());
                     break;

@@ -22,7 +22,7 @@ public class BarrelCollider : MonoBehaviour
             }
             else if (other.CompareTag("Player"))
             {
-                other.GetComponentInParent<PlayerManager>().RpcTakeDamage(_damage);
+                other.GetComponentInParent<PlayerManager>().RpcTakeDamage(45f);
             }
             else if (other.CompareTag("Barrel"))
             {

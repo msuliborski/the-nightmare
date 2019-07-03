@@ -47,6 +47,23 @@ public class PlacementController : NetworkBehaviour
         set => _currentObject = value;
     }
 
+
+    public bool hasNoPlaceable()
+    {
+        foreach (int i in placeableCount)
+        {
+            if (i != 0) return false;
+        }
+        return true;
+    }
+
+    public void InstantietePlaceable(int index)
+    {
+        _placeableIndex = index;
+        _currentObject = Instantiate(_placeableObjectModels[index]);
+          
+    }
+
     private void Start()
     {
         _source = GetComponent<AudioSource>();
@@ -93,6 +110,40 @@ public class PlacementController : NetworkBehaviour
         _source.PlayOneShot(_source.clip);
     }
 
+
+    int returnFirstAvailableBiggerIndex()
+    {
+        int tempIndex = _placeableIndex;
+        while (true)
+        {
+            tempIndex++;
+            if (tempIndex > _placeableObject.Count - 1) tempIndex = 0;
+            if (placeableCount[tempIndex] != 0)
+            {
+                return tempIndex;
+            }
+            if (tempIndex == _placeableIndex) return _placeableIndex;
+        }
+    }
+
+
+    int returnFirstAvaialbleSmallerIndex()
+    {
+        int tempIndex = _placeableIndex;
+        while (true)
+        {
+            tempIndex--;
+            if (tempIndex < 0) tempIndex = _placeableObject.Count - 1;
+            if (placeableCount[tempIndex] != 0)
+            {
+                return tempIndex;
+            }
+            if (tempIndex == _placeableIndex) return _placeableIndex;
+        }
+
+    }
+
+
     void RotateWheel()
     {
         _mouseWheelRotation = 0;
@@ -100,20 +151,32 @@ public class PlacementController : NetworkBehaviour
         
         if (_mouseWheelRotation > 0.5)
         {
-            _placeableIndex++;
-            if (_placeableIndex > _placeableObject.Count - 1) _placeableIndex = 0;
+
+            //if (_placeableIndex > _placeableObject.Count - 1) _placeableIndex = 0;
+            _placeableIndex = returnFirstAvailableBiggerIndex();
             UpdatePlaceable();
             //_currentObject.transform.Rotate(Vector3.up, 90);
         }
         else if (_mouseWheelRotation < -0.5)
         {
-            _placeableIndex--;
-            if (_placeableIndex < 0) _placeableIndex = _placeableObject.Count - 1;
+            _placeableIndex = returnFirstAvaialbleSmallerIndex();
+            //if (_placeableIndex < 0) _placeableIndex = _placeableObject.Count - 1;
             UpdatePlaceable();
             //_currentObject.transform.Rotate(Vector3.up, -90);
         }
     }
-   
+
+
+    public void ErasePlaceable()
+    {
+        
+            if (_currentObject != null) Destroy(_currentObject);
+            _isPlacing = false;
+            _playerShoot.IsBuildingOnFly = false;
+        
+    }
+
+
     void UpdatePlaceable()
     {
         Destroy(_currentObject);
@@ -141,6 +204,9 @@ public class PlacementController : NetworkBehaviour
                     GameManager.Instance.BuildingPoints[posAndTag].Buildable = false;
                     _playerShoot.WasBuilt = true;
                     placeableCount[_placeableIndex]--;
+                    if (placeableCount[_placeableIndex] == 0) {
+                        _placeableIndex = returnFirstAvailableBiggerIndex();
+                    }
                 }
                 else
                     PlaySound(nono);
@@ -212,10 +278,10 @@ public class PlacementController : NetworkBehaviour
 
                 if (Input.GetKeyDown(KeyCode.T))
                 {
-                    if (_currentObject == null)
+                    if (!_playerShoot.IsBuildingOnFly)
                     {
                         GameManager.TurnOnGridRenders(true);
-                        _currentObject = Instantiate(_placeableObjectModels[_placeableIndex]);
+                        if (placeableCount[0] != 0) _currentObject = Instantiate(_placeableObjectModels[_placeableIndex]);
                         _playerShoot.IsBuildingOnFly = true;
                     }
                     else
@@ -228,6 +294,7 @@ public class PlacementController : NetworkBehaviour
                 }
                 if (Input.GetKeyDown(KeyCode.Return) && GameManager.IsListeningForReady)
                 {
+                    ErasePlaceable();
                     GameManager.IsListeningForReady = false;
                     CmdRegisterBeingReady();
 
@@ -259,17 +326,19 @@ public class PlacementController : NetworkBehaviour
 
                 if (Input.GetKeyDown(KeyCode.T))
                 {
-                    if (_currentObject == null)
+                    if (placeableCount[0] != 0)
                     {
-                        _currentObject = Instantiate(_placeableObject[_placeableIndex]);
-                        _isPlacing = true;
+                        if (_currentObject == null)
+                        {
+                            _currentObject = Instantiate(_placeableObject[_placeableIndex]);
+                            _isPlacing = true;
+                        }
+                        else
+                        {
+                            Destroy(_currentObject);
+                            _isPlacing = false;
+                        }
                     }
-                    else
-                    {
-                        Destroy(_currentObject);
-                        _isPlacing = false;
-                    }
-
                 }
 
                 

@@ -123,21 +123,40 @@ public class PlayerEquipment : NetworkBehaviour {
                             _source.clip = _pick;
                             _source.PlayOneShot(_source.clip);
                             _shoot._grenades += _chest.grenades;
-                            if (_controller.placeableCount[0] + _chest.snares >= _controller.maxPlaceable[0])
-                                _controller.placeableCount[0] = _controller.maxPlaceable[0];
-                            else
-                                _controller.placeableCount[0] += _chest.snares;
+                        if (_controller.placeableCount[0] + _chest.snares >= _controller.maxPlaceable[0])
+                        {
+                            if (_controller.hasNoPlaceable() && _shoot.IsBuildingOnFly && _chest.grenades == 0) _controller.InstantietePlaceable(0);
+                            _controller.placeableCount[0] = _controller.maxPlaceable[0];
+                           
+                        }
+                        else
+                        {
+                            if (_controller.hasNoPlaceable() && _shoot.IsBuildingOnFly && _chest.grenades == 0) _controller.InstantietePlaceable(0);
+                            _controller.placeableCount[0] += _chest.snares;
+                        }
 
-                            if (_controller.placeableCount[1] + _chest.teddyBears >= _controller.maxPlaceable[1])
-                                _controller.placeableCount[1] = _controller.maxPlaceable[1];
-                            else
-                                _controller.placeableCount[1] += _chest.teddyBears;
+                        if (_controller.placeableCount[1] + _chest.teddyBears >= _controller.maxPlaceable[1])
+                        {
+                            if (_controller.hasNoPlaceable() && _shoot.IsBuildingOnFly && _chest.grenades == 0) _controller.InstantietePlaceable(1);
+                            _controller.placeableCount[1] = _controller.maxPlaceable[1];
+                        }
+                        else
+                        {
+                            if (_controller.hasNoPlaceable() && _shoot.IsBuildingOnFly && _chest.grenades == 0) _controller.InstantietePlaceable(1);
+                            _controller.placeableCount[1] += _chest.teddyBears;
+                        }
 
-                            if (_controller.placeableCount[2] + _chest.barrels >= _controller.maxPlaceable[2])
-                                _controller.placeableCount[2] = _controller.maxPlaceable[2];
-                            else
-                                _controller.placeableCount[2] += _chest.barrels;
-                            _chest.alreadyPicked = true;
+                        if (_controller.placeableCount[2] + _chest.barrels >= _controller.maxPlaceable[2])
+                        {
+                            if (_controller.hasNoPlaceable() && _shoot.IsBuildingOnFly && _chest.grenades == 0) _controller.InstantietePlaceable(2);
+                            _controller.placeableCount[2] = _controller.maxPlaceable[2];
+                        }
+                        else
+                        {
+                            if (_controller.hasNoPlaceable() && _shoot.IsBuildingOnFly && _chest.grenades == 0) _controller.InstantietePlaceable(2);
+                            _controller.placeableCount[2] += _chest.barrels;
+                        }
+                        _chest.alreadyPicked = true;
                         }
                     }
                     else {
