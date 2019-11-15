@@ -2,10 +2,10 @@
 FPS multiplayer game. ZTGK (2019)
 </br>
 <p align="center">
-  <img width="840" src="Images/1.jpg">
-  <img width="840" src="Images/2.jpg">
-  <img width="840" src="Images/3.jpg">
-  <img width="840" src="Images/4.jpg">
+  <img width="840" src="Images/1.jpg"/>
+  <img width="840" src="Images/2.jpg"/>
+  <img width="840" src="Images/3.jpg"/>
+  <img width="840" src="Images/4.jpg"/>
 </p>
 
 ### About game
