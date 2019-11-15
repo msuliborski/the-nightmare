@@ -14,11 +14,11 @@ The siblings wake up in the nightmare that takes place in the astral version of 
 ### Trailer
 https://vimeo.com/344669557
 
-## Download
+### Download
 All releases of the game are avaliable on the github page in the [releases](https://github.com/msuliborski/the-nightmare/releases) tab. 
 
 ## Getting Started
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
 ### Cloning
 ```
