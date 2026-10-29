@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Compiles all project C# (runtime + editor) against the Unity 2018.4 reference
-# assemblies shipped in the GameCI editor image. Needs no Unity license, so it
+# assemblies shipped in the GameCI editor image, then runs the UNET weaver on it. Needs no Unity license, so it
 # runs on every pull request and catches compile errors in ~1 minute.
 #
 #   docker run --rm -v "$PWD:/project" -w /project \
@@ -52,4 +52,15 @@ compile Assembly-CSharp-Editor.dll "$defines;UNITY_STANDALONE_LINUX;UNITY_EDITOR
   "-r:$DATA/Managed/UnityEditor.dll" "-r:$DATA/UnityExtensions/Unity/GUISystem/Editor/UnityEditor.UI.dll" \
   "-r:$OUT/Assembly-CSharp-EditorFlavor.dll" "@$OUT/editor.rsp"
 
-echo "All C# compiles."
+# The weaver expects the assembly to be called Assembly-CSharp.dll.
+echo "== UNET weaver"
+mkdir -p "$OUT/weave/in" "$OUT/weave/out"
+cp "$OUT/Assembly-CSharp-UNITY_STANDALONE_LINUX.dll" "$OUT/weave/in/Assembly-CSharp.dll"
+"$MONO" "$CSC" -nologo -r:"$DATA/Managed/Unity.UNetWeaver.dll" -r:"$DATA/Managed/Unity.Cecil.dll" \
+  -out:"$OUT/weave/UNetWeaveCheck.exe" .github/ci/UNetWeaveCheck.cs
+cp "$DATA"/Managed/Unity.UNetWeaver.dll "$DATA"/Managed/Unity.Cecil*.dll "$OUT/weave/"
+# The weaver's own trace output is very chatty; keep only the verdict, warnings and errors.
+"$MONO" "$OUT/weave/UNetWeaveCheck.exe" "$DATA" "$OUT/weave/in/Assembly-CSharp.dll" "$OUT/weave/out" \
+  | grep -E '^(error|warning): |UNET weaving' ; test "${PIPESTATUS[0]}" -eq 0
+
+echo "All C# compiles and passes UNET weaving."
