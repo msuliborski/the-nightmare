@@ -16,7 +16,6 @@ public class MusicManager : MonoBehaviour
 
     public void ChangeClip(bool isSlow)
     {
-        Debug.Log("muzyczka");
         if (!isSlow)
         {
             _source.Stop();

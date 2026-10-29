@@ -114,7 +114,6 @@ public class GameManager : NetworkBehaviour
                     break;
                 case MatchState.Room2Prepare:
                     currentChest = _chests[1];
-                    Debug.Log("AAAAKURWA");
                     Instance.CurrentRoom = Instance.Rooms[2].GetComponent<Room>();
                     _cpUI.setRoom();
 
@@ -382,7 +381,6 @@ public class GameManager : NetworkBehaviour
     
     private IEnumerator PickUpPrepare()
     {
-        Debug.Log("Second prepare");
         _pickUp.enabled = true;
         _pickUp.text = "Follow the arrow to the next room!";
         yield return new WaitForSeconds(7);
@@ -530,7 +528,7 @@ public class GameManager : NetworkBehaviour
         {
             _localPlayer = value;
             _arrow = _localPlayer.GetComponentInChildren<Arrow>();
-            if (_arrow == null) Debug.Log("honk");
+            if (_arrow == null) Debug.LogWarning("Local player has no Arrow component.");
         }
     }
     private static Dictionary<string, PlayerManager> _players = new Dictionary<string, PlayerManager>();

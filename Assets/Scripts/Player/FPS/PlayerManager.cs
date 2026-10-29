@@ -238,7 +238,6 @@ public class PlayerManager : NetworkBehaviour
     
     public void Revive()
     {
-        Debug.Log("reviving shit");
         _rigidbody.isKinematic = false;
         _rigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
         ChangeCamera(false);
