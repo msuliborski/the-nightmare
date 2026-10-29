@@ -1,6 +1,4 @@
-﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -12,6 +10,7 @@ public class Barrel : NetworkBehaviour
     private BoxCollider _collider;
     public float damage;
     public string InitialPosAndTag { get; set; }
+    private bool _exploded;
 
     private void Start()
     {
@@ -20,40 +19,39 @@ public class Barrel : NetworkBehaviour
         if (isServer) transform.GetChild(0).GetComponent<BarrelCollider>().server = true;
     }
 
+    // Server only. Two shots, a grenade and a neighbouring barrel can all trigger it in the same
+    // frame; it used to explode (and be NetworkServer.Destroy-ed) once per trigger.
+    [Server]
     public void Explode()
     {
+        if (_exploded) return;
+        _exploded = true;
         _collider.enabled = false;
         _renderer.enabled = false;
         transform.GetChild(0).gameObject.SetActive(true);
-        Debug.Log("EEEEE");
-        //gameObject.GetComponent<NetworkIdentity>().AssignClientAuthority(GameManager.LocalPlayer.GetComponent<NetworkIdentity>().connectionToClient);
         RpcExlodeBarrel(InitialPosAndTag);
         StartCoroutine(Decay());
     }
-    
+
     private IEnumerator Decay()
     {
         yield return new WaitForSeconds(0.2f);
         NetworkServer.Destroy(gameObject);
-        
-    }
-
-    [Command]
-    public void CmdExplodeBarrel()
-    {
-        Debug.Log("IIIII");
-        RpcExlodeBarrel(InitialPosAndTag);
     }
 
     [ClientRpc]
     public void RpcExlodeBarrel(string posAndTag)
     {
-        Debug.Log("AAAAA");
         GameObject explosion = Instantiate(_explosionPrefab, transform.position, Quaternion.Euler(-90f, 0f, 0f));
         Destroy(explosion, 3f);
-       
-        GameManager.Instance.BuildingPoints[posAndTag].Buildable = true;
-    }
+        if (!isServer)
+        {
+            _collider.enabled = false;
+            _renderer.enabled = false;
+        }
 
-    
+        GridPoint point;
+        if (posAndTag != null && GameManager.Instance.BuildingPoints.TryGetValue(posAndTag, out point))
+            point.Buildable = true;
+    }
 }

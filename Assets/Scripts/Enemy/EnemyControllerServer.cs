@@ -25,7 +25,6 @@ public class EnemyControllerServer : NetworkBehaviour
     [SerializeField] private List<Collider> _colliders;
     public Transform Dest { get; set; }
     private Animator _animator;
-    private CaptureArea _area;
     public enum EnemyState { Walking, Screaming, Running, Fighting, Blocked, InZone};
     private EnemyState _currentState = EnemyState.Walking;
     public EnemyState PreviousState { get; set; }
@@ -47,12 +46,14 @@ public class EnemyControllerServer : NetworkBehaviour
     public bool ShouldScream { get; set; }
     private void Start()
     {
-        transform.name = ENEMY_ID_PREFIX + GameManager.EnemyIdCounter++;
-        GameManager.Enemies.Add(transform.name, this);
+        // Hits and teddy-bear targets refer to enemies by name, so the name must be identical on every
+        // peer: use the network id instead of a local spawn counter (which differed per client).
+        transform.name = ENEMY_ID_PREFIX + netId;
+        GameManager.Enemies[transform.name] = this;
         if (!isServer) enabled = false;
         else
         {
-            int randInt = Random.RandomRange(0, 5);
+            int randInt = Random.Range(0, 5);
             if (randInt == 0) ShouldScream = true;
             _source = GetComponent<AudioSource>();
             StartCoroutine(SetClosestCaptureAreaStart());
@@ -133,7 +134,7 @@ public class EnemyControllerServer : NetworkBehaviour
                     SetAnim("running", true);
                     _currentState = EnemyState.Walking;
                 }
-                else _damageDest.RpcTakeDamage(Time.deltaTime * _damage);
+                else _damageDest.TakeDamage(Time.deltaTime * _damage);
                 
 
                 break;
@@ -166,7 +167,6 @@ public class EnemyControllerServer : NetworkBehaviour
         foreach (CaptureArea captureArea in GameManager.Instance.CurrentCaptureAreas.Values)
         {
             captureAreas.Add(captureArea.transform);
-            Debug.Log(captureArea.name);
         }
 
         Transform tMin = null;
@@ -227,7 +227,6 @@ public class EnemyControllerServer : NetworkBehaviour
             if (captureArea.EnemyNum < 7)
             {
                 captureAreas.Add(captureArea.transform);
-                Debug.Log(captureArea.name);
             }
         }
 
@@ -252,9 +251,12 @@ public class EnemyControllerServer : NetworkBehaviour
         else RpcSendDest(NO_DESTINATION, true);
     }
 
-    [Command]
-    public void CmdTakeDamage(float damage)
+    // Called by server-side code only (player hits arrive through PlayerShoot's Command). This was a
+    // [Command] invoked on the server, which UNET only tolerated because the game always ran as host.
+    [Server]
+    public void TakeDamage(float damage)
     {
+        if (_isDying) return;
         _currentHealth -= damage;
 
         if (_currentHealth <= 0 && !_isDying)
@@ -273,8 +275,6 @@ public class EnemyControllerServer : NetworkBehaviour
     IEnumerator Die()
     {
         RpcRemoveEnemy();
-        if (_area != null)
-            _area.CmdDecrementEnemies();
         yield return new WaitForSeconds(3.2f);
         RpcDie();
     }
@@ -283,7 +283,6 @@ public class EnemyControllerServer : NetworkBehaviour
     [ClientRpc]
     void RpcRemoveEnemy()
     {
-        Transform body = transform.GetChild(0).GetChild(0);
         foreach (Collider collider in _colliders)
         {
             collider.gameObject.SetActive(false);
@@ -308,9 +307,9 @@ public class EnemyControllerServer : NetworkBehaviour
             if (isArea)
             {
                 EnemyControllerClient enemyControllerClient = GetComponent<EnemyControllerClient>();
-                CaptureArea captureArea = GameManager.Instance.CurrentCaptureAreas[destId];
-                if (captureArea) enemyControllerClient.Dest = captureArea.transform;
-                else  enemyControllerClient.Dest = null; 
+                CaptureArea captureArea;
+                GameManager.Instance.CurrentCaptureAreas.TryGetValue(destId, out captureArea);
+                enemyControllerClient.Dest = captureArea != null ? captureArea.transform : null;
             }
             else
             {
@@ -322,20 +321,17 @@ public class EnemyControllerServer : NetworkBehaviour
         }
     }
 
-    [ClientRpc]
-    void RpcSendTransform(Vector3 position, Quaternion rotation)
-    {
-        if (!isServer)
-        {
-            transform.position = position;
-            transform.rotation = rotation;
-        }
-    }
-
     public void SetAnim(string animName, bool isOn)
     {
         _animator.SetBool(animName, isOn);
         RpcSetAnim(animName, isOn);
+    }
+
+    private void OnDestroy()
+    {
+        EnemyControllerServer registered;
+        if (GameManager.Enemies.TryGetValue(transform.name, out registered) && registered == this)
+            GameManager.Enemies.Remove(transform.name);
     }
 
     [ClientRpc]
@@ -355,15 +351,10 @@ public class EnemyControllerServer : NetworkBehaviour
         {
             if (other.CompareTag("Player") && CurrentState == EnemyState.Running)
             {
-                Debug.Log("collision with Player");
                 _damageDest = other.GetComponentInParent<PlayerManager>();
                 TurnOnWalking(false);
                 CurrentState = EnemyState.Fighting;
                 SetAnim("running", false);
-            }
-            else if (other.CompareTag("CaptureArea"))
-            {
-                _area = other.GetComponent<CaptureArea>();
             }
         }
     }
@@ -396,10 +387,7 @@ public class EnemyControllerServer : NetworkBehaviour
         if (!isServer)
         {
             EnemyControllerClient enemyControllerClient = GetComponent<EnemyControllerClient>();
-            //enemyControllerClient.Agent.enabled = isOn;
-            enemyControllerClient.Agent.isStopped = !isOn;
-            //enemyControllerClient.Obstacle.enabled = !isOn;
-            enemyControllerClient.IsWalking = isOn;
+            enemyControllerClient.SetWalking(isOn);
         }
     }
 

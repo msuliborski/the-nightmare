@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -26,15 +25,18 @@ public class Grenade : NetworkBehaviour
         _collider.enabled = false;
         _renderer.enabled = false;
         transform.GetChild(1).gameObject.SetActive(true);
-        if (isServer) RpcExlode();
-        StartCoroutine(Decay());
+        if (isServer)
+        {
+            RpcExlode();
+            StartCoroutine(Decay());
+        }
     }
 
+    // Spawned object: the server despawns it for everyone (clients used to destroy their own copies).
     private IEnumerator Decay()
     {
         yield return new WaitForSeconds(_decayTime);
-        Destroy(gameObject);
-        
+        NetworkServer.Destroy(gameObject);
     }
 
     [ClientRpc]
@@ -43,5 +45,4 @@ public class Grenade : NetworkBehaviour
         GameObject explosion = Instantiate(_explosionPrefab, transform.position, transform.rotation);
         Destroy(explosion, 3f);
     }
-
 }

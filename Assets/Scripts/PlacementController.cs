@@ -350,14 +350,15 @@ public class PlacementController : NetworkBehaviour
     void CmdRegisterBeingReady()
     {
         GameManager.Instance.ReadyPlayersCnt++;
-        if (GameManager.Instance.ReadyPlayersCnt == GameManager.Players.Count)
+        // >= : a player leaving the lobby after others got ready used to block the start forever.
+        if (GameManager.Instance.ReadyPlayersCnt >= GameManager.Players.Count)
            RpcRegisterLocalPlayerBeingReady(); // rpc bedzie wywolywana na obiketach symbolizujacych ostatniego playera ktory zadeklarowal sie 'ready'
     }
 
     [ClientRpc]
     void RpcRegisterLocalPlayerBeingReady() 
     {
-        Debug.Log("aaaa: " + GameManager.LocalPlayer.transform.name);
+        if (GameManager.Instance.CurrentMachState != GameManager.MatchState.Lobby) return;
         /*PlacementController localPlayer = GameManager.LocalPlayer.GetComponent<PlacementController>(); // dlatego musimy wyluskac local playera
         localPlayer._currentCamera = localPlayer._actionCamera;
         ClockManager.canCount = true;

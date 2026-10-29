@@ -16,8 +16,10 @@ public class CaptureArea : NetworkBehaviour
     private List<GameObject> _candles = new List<GameObject>();
     private Sprite[] _sprites = new Sprite[2];
     private SpriteRenderer _renderer;
-    private GameObject Room;
     private float _scale;
+    // Progress was tuned as "_step per frame" at the game's 50 FPS cap; now it is per second.
+    private const float STEPS_PER_SECOND = 50f;
+    private readonly HashSet<EnemyControllerServer> _enemiesInside = new HashSet<EnemyControllerServer>();
 
     public bool IsCaptured
     {
@@ -49,14 +51,15 @@ public class CaptureArea : NetworkBehaviour
         if (other.CompareTag("EnemyLegs"))
         {
             EnemyControllerServer enemy = other.GetComponentInParent<EnemyControllerServer>();
-            if (enemy.isActiveAndEnabled && !enemy.IsTriggerLocked)
+            if (enemy.isActiveAndEnabled && !enemy.IsTriggerLocked && !enemy._isDying)
             {
                 enemy.CurrentState = EnemyControllerServer.EnemyState.Blocked;
                 enemy.TurnOnWalking(false);
                 enemy.SetAnim("blocked", false);
                 enemy.SetAnim("running", false);
                 enemy.IsTriggerLocked = true;
-                _enemyNum++;
+                _enemiesInside.Add(enemy);
+                _enemyNum = _enemiesInside.Count;
                 _capturing = true;
             }
         }
@@ -69,9 +72,9 @@ public class CaptureArea : NetworkBehaviour
         if (other.CompareTag("EnemyLegs"))
         {
             EnemyControllerServer enemy = other.GetComponentInParent<EnemyControllerServer>();
-            if (enemy.isActiveAndEnabled)
+            if (enemy.isActiveAndEnabled && _enemiesInside.Remove(enemy))
             {
-                _enemyNum--;
+                _enemyNum = _enemiesInside.Count;
                 if (_enemyNum <= 0)
                     _capturing = false;
                 enemy.TurnOnWalking(true);
@@ -82,18 +85,16 @@ public class CaptureArea : NetworkBehaviour
         }
     }
 
-    [Command]
-    public void CmdDecrementEnemies()
-    {
-        _enemyNum--;
-
-    }
-    
+    // Enemies that die inside the area simply drop out of the set (their colliders are disabled,
+    // so no OnTriggerExit). The old counter was decremented on death even for enemies that were
+    // never counted, and could go negative or stay too high.
     void Update()
     {
-        if (isServer)
+        if (isServer && !_isCaptured)
         {
-            _capturing = true;
+            _enemiesInside.RemoveWhere(enemy => enemy == null || enemy._isDying);
+            _enemyNum = _enemiesInside.Count;
+            _capturing = _enemyNum > 0;
             if (_enemyNum >= 4)
             {
                 _scale = 3;
@@ -102,28 +103,20 @@ public class CaptureArea : NetworkBehaviour
             {
                 _scale = 2;
             }
-            else if (_enemyNum > 0)
+            else
             {
                 _scale = 1;
             }
-            else
-            {
-                _enemyNum = 0;
-                _capturing = false;
-            }
-            
-               
-            
+
             if (_capturing)
             {
-                _progress -= _step*_scale;
+                _progress -= _step * _scale * STEPS_PER_SECOND * Time.deltaTime;
                 if (_progress <= 0)
                 {
                     _progress = 0;
                     IsCaptured = true;
-                    GameManager.Instance.CurrentMachState = GameManager.MatchState.Lose;
-                    if (_renderer.sprite != _sprites[1])
-                        RpcChangeSprite(0);
+                    RpcChangeSprite(0); // the old check compared against the wrong sprite, so it never turned red
+                    GameManager.Instance.ServerSetMatchState(GameManager.MatchState.Lose);
                 }
                 
                 candlesToLight =  (int)(  _progress / 100 * _candles.Count);

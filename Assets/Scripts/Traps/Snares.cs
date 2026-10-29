@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.Networking;
 
 public class Snares : NetworkBehaviour
@@ -8,16 +8,29 @@ public class Snares : NetworkBehaviour
     public int EnemiesToDestroy { get { return _enemiesToDestroy; } set { _enemiesToDestroy = value; } }
     public int EnemiesCounter { get; set; }
     public string InitialPosAndTag;
+    private bool _destroyed;
 
     private void Awake()
     {
         EnemiesCounter = 0;
     }
 
-    [ClientRpc]
-    public void RpcDestroySnares(string posAndTag)
+    // Server: counts a caught enemy and despawns the snares once used up.
+    [Server]
+    public void RegisterCaughtEnemy()
     {
-        GameManager.Instance.BuildingPoints[posAndTag].Buildable = true;
-        Destroy(gameObject);
+        EnemiesCounter++;
+        if (EnemiesCounter < EnemiesToDestroy || _destroyed) return;
+        _destroyed = true;
+        RpcFreeBuildingPoint(InitialPosAndTag);
+        NetworkServer.Destroy(gameObject);
+    }
+
+    [ClientRpc]
+    private void RpcFreeBuildingPoint(string posAndTag)
+    {
+        GridPoint point;
+        if (posAndTag != null && GameManager.Instance.BuildingPoints.TryGetValue(posAndTag, out point))
+            point.Buildable = true;
     }
 }

@@ -18,18 +18,12 @@ public class TrapsHandler : MonoBehaviour
     {
         if (other.CompareTag("Snares") && _enemyController.enabled && _enemyController.CurrentState != EnemyControllerServer.EnemyState.Blocked)
         {
-
-            Debug.Log("Snares kurwa");
             _enemyController.TurnOnWalking(false);
             _enemyController.CurrentState = EnemyControllerServer.EnemyState.Blocked;
             _enemyController.SetAnim("blocked", true);
             _snares = other.GetComponent<Snares>();
             StartCoroutine(Freeze());
-            _snares.EnemiesCounter++;
-            if (_snares.EnemiesCounter == _snares.EnemiesToDestroy)
-            {
-                _snares.RpcDestroySnares(_snares.InitialPosAndTag);
-            }
+            _snares.RegisterCaughtEnemy();
         }
     }
 
@@ -38,6 +32,7 @@ public class TrapsHandler : MonoBehaviour
     IEnumerator Freeze()
     {
         yield return new WaitForSeconds(_snares.freezeTime);
+        if (_enemyController._isDying) yield break; // don't revive a dying enemy's walk/run animation
         _enemyController._damageDest = null;
         _enemyController.CurrentState = _enemyController.PreviousState;
         switch (_enemyController.CurrentState)

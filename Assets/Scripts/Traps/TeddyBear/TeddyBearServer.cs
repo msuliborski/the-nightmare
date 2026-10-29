@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Networking;
@@ -81,10 +80,11 @@ public class TeddyBearServer : NetworkBehaviour
                     SetAnim("fighting", false);
                     if (_beatenEnemies >= _beatenEnemiesToDeath)
                     {
-                        CmdDeath();
+                        Death();
+                        return;
                     }
                 }
-                else _damageDest.CmdTakeDamage(Time.deltaTime * _damage);
+                else _damageDest.TakeDamage(Time.deltaTime * _damage);
                 break;
 
             case BearState.Waiting:
@@ -144,9 +144,14 @@ public class TeddyBearServer : NetworkBehaviour
     }
 
     
-    [Command]
-    public void CmdDeath()
+    private bool _dying;
+
+    // Server only (was a [Command] called on the server). Guarded: it could start several times.
+    [Server]
+    public void Death()
     {
+        if (_dying) return;
+        _dying = true;
         _currentState = BearState.Waiting;
         TurnOnWalking(false);
         SetAnim("death", true);
@@ -157,14 +162,20 @@ public class TeddyBearServer : NetworkBehaviour
     {
         yield return new WaitForSeconds(3.9f);
         RpcDie(InitialPosAndTag);
-     }
+        NetworkServer.Destroy(gameObject);
+    }
 
     [ClientRpc]
     public void RpcDie(string posAndTag)
     {
+        GridPoint point;
+        if (posAndTag != null && GameManager.Instance.BuildingPoints.TryGetValue(posAndTag, out point))
+            point.Buildable = true;
+    }
+
+    private void OnDestroy()
+    {
         GameManager.SpriteRenderer.Remove(_spriteRenderer);
-        GameManager.Instance.BuildingPoints[posAndTag].Buildable = true;
-        Destroy(gameObject);
     }
     
     public void SetClosestEnemy()
@@ -202,7 +213,7 @@ public class TeddyBearServer : NetworkBehaviour
         if (!isServer)
         {
             TeddyBearClient teddyClient = GetComponent<TeddyBearClient>();
-            EnemyControllerServer enemy = GameManager.GetEnemy(destId);
+            EnemyControllerServer enemy = destId == NO_DESTINATION ? null : GameManager.GetEnemy(destId);
             if (enemy) teddyClient.Dest = enemy.transform;
             else teddyClient.Dest = null;
         }
@@ -220,9 +231,7 @@ public class TeddyBearServer : NetworkBehaviour
     {
         if (!isServer)
         {
-            TeddyBearClient teddyClient = GetComponent<TeddyBearClient>();
-            teddyClient.Agent.enabled = isOn;
-            teddyClient.IsWalking = isOn;
+            GetComponent<TeddyBearClient>().SetWalking(isOn);
         }
     }
 

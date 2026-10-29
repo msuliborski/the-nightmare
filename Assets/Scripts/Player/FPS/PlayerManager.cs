@@ -22,7 +22,6 @@ public class PlayerManager : NetworkBehaviour
     private GameObject _cross;
     private Rigidbody _rigidbody;
     private Animator _playerAnimator;
-    private static bool isRevived = false;
     [SerializeField] private GameObject _cameraReviving;
     private GameObject _camera;
     [SerializeField] private GameObject _aliveCollider;
@@ -174,34 +173,36 @@ public class PlayerManager : NetworkBehaviour
             _disableOnDeath[i].enabled = _wasEnabled[i];
 
         
-        CmdSwitchColliders(true);
+        SwitchColliders(true);
     }
 
-    [Command]
-    void CmdSwitchColliders(bool isOn)
+    // Die/Revive already run on every peer (via RPC), so colliders are switched locally.
+    // This used to be a Command, which non-owning clients are not allowed to send.
+    private void SwitchColliders(bool isAlive)
     {
-        RpcSwitchColliders(isOn);
+        _aliveCollider.SetActive(isAlive);
+        _reviveCollider.SetActive(!isAlive);
+    }
+
+    // Health is server-authoritative and reaches clients through the SyncVar. Damage used to be a
+    // ClientRpc that every client applied on its own copy, and enemies sent one every frame.
+    [Server]
+    public void TakeDamage(float damage)
+    {
+        if (_isDead || damage <= 0f) return;
+
+        _currentHealth = Mathf.Max(0f, _currentHealth - damage);
+        if (_currentHealth <= 0f)
+        {
+            _isDead = true;
+            RpcDie();
+        }
     }
 
     [ClientRpc]
-    void RpcSwitchColliders(bool isOn)
+    private void RpcDie()
     {
-        _aliveCollider.SetActive(isOn);
-        _reviveCollider.SetActive(!isOn);
-    }
-    
-    
-    
-    [ClientRpc]
-    public void RpcTakeDamage(float damage)
-    {
-        if (_isDead) return;
-
-        _currentHealth -= damage;
-
-        //Debug.Log(transform.name + " now has " + _currentHealth + " health.");
-
-        if (_currentHealth <= 0) Die();
+        Die();
     }
 
     private void Die()
@@ -215,10 +216,9 @@ public class PlayerManager : NetworkBehaviour
         _rigidbody.collisionDetectionMode = CollisionDetectionMode.Discrete;
         _rigidbody.isKinematic = true;
 
-        CmdSwitchColliders(false);
+        SwitchColliders(false);
         GameManager.DeactivatePlayer(transform.name);
         ChangeCamera(true);
-        isRevived = true;
         
         transform.GetComponent<PlayerEquipment>().getActiveWeapon().transform.GetComponent<Animator>().SetBool("isHidden", false);
         transform.GetComponent<PlayerEquipment>().getActiveWeapon().transform.GetComponent<Animator>().SetBool("isSprinting", false);
@@ -241,7 +241,6 @@ public class PlayerManager : NetworkBehaviour
         Debug.Log("reviving shit");
         _rigidbody.isKinematic = false;
         _rigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
-        isRevived = false;
         ChangeCamera(false);
         _playerAnimator.SetBool("revive", true);
         //yield return new WaitForSeconds(GameManager.Instance.MatchSettings.RespawnTime);
