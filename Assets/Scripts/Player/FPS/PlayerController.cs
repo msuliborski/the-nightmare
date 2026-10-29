@@ -24,8 +24,9 @@ public class PlayerController : NetworkBehaviour {
         set { _zoomSensivity = value; }
     }
 
+    private const float SPRINT_SPEED = 7f;
     private float _speedSlow = 2.5f;
-    private float _speedFast = 7f;
+    private float _speedFast = SPRINT_SPEED;
 
     private PlayerMotor _motor;
     private PlayerManager _playerManager;
@@ -46,7 +47,8 @@ public class PlayerController : NetworkBehaviour {
     private void Update() {
         if (ButtonsControll.screensOver && !WinLoseScreens.winLoseActive)
         {
-            if (transform.GetComponent<PlayerEquipment>().getActiveWeapon().GetComponent<Animator>().GetBool(IsSprinting))
+            Weapon weapon = transform.GetComponent<PlayerEquipment>().getActiveWeapon();
+            if (weapon != null && weapon.GetComponent<Animator>().GetBool(IsSprinting))
                 _speed = _speedFast;
             else
                 _speed = _speedSlow;
@@ -90,13 +92,14 @@ public class PlayerController : NetworkBehaviour {
 #if UNITY_ANDROID
             if(Mathf.Abs(look.Horizontal) >= 0.2)
                 yRot = look.Horizontal;
-            if(Mathf.Abs(look.Horizontal) >= 0.2)
+            if(Mathf.Abs(look.Vertical) >= 0.2)
                 xRot = look.Vertical;
 #endif
 
 #if UNITY_STANDALONE
-                yRot = Input.GetAxisRaw("Mouse X") * SensitivityScale;
-                xRot = Input.GetAxis("Mouse Y") * SensitivityScale;
+                float sensitivity = SensitivityScale * GameSettings.MouseSensitivity;
+                yRot = Input.GetAxisRaw("Mouse X") * sensitivity;
+                xRot = Input.GetAxis("Mouse Y") * sensitivity * (GameSettings.InvertY ? -1f : 1f);
 #endif
 
                 Vector3 rotation = new Vector3(0f, yRot, 0f) * _lookSensitivity;
@@ -124,7 +127,7 @@ public class PlayerController : NetworkBehaviour {
     
     void OnCollisionExit(Collision col) {
         if (col.gameObject.CompareTag("SlowDownWall")) {
-            _speedFast = 6f;
+            _speedFast = SPRINT_SPEED; // was 6, so touching such a wall permanently slowed sprinting
         }
     }
 }

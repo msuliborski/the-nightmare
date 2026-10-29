@@ -16,7 +16,7 @@ public class ClipsManager : MonoBehaviour {
     }
 
     void Update() {
-        if (playerEnabled) {
+        if (playerEnabled && player != null && player.getActiveWeapon() != null) {
             int ratio = (player.getActiveWeapon().CurrentAmmo - player.getActiveWeapon().CurrentMagAmmo) / player.getActiveWeapon().MaxMagAmmo;
             if (ratio > 4) ratio = 4;
 

@@ -40,7 +40,11 @@ public class PlayerEquipment : NetworkBehaviour {
         return Weapon2;
     }
 
+    private const float REVIVE_DISTANCE = 3f;
+
     private void Update() {
+        // Interactions are input-driven; on other players' copies this used to fire on *our* key presses.
+        if (!isLocalPlayer) return;
         RaycastHit weaponFinder;
         if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out weaponFinder, 0.75f,
             _mask)) {
@@ -51,7 +55,7 @@ public class PlayerEquipment : NetworkBehaviour {
                 }
 
                 if (Input.GetKeyDown(KeyCode.E)) {
-                    Destroy(weaponFinder.collider.gameObject);
+                    CmdRemoveChairs(weaponFinder.collider.transform.position);
                 }
             }
             else if (weaponFinder.collider.CompareTag("Weapon")) {
@@ -59,7 +63,8 @@ public class PlayerEquipment : NetworkBehaviour {
                     pickUp.enabled = true;
                     pickUp.text = "Press E to pick up Rifle";
                 }
-                if (Input.GetKeyDown(KeyCode.E)) {
+                Weapon active = getActiveWeapon();
+                if (Input.GetKeyDown(KeyCode.E) && active != null && active.State == Weapon.WeaponState.idle && !_shoot.IsSwitchingWeapon) {
                     if (isLocalPlayer) {
                         _source.clip = _pickRifle;
                         _source.PlayOneShot(_source.clip);
@@ -70,11 +75,12 @@ public class PlayerEquipment : NetworkBehaviour {
                             Weapon1.transform.localPosition = new Vector3(0.02f, 0.03f, -0.22f);
                             Weapon1.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
                             Weapon1.gameObject.SetActive(false);
-//                            CmdChangeWeapon(1);
+                            CmdSetActiveWeapon(Weapon2.Id);
                         }
                         else {
-                            Weapon2.CurrentAmmo = Weapon2.MaxAmmo + (Weapon2.MaxMagAmmo - Weapon2.CurrentMagAmmo);
-//                        Weapon2.CurrentMagAmmo = Weapon2.MaxMagAmmo;
+                            // CurrentAmmo is the total including the magazine, so a refill tops it up to MaxAmmo.
+                            // The old formula (MaxAmmo + missing rounds) could exceed the maximum.
+                            Weapon2.CurrentAmmo = Mathf.Max(Weapon2.CurrentAmmo, Weapon2.MaxAmmo);
                         }
                     }
                     else {
@@ -178,13 +184,38 @@ public class PlayerEquipment : NetworkBehaviour {
     [Command]
     private void CmdCallRevive(string name)
     {
+        PlayerManager target = GameManager.GetPlayer(name);
+        PlayerManager self = GetComponent<PlayerManager>();
+        if (target == null || !target.IsDead || self.IsDead) return;
+        if (Vector3.Distance(target.transform.position, transform.position) > REVIVE_DISTANCE) return;
         RpcCallRevive(name);
+    }
+
+    // Removable chairs are scene objects without a NetworkIdentity, so they are found by position.
+    [Command]
+    private void CmdRemoveChairs(Vector3 position)
+    {
+        RpcRemoveChairs(position);
+    }
+
+    [ClientRpc]
+    private void RpcRemoveChairs(Vector3 position)
+    {
+        foreach (GameObject chairs in GameObject.FindGameObjectsWithTag("removableChairs"))
+        {
+            if ((chairs.transform.position - position).sqrMagnitude < 0.01f)
+            {
+                Destroy(chairs);
+                return;
+            }
+        }
     }
 
     [ClientRpc]
     private void RpcCallRevive(string name)
     {
-        GameManager.Players[name].Revive();
+        PlayerManager target = GameManager.GetPlayer(name);
+        if (target != null) target.Revive();
     }
     
     public void PlayerShooting() {
@@ -196,44 +227,50 @@ public class PlayerEquipment : NetworkBehaviour {
     }
 
 
+    // Which weapon a player holds is shown to everybody else. Before, remote players always held the
+    // pistol model (the old RpcChangeWeapon was commented out because it indexed hand children that
+    // did not exist yet), so muzzle flashes and smoke also came from the wrong gun.
     [Command]
-    public void CmdChangeWeapon(int weaponId) {
-        RpcChangeWeapon(weaponId);
+    public void CmdSetActiveWeapon(int weaponId) {
+        if (weaponId < 0 || weaponId >= GameManager.Instance.Weapons.Length) return;
+        RpcSetActiveWeapon(weaponId);
     }
 
     [ClientRpc]
-    void RpcChangeWeapon(int weaponId) {
-        if (!isLocalPlayer) {
-            Transform rightHand = transform.GetChild(0).GetChild(0).GetChild(2).GetChild(2)
-                .GetChild(0).GetChild(0).GetChild(2).GetChild(0).GetChild(0).GetChild(0).transform;
-            if (weaponId == 1) {
-                rightHand.GetChild(5).gameObject.SetActive(false);
-                rightHand.GetChild(6).gameObject.SetActive(true);
-            } else {
-                rightHand.GetChild(5).gameObject.SetActive(true);
-                rightHand.GetChild(6).gameObject.SetActive(false);
-            }
+    void RpcSetActiveWeapon(int weaponId) {
+        if (isLocalPlayer || Weapon1 == null) return;
 
-            GameObject weaponObject =
-                Instantiate(GameManager.Instance.Weapons[weaponId],
-                    rightHand); //_cam.transform.GetChild(0).transform);//tutaj
-            if (weaponObject.GetComponent<Weapon>().Name.Equals("Rifle")) {
-                weaponObject.transform.localPosition = new Vector3(-0.061f, -0.442f, 0.308f);
-                weaponObject.transform.localRotation = Quaternion.Euler(-106.591f, 62.645f, 25.95499f);
-            }
-            else {
-                weaponObject.transform.localPosition = new Vector3(-0.115f, -0.407f, 0.333f);
-                weaponObject.transform.localRotation = Quaternion.Euler(-101.359f, 19.54199f, 79.521f);
-            }
-
-            Weapon2 = weaponObject.GetComponent<Weapon>();
-            WeaponSound = weaponObject.GetComponent<AudioSource>();
-            Weapon2.State = Weapon.WeaponState.idle;
-            Weapon2.CurrentMagAmmo = Weapon1.MaxMagAmmo;
-            Weapon2.CurrentAmmo = Weapon1.MaxAmmo;
-            weaponObject.GetComponent<Animator>().enabled = false;
-            GameManager.SetLayerRecursively(weaponObject, "LocalPlayer");
+        if (weaponId == Weapon1.Id) {
+            Weapon1.gameObject.SetActive(true);
+            if (Weapon2 != null) Weapon2.gameObject.SetActive(false);
+            return;
         }
+
+        if (Weapon2 == null || Weapon2.Id != weaponId) {
+            if (Weapon2 != null) Destroy(Weapon2.gameObject);
+            Weapon2 = CreateRemoteWeapon(GameManager.Instance.Weapons[weaponId]);
+        }
+        Weapon2.gameObject.SetActive(true);
+        Weapon1.gameObject.SetActive(false);
+    }
+
+    // Third-person weapon held by another player's model; used for its visuals and muzzle effects only.
+    public Weapon CreateRemoteWeapon(GameObject weaponPrefab) {
+        Transform rightHand = transform.GetChild(0).GetChild(0).GetChild(2).GetChild(2)
+            .GetChild(0).GetChild(0).GetChild(2).GetChild(0).GetChild(0).GetChild(0).transform;
+        GameObject weaponObject = Instantiate(weaponPrefab, rightHand);
+        Weapon weapon = weaponObject.GetComponent<Weapon>();
+        if (weapon.Name.Equals("Rifle")) {
+            weaponObject.transform.localPosition = new Vector3(-0.061f, -0.442f, 0.308f);
+            weaponObject.transform.localRotation = Quaternion.Euler(-106.591f, 62.645f, 25.95499f);
+        }
+        else {
+            weaponObject.transform.localPosition = new Vector3(-0.115f, -0.407f, 0.333f);
+            weaponObject.transform.localRotation = Quaternion.Euler(-101.359f, 19.54199f, 79.521f);
+        }
+        weaponObject.GetComponent<Animator>().enabled = false;
+        GameManager.SetLayerRecursively(weaponObject, "LocalPlayer");
+        return weapon;
     }
 
     [ClientRpc]

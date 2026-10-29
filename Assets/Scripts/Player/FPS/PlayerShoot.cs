@@ -37,6 +37,11 @@ public class PlayerShoot : NetworkBehaviour {
 
 
     public bool IsBuildingOnFly { get; set; }
+    // True while the hide/show animation of a weapon swap plays; the weapon must not fire meanwhile.
+    public bool IsSwitchingWeapon { get; private set; }
+    private const float BURST_RECOIL_SCALE = 0.5f;
+    // Headshots deal 3x; anything above this is rejected by the server.
+    private const float DAMAGE_MULTIPLIER_LIMIT = 3f;
     public bool WasBuilt { get; set; }
     private Animator weaponAnimator;
     private static readonly int IsAiming = Animator.StringToHash("isAiming");
@@ -69,8 +74,7 @@ public class PlayerShoot : NetworkBehaviour {
 
         if (isLocalPlayer)
             _grenadesTM = GameObject.Find("Grenades").GetComponent<TextMeshProUGUI>();
-        normalFOV = Cam.fieldOfView;
-        zoomFOV = normalFOV - 40;
+
         currentRecoil = activeWeapon.Recoil;
 
         if (!isLocalPlayer) activeWeapon.GetComponent<Animator>().enabled = false;
@@ -78,23 +82,25 @@ public class PlayerShoot : NetworkBehaviour {
 
 
     void Update() {
-        if (ButtonsControll.screensOver && !WinLoseScreens.winLoseActive)
+        if (ButtonsControll.screensOver && !WinLoseScreens.winLoseActive && Equipment.getActiveWeapon() != null)
         { 
             currentRecoil = Equipment.getActiveWeapon().Recoil;
-//        weaponAnimator = activeWeapon.GetComponent<Animator>();
+            normalFOV = GameSettings.FieldOfView;
+            zoomFOV = normalFOV - GameSettings.AIM_FOV_REDUCTION;
 
             if (_grenades > _maxGrenades)
                 _grenades = _maxGrenades;
             if (isLocalPlayer)
                 _grenadesTM.text = _grenades.ToString();
-            if (crossAccuracy > 1.02) crossAccuracy -= (crossAccuracy * 0.05f + 0.02f);
-            else crossAccuracy = 1f;
+            // Tuned for the old fixed 50 FPS cap; scaled by frame time so it decays the same at any frame rate.
+            if (crossAccuracy > 1.02) crossAccuracy -= (crossAccuracy * 0.05f + 0.02f) * Time.deltaTime * 50f;
+            if (crossAccuracy < 1.02f) crossAccuracy = 1f;
             Cross.transform.GetChild(0).transform.localScale = new Vector3(crossAccuracy, crossAccuracy, crossAccuracy);
 
             //changing weapon
             if (changeWeaponCooldown > 0) changeWeaponCooldown -= Time.deltaTime;
             if (changeWeaponCooldown <= 0 && Math.Abs(Input.GetAxis("Mouse ScrollWheel")) > 0.01 &&
-                Equipment.getActiveWeapon().State == Weapon.WeaponState.idle && !IsBuildingOnFly) {
+                Equipment.getActiveWeapon().State == Weapon.WeaponState.idle && !IsBuildingOnFly && !IsSwitchingWeapon) {
                 changeWeaponCooldown = 2;
                 if (Equipment.Weapon2 != null) {
                     if (Equipment.Weapon1.gameObject.activeSelf) {
@@ -108,11 +114,12 @@ public class PlayerShoot : NetworkBehaviour {
 
 
             //fire mode
-            if (Input.GetKeyDown(KeyCode.B)) Equipment.getActiveWeapon().changeFireMode();
+            if (Input.GetKeyDown(KeyCode.B) && !IsSwitchingWeapon) Equipment.getActiveWeapon().changeFireMode();
 
-            //reloading
-            if (Input.GetKeyDown(KeyCode.R) && Equipment.getActiveWeapon().State != Weapon.WeaponState.reloading &&
-                Equipment.getActiveWeapon().CurrentMagAmmo != Equipment.getActiveWeapon().MaxMagAmmo) {
+            //reloading: only with spare rounds left (CurrentAmmo counts the magazine too)
+            Weapon weapon = Equipment.getActiveWeapon();
+            if (Input.GetKeyDown(KeyCode.R) && weapon.State != Weapon.WeaponState.reloading && !IsSwitchingWeapon &&
+                weapon.CurrentMagAmmo < weapon.MaxMagAmmo && weapon.CurrentAmmo > weapon.CurrentMagAmmo) {
                 StartCoroutine(Reload());
             }
 
@@ -125,24 +132,24 @@ public class PlayerShoot : NetworkBehaviour {
                 if (_grenades > 0)
                 {
                     _grenades--;
-                    CmdSpawnGrenade(transform.position, transform.rotation, transform.forward,
+                    // Thrown where the player looks (it used to always fly flat along the body's forward).
+                    CmdSpawnGrenade(transform.position, transform.rotation, Cam.transform.forward,
                         (_grenadeTimer + 0.5f) / 3);
                     _playerAnimator.SetTrigger("throwing");
                     _grenadeTimer = 0f;
                 }
                 else
                 {
-
                     source.clip = nono;
                     source.PlayOneShot(source.clip);
-                    Debug.Log("nono");
+                    _grenadeTimer = 0f; // otherwise the next throw starts fully charged
                 }
             }
             
 
             //fireing
             if (Input.GetButton("Fire1") && Equipment.getActiveWeapon().State == Weapon.WeaponState.idle &&
-                !PauseGame.menuActive && Equipment.getActiveWeapon().CurrentMagAmmo >= 1 && !IsBuildingOnFly) {
+                !PauseGame.menuActive && Equipment.getActiveWeapon().CurrentMagAmmo >= 1 && !IsBuildingOnFly && !IsSwitchingWeapon) {
                 Shoot();
             }
 
@@ -158,7 +165,7 @@ public class PlayerShoot : NetworkBehaviour {
             if (Input.GetButton("Fire2") &&
                 (Equipment.getActiveWeapon().State == Weapon.WeaponState.idle ||
                  Equipment.getActiveWeapon().State == Weapon.WeaponState.shooting) &&
-                !PauseGame.menuActive) {
+                !PauseGame.menuActive && !IsSwitchingWeapon) {
                 currentRecoil = Equipment.getActiveWeapon().Recoil * 0.35f;
                 if (isLocalPlayer) {
                     Equipment.getActiveWeapon().GetComponent<Animator>().SetBool(IsSprinting, false);
@@ -180,6 +187,7 @@ public class PlayerShoot : NetworkBehaviour {
     }
 
     public IEnumerator HideWeapon(GameObject toHide, GameObject toShow) {
+        IsSwitchingWeapon = true;
         toHide.gameObject.SetActive(true);
         toShow.gameObject.SetActive(true);
         
@@ -191,7 +199,6 @@ public class PlayerShoot : NetworkBehaviour {
         yield return new WaitForSeconds(0.5f);    
         toHide.transform.GetChild(0).gameObject.SetActive(false);
         toShow.transform.GetChild(0).gameObject.SetActive(true);
-        Debug.Log(toShow.transform.GetComponent<Weapon>().Id);
         if(toShow.transform.GetComponent<Weapon>().Id == 1)
             playSound(rifle);
         else
@@ -210,6 +217,13 @@ public class PlayerShoot : NetworkBehaviour {
         toHide.transform.GetComponent<Animator>().SetBool(IsHidden, false);
         toHide.gameObject.SetActive(false);
         toShow.gameObject.SetActive(true);
+        IsSwitchingWeapon = false;
+        Equipment.CmdSetActiveWeapon(toShow.GetComponent<Weapon>().Id);
+    }
+
+    private void OnDisable() {
+        // Death or a blocked weapon disables this component mid-swap; don't stay locked afterwards.
+        IsSwitchingWeapon = false;
     }
     
     IEnumerator Reload() {
@@ -222,13 +236,17 @@ public class PlayerShoot : NetworkBehaviour {
         if (isLocalPlayer) Equipment.getActiveWeapon().GetComponent<Animator>().SetBool(IsReloading, false);
     }
 
+    // Burst of three with half recoil. The old code halved Weapon.Recoil around StartCoroutine, which
+    // had no effect (recoil is read from currentRecoil), and the rest of a burst could be fired
+    // from a different weapon after a swap.
     IEnumerator TripleShot() {
-        PerformWeaponFire();
-        yield return new WaitForSeconds(Equipment.getActiveWeapon().FireRate * 0.8f);
-        PerformWeaponFire();
-        yield return new WaitForSeconds(Equipment.getActiveWeapon().FireRate * 0.8f);
-        PerformWeaponFire();
-        yield return new WaitForSeconds(Equipment.getActiveWeapon().FireRate * 0.8f);
+        Weapon weapon = Equipment.getActiveWeapon();
+        for (int i = 0; i < 3; i++) {
+            if (Equipment.getActiveWeapon() != weapon || IsSwitchingWeapon || weapon.State == Weapon.WeaponState.reloading)
+                yield break;
+            PerformWeaponFire(BURST_RECOIL_SCALE);
+            yield return new WaitForSeconds(weapon.FireRate * 0.8f);
+        }
     }
 
 
@@ -242,9 +260,7 @@ public class PlayerShoot : NetworkBehaviour {
             _shootingDone = true;
         }
         else if (Equipment.getActiveWeapon().Mode == Weapon.FireMode.triple && !_shootingDone) {
-            Equipment.getActiveWeapon().Recoil = Equipment.getActiveWeapon().Recoil / 2;
             StartCoroutine(TripleShot());
-            Equipment.getActiveWeapon().Recoil = Equipment.getActiveWeapon().Recoil * 2;
             _shootingDone = true;
         }
         else if (Equipment.getActiveWeapon().Mode == Weapon.FireMode.continous) {
@@ -253,18 +269,17 @@ public class PlayerShoot : NetworkBehaviour {
     }
 
 
-    void PerformWeaponFire() {
+    void PerformWeaponFire(float recoilScale = 1f) {
         if (Equipment.getActiveWeapon().CurrentMagAmmo >= 1) {
             Equipment.PlayerShooting();
             playSound(shot);
             Equipment.getActiveWeapon().shoot();
-            gameObject.GetComponent<PlayerMotor>().IncreaseRecoil(currentRecoil);
+            gameObject.GetComponent<PlayerMotor>().IncreaseRecoil(currentRecoil * recoilScale);
             CmdPlayerShooting();
             RaycastHit hit;
             if (Physics.Raycast(Cam.transform.position, Cam.transform.forward, out hit,
                 Equipment.getActiveWeapon().Range,
                 _mask, QueryTriggerInteraction.Ignore)) {
-                Debug.Log("We hit " + hit.collider.name);
                 if (hit.collider.tag == "Player") { //wylaczamy friendly fire??? NIE XD
                     StartCoroutine(ShowHitmarker());
                     CmdPlayerShoot(hit.collider.GetComponentInParent<PlayerManager>().transform.name,
@@ -307,36 +322,10 @@ public class PlayerShoot : NetworkBehaviour {
     [Command]
     public void CmdExplodeBarrel(NetworkInstanceId objectId)
     {
-        var Barrel = NetworkServer.FindLocalObject(objectId).GetComponent<Barrel>();
-        Barrel.Explode();
-    }
-
-
-    [Command]
-    public void CmdSetAuthAndExplode(NetworkInstanceId objectId, NetworkIdentity player)
-    {
-        var iObject = NetworkServer.FindLocalObject(objectId);
-        Debug.Log(iObject.name);
-        var networkIdentity = iObject.GetComponent<NetworkIdentity>();
-        var otherOwner = networkIdentity.clientAuthorityOwner;
-        Debug.Log(otherOwner.connectionId);
-        if (otherOwner == player.connectionToClient)
-        {
-            Debug.Log("ZAJEBSICIE");
-            return;
-        }
-        else
-        {
-            if (otherOwner != null)
-            {
-                networkIdentity.RemoveClientAuthority(otherOwner);
-            }
-            networkIdentity.AssignClientAuthority(player.connectionToClient);
-            Debug.Log("DOWOD ZODNOSCI: ");
-            Debug.Log(networkIdentity.clientAuthorityOwner.ToString());
-
-            Debug.Log(player.connectionToClient.ToString());
-        }
+        // Another shot or a chain reaction may already have destroyed it.
+        GameObject barrelObject = NetworkServer.FindLocalObject(objectId);
+        Barrel barrel = barrelObject != null ? barrelObject.GetComponent<Barrel>() : null;
+        if (barrel != null) barrel.Explode();
     }
 
     private void playSound(AudioClip clip)
@@ -371,10 +360,23 @@ public class PlayerShoot : NetworkBehaviour {
         Equipment.RpcDoHitEffect(hitPoint, normal);
     }
 
+    // The client reports hits (no lag compensation yet), so at least reject impossible damage.
+    [Server]
+    private bool IsPlausibleDamage(float damage) {
+        PlayerManager self = GetComponent<PlayerManager>();
+        if (self == null || self.IsDead || damage <= 0f) return false;
+        float maxDamage = 0f;
+        foreach (GameObject weaponPrefab in GameManager.Instance.Weapons) {
+            Weapon weapon = weaponPrefab != null ? weaponPrefab.GetComponent<Weapon>() : null;
+            if (weapon != null) maxDamage = Mathf.Max(maxDamage, weapon.Damage);
+        }
+        return damage <= maxDamage * DAMAGE_MULTIPLIER_LIMIT;
+    }
+
     [Command]
     void CmdEnemyShoot(string shootEnemyId, float damage) {
-        Debug.Log(shootEnemyId + " has been shoot");
-        GameManager.GetEnemy(shootEnemyId).CmdTakeDamage(damage);
+        EnemyControllerServer enemy = GameManager.GetEnemy(shootEnemyId);
+        if (enemy != null && IsPlausibleDamage(damage)) enemy.TakeDamage(damage);
     }
 
 
@@ -384,15 +386,21 @@ public class PlayerShoot : NetworkBehaviour {
 
     [Command]
     void CmdPlayerShoot(string shootPlayerId, float damage) {
-        Debug.Log(shootPlayerId + " has been shoot");
-        GameManager.GetPlayer(shootPlayerId).RpcTakeDamage(damage);
+        PlayerManager target = GameManager.GetPlayer(shootPlayerId);
+        if (target != null && IsPlausibleDamage(damage)) target.TakeDamage(damage);
     }
 
     [Command]
-    void CmdSpawnGrenade(Vector3 playerPos, Quaternion playerRot, Vector3 forwardVector, float force) {
-        GameObject grenade = Instantiate(_grenadePrefab, playerPos + forwardVector + Vector3.up / 2, playerRot);
+    void CmdSpawnGrenade(Vector3 playerPos, Quaternion playerRot, Vector3 aimDirection, float force) {
+        // Charge is (0.5..3.5)/3 on the client; clamp what a client may send.
+        force = Mathf.Clamp(force, 0f, 3.5f / 3f);
+        aimDirection = aimDirection.sqrMagnitude > 0.0001f ? aimDirection.normalized : transform.forward;
+        // Spawn in front of the body at chest height, independent of the aim pitch, so it never starts in the floor.
+        Vector3 flatForward = Vector3.ProjectOnPlane(aimDirection, Vector3.up);
+        if (flatForward.sqrMagnitude < 0.0001f) flatForward = transform.forward;
+        GameObject grenade = Instantiate(_grenadePrefab, playerPos + flatForward.normalized + Vector3.up / 2, playerRot);
         Rigidbody rb = grenade.GetComponent<Rigidbody>();
-        rb.velocity = force * (15 * forwardVector + 5 * Vector3.up);
+        rb.velocity = force * (15 * aimDirection + 5 * Vector3.up);
         NetworkServer.Spawn(grenade);
     }
 }

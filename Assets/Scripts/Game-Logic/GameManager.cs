@@ -114,7 +114,6 @@ public class GameManager : NetworkBehaviour
                     break;
                 case MatchState.Room2Prepare:
                     currentChest = _chests[1];
-                    Debug.Log("AAAAKURWA");
                     Instance.CurrentRoom = Instance.Rooms[2].GetComponent<Room>();
                     _cpUI.setRoom();
 
@@ -160,14 +159,14 @@ public class GameManager : NetworkBehaviour
                     break;
 
                 case MatchState.Win:
-                    //StopHordeAttack();
+                    StopHordeAttack();
                     ClockManager.time = 0f;
                     ClockManager.canCount = false;
                     _screens.ActivateScreen(true);
                     break;
 
                 case MatchState.Lose:
-                    //StopHordeAttack();
+                    StopHordeAttack();
                     ClockManager.time = 0f;
                     ClockManager.canCount = false;
                     _screens.ActivateScreen(false);
@@ -211,6 +210,7 @@ public class GameManager : NetworkBehaviour
     {
         if (Instance != null) Debug.LogError("More than one GameManager in scene!");
         else Instance = this;
+        ResetStaticState();
         Transform rooms = GameObject.Find("Rooms").transform;
         for (int i = 0; i < rooms.childCount; i++)
         {
@@ -273,66 +273,102 @@ public class GameManager : NetworkBehaviour
         {
             _readyPlayers.enabled = false;
         }
+        // Enemies stop spawning for the last 10 seconds of a fight (markers stop blinking on every peer).
+        if (ClockManager.canCount && ClockManager.time > 0f && ClockManager.time <= 10f && IsFightState(_currentMatchState))
+            StopHordeAttack();
+
+        // Only the server decides when the match moves on, so every player sees the same phase.
+        // Previously each client advanced on its own clock and the loss check fired as soon as the
+        // first player in the dictionary was down instead of when everyone was.
+        if (!isServer || IsMatchOver) return;
+
+        if (IsFightOrPrepareState(_currentMatchState) && AllPlayersDown())
+        {
+            ServerSetMatchState(MatchState.Lose);
+            return;
+        }
+
+        if (ClockManager.canCount && ClockManager.time <= 0f)
+        {
+            MatchState next = NextState(_currentMatchState);
+            if (next != MatchState.None) ServerSetMatchState(next);
+        }
+    }
+
+    public bool IsMatchOver { get { return _currentMatchState == MatchState.Win || _currentMatchState == MatchState.Lose; } }
+
+    private static bool IsFightState(MatchState state)
+    {
+        return state == MatchState.Room1Fight || state == MatchState.Room2Fight || state == MatchState.Room3Fight;
+    }
+
+    private static bool IsFightOrPrepareState(MatchState state)
+    {
+        return state != MatchState.None && state != MatchState.Lobby && state != MatchState.Win && state != MatchState.Lose;
+    }
+
+    private static MatchState NextState(MatchState state)
+    {
+        switch (state)
+        {
+            case MatchState.Room1Prepare: return MatchState.Room1Fight;
+            case MatchState.Room1Fight: return MatchState.Room2Prepare;
+            case MatchState.Room2Prepare: return MatchState.Room2Fight;
+            case MatchState.Room2Fight: return MatchState.Room3Prepare;
+            case MatchState.Room3Prepare: return MatchState.Room3Fight;
+            case MatchState.Room3Fight: return MatchState.Win;
+            default: return MatchState.None;
+        }
+    }
+
+    private static bool AllPlayersDown()
+    {
+        if (_players.Count == 0) return false;
         foreach (PlayerManager player in _players.Values)
-        {
-            if (player._currentHealth > 0f)
-            {
-                break;
-            }
-            CurrentMachState = MatchState.Lose;
-        }
-        
-        if (ClockManager.canCount)
-        {
-            if (ClockManager.time <= 0)
-            {
-                switch (_currentMatchState)
-                {
-                    case MatchState.Room1Prepare:
-                        _musicManager.ChangeClip(false);
-                        CurrentMachState = MatchState.Room1Fight;
-                        break;
-                    case MatchState.Room1Fight:
-                        _musicManager.ChangeClip(true);
-                        CurrentMachState = MatchState.Room2Prepare;
-                        break;
-                    case MatchState.Room2Prepare:
-                        _musicManager.ChangeClip(false);
-                        CurrentMachState = MatchState.Room2Fight;
-                        break;
-                    case MatchState.Room2Fight:
-                        _musicManager.ChangeClip(true);
-                        CurrentMachState = MatchState.Room3Prepare;
-                        break;
-                    case MatchState.Room3Prepare:
-                        _musicManager.ChangeClip(false);
-                        CurrentMachState = MatchState.Room3Fight;
-                        break;
-                    case MatchState.Room3Fight:
-                        _musicManager.ChangeClip(false);
-                        CurrentMachState = MatchState.Win;
-                        break;
-                }
-            }
-            else if (ClockManager.time <= 10f)
-            {
-                switch (_currentMatchState)
-                {
-                    case MatchState.Room1Fight:
-                        StopHordeAttack();
-                        break;
+            if (player != null && !player.IsDead) return false;
+        return true;
+    }
 
-                    case MatchState.Room2Fight:
-                        StopHordeAttack();
-                        break;
+    private MatchState _requestedState = MatchState.None;
 
-                    case MatchState.Room3Fight:
-                        StopHordeAttack();
-                        break;
-                }
-            }
-        }
-        
+    [Server]
+    public void ServerSetMatchState(MatchState state)
+    {
+        if (state == _requestedState || state == _currentMatchState || IsMatchOver) return;
+        _requestedState = state;
+        RpcSetMatchState((int) state);
+    }
+
+    [ClientRpc]
+    private void RpcSetMatchState(int stateValue)
+    {
+        MatchState state = (MatchState) stateValue;
+        if (state == _currentMatchState) return;
+        // Same music as before: calm while preparing rooms 2 and 3, fast for fights and the end.
+        if (state == MatchState.Room2Prepare || state == MatchState.Room3Prepare) _musicManager.ChangeClip(true);
+        else if (IsFightState(state) || state == MatchState.Win) _musicManager.ChangeClip(false);
+        CurrentMachState = state;
+    }
+
+    // Statics outlive a match; without this a second game in the same session ran with stale
+    // players/enemies and destroyed renderers (MissingReferenceException in TurnOnGridRenders).
+    private static void ResetStaticState()
+    {
+        _players.Clear();
+        _activePlayers.Clear();
+        _enemies.Clear();
+        _gridRenderes.Clear();
+        _spriteRenderes.Clear();
+        _enemyIdCounter = 0;
+        _localPlayer = null;
+        _arrow = null;
+        _currentState = GameState.Fighting;
+        IsListeningForReady = false;
+        arrowIndexList.Clear();
+        arrowIndexList.AddRange(new[] {0, 1, 2, 3});
+        ButtonsControll.screensOver = false;
+        WinLoseScreens.winLoseActive = false;
+        PauseGame.menuActive = false;
     }
     
     private IEnumerator PickUpPrepareFirst()
@@ -345,7 +381,6 @@ public class GameManager : NetworkBehaviour
     
     private IEnumerator PickUpPrepare()
     {
-        Debug.Log("Second prepare");
         _pickUp.enabled = true;
         _pickUp.text = "Follow the arrow to the next room!";
         yield return new WaitForSeconds(7);
@@ -395,51 +430,51 @@ public class GameManager : NetworkBehaviour
 
     public IEnumerator SpawnEnemy()
     {
-        float upperTimeBound;
-        switch (_activePlayers.Count)
+        while (true)
         {
-            case 1:
-                upperTimeBound = 8f;
-                break;
-            case 2:
-                upperTimeBound = 6f;
-                break;
-            case 3:
-                upperTimeBound = 4f;
-                break;
-            default:
-                upperTimeBound = 3f;
-                break;
-        }
-
-        float randTime = Random.Range(1f, upperTimeBound);
-        yield return new WaitForSeconds(randTime);
-        Transform spawnPoint = null;
-        Transform previousSpawn = null;
-        if (_nameOfPreviousSpawn != null)
-        {
-            previousSpawn = EnemySpawnPoints[_nameOfPreviousSpawn];
-            EnemySpawnPoints.Remove(_nameOfPreviousSpawn);
-        }
-        int randIndex = Random.Range(0, EnemySpawnPoints.Keys.Count);
-        int counter = 0;
-        foreach (KeyValuePair<string, Transform> entry in _enemySpawnPoints)
-        {
-            if (counter == randIndex)
+            float upperTimeBound;
+            switch (_activePlayers.Count)
             {
-                //Debug.Log(counter);
-                spawnPoint = entry.Value;
-                if (_nameOfPreviousSpawn != null) _enemySpawnPoints.Add(_nameOfPreviousSpawn, previousSpawn);
-                _nameOfPreviousSpawn = spawnPoint.name;
-                break;
+                case 1:
+                    upperTimeBound = 8f;
+                    break;
+                case 2:
+                    upperTimeBound = 6f;
+                    break;
+                case 3:
+                    upperTimeBound = 4f;
+                    break;
+                default:
+                    upperTimeBound = 3f;
+                    break;
             }
-            counter++;
+
+            yield return new WaitForSeconds(Random.Range(1f, upperTimeBound));
+
+            Transform spawnPoint = PickSpawnPoint();
+            if (spawnPoint == null) continue;
+            GameObject enemy = Instantiate(_enemyPrefab, spawnPoint.position, spawnPoint.rotation);
+            NetworkServer.Spawn(enemy);
+            _enemiesCounter++;
+            _spawnedEnemiesCounter++;
         }
-        GameObject enemy = Instantiate(_enemyPrefab, spawnPoint.position, spawnPoint.rotation);
-        NetworkServer.Spawn(enemy);
-        _enemiesCounter++;
-        _spawnedEnemiesCounter++;
-        _spawnEnemy = StartCoroutine(SpawnEnemy());
+    }
+
+    // Random spawn point, avoiding the previous one when there is a choice. The old version
+    // crashed when the room had a single spawn point (it removed the only candidate).
+    private Transform PickSpawnPoint()
+    {
+        List<Transform> candidates = new List<Transform>();
+        foreach (KeyValuePair<string, Transform> entry in _enemySpawnPoints)
+            if (entry.Value != null && entry.Key != _nameOfPreviousSpawn) candidates.Add(entry.Value);
+        if (candidates.Count == 0)
+            foreach (Transform point in _enemySpawnPoints.Values)
+                if (point != null) candidates.Add(point);
+        if (candidates.Count == 0) return null;
+
+        Transform spawnPoint = candidates[Random.Range(0, candidates.Count)];
+        _nameOfPreviousSpawn = spawnPoint.name;
+        return spawnPoint;
     }
 
 
@@ -456,20 +491,26 @@ public class GameManager : NetworkBehaviour
         }
     }
 
+    private bool _hordeActive;
+
     public void StartHordeAttack()
     {
+        if (_hordeActive) return;
+        _hordeActive = true;
         foreach (ExPointBlink exPointBlink in _enemySpawnMarkers)
             exPointBlink.StartBlink();
         if (isServer) _spawnEnemy = StartCoroutine(SpawnEnemy());
     }
 
+    // Idempotent: it is called every frame during the last 10 seconds of a fight.
     public void StopHordeAttack()
     {
-        //ClockManager.canCount = false;
-        //ClockManager.time = 0;
+        if (!_hordeActive) return;
+        _hordeActive = false;
         foreach (ExPointBlink exPointBlink in _enemySpawnMarkers)
             exPointBlink.StopBlink();
-        if (isServer) StopCoroutine(_spawnEnemy);
+        if (_spawnEnemy != null) StopCoroutine(_spawnEnemy);
+        _spawnEnemy = null;
     }
 
     #endregion
@@ -487,7 +528,7 @@ public class GameManager : NetworkBehaviour
         {
             _localPlayer = value;
             _arrow = _localPlayer.GetComponentInChildren<Arrow>();
-            if (_arrow == null) Debug.Log("honk");
+            if (_arrow == null) Debug.LogWarning("Local player has no Arrow component.");
         }
     }
     private static Dictionary<string, PlayerManager> _players = new Dictionary<string, PlayerManager>();
@@ -530,21 +571,22 @@ public class GameManager : NetworkBehaviour
             }
         }
         player.transform.GetChild(4).GetChild(arrowIndexList[tempIndex]).gameObject.SetActive(true);
-        arrowIndexList.Remove(tempIndex);
+        arrowIndexList.RemoveAt(tempIndex); // was Remove(tempIndex): removed by value, so colours repeated
     }
 
     public static void UnregisterPlayer(string playerId) {
-        int index = -1;
-        if (_players[playerId].transform.GetChild(4).GetChild(0).gameObject.activeSelf) 
+        int index;
+        Transform arrows = _players[playerId].transform.GetChild(4);
+        if (arrows.GetChild(0).gameObject.activeSelf)
             index = 0;
-        else if (_players[playerId].transform.GetChild(4).GetChild(1).gameObject.activeSelf)
+        else if (arrows.GetChild(1).gameObject.activeSelf)
             index = 1;
-        else if (_players[playerId].transform.GetChild(4).GetChild(1).gameObject.activeSelf)
+        else if (arrows.GetChild(2).gameObject.activeSelf) // checked child 1 twice before
             index = 2;
         else
             index = 3;
-        
-        arrowIndexList.Add(index);
+
+        if (!arrowIndexList.Contains(index)) arrowIndexList.Add(index);
         arrowIndexList.Sort();
             
         _players.Remove(playerId);
@@ -570,7 +612,7 @@ public class GameManager : NetworkBehaviour
 
     public static void ActivatePlayer(string playerId, PlayerManager player)
     {
-        _activePlayers.Add(playerId, player);
+        _activePlayers[playerId] = player;
     }
 
     public void SetCameraForBillboards(Camera cam)
@@ -588,7 +630,9 @@ public class GameManager : NetworkBehaviour
         Rigidbody rigidbody = LocalPlayer.GetComponent<Rigidbody>();
         rigidbody.collisionDetectionMode = CollisionDetectionMode.Discrete;
         rigidbody.isKinematic = true;
-        LocalPlayer.transform.position = new Vector3(pos.x + randX, pos.y + 1f, pos.z + randZ);
+        Vector3 target = new Vector3(pos.x + randX, pos.y + 1f, pos.z + randZ);
+        LocalPlayer.transform.position = target;
+        rigidbody.position = target; // with interpolation the transform alone can be pulled back
         rigidbody.isKinematic = false;
         rigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
         TurnOnGridRenders(false);
@@ -596,6 +640,7 @@ public class GameManager : NetworkBehaviour
         Destroy(playerEquipment.Weapon1.gameObject);
         if (playerEquipment.Weapon2 != null) Destroy(playerEquipment.Weapon2.gameObject);
         LocalPlayer.gameObject.GetComponent<PlayerSetup>().EquipWeapon();
+        playerEquipment.CmdSetActiveWeapon(playerEquipment.Weapon1.Id); // everyone starts room 1 with the pistol
 //        playerEquipment.Weapon1.resetAmmo();
 //        playerEquipment.Weapon1.gameObject.SetActive(true);
 //        playerEquipment.Weapon1.transform.localPosition = new Vector3(0.02f, 0.03f, -0.22f);

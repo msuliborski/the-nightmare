@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class DissolveEnemyBody : MonoBehaviour {
 
@@ -17,12 +16,13 @@ public class DissolveEnemyBody : MonoBehaviour {
     }
 
     private void Update() {
-        if (Enabled)
-        {
-           _dissolveAmount += Time.deltaTime / 3;
-            mat.SetFloat("_DissolveAmount", DissolveAmount);
-            if (_dissolveAmount >= 1)
-                Destroy(_enemyControllerServer.gameObject);
-        }
+        if (!Enabled || _dissolveAmount >= 1f) return;
+
+        _dissolveAmount = Mathf.Min(1f, _dissolveAmount + Time.deltaTime / 3);
+        mat.SetFloat("_DissolveAmount", DissolveAmount);
+        // The enemy is a networked object: the server despawns it for everyone. Clients just stay
+        // fully dissolved until the destroy message arrives instead of destroying their copy early.
+        if (_dissolveAmount >= 1f && NetworkServer.active)
+            NetworkServer.Destroy(_enemyControllerServer.gameObject);
     }
 }

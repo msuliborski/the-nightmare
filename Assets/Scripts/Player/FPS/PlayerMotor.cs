@@ -5,8 +5,9 @@ using UnityEngine.Networking;
 public class PlayerMotor : NetworkBehaviour {
     [SerializeField] private Camera _cam;
     private Vector3 _velocity = Vector3.zero;
-    private Vector3 _rotation = Vector3.zero;
-    private float _cameraRotationX = 0f;
+    // Look input arrives every frame but the body turns in FixedUpdate: accumulate it so no mouse
+    // movement is lost or applied twice when the frame rate differs from the physics rate.
+    private Vector3 _pendingRotation = Vector3.zero;
     private float currentCameraRotationX = 0f;
     private Rigidbody _rb;
     private Animator _anim;
@@ -35,6 +36,15 @@ public class PlayerMotor : NetworkBehaviour {
             PerformRotation();
             DecreaseRecoil();
         }
+        _pendingRotation = Vector3.zero;
+    }
+
+    // The camera has no physics, so pitch is applied every rendered frame.
+    void LateUpdate() {
+        if (_cam != null) {
+            currentCameraRotationX = Mathf.Clamp(currentCameraRotationX, -_cameraRotationLimit, _cameraRotationLimit);
+            _cam.transform.localEulerAngles = new Vector3(currentCameraRotationX - _recoilOffset, 0f, 0f);
+        }
     }
 
     private void PerformMovement() {
@@ -52,26 +62,23 @@ public class PlayerMotor : NetworkBehaviour {
         }
         else {
             _anim.SetBool("running", false);
-            transform.GetComponent<PlayerEquipment>().getActiveWeapon().GetComponent<Animator>().SetBool(IsSprinting, false);
+            Weapon weapon = transform.GetComponent<PlayerEquipment>().getActiveWeapon();
+            if (weapon != null) weapon.GetComponent<Animator>().SetBool(IsSprinting, false);
         }
     }
 
+    // Called once per frame with this frame's look delta.
     public void Rotate(Vector3 rotation) {
-        _rotation = rotation;
+        _pendingRotation += rotation;
     }
 
     void PerformRotation() {
-        _rb.MoveRotation(_rb.rotation * Quaternion.Euler(_rotation));
-        if (_cam != null) {
-            currentCameraRotationX -= _cameraRotationX;
-            currentCameraRotationX = Mathf.Clamp(currentCameraRotationX, -_cameraRotationLimit, _cameraRotationLimit);
-
-            _cam.transform.localEulerAngles = new Vector3(currentCameraRotationX - _recoilOffset, 0f, 0f);
-        }
+        _rb.MoveRotation(_rb.rotation * Quaternion.Euler(_pendingRotation));
     }
 
+    // Called once per frame with this frame's pitch delta.
     public void RotateCamera(float cameraRotation) {
-        _cameraRotationX = cameraRotation;
+        currentCameraRotationX -= cameraRotation;
     }
 
     public void IncreaseRecoil(float weaponRecoil) {

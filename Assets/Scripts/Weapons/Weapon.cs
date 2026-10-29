@@ -161,13 +161,19 @@ public class Weapon : NetworkBehaviour {
         _state = WeaponState.shooting;
     }
 
+    // Cycles single -> triple -> continuous, skipping modes this weapon doesn't allow. The old version
+    // skipped a disallowed triple straight into continuous without checking allowContinous.
     public void changeFireMode() {
-        if (_fireMode == FireMode.single) _fireMode = FireMode.triple;
-        else if (_fireMode == FireMode.triple) _fireMode = FireMode.continous;
-        else if (_fireMode == FireMode.continous) _fireMode = FireMode.single;
+        for (int i = 0; i < 3; i++) {
+            _fireMode = (FireMode) (((int) _fireMode + 1) % 3);
+            if (IsAllowed(_fireMode)) return;
+        }
+    }
 
-        if (!allowTriple && _fireMode == FireMode.triple) _fireMode = FireMode.continous;
-        else if (!allowContinous && _fireMode == FireMode.continous) _fireMode = FireMode.single;
+    private bool IsAllowed(FireMode mode) {
+        return mode == FireMode.single
+               || (mode == FireMode.triple && allowTriple)
+               || (mode == FireMode.continous && allowContinous);
     }
     public void resetAmmo() {
         _currentAmmo = MaxAmmo;

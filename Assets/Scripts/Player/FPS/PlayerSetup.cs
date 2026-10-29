@@ -29,7 +29,9 @@ public class PlayerSetup : NetworkBehaviour {
             GetComponentInChildren<Arrow>().gameObject.SetActive(false);
         }
         else {
-            Application.targetFrameRate = 50;
+            GameSettings.ApplyFrameRate();
+            // Physics runs at 50 Hz; interpolate the local body so rendering above that stays smooth.
+            GetComponent<Rigidbody>().interpolation = RigidbodyInterpolation.Interpolate;
             EquipWeapon();
            
             _bulletshud = GameObject.Find("bulletsNumber").GetComponent<BulletsHUD>();
@@ -57,50 +59,32 @@ public class PlayerSetup : NetworkBehaviour {
             _clipsManager.playerEnabled = true;
             GameManager.Instance.SetCameraForBillboards(_actionCamera);
             
-            GameObject g = GameObject.Find("LobbySpawn");
-            if (g == null) Debug.Log("g to null");
-            else Debug.Log("g to nie null");
             Vector3 lobbySpawn = GameObject.Find("LobbySpawn").transform.position;
-            Vector3 randomStartPosition = new Vector3(lobbySpawn.x + Random.Range(-1, 1), lobbySpawn.y, lobbySpawn.z + Random.Range(-1, 1));
+            // Float overload: the int one only returned -1 or 0, so players spawned almost on top of each other.
+            Vector3 randomStartPosition = new Vector3(lobbySpawn.x + Random.Range(-1f, 1f), lobbySpawn.y, lobbySpawn.z + Random.Range(-1f, 1f));
             
             Rigidbody rigidbody = GetComponent<Rigidbody>();
             rigidbody.collisionDetectionMode = CollisionDetectionMode.Discrete;
             rigidbody.isKinematic = true;
-            transform.position = new Vector3(randomStartPosition.x, randomStartPosition.y, randomStartPosition.z);
+            transform.position = randomStartPosition;
+            rigidbody.position = randomStartPosition;
             rigidbody.isKinematic = false;
             rigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
-            
-            transform.position = randomStartPosition;
         }
         
         GetComponent<PlayerManager>().Setup();
     }
 
     void EquipWeaponNotLocal() {
-        Transform rightHand = transform.GetChild(0).GetChild(0).GetChild(2).GetChild(2)
-            .GetChild(0).GetChild(0).GetChild(2).GetChild(0).GetChild(0).GetChild(0).transform;
-        GameObject weaponObject = Instantiate(_weaponObjectPrefab, rightHand);
-        if (weaponObject.GetComponent<Weapon>().Name.Equals("Rifle")) {
-            weaponObject.transform.localPosition = new Vector3(-0.061f, -0.442f, 0.308f);
-            weaponObject.transform.localRotation = Quaternion.Euler(-106.591f, 62.645f, 25.95499f);
-        }
-        else {
-            weaponObject.transform.localPosition = new Vector3(-0.115f, -0.407f, 0.333f);
-            weaponObject.transform.localRotation = Quaternion.Euler(-101.359f, 19.54199f, 79.521f);
-        }
-
         PlayerShoot shoot = GetComponent<PlayerShoot>();
         shoot.source = GetComponent<AudioSource>();
         shoot.Cam = _actionCamera;
         _equipment = GetComponent<PlayerEquipment>();
-        _equipment.Weapon1 = weaponObject.GetComponent<Weapon>();
-        _equipment.WeaponSound = weaponObject.GetComponent<AudioSource>();
-        _equipment.Weapon1.GetComponent<Animator>().enabled = false;
+        _equipment.Weapon1 = _equipment.CreateRemoteWeapon(_weaponObjectPrefab);
+        _equipment.WeaponSound = _equipment.Weapon1.GetComponent<AudioSource>();
         shoot.Equipment = _equipment;
 
         _actionCamera.transform.GetChild(1).GetComponent<Camera>().enabled = false;
-
-        GameManager.SetLayerRecursively(rightHand.GetChild(5).gameObject, "LocalPlayer");
     }
 
     public void EquipWeapon() {

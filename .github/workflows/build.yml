@@ -1,0 +1,183 @@
+name: Build game
+
+# Click "Run workflow" in the Actions tab to get Windows / macOS / Linux packages.
+# Pushing a tag like v1.2.0 also builds and publishes a GitHub Release.
+on:
+  workflow_dispatch:
+    inputs:
+      platforms:
+        description: "Which platforms to build"
+        type: choice
+        default: all
+        options: [all, windows, macos, linux]
+      release:
+        description: "Also publish a GitHub Release (pre-release) with the packages"
+        type: boolean
+        default: false
+  push:
+    tags: ["v*"]
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  BUILD_NAME: TheNightmare
+
+jobs:
+  matrix:
+    name: Pick platforms
+    runs-on: ubuntu-latest
+    outputs:
+      include: ${{ steps.pick.outputs.include }}
+    steps:
+      - id: pick
+        shell: bash
+        run: |
+          choice="${{ github.event.inputs.platforms || 'all' }}"
+          win='{"targetPlatform":"StandaloneWindows64","os":"windows"}'
+          mac='{"targetPlatform":"StandaloneOSX","os":"macos"}'
+          lin='{"targetPlatform":"StandaloneLinux64","os":"linux"}'
+          case "$choice" in
+            windows) list="[$win]" ;;
+            macos)   list="[$mac]" ;;
+            linux)   list="[$lin]" ;;
+            *)       list="[$win,$mac,$lin]" ;;
+          esac
+          echo "include=$list" >> "$GITHUB_OUTPUT"
+
+  build:
+    name: Build ${{ matrix.os }}
+    needs: matrix
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJson(needs.matrix.outputs.include) }}
+    steps:
+      # The Unity editor image plus a ~2.6 GB Assets folder and its imported
+      # Library do not fit on a stock runner, so clear the preinstalled SDKs first.
+      - name: Free disk space
+        uses: jlumbroso/free-disk-space@v1.3.1
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: false
+          docker-images: true
+          swap-storage: true
+
+      - name: Check Unity license secrets
+        shell: bash
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        run: |
+          if [ -z "$UNITY_EMAIL" ] || [ -z "$UNITY_PASSWORD" ] || { [ -z "$UNITY_LICENSE" ] && [ -z "$UNITY_SERIAL" ]; }; then
+            echo "::error::Missing Unity license secrets. Add UNITY_EMAIL, UNITY_PASSWORD and UNITY_LICENSE (Personal) or UNITY_SERIAL (Plus/Pro). See docs/BUILDING.md."
+            exit 1
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: false
+
+      - name: Version
+        id: version
+        shell: bash
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+            v="${GITHUB_REF#refs/tags/v}"
+          else
+            v="0.$(git rev-list --count HEAD).${{ github.run_number }}"
+          fi
+          echo "version=$v" >> "$GITHUB_OUTPUT"
+          echo "short_sha=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Unity Library
+        uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-${{ matrix.targetPlatform }}-${{ hashFiles('Packages/manifest.json', 'ProjectSettings/ProjectVersion.txt') }}-${{ github.sha }}
+          restore-keys: |
+            Library-${{ matrix.targetPlatform }}-${{ hashFiles('Packages/manifest.json', 'ProjectSettings/ProjectVersion.txt') }}-
+            Library-${{ matrix.targetPlatform }}-
+
+      - name: Build with Unity
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: ${{ matrix.targetPlatform }}
+          buildName: ${{ env.BUILD_NAME }}
+          buildMethod: NightmareBuild.BuildFromCommandLine
+          versioning: Custom
+          version: ${{ steps.version.outputs.version }}
+          allowDirtyBuild: true
+
+      # tar keeps the executable bits that a plain zip of the macOS .app / Linux binary would lose.
+      - name: Package
+        id: package
+        shell: bash
+        run: |
+          set -euo pipefail
+          src="build/${{ matrix.targetPlatform }}"
+          name="${BUILD_NAME}-${{ steps.version.outputs.version }}-${{ matrix.os }}"
+          mkdir -p dist
+          sudo chown -R "$(id -u):$(id -g)" build
+          find "$src" -name "*_BackUpThisFolder_ButDontShipItWithYourGame" -prune -exec rm -rf {} +
+          if [ "${{ matrix.os }}" = "windows" ]; then
+            (cd "$src" && zip -qr9 "$GITHUB_WORKSPACE/dist/$name.zip" .)
+            echo "file=dist/$name.zip" >> "$GITHUB_OUTPUT"
+          else
+            tar -C "$src" -czf "dist/$name.tar.gz" .
+            echo "file=dist/$name.tar.gz" >> "$GITHUB_OUTPUT"
+          fi
+          ls -lh dist
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.BUILD_NAME }}-${{ matrix.os }}
+          path: ${{ steps.package.outputs.file }}
+          compression-level: 0
+          retention-days: 30
+
+  release:
+    name: Publish release
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v') || github.event.inputs.release == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          sparse-checkout: CHANGELOG.md
+          sparse-checkout-cone-mode: false
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          tag_name: "${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || format('build-{0}', github.run_number) }}"
+          name: "${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || format('Test build #{0}', github.run_number) }}"
+          target_commitish: ${{ github.sha }}
+          prerelease: ${{ !startsWith(github.ref, 'refs/tags/v') }}
+          body_path: CHANGELOG.md
+          generate_release_notes: true

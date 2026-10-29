@@ -139,7 +139,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1250475252818553949}
   - component: {fileID: 132920175}
-  - component: {fileID: 5066969031249784106}
   - component: {fileID: 8769869101659370329}
   m_Layer: 0
   m_Name: NetworkManager
@@ -181,22 +180,6 @@ MonoBehaviour:
   showGUI: 1
   offsetX: 0
   offsetY: 0
---- !u!114 &5066969031249784106
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 210125983785559080}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f000284a7bee25b41b9e428cf34c4467, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_HostMigration: 1
-  m_ShowGUI: 1
-  m_OffsetX: 10
-  m_OffsetY: 300
 --- !u!114 &8769869101659370329
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -206,7 +189,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 210125983785559080}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -822479833, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Script: {fileID: 11500000, guid: 10e66068d9290094b9fbe6d56b4c4154, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_NetworkPort: 7777
