@@ -17,12 +17,10 @@ public class PlayMenuVideo : MonoBehaviour
     IEnumerator PlayVideo()
     {
         _player.Prepare();
-        WaitForSeconds wait = new WaitForSeconds(1);
-        while (!_player.isPrepared)
-        {
-            yield return wait;
-            break;
-        }
+        // Wait until the clip is ready (the old loop gave up after one second and could show a blank texture).
+        float timeout = Time.unscaledTime + 10f;
+        while (!_player.isPrepared && Time.unscaledTime < timeout)
+            yield return null;
 
         _image.texture = _player.texture;
         _player.Play();
