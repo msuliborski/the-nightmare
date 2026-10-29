@@ -72,8 +72,16 @@ public class SettingsMenu : MonoBehaviour
         _window = GUILayout.Window(GetInstanceID(), _window, DrawWindow, "Settings");
     }
 
+    private string _nameField;
+
     private void DrawWindow(int id)
     {
+        if (_nameField == null) _nameField = GameSettings.PlayerName;
+        GUILayout.Label("Player name (applies when you join the next game)");
+        _nameField = GUILayout.TextField(_nameField, GameSettings.MAX_NAME_LENGTH);
+        GameSettings.PlayerName = _nameField;
+
+        GUILayout.Space(8);
         GUILayout.Label("Mouse sensitivity: " + GameSettings.MouseSensitivity.ToString("0.00") + "x");
         GameSettings.MouseSensitivity = GUILayout.HorizontalSlider(GameSettings.MouseSensitivity, 0.1f, 3f);
         GameSettings.InvertY = GUILayout.Toggle(GameSettings.InvertY, " Invert mouse Y");
