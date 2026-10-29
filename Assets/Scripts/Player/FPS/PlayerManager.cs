@@ -261,9 +261,4 @@ public class PlayerManager : NetworkBehaviour
             transform.GetComponent<PlayerEquipment>().getActiveWeapon().transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
         }
     }
-
-    public override void OnDeserialize(NetworkReader reader, bool initialState)
-    {
-        base.OnDeserialize(reader, initialState);
-    }
 }
