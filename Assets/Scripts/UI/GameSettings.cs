@@ -11,6 +11,8 @@ public static class GameSettings
     private const string MAX_FPS_KEY = "settings.maxFps";
     // 0 = unlimited. The game used to be hard-capped at 50 FPS to hide a mouse-input bug (fixed since).
     public static readonly int[] MAX_FPS_OPTIONS = { 30, 60, 120, 144, 240, 0 };
+    private const string NAME_KEY = "settings.playerName";
+    public const int MAX_NAME_LENGTH = 16;
 
     public const float DEFAULT_FOV = 90f;
     public const float MIN_FOV = 60f;
@@ -23,6 +25,22 @@ public static class GameSettings
     {
         get { return PlayerPrefs.GetFloat(SENSITIVITY_KEY, 1f); }
         set { PlayerPrefs.SetFloat(SENSITIVITY_KEY, Mathf.Clamp(value, 0.1f, 3f)); }
+    }
+
+    // Shown above the player for teammates; a random default so players are distinguishable from the start.
+    public static string PlayerName
+    {
+        get
+        {
+            if (!PlayerPrefs.HasKey(NAME_KEY)) PlayerPrefs.SetString(NAME_KEY, "Player" + Random.Range(100, 1000));
+            return PlayerPrefs.GetString(NAME_KEY);
+        }
+        set
+        {
+            string name = (value ?? "").Trim();
+            if (name.Length > MAX_NAME_LENGTH) name = name.Substring(0, MAX_NAME_LENGTH);
+            if (name.Length > 0) PlayerPrefs.SetString(NAME_KEY, name);
+        }
     }
 
     public static bool InvertY

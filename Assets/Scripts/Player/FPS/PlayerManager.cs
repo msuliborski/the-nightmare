@@ -13,6 +13,24 @@ public class PlayerManager : NetworkBehaviour
 
     public float _maxHealth = 100;
 
+    private const int MAX_NAME_LENGTH = 16;
+    [SyncVar] private string _displayName = "";
+    public string DisplayName { get { return string.IsNullOrEmpty(_displayName) ? transform.name : _displayName; } }
+
+    public override void OnStartLocalPlayer()
+    {
+        base.OnStartLocalPlayer();
+        CmdSetDisplayName(GameSettings.PlayerName);
+    }
+
+    [Command]
+    private void CmdSetDisplayName(string requested)
+    {
+        string name = (requested ?? "").Replace("\n", " ").Replace("<", "").Replace(">", "").Trim();
+        if (name.Length > MAX_NAME_LENGTH) name = name.Substring(0, MAX_NAME_LENGTH);
+        _displayName = name;
+    }
+
     [SyncVar] public float _currentHealth;
 
     [SerializeField] private Behaviour[] _disableOnDeath;
