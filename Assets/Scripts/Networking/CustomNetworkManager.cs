@@ -286,7 +286,20 @@ public class CustomNetworkManager : NetworkManager
         float width = Mathf.Min(560f, Screen.width - 20f);
         float height = style.CalcHeight(new GUIContent(text), width);
         GUI.Box(new Rect(Screen.width - width - 10f, 10f, width, height), text, style);
+
+        // Clickable while the cursor is free (pause menu / lobby before the welcome screens are closed).
+        if (NetworkServer.active && _localAddresses.Count > 0)
+        {
+            string address = _localAddresses[0] + (networkPort != DEFAULT_PORT ? ":" + networkPort : "");
+            if (GUI.Button(new Rect(Screen.width - 130f, height + 15f, 120f, 28f), _copiedUntil > Time.unscaledTime ? "Copied!" : "Copy IP"))
+            {
+                GUIUtility.systemCopyBuffer = address;
+                _copiedUntil = Time.unscaledTime + 1.5f;
+            }
+        }
     }
+
+    private float _copiedUntil;
 
     #endregion
 }

@@ -74,8 +74,7 @@ public class PlayerShoot : NetworkBehaviour {
 
         if (isLocalPlayer)
             _grenadesTM = GameObject.Find("Grenades").GetComponent<TextMeshProUGUI>();
-        normalFOV = Cam.fieldOfView;
-        zoomFOV = normalFOV - 40;
+
         currentRecoil = activeWeapon.Recoil;
 
         if (!isLocalPlayer) activeWeapon.GetComponent<Animator>().enabled = false;
@@ -86,7 +85,8 @@ public class PlayerShoot : NetworkBehaviour {
         if (ButtonsControll.screensOver && !WinLoseScreens.winLoseActive && Equipment.getActiveWeapon() != null)
         { 
             currentRecoil = Equipment.getActiveWeapon().Recoil;
-//        weaponAnimator = activeWeapon.GetComponent<Animator>();
+            normalFOV = GameSettings.FieldOfView;
+            zoomFOV = normalFOV - GameSettings.AIM_FOV_REDUCTION;
 
             if (_grenades > _maxGrenades)
                 _grenades = _maxGrenades;

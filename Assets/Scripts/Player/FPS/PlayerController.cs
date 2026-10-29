@@ -97,8 +97,9 @@ public class PlayerController : NetworkBehaviour {
 #endif
 
 #if UNITY_STANDALONE
-                yRot = Input.GetAxisRaw("Mouse X") * SensitivityScale;
-                xRot = Input.GetAxis("Mouse Y") * SensitivityScale;
+                float sensitivity = SensitivityScale * GameSettings.MouseSensitivity;
+                yRot = Input.GetAxisRaw("Mouse X") * sensitivity;
+                xRot = Input.GetAxis("Mouse Y") * sensitivity * (GameSettings.InvertY ? -1f : 1f);
 #endif
 
                 Vector3 rotation = new Vector3(0f, yRot, 0f) * _lookSensitivity;
