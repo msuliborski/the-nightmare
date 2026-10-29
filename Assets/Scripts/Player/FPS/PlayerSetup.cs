@@ -77,30 +77,15 @@ public class PlayerSetup : NetworkBehaviour {
     }
 
     void EquipWeaponNotLocal() {
-        Transform rightHand = transform.GetChild(0).GetChild(0).GetChild(2).GetChild(2)
-            .GetChild(0).GetChild(0).GetChild(2).GetChild(0).GetChild(0).GetChild(0).transform;
-        GameObject weaponObject = Instantiate(_weaponObjectPrefab, rightHand);
-        if (weaponObject.GetComponent<Weapon>().Name.Equals("Rifle")) {
-            weaponObject.transform.localPosition = new Vector3(-0.061f, -0.442f, 0.308f);
-            weaponObject.transform.localRotation = Quaternion.Euler(-106.591f, 62.645f, 25.95499f);
-        }
-        else {
-            weaponObject.transform.localPosition = new Vector3(-0.115f, -0.407f, 0.333f);
-            weaponObject.transform.localRotation = Quaternion.Euler(-101.359f, 19.54199f, 79.521f);
-        }
-
         PlayerShoot shoot = GetComponent<PlayerShoot>();
         shoot.source = GetComponent<AudioSource>();
         shoot.Cam = _actionCamera;
         _equipment = GetComponent<PlayerEquipment>();
-        _equipment.Weapon1 = weaponObject.GetComponent<Weapon>();
-        _equipment.WeaponSound = weaponObject.GetComponent<AudioSource>();
-        _equipment.Weapon1.GetComponent<Animator>().enabled = false;
+        _equipment.Weapon1 = _equipment.CreateRemoteWeapon(_weaponObjectPrefab);
+        _equipment.WeaponSound = _equipment.Weapon1.GetComponent<AudioSource>();
         shoot.Equipment = _equipment;
 
         _actionCamera.transform.GetChild(1).GetComponent<Camera>().enabled = false;
-
-        GameManager.SetLayerRecursively(rightHand.GetChild(5).gameObject, "LocalPlayer");
     }
 
     public void EquipWeapon() {
