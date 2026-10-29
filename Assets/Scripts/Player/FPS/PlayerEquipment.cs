@@ -40,7 +40,11 @@ public class PlayerEquipment : NetworkBehaviour {
         return Weapon2;
     }
 
+    private const float REVIVE_DISTANCE = 3f;
+
     private void Update() {
+        // Interactions are input-driven; on other players' copies this used to fire on *our* key presses.
+        if (!isLocalPlayer) return;
         RaycastHit weaponFinder;
         if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out weaponFinder, 0.75f,
             _mask)) {
@@ -51,7 +55,7 @@ public class PlayerEquipment : NetworkBehaviour {
                 }
 
                 if (Input.GetKeyDown(KeyCode.E)) {
-                    Destroy(weaponFinder.collider.gameObject);
+                    CmdRemoveChairs(weaponFinder.collider.transform.position);
                 }
             }
             else if (weaponFinder.collider.CompareTag("Weapon")) {
@@ -59,7 +63,8 @@ public class PlayerEquipment : NetworkBehaviour {
                     pickUp.enabled = true;
                     pickUp.text = "Press E to pick up Rifle";
                 }
-                if (Input.GetKeyDown(KeyCode.E)) {
+                Weapon active = getActiveWeapon();
+                if (Input.GetKeyDown(KeyCode.E) && active != null && active.State == Weapon.WeaponState.idle && !_shoot.IsSwitchingWeapon) {
                     if (isLocalPlayer) {
                         _source.clip = _pickRifle;
                         _source.PlayOneShot(_source.clip);
@@ -73,8 +78,9 @@ public class PlayerEquipment : NetworkBehaviour {
 //                            CmdChangeWeapon(1);
                         }
                         else {
-                            Weapon2.CurrentAmmo = Weapon2.MaxAmmo + (Weapon2.MaxMagAmmo - Weapon2.CurrentMagAmmo);
-//                        Weapon2.CurrentMagAmmo = Weapon2.MaxMagAmmo;
+                            // CurrentAmmo is the total including the magazine, so a refill tops it up to MaxAmmo.
+                            // The old formula (MaxAmmo + missing rounds) could exceed the maximum.
+                            Weapon2.CurrentAmmo = Mathf.Max(Weapon2.CurrentAmmo, Weapon2.MaxAmmo);
                         }
                     }
                     else {
@@ -178,13 +184,38 @@ public class PlayerEquipment : NetworkBehaviour {
     [Command]
     private void CmdCallRevive(string name)
     {
+        PlayerManager target = GameManager.GetPlayer(name);
+        PlayerManager self = GetComponent<PlayerManager>();
+        if (target == null || !target.IsDead || self.IsDead) return;
+        if (Vector3.Distance(target.transform.position, transform.position) > REVIVE_DISTANCE) return;
         RpcCallRevive(name);
+    }
+
+    // Removable chairs are scene objects without a NetworkIdentity, so they are found by position.
+    [Command]
+    private void CmdRemoveChairs(Vector3 position)
+    {
+        RpcRemoveChairs(position);
+    }
+
+    [ClientRpc]
+    private void RpcRemoveChairs(Vector3 position)
+    {
+        foreach (GameObject chairs in GameObject.FindGameObjectsWithTag("removableChairs"))
+        {
+            if ((chairs.transform.position - position).sqrMagnitude < 0.01f)
+            {
+                Destroy(chairs);
+                return;
+            }
+        }
     }
 
     [ClientRpc]
     private void RpcCallRevive(string name)
     {
-        GameManager.Players[name].Revive();
+        PlayerManager target = GameManager.GetPlayer(name);
+        if (target != null) target.Revive();
     }
     
     public void PlayerShooting() {
