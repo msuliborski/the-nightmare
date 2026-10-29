@@ -72,7 +72,7 @@ public class CustomNetworkManager : NetworkManager
         RoomName = string.IsNullOrEmpty(roomName) ? DEFAULT_ROOM_NAME : roomName.Trim();
         networkPort = port;
         if (StartHost() != null) return true;
-        SetStatus("Could not host on port " + port + ". Is another game already running on it?");
+        SetStatus("Port " + port + " is busy");
         return false;
     }
 
@@ -85,7 +85,7 @@ public class CustomNetworkManager : NetworkManager
         _wasConnected = false;
         _rejectReason = null;
         StartClient();
-        SetStatus("Connecting to " + address + ":" + port + "...");
+        SetStatus("Connecting...");
     }
 
     // "192.168.0.10", "192.168.0.10:7777" or "my-pc.local:7778"
@@ -155,8 +155,8 @@ public class CustomNetworkManager : NetworkManager
         if (conn.hostId == -1) return;
 
         string reason = null;
-        if (MatchInProgress) reason = "The match has already started.";
-        else if (ConnectedPlayers > maxConnections) reason = "The game is full.";
+        if (MatchInProgress) reason = "Match already started";
+        else if (ConnectedPlayers > maxConnections) reason = "Game is full";
         if (reason != null) StartCoroutine(Reject(conn, reason));
     }
 
@@ -195,9 +195,9 @@ public class CustomNetworkManager : NetworkManager
     public override void OnClientDisconnect(NetworkConnection conn)
     {
         string status = null;
-        if (_rejectReason != null) status = "Host refused the connection: " + _rejectReason;
-        else if (!_wasConnected) status = "Could not connect to " + networkAddress + ":" + networkPort + ".";
-        else if (!_leavingOnPurpose) status = "Lost connection to the host.";
+        if (_rejectReason != null) status = _rejectReason;
+        else if (!_wasConnected) status = "Can't reach " + networkAddress;
+        else if (!_leavingOnPurpose) status = "Connection lost";
         base.OnClientDisconnect(conn);
         if (status != null) SetStatus(status);
     }

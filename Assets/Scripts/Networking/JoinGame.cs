@@ -68,7 +68,8 @@ public class JoinGame : MonoBehaviour
       _addressField.characterLimit = 64;
       _addressField.text = PlayerPrefs.GetString(LAST_ADDRESS_KEY, "");
       Text placeholder = _addressField.placeholder as Text;
-      if (placeholder != null) placeholder.text = "Host IP, e.g. 192.168.0.10";
+      // Short like the "Room name..." placeholder: a longer text wraps and gets clipped away entirely.
+      if (placeholder != null) placeholder.text = "Host IP...";
       _addressField.transform.SetSiblingIndex(index);
 
       Button connect = Instantiate(_refreshButton, column, false);
@@ -77,6 +78,10 @@ public class JoinGame : MonoBehaviour
       connect.onClick.AddListener(JoinByAddress);
       if (_connectSprite != null) connect.image.sprite = _connectSprite;
       connect.transform.SetSiblingIndex(index + 1);
+
+      // Two extra rows no longer fit with the original 50 px spacing (Refresh hung off the paper).
+      VerticalLayoutGroup layout = column.GetComponent<VerticalLayoutGroup>();
+      if (layout != null) layout.spacing = Mathf.Min(layout.spacing, 20f);
    }
 
    public void RefreshRoomList()
@@ -98,9 +103,8 @@ public class JoinGame : MonoBehaviour
 
       if (!string.IsNullOrEmpty(CustomNetworkManager.LastStatus)) _status.text = CustomNetworkManager.LastStatus;
       else if (_roomList.Count == 0)
-         _status.text = _networkManager.Discovery.IsListening
-            ? "Searching your network for games...\nOr type the host's IP below."
-            : "LAN search unavailable. Type the host's IP below.";
+         // Kept to one short line: the status sits over the panel title and longer text covered it.
+         _status.text = _networkManager.Discovery.IsListening ? "Searching..." : "No LAN search";
       else _status.text = "";
    }
 
@@ -128,7 +132,7 @@ public class JoinGame : MonoBehaviour
       int port;
       if (_addressField == null || !CustomNetworkManager.TryParseAddress(_addressField.text, out host, out port))
       {
-         _status.text = "Enter the host's IP address, e.g. 192.168.0.10 or 192.168.0.10:7777";
+         _status.text = "Enter host IP";
          return;
       }
       PlayerPrefs.SetString(LAST_ADDRESS_KEY, _addressField.text.Trim());
