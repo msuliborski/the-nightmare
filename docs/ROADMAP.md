@@ -1,36 +1,42 @@
 # Modernisation roadmap
 
-Planned follow-up pull requests, in order. Each one should stay reviewable on its own and keep
-the **Compile check** and **Build game** workflows green.
+Work lands on the `ai` integration branch through small PRs and reaches `master` through the umbrella
+PR. Each step must keep the **Compile check** and **Build game** workflows green.
 
-## Done in the first PR
+## Done
 
-- One-click Windows/macOS/Linux builds and releases (GameCI), license-free compile + UNET weaver check on PRs.
-- Direct IP hosting/joining and LAN discovery instead of the shut-down Unity matchmaker.
-- Server-authoritative damage, match phases and enemy movement; many desync and gameplay bug fixes
-  (see the commit messages).
+See [CHANGELOG.md](../CHANGELOG.md). In short:
+- CI builds and checks.
+- Direct-connect multiplayer with LAN discovery.
+- Server-authoritative gameplay.
+- Remote players' weapons, settings window, player names and downed markers.
+- Many bug fixes.
 
-## Next pull requests
+## Next
 
-1. **Play-test pass and polish of the new lobby** — verify the cloned *Host IP* field / *Connect*
-   button layout in the editor, tune positions, add a "copy my IP" button, show ping in the scoreboard.
-2. **Unity 2018.4 → 2021.3 LTS (then 6 LTS)** — upgrade the editor, replace Post Processing v1 and
-   Standard Assets scripts that no longer compile, move TextMesh Pro to the package version, re-bake
-   lighting/NavMesh, update the CI image. UNET is removed in 2019.1+ (HLAPI package until 2021),
-   so this goes together with the next item.
-3. **UNET → Mirror** — the API is nearly identical (`NetworkBehaviour`, `[Command]`, `[ClientRpc]`,
-   `[SyncVar]`); swap the components on prefabs/scenes, use the KCP transport, keep `LanDiscovery`.
-   Remove the remaining string-based object lookups in favour of `NetworkIdentity` references.
-4. **Internet play without port forwarding** — a relay/NAT-punch transport: Steam (FizzySteamworks)
-   if the game goes on Steam, otherwise Epic Online Services or Unity Relay; join codes instead of IPs.
-5. **Weapons visible to other players** — sync the active weapon (pistol/rifle) and its effects;
-   today remote players always hold the pistol model.
-6. **Server-side hit validation / lag compensation** — the server re-checks the shot ray against
-   rewound positions instead of trusting the client's hit report (currently only damage is capped).
-7. **Uncapped frame rate** — enable Rigidbody interpolation for the local player and remove the
-   50 FPS cap (logic is already frame-rate independent).
-8. **Settings menu** — mouse sensitivity, FOV, volume, resolution/fullscreen, key bindings.
-9. **Late join / reconnect** — sync the full match state to players joining a running match.
-10. **Code health** — remove unused test scenes/scripts and debug logs, split `GameManager`,
-    replace `GetChild(n)` chains with serialized references, add play-mode tests for the match flow.
-11. **Repository size** — move large binary assets to Git LFS (the history is ~2 GB) to speed up CI checkouts.
+1. **Play-test pass**: verify the lobby *Host IP* field and *Connect* button layout and the IMGUI
+   panels in a real build, and polish their look.
+2. **Unity 2018.4 → 2021.3 LTS (then 6 LTS)**:
+   - Upgrade the editor.
+   - Replace Post Processing v1 and the Standard Assets scripts that no longer compile.
+   - Move TextMesh Pro to the package version.
+   - Re-bake lighting and NavMesh, and update the CI image.
+
+   UNET is removed in 2019.1+ (an HLAPI package exists until 2021), so this goes together with the next item.
+3. **UNET → Mirror**: the API is nearly identical (`NetworkBehaviour`, `[Command]`, `[ClientRpc]`,
+   `[SyncVar]`). Swap the components on prefabs and scenes, use the KCP transport and keep `LanDiscovery`.
+   Replace the remaining string-based object lookups with `NetworkIdentity` references.
+4. **Internet play without port forwarding**: a relay/NAT-punch transport. Use Steam (FizzySteamworks)
+   if the game goes on Steam, otherwise Epic Online Services or Unity Relay. Join codes instead of IPs.
+5. **Server-side hit validation / lag compensation**: the server re-checks the shot ray against
+   rewound positions instead of trusting the client's hit report. Today only the damage is capped.
+6. **Uncapped frame rate**: enable Rigidbody interpolation for the local player and remove the
+   50 FPS cap. The game logic is already frame-rate independent.
+7. **Key rebinding** in the settings window.
+8. **Late join / reconnect**: sync the full match state to players joining a running match.
+9. **Code health**:
+   - Remove unused test scenes and scripts.
+   - Split `GameManager`.
+   - Replace `GetChild(n)` chains with serialized references.
+   - Add play-mode tests for the match flow.
+10. **Repository size**: move large binary assets to Git LFS (the history is ~2 GB) to speed up CI checkouts.
