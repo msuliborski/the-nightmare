@@ -132,7 +132,8 @@ public class PlayerShoot : NetworkBehaviour {
                 if (_grenades > 0)
                 {
                     _grenades--;
-                    CmdSpawnGrenade(transform.position, transform.rotation, transform.forward,
+                    // Thrown where the player looks (it used to always fly flat along the body's forward).
+                    CmdSpawnGrenade(transform.position, transform.rotation, Cam.transform.forward,
                         (_grenadeTimer + 0.5f) / 3);
                     _playerAnimator.SetTrigger("throwing");
                     _grenadeTimer = 0f;
@@ -390,10 +391,16 @@ public class PlayerShoot : NetworkBehaviour {
     }
 
     [Command]
-    void CmdSpawnGrenade(Vector3 playerPos, Quaternion playerRot, Vector3 forwardVector, float force) {
-        GameObject grenade = Instantiate(_grenadePrefab, playerPos + forwardVector + Vector3.up / 2, playerRot);
+    void CmdSpawnGrenade(Vector3 playerPos, Quaternion playerRot, Vector3 aimDirection, float force) {
+        // Charge is (0.5..3.5)/3 on the client; clamp what a client may send.
+        force = Mathf.Clamp(force, 0f, 3.5f / 3f);
+        aimDirection = aimDirection.sqrMagnitude > 0.0001f ? aimDirection.normalized : transform.forward;
+        // Spawn in front of the body at chest height, independent of the aim pitch, so it never starts in the floor.
+        Vector3 flatForward = Vector3.ProjectOnPlane(aimDirection, Vector3.up);
+        if (flatForward.sqrMagnitude < 0.0001f) flatForward = transform.forward;
+        GameObject grenade = Instantiate(_grenadePrefab, playerPos + flatForward.normalized + Vector3.up / 2, playerRot);
         Rigidbody rb = grenade.GetComponent<Rigidbody>();
-        rb.velocity = force * (15 * forwardVector + 5 * Vector3.up);
+        rb.velocity = force * (15 * aimDirection + 5 * Vector3.up);
         NetworkServer.Spawn(grenade);
     }
 }
