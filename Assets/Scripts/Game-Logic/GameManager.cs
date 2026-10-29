@@ -630,7 +630,9 @@ public class GameManager : NetworkBehaviour
         Rigidbody rigidbody = LocalPlayer.GetComponent<Rigidbody>();
         rigidbody.collisionDetectionMode = CollisionDetectionMode.Discrete;
         rigidbody.isKinematic = true;
-        LocalPlayer.transform.position = new Vector3(pos.x + randX, pos.y + 1f, pos.z + randZ);
+        Vector3 target = new Vector3(pos.x + randX, pos.y + 1f, pos.z + randZ);
+        LocalPlayer.transform.position = target;
+        rigidbody.position = target; // with interpolation the transform alone can be pulled back
         rigidbody.isKinematic = false;
         rigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
         TurnOnGridRenders(false);
