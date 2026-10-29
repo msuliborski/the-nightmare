@@ -30,6 +30,15 @@ defines+=";UNITY_STANDALONE;ENABLE_MONO;NET_4_6;CROSS_PLATFORM_INPUT;UNITY_POST_
 nowarn="0618,0414,0169,0649,0219,0067,0108,0114,0162,0168,0472,1635"
 
 cd "$PROJECT"
+
+# CI builds run the Linux editor, which cannot import H.264/MP4/MOV video: such clips end up empty in
+# every build (the main menu showed a white screen). Video must be WebM (VP8) or OGV.
+bad_videos=$(find Assets -type f \( -iname '*.mp4' -o -iname '*.mov' -o -iname '*.m4v' -o -iname '*.avi' \) | head -20)
+if [ -n "$bad_videos" ]; then
+  echo "error: video formats the Linux editor cannot import (convert to WebM/VP8):"
+  echo "$bad_videos"
+  exit 1
+fi
 # TextMesh Pro lives in a UPM package that is only resolved by the editor, so a tiny stub stands in for it.
 { find Assets -name '*.cs' -not -path '*/Editor/*'; echo .github/ci/TMProStub.cs; } | sed 's/.*/"&"/' > "$OUT/runtime.rsp"
 find Assets -name '*.cs' -path '*/Editor/*' | sed 's/.*/"&"/' > "$OUT/editor.rsp"
