@@ -194,7 +194,6 @@ public class PlacementController : NetworkBehaviour
                     && GameManager.Instance.BuildingPoints[posAndTag].Buildable
                     )
                 {
-                    Debug.Log("clicked");
                     PlaySound(bop);
                     if (GameManager.CurrentState == GameManager.GameState.Fighting)
                         GameManager.TurnOnGridRenders(false);

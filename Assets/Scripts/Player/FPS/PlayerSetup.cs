@@ -57,11 +57,9 @@ public class PlayerSetup : NetworkBehaviour {
             _clipsManager.playerEnabled = true;
             GameManager.Instance.SetCameraForBillboards(_actionCamera);
             
-            GameObject g = GameObject.Find("LobbySpawn");
-            if (g == null) Debug.Log("g to null");
-            else Debug.Log("g to nie null");
             Vector3 lobbySpawn = GameObject.Find("LobbySpawn").transform.position;
-            Vector3 randomStartPosition = new Vector3(lobbySpawn.x + Random.Range(-1, 1), lobbySpawn.y, lobbySpawn.z + Random.Range(-1, 1));
+            // Float overload: the int one only returned -1 or 0, so players spawned almost on top of each other.
+            Vector3 randomStartPosition = new Vector3(lobbySpawn.x + Random.Range(-1f, 1f), lobbySpawn.y, lobbySpawn.z + Random.Range(-1f, 1f));
             
             Rigidbody rigidbody = GetComponent<Rigidbody>();
             rigidbody.collisionDetectionMode = CollisionDetectionMode.Discrete;
