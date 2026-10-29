@@ -8,6 +8,9 @@ public static class GameSettings
     private const string FOV_KEY = "settings.fieldOfView";
     private const string VOLUME_KEY = "settings.masterVolume";
     private const string QUALITY_KEY = "settings.quality";
+    private const string MAX_FPS_KEY = "settings.maxFps";
+    // 0 = unlimited. The game used to be hard-capped at 50 FPS to hide a mouse-input bug (fixed since).
+    public static readonly int[] MAX_FPS_OPTIONS = { 30, 60, 120, 144, 240, 0 };
     private const string NAME_KEY = "settings.playerName";
     public const int MAX_NAME_LENGTH = 16;
 
@@ -73,6 +76,21 @@ public static class GameSettings
         }
     }
 
+    public static int MaxFps
+    {
+        get { return PlayerPrefs.GetInt(MAX_FPS_KEY, 60); }
+        set
+        {
+            PlayerPrefs.SetInt(MAX_FPS_KEY, Mathf.Max(0, value));
+            ApplyFrameRate();
+        }
+    }
+
+    public static void ApplyFrameRate()
+    {
+        Application.targetFrameRate = MaxFps > 0 ? MaxFps : -1;
+    }
+
     public static void Save()
     {
         PlayerPrefs.Save();
@@ -82,6 +100,7 @@ public static class GameSettings
     private static void ApplyOnStartup()
     {
         AudioListener.volume = MasterVolume;
+        ApplyFrameRate();
         if (PlayerPrefs.HasKey(QUALITY_KEY)) QualitySettings.SetQualityLevel(QualityLevel, true);
     }
 }

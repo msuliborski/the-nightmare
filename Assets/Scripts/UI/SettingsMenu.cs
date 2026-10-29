@@ -97,6 +97,14 @@ public class SettingsMenu : MonoBehaviour
         if (!Mathf.Approximately(volume, GameSettings.MasterVolume)) GameSettings.MasterVolume = volume;
 
         GUILayout.Space(8);
+        GUILayout.Label("Max FPS (ignored while V-Sync is on in the chosen quality level)");
+        int[] fpsOptions = GameSettings.MAX_FPS_OPTIONS;
+        int fpsIndex = System.Array.IndexOf(fpsOptions, GameSettings.MaxFps);
+        string[] fpsLabels = System.Array.ConvertAll(fpsOptions, f => f == 0 ? "Unlimited" : f.ToString());
+        int newFpsIndex = GUILayout.SelectionGrid(fpsIndex, fpsLabels, fpsOptions.Length);
+        if (newFpsIndex != fpsIndex && newFpsIndex >= 0) GameSettings.MaxFps = fpsOptions[newFpsIndex];
+
+        GUILayout.Space(8);
         string[] qualityNames = QualitySettings.names;
         if (qualityNames.Length > 0)
         {

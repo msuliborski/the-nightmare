@@ -29,7 +29,9 @@ public class PlayerSetup : NetworkBehaviour {
             GetComponentInChildren<Arrow>().gameObject.SetActive(false);
         }
         else {
-            Application.targetFrameRate = 50;
+            GameSettings.ApplyFrameRate();
+            // Physics runs at 50 Hz; interpolate the local body so rendering above that stays smooth.
+            GetComponent<Rigidbody>().interpolation = RigidbodyInterpolation.Interpolate;
             EquipWeapon();
            
             _bulletshud = GameObject.Find("bulletsNumber").GetComponent<BulletsHUD>();
@@ -64,11 +66,10 @@ public class PlayerSetup : NetworkBehaviour {
             Rigidbody rigidbody = GetComponent<Rigidbody>();
             rigidbody.collisionDetectionMode = CollisionDetectionMode.Discrete;
             rigidbody.isKinematic = true;
-            transform.position = new Vector3(randomStartPosition.x, randomStartPosition.y, randomStartPosition.z);
+            transform.position = randomStartPosition;
+            rigidbody.position = randomStartPosition;
             rigidbody.isKinematic = false;
             rigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
-            
-            transform.position = randomStartPosition;
         }
         
         GetComponent<PlayerManager>().Setup();
