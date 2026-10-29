@@ -36,7 +36,8 @@
   - A second match in the same session works.
 
 ### New
-- Settings window: mouse sensitivity, invert Y, FOV, volume, graphics quality, resolution/fullscreen, player name.
+- Settings window: mouse sensitivity, invert Y, FOV, volume, graphics quality, resolution/fullscreen, max FPS, player name.
+- No more hard 50 FPS cap (default 60, configurable up to unlimited), with smooth interpolated player movement.
 - Command line: `-host [-name "Room"] [-port 7777]`, `-connect <ip[:port]>`.
 
 ### Under the hood
