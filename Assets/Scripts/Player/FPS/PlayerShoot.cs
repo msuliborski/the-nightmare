@@ -217,6 +217,7 @@ public class PlayerShoot : NetworkBehaviour {
         toHide.gameObject.SetActive(false);
         toShow.gameObject.SetActive(true);
         IsSwitchingWeapon = false;
+        Equipment.CmdSetActiveWeapon(toShow.GetComponent<Weapon>().Id);
     }
 
     private void OnDisable() {

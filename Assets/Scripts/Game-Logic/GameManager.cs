@@ -640,6 +640,7 @@ public class GameManager : NetworkBehaviour
         Destroy(playerEquipment.Weapon1.gameObject);
         if (playerEquipment.Weapon2 != null) Destroy(playerEquipment.Weapon2.gameObject);
         LocalPlayer.gameObject.GetComponent<PlayerSetup>().EquipWeapon();
+        playerEquipment.CmdSetActiveWeapon(playerEquipment.Weapon1.Id); // everyone starts room 1 with the pistol
 //        playerEquipment.Weapon1.resetAmmo();
 //        playerEquipment.Weapon1.gameObject.SetActive(true);
 //        playerEquipment.Weapon1.transform.localPosition = new Vector3(0.02f, 0.03f, -0.22f);

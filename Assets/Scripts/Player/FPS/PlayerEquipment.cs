@@ -75,7 +75,7 @@ public class PlayerEquipment : NetworkBehaviour {
                             Weapon1.transform.localPosition = new Vector3(0.02f, 0.03f, -0.22f);
                             Weapon1.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
                             Weapon1.gameObject.SetActive(false);
-//                            CmdChangeWeapon(1);
+                            CmdSetActiveWeapon(Weapon2.Id);
                         }
                         else {
                             // CurrentAmmo is the total including the magazine, so a refill tops it up to MaxAmmo.
@@ -227,44 +227,50 @@ public class PlayerEquipment : NetworkBehaviour {
     }
 
 
+    // Which weapon a player holds is shown to everybody else. Before, remote players always held the
+    // pistol model (the old RpcChangeWeapon was commented out because it indexed hand children that
+    // did not exist yet), so muzzle flashes and smoke also came from the wrong gun.
     [Command]
-    public void CmdChangeWeapon(int weaponId) {
-        RpcChangeWeapon(weaponId);
+    public void CmdSetActiveWeapon(int weaponId) {
+        if (weaponId < 0 || weaponId >= GameManager.Instance.Weapons.Length) return;
+        RpcSetActiveWeapon(weaponId);
     }
 
     [ClientRpc]
-    void RpcChangeWeapon(int weaponId) {
-        if (!isLocalPlayer) {
-            Transform rightHand = transform.GetChild(0).GetChild(0).GetChild(2).GetChild(2)
-                .GetChild(0).GetChild(0).GetChild(2).GetChild(0).GetChild(0).GetChild(0).transform;
-            if (weaponId == 1) {
-                rightHand.GetChild(5).gameObject.SetActive(false);
-                rightHand.GetChild(6).gameObject.SetActive(true);
-            } else {
-                rightHand.GetChild(5).gameObject.SetActive(true);
-                rightHand.GetChild(6).gameObject.SetActive(false);
-            }
+    void RpcSetActiveWeapon(int weaponId) {
+        if (isLocalPlayer || Weapon1 == null) return;
 
-            GameObject weaponObject =
-                Instantiate(GameManager.Instance.Weapons[weaponId],
-                    rightHand); //_cam.transform.GetChild(0).transform);//tutaj
-            if (weaponObject.GetComponent<Weapon>().Name.Equals("Rifle")) {
-                weaponObject.transform.localPosition = new Vector3(-0.061f, -0.442f, 0.308f);
-                weaponObject.transform.localRotation = Quaternion.Euler(-106.591f, 62.645f, 25.95499f);
-            }
-            else {
-                weaponObject.transform.localPosition = new Vector3(-0.115f, -0.407f, 0.333f);
-                weaponObject.transform.localRotation = Quaternion.Euler(-101.359f, 19.54199f, 79.521f);
-            }
-
-            Weapon2 = weaponObject.GetComponent<Weapon>();
-            WeaponSound = weaponObject.GetComponent<AudioSource>();
-            Weapon2.State = Weapon.WeaponState.idle;
-            Weapon2.CurrentMagAmmo = Weapon1.MaxMagAmmo;
-            Weapon2.CurrentAmmo = Weapon1.MaxAmmo;
-            weaponObject.GetComponent<Animator>().enabled = false;
-            GameManager.SetLayerRecursively(weaponObject, "LocalPlayer");
+        if (weaponId == Weapon1.Id) {
+            Weapon1.gameObject.SetActive(true);
+            if (Weapon2 != null) Weapon2.gameObject.SetActive(false);
+            return;
         }
+
+        if (Weapon2 == null || Weapon2.Id != weaponId) {
+            if (Weapon2 != null) Destroy(Weapon2.gameObject);
+            Weapon2 = CreateRemoteWeapon(GameManager.Instance.Weapons[weaponId]);
+        }
+        Weapon2.gameObject.SetActive(true);
+        Weapon1.gameObject.SetActive(false);
+    }
+
+    // Third-person weapon held by another player's model; used for its visuals and muzzle effects only.
+    public Weapon CreateRemoteWeapon(GameObject weaponPrefab) {
+        Transform rightHand = transform.GetChild(0).GetChild(0).GetChild(2).GetChild(2)
+            .GetChild(0).GetChild(0).GetChild(2).GetChild(0).GetChild(0).GetChild(0).transform;
+        GameObject weaponObject = Instantiate(weaponPrefab, rightHand);
+        Weapon weapon = weaponObject.GetComponent<Weapon>();
+        if (weapon.Name.Equals("Rifle")) {
+            weaponObject.transform.localPosition = new Vector3(-0.061f, -0.442f, 0.308f);
+            weaponObject.transform.localRotation = Quaternion.Euler(-106.591f, 62.645f, 25.95499f);
+        }
+        else {
+            weaponObject.transform.localPosition = new Vector3(-0.115f, -0.407f, 0.333f);
+            weaponObject.transform.localRotation = Quaternion.Euler(-101.359f, 19.54199f, 79.521f);
+        }
+        weaponObject.GetComponent<Animator>().enabled = false;
+        GameManager.SetLayerRecursively(weaponObject, "LocalPlayer");
+        return weapon;
     }
 
     [ClientRpc]
