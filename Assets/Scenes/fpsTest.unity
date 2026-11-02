@@ -1072,6 +1072,7 @@ Transform:
   m_Name: 
   m_EditorClassIdentifier: 
   serverOnly: 0
+  sceneId: 3753095592
 --- !u!1 &1685869526
 GameObject:
   m_ObjectHideFlags: 0

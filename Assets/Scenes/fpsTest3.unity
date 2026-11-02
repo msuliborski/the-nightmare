@@ -10972,6 +10972,7 @@ Transform:
   m_Name: 
   m_EditorClassIdentifier: 
   serverOnly: 0
+  sceneId: 1839639417
 --- !u!1 &1435537380 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100006, guid: efbf73c0b25968c4b9cc326426bd3a6c,

@@ -2238,6 +2238,7 @@ Transform:
   m_Name: 
   m_EditorClassIdentifier: 
   serverOnly: 0
+  sceneId: 4119374925
 --- !u!54 &24910895
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -16589,6 +16590,7 @@ Transform:
   m_Name: 
   m_EditorClassIdentifier: 
   serverOnly: 0
+  sceneId: 1724858101
 --- !u!54 &168681710
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -29721,6 +29723,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1278584741415763376, guid: fff42774a33b7704f8d83ea810557ad6, type: 3}
+      propertyPath: sceneId
+      value: 1074742591
+      objectReference: {fileID: 0}
     - target: {fileID: 940214644287376405, guid: fff42774a33b7704f8d83ea810557ad6,
         type: 3}
       propertyPath: m_Name
@@ -32428,6 +32434,7 @@ Transform:
   m_Name: 
   m_EditorClassIdentifier: 
   serverOnly: 0
+  sceneId: 3138031315
 --- !u!54 &322794416
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -92342,6 +92349,7 @@ Transform:
   m_Name: 
   m_EditorClassIdentifier: 
   serverOnly: 0
+  sceneId: 3037131093
 --- !u!54 &899258541
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -98344,6 +98352,7 @@ Transform:
   m_Name: 
   m_EditorClassIdentifier: 
   serverOnly: 0
+  sceneId: 3436796741
 --- !u!54 &946703731
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -102060,6 +102069,7 @@ Transform:
   m_Name: 
   m_EditorClassIdentifier: 
   serverOnly: 0
+  sceneId: 448866060
 --- !u!54 &984381729
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -147519,6 +147529,7 @@ Transform:
   m_Name: 
   m_EditorClassIdentifier: 
   serverOnly: 0
+  sceneId: 1307659307
 --- !u!54 &1430475658
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -203266,6 +203277,7 @@ Transform:
   m_Name: 
   m_EditorClassIdentifier: 
   serverOnly: 0
+  sceneId: 3722384244
 --- !u!54 &1961346187
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -213194,6 +213206,7 @@ GameObject:
   m_Name: 
   m_EditorClassIdentifier: 
   serverOnly: 0
+  sceneId: 3799044390
 --- !u!114 &2065429341
 MonoBehaviour:
   m_ObjectHideFlags: 0

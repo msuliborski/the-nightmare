@@ -26,6 +26,9 @@ if grep -rlE 'using UnityEngine\.Networking;|UnityEngine\.Networking\.(NetworkBe
 fi
 
 command -v python3 >/dev/null || { apt-get update -qq && apt-get install -y -qq python3 >/dev/null; }
+
+# Mirror sceneIds must be saved in the scenes (not generated per build) so all platforms agree.
+python3 Tools/assign_scene_ids.py --check
 OUT=$(mktemp -d)
 status=0
 for platform in WIN OSX LINUX; do

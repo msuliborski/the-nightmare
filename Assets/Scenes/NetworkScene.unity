@@ -1100,6 +1100,7 @@ GameObject:
   m_Name: 
   m_EditorClassIdentifier: 
   serverOnly: 0
+  sceneId: 1594575991
 --- !u!114 &1796741811
 MonoBehaviour:
   m_ObjectHideFlags: 0

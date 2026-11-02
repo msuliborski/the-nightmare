@@ -300,6 +300,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8338500315076982197, guid: c3ce8b8bd4727824c98c24dd0411c3a7, type: 3}
+      propertyPath: sceneId
+      value: 2291630628
+      objectReference: {fileID: 0}
     - target: {fileID: 2361017057787199711, guid: c3ce8b8bd4727824c98c24dd0411c3a7,
         type: 3}
       propertyPath: m_Name
@@ -1785,6 +1789,7 @@ Transform:
   m_Name: 
   m_EditorClassIdentifier: 
   serverOnly: 0
+  sceneId: 1025340213
 --- !u!1 &1685869526
 GameObject:
   m_ObjectHideFlags: 0
