@@ -53,6 +53,9 @@ jobs:
     timeout-minutes: 180
     strategy:
       fail-fast: false
+      # One at a time: all jobs activate the same Unity Personal license, and parallel activations
+      # made Unity kill the editors of the other jobs (exit code 137 a second after start-up).
+      max-parallel: 1
       matrix:
         include: ${{ fromJson(needs.matrix.outputs.include) }}
     steps:
