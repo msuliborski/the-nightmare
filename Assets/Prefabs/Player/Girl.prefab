@@ -676,6 +676,7 @@ MonoBehaviour:
   _cameraRotationLimit: 85
   isSpeintingToggle: 0
 --- !u!114 &8338500315076982197
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -688,6 +689,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   serverOnly: 0
 --- !u!114 &892608862186438454
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -700,6 +702,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncDirection: 1
 --- !u!114 &5152246704149243696
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -821,6 +824,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &4371665320065314336
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}

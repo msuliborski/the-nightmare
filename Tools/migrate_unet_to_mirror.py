@@ -66,8 +66,9 @@ def field(body, name):
 
 
 def std_lines(body, new_script):
-    out = []
-    for line in body.splitlines(True):
+    # Keep the class line ("MonoBehaviour:") and the standard Unity fields; drop the UNET fields.
+    out = [body.splitlines(True)[0]]
+    for line in body.splitlines(True)[1:]:
         key = line.strip().split(':')[0]
         if line.startswith('  ') and not line.startswith('   ') and key in STD:
             out.append(new_script if key == 'm_Script' else line)

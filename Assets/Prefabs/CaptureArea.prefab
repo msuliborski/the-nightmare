@@ -114,6 +114,7 @@ MonoBehaviour:
   _progress: 0
   _step: 0.3
 --- !u!114 &1065934451943923818
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}

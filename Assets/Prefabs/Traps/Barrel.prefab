@@ -248,6 +248,7 @@ BoxCollider:
   m_Size: {x: 0.7595874, y: 1.330368, z: 0.7577851}
   m_Center: {x: 0.004144907, y: 0.67, z: 0.010092378}
 --- !u!114 &2396151932420422939
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}

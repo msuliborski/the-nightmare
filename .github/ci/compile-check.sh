@@ -27,6 +27,19 @@ fi
 
 command -v python3 >/dev/null || { apt-get update -qq && apt-get install -y -qq python3 >/dev/null; }
 
+# Every object in a text scene/prefab starts with "--- !u!<class> &<id>" followed by its class name line;
+# without it Unity silently drops the component (a scripted edit once lost 51 of them).
+python3 - <<'PY'
+import glob, re, sys
+bad = []
+for f in glob.glob('Assets/**/*.unity', recursive=True) + glob.glob('Assets/**/*.prefab', recursive=True):
+    text = open(f, encoding='utf-8', errors='replace').read()
+    if text.startswith('%YAML'):
+        bad += ['%s: %s' % (f, m.group(1)) for m in re.finditer(r'(?m)^(--- !u!\d+ &-?\d+(?: stripped)?)\n(?![A-Za-z]\w*:\s*$)', text)]
+for b in bad[:20]: print('error: object without a class line in', b)
+sys.exit(1 if bad else 0)
+PY
+
 # Mirror sceneIds must be saved in the scenes (not generated per build) so all platforms agree.
 python3 Tools/assign_scene_ids.py --check
 OUT=$(mktemp -d)

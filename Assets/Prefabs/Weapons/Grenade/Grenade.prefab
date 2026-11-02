@@ -173,6 +173,7 @@ Rigidbody:
   m_Constraints: 0
   m_CollisionDetection: 1
 --- !u!114 &5962763723503294883
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -185,6 +186,7 @@ Rigidbody:
   m_EditorClassIdentifier: 
   serverOnly: 0
 --- !u!114 &2928674480685709847
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}

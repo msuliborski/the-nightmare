@@ -48,16 +48,18 @@ public static class NightmareBuild
 
         // Unity reports "Succeeded" even when Mirror logged that scene objects have no sceneId, which
         // gives a game whose multiplayer cannot work, so treat those errors as a failed build.
-        int networkErrors = 0;
+        var networkErrors = new System.Collections.Generic.List<string>();
         Application.LogCallback onLog = (message, stack, type) =>
         {
-            if ((type == LogType.Error || type == LogType.Exception) && message.Contains("sceneId")) networkErrors++;
+            if ((type == LogType.Error || type == LogType.Exception) && message.Contains("sceneId")) networkErrors.Add(message);
         };
         Application.logMessageReceived += onLog;
         BuildReport report = Build(target, path, version);
         Application.logMessageReceived -= onLog;
-        if (networkErrors > 0) Debug.LogError("[NightmareBuild] " + networkErrors + " Mirror sceneId errors, failing the build.");
-        EditorApplication.Exit(report.summary.result == BuildResult.Succeeded && networkErrors == 0 ? 0 : 1);
+        // Repeated at the end so it shows up in the tail of the CI log.
+        if (networkErrors.Count > 0)
+            Debug.LogError("[NightmareBuild] Mirror sceneId errors, failing the build:\n  " + string.Join("\n  ", networkErrors));
+        EditorApplication.Exit(report.summary.result == BuildResult.Succeeded && networkErrors.Count == 0 ? 0 : 1);
     }
 
     private static BuildReport Build(BuildTarget target, string path, string version)
