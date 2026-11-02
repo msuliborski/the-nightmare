@@ -67,7 +67,9 @@ jobs:
           haskell: true
           large-packages: false
           docker-images: true
-          swap-storage: true
+          # Keep the swap file: without it the editor was sometimes OOM-killed (exit code 137)
+          # while loading the project on the 16 GB runner.
+          swap-storage: false
 
       - name: Check Unity license secrets
         shell: bash
@@ -122,6 +124,13 @@ jobs:
           versioning: Custom
           version: ${{ steps.version.outputs.version }}
           allowDirtyBuild: true
+
+      - name: Show out-of-memory kills
+        if: failure()
+        shell: bash
+        run: |
+          free -h || true
+          sudo dmesg 2>/dev/null | grep -iE 'out of memory|oom-kill|killed process' | tail -20 || true
 
       # tar keeps the executable bits that a plain zip of the macOS .app / Linux binary would lose.
       - name: Package
