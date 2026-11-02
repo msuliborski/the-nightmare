@@ -68,6 +68,7 @@ public static class NightmareBuild
         if (scenes.Length == 0) throw new InvalidOperationException("No scenes enabled in Build Settings.");
 
         // Networked prefabs / scene objects need Mirror ids before they are baked into the player.
+        UrpConversion.ConvertIfNeeded();
         NetworkIdBaker.BakeAll();
         PlayerSettings.bundleVersion = version;
         if (target == BuildTarget.StandaloneOSX && !path.EndsWith(".app")) path += ".app";

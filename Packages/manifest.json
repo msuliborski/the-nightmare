@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "com.unity.ugui": "2.6.0",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.animation": "1.0.0",
     "com.unity.modules.audio": "1.0.0",
@@ -21,6 +20,8 @@
     "com.unity.modules.unitywebrequest": "1.0.0",
     "com.unity.modules.vehicles": "1.0.0",
     "com.unity.modules.video": "1.0.0",
-    "com.unity.modules.wind": "1.0.0"
+    "com.unity.modules.wind": "1.0.0",
+    "com.unity.render-pipelines.universal": "17.6.0",
+    "com.unity.ugui": "2.6.0"
   }
 }
