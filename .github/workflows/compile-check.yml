@@ -1,6 +1,6 @@
 name: Compile check
 
-# Fast C# compile check against the Unity 2018.4 assemblies. No Unity license needed.
+# Fast C# compile check against the Unity 6.6 compiler and assemblies. No Unity license needed.
 on:
   pull_request:
   push:
@@ -10,8 +10,8 @@ on:
 jobs:
   compile:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
-    container: unityci/editor:ubuntu-2018.4.3f1-base-3
+    timeout-minutes: 30
+    container: unityci/editor:ubuntu-6000.6.7f1-base-3
     steps:
       - uses: actions/checkout@v4
         with:

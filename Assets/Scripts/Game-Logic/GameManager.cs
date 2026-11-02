@@ -1,6 +1,6 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.Networking;
+using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;

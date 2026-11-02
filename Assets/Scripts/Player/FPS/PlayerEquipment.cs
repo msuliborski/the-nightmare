@@ -1,7 +1,7 @@
 ﻿using System;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Networking;
+using Mirror;
 using UnityEngine.UI;
 
 public class PlayerEquipment : NetworkBehaviour {

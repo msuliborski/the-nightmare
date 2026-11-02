@@ -10,6 +10,7 @@ public class SettingsMenu : MonoBehaviour
     private const string MAIN_MENU_SCENE = "MainMenu";
     private const string LOBBY_SCENE = "LobbyTests";
     private const float WINDOW_WIDTH = 440f;
+    private const int WINDOW_ID = 0x5E77;
 
     private bool _open;
     private Rect _window;
@@ -69,7 +70,7 @@ public class SettingsMenu : MonoBehaviour
             if (GUI.Button(new Rect(10f, Screen.height - 50f, 140f, 40f), "Settings", _buttonStyle)) OpenWindow();
             return;
         }
-        _window = GUILayout.Window(GetInstanceID(), _window, DrawWindow, "Settings");
+        _window = GUILayout.Window(WINDOW_ID, _window, DrawWindow, "Settings");
     }
 
     private string _nameField;

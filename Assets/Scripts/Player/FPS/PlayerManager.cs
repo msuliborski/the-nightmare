@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Networking;
+using Mirror;
 using Random = System.Random;
 
 public class PlayerManager : NetworkBehaviour
@@ -46,7 +46,6 @@ public class PlayerManager : NetworkBehaviour
     [SerializeField] private GameObject _reviveCollider;
     private GameObject boy;
     private GameObject girl;
-    private NetworkAnimator _netAnim;
 
 
 
@@ -90,11 +89,9 @@ public class PlayerManager : NetworkBehaviour
 
     public void Setup()
     {
-        _netAnim = GetComponent<NetworkAnimator>();
         
         boy = transform.GetChild(0).GetChild(0).gameObject;
         girl = transform.GetChild(0).GetChild(1).gameObject;
-//        setModel();
         _playerAnimator = boy.GetComponent<Animator>();
         if (isLocalPlayer) SetLayerRecursively(transform.GetChild(0).gameObject, 12);
         _rigidbody = GetComponent<Rigidbody>();
@@ -146,29 +143,6 @@ public class PlayerManager : NetworkBehaviour
         
     }
 
-    private void setModel()
-    {
-        int rand = UnityEngine.Random.Range(0, 1);
-        if (rand == 0)
-        {
-            boy.SetActive(true);
-            girl.SetActive(false);
-            _netAnim.animator = boy.GetComponent<Animator>();
-            _playerAnimator = boy.GetComponent<Animator>();
-        }
-        else if (rand == 1)
-        {
-            boy.SetActive(false);
-            girl.SetActive(true);
-            _netAnim.animator = girl.GetComponent<Animator>();
-            _playerAnimator = girl.GetComponent<Animator>();
-        }
-
-        for (int i = 0; i < 4; i++)
-        {
-            _netAnim.SetParameterAutoSend(i, true);
-        }
-    }
     
     private void SetLayerRecursively(GameObject obj, int newLayer)
     {

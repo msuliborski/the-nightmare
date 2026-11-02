@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using UnityEngine.Networking;
+using Mirror;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerMotor : NetworkBehaviour {

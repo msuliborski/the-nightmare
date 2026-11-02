@@ -52,7 +52,7 @@ public class FullscreenUIFitter : MonoBehaviour
 
     private void FitAll()
     {
-        foreach (CanvasScaler scaler in FindObjectsOfType<CanvasScaler>())
+        foreach (CanvasScaler scaler in FindObjectsByType<CanvasScaler>(FindObjectsSortMode.None))
         {
             if (scaler.uiScaleMode != CanvasScaler.ScaleMode.ScaleWithScreenSize) continue;
             var canvasRect = scaler.GetComponent<RectTransform>();

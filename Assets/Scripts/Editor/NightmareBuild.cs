@@ -55,6 +55,8 @@ public static class NightmareBuild
         string[] scenes = EditorBuildSettings.scenes.Where(s => s.enabled).Select(s => s.path).ToArray();
         if (scenes.Length == 0) throw new InvalidOperationException("No scenes enabled in Build Settings.");
 
+        // Networked prefabs / scene objects need Mirror ids before they are baked into the player.
+        NetworkIdBaker.BakeAll();
         PlayerSettings.bundleVersion = version;
         if (target == BuildTarget.StandaloneOSX && !path.EndsWith(".app")) path += ".app";
         Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(path)));

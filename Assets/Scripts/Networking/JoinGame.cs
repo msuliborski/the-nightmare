@@ -59,7 +59,7 @@ public class JoinGame : MonoBehaviour
       _addressField.gameObject.SetActive(true);
       // Drop the template's persistent bindings (it belongs to the "room name" field).
       _addressField.onValueChanged = new InputField.OnChangeEvent();
-      _addressField.onEndEdit = new InputField.SubmitEvent();
+      _addressField.onEndEdit = new InputField.EndEditEvent();
       _addressField.onEndEdit.AddListener(_ =>
       {
          if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)) JoinByAddress();

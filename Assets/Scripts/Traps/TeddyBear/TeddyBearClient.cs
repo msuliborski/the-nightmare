@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Networking;
+using Mirror;
 
 // Client-side presentation of a teddy bear. The server moves the bear (synced by NetworkTransformChild);
 // clients only fall back to their own NavMeshAgent if that component is missing.
@@ -23,7 +23,7 @@ public class TeddyBearClient : NetworkBehaviour
         IsWalking = true;
         Agent = transform.GetChild(1).GetComponent<NavMeshAgent>();
         _animator = GetComponentInChildren<Animator>();
-        _simulateLocally = GetComponent<NetworkTransformChild>() == null;
+        _simulateLocally = GetComponent<NetworkTransformBase>() == null;
         if (!_simulateLocally) Agent.enabled = false;
     }
 

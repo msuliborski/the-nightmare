@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.Networking;
+using Mirror;
 using UnityEngine.AI;
 using System.Collections.Generic;
 
@@ -26,7 +26,7 @@ public class EnemyControllerClient : NetworkBehaviour
             Agent = GetComponent<NavMeshAgent>();
             IsWalking = true;
             _animator = GetComponentInChildren<Animator>();
-            _simulateLocally = GetComponent<NetworkTransform>() == null;
+            _simulateLocally = GetComponent<NetworkTransformBase>() == null;
             if (!_simulateLocally && Agent != null) Agent.enabled = false;
         }
     }

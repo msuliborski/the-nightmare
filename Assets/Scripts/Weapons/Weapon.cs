@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
-using UnityEngine.Networking;
 
-public class Weapon : NetworkBehaviour {
+public class Weapon : MonoBehaviour {
 
     [SerializeField] protected int _id;
     public int Id { get { return _id; } set { _id = value; } }
