@@ -4,7 +4,8 @@
 
 The **Build game** workflow (`.github/workflows/build.yml`) builds Windows, macOS and Linux
 packages with Unity 6000.6.7f1 through [GameCI](https://game.ci). Platforms build one after another
-(parallel jobs on one Unity Personal license killed each other), about 10 minutes each.
+and import the project from scratch (a restored Library cache got the editor killed at start-up),
+about 25 minutes each.
 
 1. Open **Actions → Build game → Run workflow**.
 2. Pick the platforms (default: all) and, optionally, tick *publish a GitHub Release*.

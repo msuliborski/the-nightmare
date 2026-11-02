@@ -107,14 +107,8 @@ jobs:
           echo "version=$v" >> "$GITHUB_OUTPUT"
           echo "short_sha=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
 
-      - name: Cache Unity Library
-        uses: actions/cache@v4
-        with:
-          path: Library
-          key: Library-v2-${{ matrix.targetPlatform }}-${{ hashFiles('Packages/manifest.json', 'ProjectSettings/ProjectVersion.txt') }}-${{ github.sha }}
-          restore-keys: |
-            Library-v2-${{ matrix.targetPlatform }}-${{ hashFiles('Packages/manifest.json', 'ProjectSettings/ProjectVersion.txt') }}-
-
+      # No Library cache: editors started on a restored Library were repeatedly killed (exit code 137)
+      # a second after start-up, while every build from a clean import succeeded. Slower but reliable.
       - name: Build with Unity
         uses: game-ci/unity-builder@v4
         env:
