@@ -30,7 +30,7 @@ Windows, macOS and Linux players can play together. Details in [docs/BUILDING.md
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
 ### Prerequisites
-In order to properly build application one might need to install [Unity](https://unity.com/releases/editor/archive) 2018.4.3f1.
+[Unity](https://unity.com/releases/editor/archive) **6000.6.7f1** (Unity 6.6) with Windows/Mac/Linux build support. Networking uses [Mirror](https://github.com/MirrorNetworking/Mirror) (included in `Assets/Mirror`).
 
 ### Cloning
 ```
@@ -38,7 +38,8 @@ $ git clone https://github.com/msuliborski/the-nightmare
 ```
 
 ### Building
-Open the project in Unity 2018.4.3f1 and hit play, or use the **The Nightmare → Build** menu.
+Open the project in Unity 6000.6.7f1, open `Assets/Scenes/MainMenu.unity` and hit Play, or use the **The Nightmare → Build** menu.
+How the code is organised: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 CI builds, license setup and a Unity-free compile check are described in [docs/BUILDING.md](docs/BUILDING.md).
 Planned improvements: [docs/ROADMAP.md](docs/ROADMAP.md).
 

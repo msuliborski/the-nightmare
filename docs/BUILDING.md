@@ -3,7 +3,8 @@
 ## One-click builds (GitHub Actions)
 
 The **Build game** workflow (`.github/workflows/build.yml`) builds Windows, macOS and Linux
-packages with Unity 2018.4.3f1 through [GameCI](https://game.ci).
+packages with Unity 6000.6.7f1 through [GameCI](https://game.ci). Platforms build one after another
+(parallel jobs on one Unity Personal license killed each other), about 10 minutes each.
 
 1. Open **Actions → Build game → Run workflow**.
 2. Pick the platforms (default: all) and, optionally, tick *publish a GitHub Release*.
@@ -13,7 +14,8 @@ packages with Unity 2018.4.3f1 through [GameCI](https://game.ci).
 Pushing a tag such as `v1.1.0` builds all platforms and publishes a regular release.
 
 Every pull request also runs **Compile check**: it compiles all scripts for Windows/macOS/Linux
-plus the editor scripts and runs Unity's UNET weaver. It needs no Unity license and takes about a minute.
+plus the editor scripts with the Unity 6.6 compiler, and checks scene/prefab integrity and Mirror scene ids.
+It needs no Unity license and takes a few minutes.
 
 ### One-time setup: Unity license secrets
 
@@ -49,14 +51,14 @@ the imported `Library` folder is cached, so later builds are much faster.
 
 ## Local builds
 
-Open the project in Unity **2018.4.3f1** and use the menu **The Nightmare → Build**
+Open the project in Unity **6000.6.7f1** and use the menu **The Nightmare → Build**
 (output goes to `Builds/<platform>/`). Building macOS/Linux from Windows requires the
 corresponding Unity *Build Support* modules.
 
 To check scripts without Unity installed, run the same compile check CI uses:
 
 ```bash
-docker run --rm -v "$PWD:/project" -w /project unityci/editor:ubuntu-2018.4.3f1-base-3 bash .github/ci/compile-check.sh
+docker run --rm -v "$PWD:/project" -w /project unityci/editor:ubuntu-6000.6.7f1-base-3 bash .github/ci/compile-check.sh
 ```
 
 ## Playing together
