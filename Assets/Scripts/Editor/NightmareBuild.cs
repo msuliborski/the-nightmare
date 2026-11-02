@@ -46,8 +46,20 @@ public static class NightmareBuild
                       ?? Path.Combine("build", target.ToString(), BUILD_NAME + Extension(target));
         string version = GetArg(args, "-buildVersion") ?? PlayerSettings.bundleVersion;
 
+        // Unity reports "Succeeded" even when Mirror logged that scene objects have no sceneId, which
+        // gives a game whose multiplayer cannot work, so treat those errors as a failed build.
+        var networkErrors = new System.Collections.Generic.List<string>();
+        Application.LogCallback onLog = (message, stack, type) =>
+        {
+            if ((type == LogType.Error || type == LogType.Exception) && message.Contains("sceneId")) networkErrors.Add(message);
+        };
+        Application.logMessageReceived += onLog;
         BuildReport report = Build(target, path, version);
-        EditorApplication.Exit(report.summary.result == BuildResult.Succeeded ? 0 : 1);
+        Application.logMessageReceived -= onLog;
+        // Repeated at the end so it shows up in the tail of the CI log.
+        if (networkErrors.Count > 0)
+            Debug.LogError("[NightmareBuild] Mirror sceneId errors, failing the build:\n  " + string.Join("\n  ", networkErrors));
+        EditorApplication.Exit(report.summary.result == BuildResult.Succeeded && networkErrors.Count == 0 ? 0 : 1);
     }
 
     private static BuildReport Build(BuildTarget target, string path, string version)
@@ -55,6 +67,8 @@ public static class NightmareBuild
         string[] scenes = EditorBuildSettings.scenes.Where(s => s.enabled).Select(s => s.path).ToArray();
         if (scenes.Length == 0) throw new InvalidOperationException("No scenes enabled in Build Settings.");
 
+        // Networked prefabs / scene objects need Mirror ids before they are baked into the player.
+        NetworkIdBaker.BakeAll();
         PlayerSettings.bundleVersion = version;
         if (target == BuildTarget.StandaloneOSX && !path.EndsWith(".app")) path += ".app";
         Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(path)));

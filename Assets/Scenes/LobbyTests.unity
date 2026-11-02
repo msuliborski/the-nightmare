@@ -985,10 +985,6 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 4.25
       objectReference: {fileID: 0}
-    - target: {fileID: 132920175, guid: 073947f950d4f2fd599365c522c0559e, type: 3}
-      propertyPath: showGUI
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8769869101659370329, guid: 073947f950d4f2fd599365c522c0559e,
         type: 3}
       propertyPath: m_Channels.Array.size

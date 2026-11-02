@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Networking;
+using Mirror;
 using UnityEngine.AI;
 
 public class PlayerShoot : NetworkBehaviour {
@@ -320,11 +320,12 @@ public class PlayerShoot : NetworkBehaviour {
     }
 
     [Command]
-    public void CmdExplodeBarrel(NetworkInstanceId objectId)
+    public void CmdExplodeBarrel(uint objectId)
     {
         // Another shot or a chain reaction may already have destroyed it.
-        GameObject barrelObject = NetworkServer.FindLocalObject(objectId);
-        Barrel barrel = barrelObject != null ? barrelObject.GetComponent<Barrel>() : null;
+        NetworkIdentity barrelIdentity;
+        if (!NetworkServer.spawned.TryGetValue(objectId, out barrelIdentity) || barrelIdentity == null) return;
+        Barrel barrel = barrelIdentity.GetComponent<Barrel>();
         if (barrel != null) barrel.Explode();
     }
 

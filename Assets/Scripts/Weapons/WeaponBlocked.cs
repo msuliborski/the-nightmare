@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
-using UnityEngine.Networking;
 
-public class WeaponBlocked : NetworkBehaviour
+public class WeaponBlocked : MonoBehaviour
 {
     private bool _isBlocked = false;
     public bool IsBlocked

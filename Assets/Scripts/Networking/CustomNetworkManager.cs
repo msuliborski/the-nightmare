@@ -2,26 +2,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using Mirror;
 using UnityEngine;
-using UnityEngine.Networking;
-using UnityEngine.Networking.NetworkSystem;
 using UnityEngine.SceneManagement;
 
-// Direct-connect session management. The Unity matchmaker/relay this game used is shut down,
-// so a player hosts on their machine (UDP port 7777 by default) and others join by IP address
-// or pick the game from the LAN list. Must not declare Awake/OnDestroy/OnValidate: the UNET
-// base class uses private ones for its singleton.
+// Sent by the server just before it refuses a connection, so the joining player sees why.
+public struct RejectMessage : NetworkMessage
+{
+    public string reason;
+}
+
+// Direct-connect session management on top of Mirror. A player hosts on their machine (UDP port 7777
+// by default, KCP transport) and others join by IP address or pick the game from the LAN list.
 public class CustomNetworkManager : NetworkManager
 {
     public const int DEFAULT_PORT = 7777;
     public const string DEFAULT_ROOM_NAME = "The Nightmare";
-    private const short REJECT_MSG = MsgType.Highest + 1;
     private const string MAIN_MENU_SCENE = "MainMenu";
     private const string LOBBY_SCENE = "LobbyTests";
 
     public static CustomNetworkManager Instance { get { return singleton as CustomNetworkManager; } }
 
-    // Shown by the lobby after it is (re)loaded, e.g. "Could not connect to ...".
+    // Shown by the lobby after it is (re)loaded, e.g. "Can't reach ...".
     public static string LastStatus { get; set; }
     public static event Action<string> StatusChanged;
 
@@ -32,6 +34,7 @@ public class CustomNetworkManager : NetworkManager
     private static bool _commandLineHandled;
     private List<string> _localAddresses;
     private bool _showOverlay;
+    private float _copiedUntil;
 
     private LanDiscovery _discovery;
     public LanDiscovery Discovery
@@ -44,16 +47,22 @@ public class CustomNetworkManager : NetworkManager
         }
     }
 
-    public int ConnectedPlayers
+    // The game port lives on the transport (KCP) in Mirror.
+    public int NetworkPort
     {
         get
         {
-            int count = 0;
-            foreach (NetworkConnection conn in NetworkServer.connections)
-                if (conn != null) count++;
-            return count;
+            var portTransport = transport as PortTransport;
+            return portTransport != null ? portTransport.Port : DEFAULT_PORT;
+        }
+        set
+        {
+            var portTransport = transport as PortTransport;
+            if (portTransport != null) portTransport.Port = (ushort) Mathf.Clamp(value, 1, 65535);
         }
     }
+
+    public int ConnectedPlayers { get { return NetworkServer.connections.Count; } }
 
     public static bool MatchInProgress
     {
@@ -68,10 +77,17 @@ public class CustomNetworkManager : NetworkManager
     public bool Host(string roomName, int port)
     {
         if (isNetworkActive) return false;
-        StopMatchMaker();
         RoomName = string.IsNullOrEmpty(roomName) ? DEFAULT_ROOM_NAME : roomName.Trim();
-        networkPort = port;
-        if (StartHost() != null) return true;
+        NetworkPort = port;
+        try
+        {
+            StartHost();
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning("[Network] Could not host: " + e.Message);
+        }
+        if (NetworkServer.active) return true;
         SetStatus("Port " + port + " is busy");
         return false;
     }
@@ -79,9 +95,8 @@ public class CustomNetworkManager : NetworkManager
     public void Join(string address, int port)
     {
         if (isNetworkActive) return;
-        StopMatchMaker();
         networkAddress = address;
-        networkPort = port;
+        NetworkPort = port;
         _wasConnected = false;
         _rejectReason = null;
         StartClient();
@@ -112,9 +127,12 @@ public class CustomNetworkManager : NetworkManager
         _leavingOnPurpose = true;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        if (NetworkServer.active && NetworkClient.active) StopHost();
-        else if (NetworkClient.active) StopClient();
-        else if (NetworkServer.active) StopServer();
+        switch (mode)
+        {
+            case NetworkManagerMode.Host: StopHost(); break;
+            case NetworkManagerMode.ClientOnly: StopClient(); break;
+            case NetworkManagerMode.ServerOnly: StopServer(); break;
+        }
     }
 
     public void LeaveToMainMenu()
@@ -138,8 +156,8 @@ public class CustomNetworkManager : NetworkManager
     {
         base.OnStartHost();
         _localAddresses = LanDiscovery.GetLocalAddresses();
-        Discovery.StartAdvertising(RoomName, networkPort, maxConnections, () => ConnectedPlayers, () => MatchInProgress);
-        Debug.Log("[Network] Hosting '" + RoomName + "' on " + string.Join(", ", _localAddresses.ToArray()) + " port " + networkPort);
+        Discovery.StartAdvertising(RoomName, NetworkPort, maxConnections, () => ConnectedPlayers, () => MatchInProgress);
+        Debug.Log("[Network] Hosting '" + RoomName + "' on " + string.Join(", ", _localAddresses.ToArray()) + " port " + NetworkPort);
     }
 
     public override void OnStopServer()
@@ -148,11 +166,11 @@ public class CustomNetworkManager : NetworkManager
         base.OnStopServer();
     }
 
-    public override void OnServerConnect(NetworkConnection conn)
+    public override void OnServerConnect(NetworkConnectionToClient conn)
     {
         base.OnServerConnect(conn);
         // The host's own local connection is always accepted.
-        if (conn.hostId == -1) return;
+        if (conn is LocalConnectionToClient) return;
 
         string reason = null;
         if (MatchInProgress) reason = "Match already started";
@@ -160,45 +178,44 @@ public class CustomNetworkManager : NetworkManager
         if (reason != null) StartCoroutine(Reject(conn, reason));
     }
 
-    private IEnumerator Reject(NetworkConnection conn, string reason)
+    private IEnumerator Reject(NetworkConnectionToClient conn, string reason)
     {
         Debug.Log("[Network] Rejecting connection " + conn.connectionId + ": " + reason);
-        conn.Send(REJECT_MSG, new StringMessage(reason));
+        conn.Send(new RejectMessage { reason = reason });
         yield return new WaitForSecondsRealtime(0.5f); // let the reason arrive before the disconnect
-        if (conn.isConnected) conn.Disconnect();
+        if (NetworkServer.connections.ContainsKey(conn.connectionId)) conn.Disconnect();
     }
 
     #endregion
 
     #region Client
 
-    public override void OnStartClient(NetworkClient client)
+    public override void OnStartClient()
     {
-        base.OnStartClient(client);
-        client.RegisterHandler(REJECT_MSG, msg => _rejectReason = msg.ReadMessage<StringMessage>().value);
+        base.OnStartClient();
+        NetworkClient.RegisterHandler<RejectMessage>(msg => _rejectReason = msg.reason, false);
     }
 
-    public override void OnClientConnect(NetworkConnection conn)
+    public override void OnClientConnect()
     {
         _wasConnected = true;
         SetStatus("");
-        base.OnClientConnect(conn);
+        base.OnClientConnect();
     }
 
-    public override void OnClientError(NetworkConnection conn, int errorCode)
+    public override void OnClientError(TransportError error, string reason)
     {
-        base.OnClientError(conn, errorCode);
-        SetStatus("Network error: " + (NetworkError) errorCode);
+        base.OnClientError(error, reason);
+        SetStatus("Network error: " + error);
     }
 
-    // Status is published after base (which stops the client) so listeners see the final state.
-    public override void OnClientDisconnect(NetworkConnection conn)
+    public override void OnClientDisconnect()
     {
         string status = null;
         if (_rejectReason != null) status = _rejectReason;
         else if (!_wasConnected) status = "Can't reach " + networkAddress;
         else if (!_leavingOnPurpose) status = "Connection lost";
-        base.OnClientDisconnect(conn);
+        base.OnClientDisconnect();
         if (status != null) SetStatus(status);
     }
 
@@ -221,12 +238,13 @@ public class CustomNetworkManager : NetworkManager
     {
         string[] args = Environment.GetCommandLineArgs();
         if (Array.IndexOf(args, "-host") < 0 && Array.IndexOf(args, "-connect") < 0) return;
-        if (FindObjectOfType<CustomNetworkManager>() == null) SceneManager.LoadScene(LOBBY_SCENE);
+        if (FindFirstObjectByType<CustomNetworkManager>() == null) SceneManager.LoadScene(LOBBY_SCENE);
     }
 
     // TheNightmare -host [-name "Room"] [-port 7777]   or   TheNightmare -connect 192.168.0.10[:7777]
-    private void Start()
+    public override void Start()
     {
+        base.Start();
         if (_commandLineHandled || singleton != this) return;
         _commandLineHandled = true;
 
@@ -254,8 +272,9 @@ public class CustomNetworkManager : NetworkManager
         return i >= 0 && i + 1 < args.Length ? args[i + 1] : null;
     }
 
-    private void Update()
+    public override void Update()
     {
+        base.Update();
         if (Input.GetKeyDown(KeyCode.F1)) _showOverlay = !_showOverlay;
     }
 
@@ -266,19 +285,20 @@ public class CustomNetworkManager : NetworkManager
         bool inPreMatchLobby = GameManager.Instance != null && GameManager.Instance.CurrentMachState == GameManager.MatchState.Lobby;
         if (!_showOverlay && !inPreMatchLobby && !PauseGame.menuActive) return;
 
+        int port = NetworkPort;
         string text;
         if (NetworkServer.active)
         {
             if (_localAddresses == null) _localAddresses = LanDiscovery.GetLocalAddresses();
             text = "Hosting \"" + RoomName + "\" (" + ConnectedPlayers + "/" + maxConnections + " players)\n"
                    + "Friends join with: " + string.Join("  or  ", _localAddresses.ToArray())
-                   + (networkPort != DEFAULT_PORT ? "  port " + networkPort : "")
-                   + "\nOver the internet: forward UDP port " + networkPort + " or use a VPN (Tailscale/ZeroTier).";
+                   + (port != DEFAULT_PORT ? "  port " + port : "")
+                   + "\nOver the internet: forward UDP port " + port + " or use a VPN (Tailscale/ZeroTier).";
         }
         else
         {
-            text = "Connected to " + networkAddress + ":" + networkPort
-                   + (client != null ? "   ping " + client.GetRTT() + " ms" : "");
+            text = "Connected to " + networkAddress + ":" + port
+                   + "   ping " + Math.Round(NetworkTime.rtt * 1000) + " ms";
         }
 
         var style = new GUIStyle(GUI.skin.box) { alignment = TextAnchor.UpperLeft, fontSize = 14, wordWrap = true };
@@ -290,7 +310,7 @@ public class CustomNetworkManager : NetworkManager
         // Clickable while the cursor is free (pause menu / lobby before the welcome screens are closed).
         if (NetworkServer.active && _localAddresses.Count > 0)
         {
-            string address = _localAddresses[0] + (networkPort != DEFAULT_PORT ? ":" + networkPort : "");
+            string address = _localAddresses[0] + (port != DEFAULT_PORT ? ":" + port : "");
             if (GUI.Button(new Rect(Screen.width - 130f, height + 15f, 120f, 28f), _copiedUntil > Time.unscaledTime ? "Copied!" : "Copy IP"))
             {
                 GUIUtility.systemCopyBuffer = address;
@@ -298,8 +318,6 @@ public class CustomNetworkManager : NetworkManager
             }
         }
     }
-
-    private float _copiedUntil;
 
     #endregion
 }

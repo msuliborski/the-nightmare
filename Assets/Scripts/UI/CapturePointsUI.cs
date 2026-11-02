@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Networking;
 using Image = UnityEngine.UI.Image;
 
-public class CapturePointsUI : NetworkBehaviour
+public class CapturePointsUI : MonoBehaviour
 {
     private List<TextMeshProUGUI> captures = new List<TextMeshProUGUI>();
     private List<GameObject> captureBG = new List<GameObject>();
@@ -43,7 +42,6 @@ public class CapturePointsUI : NetworkBehaviour
                 }
                 captures[i].text = ((int)areas[i]._progress).ToString();
             }
-            //RpcUpdateText();
         }
     }
 
@@ -62,14 +60,4 @@ public class CapturePointsUI : NetworkBehaviour
         isSet = true;
     }
 
-    [ClientRpc]
-    private void RpcUpdateText()
-    {
-        for (int i = 0; i < areas.Count; i++)
-        {
-            captures[i].text = areas[i]._progress.ToString();
-        }
-
-        hasPlayed = false;
-    }
 }

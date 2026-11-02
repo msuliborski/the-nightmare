@@ -41,6 +41,8 @@
 - Command line: `-host [-name "Room"] [-port 7777]`, `-connect <ip[:port]>`.
 
 ### Under the hood
+- **Unity 6.6** (was 2018.4). Networking moved from UNET, which Unity removed, to **Mirror**, its open-source successor; hosting, joining by IP and LAN discovery work as before (UDP 7777).
+- Removed ~230 MB of unused demo assets.
 - One-click Windows/macOS/Linux builds and releases (GitHub Actions + GameCI).
-- Every PR is checked by: C# compile for all platforms, the UNET weaver, a SyncVar deserialization check and a workflow lint.
+- Every PR is checked by: C# compile with the Unity 6.6 compiler for all platforms, scene/prefab integrity, Mirror scene ids and a workflow lint.
 - Music streams from disk instead of being kept decompressed in memory.
