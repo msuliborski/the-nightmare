@@ -9,7 +9,7 @@ public class Arrow : MonoBehaviour
     private GameObject target;
     void Update()
     {
-        if (isSet)
+        if (isSet && target != null)
         {
             Vector3 targetPosition = target.transform.position;
             targetPosition.y = transform.position.y;

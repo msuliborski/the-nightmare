@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Networking;
+using Mirror;
 using Random = System.Random;
-using UnityEngine.SceneManagement;
-using UnityEngine.Networking.Match;
 
 public class PlayerManager : NetworkBehaviour
 {
@@ -14,6 +12,24 @@ public class PlayerManager : NetworkBehaviour
     public bool IsDead { get { return _isDead; }  protected set { _isDead = value; } }
 
     public float _maxHealth = 100;
+
+    private const int MAX_NAME_LENGTH = 16;
+    [SyncVar] private string _displayName = "";
+    public string DisplayName { get { return string.IsNullOrEmpty(_displayName) ? transform.name : _displayName; } }
+
+    public override void OnStartLocalPlayer()
+    {
+        base.OnStartLocalPlayer();
+        CmdSetDisplayName(GameSettings.PlayerName);
+    }
+
+    [Command]
+    private void CmdSetDisplayName(string requested)
+    {
+        string name = (requested ?? "").Replace("\n", " ").Replace("<", "").Replace(">", "").Trim();
+        if (name.Length > MAX_NAME_LENGTH) name = name.Substring(0, MAX_NAME_LENGTH);
+        _displayName = name;
+    }
 
     [SyncVar] public float _currentHealth;
 
@@ -24,15 +40,12 @@ public class PlayerManager : NetworkBehaviour
     private GameObject _cross;
     private Rigidbody _rigidbody;
     private Animator _playerAnimator;
-    private static bool isRevived = false;
     [SerializeField] private GameObject _cameraReviving;
     private GameObject _camera;
     [SerializeField] private GameObject _aliveCollider;
     [SerializeField] private GameObject _reviveCollider;
     private GameObject boy;
     private GameObject girl;
-    private NetworkAnimator _netAnim;
-    private NetworkManager _networkManager;
 
 
 
@@ -76,12 +89,9 @@ public class PlayerManager : NetworkBehaviour
 
     public void Setup()
     {
-        _networkManager = GameObject.Find("NetworkManager").GetComponent<NetworkManager>();
-        _netAnim = GetComponent<NetworkAnimator>();
         
         boy = transform.GetChild(0).GetChild(0).gameObject;
         girl = transform.GetChild(0).GetChild(1).gameObject;
-//        setModel();
         _playerAnimator = boy.GetComponent<Animator>();
         if (isLocalPlayer) SetLayerRecursively(transform.GetChild(0).gameObject, 12);
         _rigidbody = GetComponent<Rigidbody>();
@@ -98,6 +108,7 @@ public class PlayerManager : NetworkBehaviour
     }
 
     void Update() {
+        if (!isLocalPlayer) return;
 //        //changing weapon
 //        PlayerShoot t = transform.GetComponent<PlayerShoot>();
 //        if (!isLocalPlayer) {
@@ -127,41 +138,11 @@ public class PlayerManager : NetworkBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Backspace))
-        {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-            MatchInfo info = _networkManager.matchInfo;
-            _networkManager.matchMaker.DropConnection(info.networkId, info.nodeId, 0, _networkManager.OnDropConnection);
-            _networkManager.StopHost();
-            SceneManager.LoadScene(0);
-        }
+        if (Input.GetKeyDown(KeyCode.Backspace) && CustomNetworkManager.Instance != null)
+            CustomNetworkManager.Instance.LeaveToMainMenu();
         
     }
 
-    private void setModel()
-    {
-        int rand = UnityEngine.Random.Range(0, 1);
-        if (rand == 0)
-        {
-            boy.SetActive(true);
-            girl.SetActive(false);
-            _netAnim.animator = boy.GetComponent<Animator>();
-            _playerAnimator = boy.GetComponent<Animator>();
-        }
-        else if (rand == 1)
-        {
-            boy.SetActive(false);
-            girl.SetActive(true);
-            _netAnim.animator = girl.GetComponent<Animator>();
-            _playerAnimator = girl.GetComponent<Animator>();
-        }
-
-        for (int i = 0; i < 4; i++)
-        {
-            _netAnim.SetParameterAutoSend(i, true);
-        }
-    }
     
     private void SetLayerRecursively(GameObject obj, int newLayer)
     {
@@ -184,34 +165,36 @@ public class PlayerManager : NetworkBehaviour
             _disableOnDeath[i].enabled = _wasEnabled[i];
 
         
-        CmdSwitchColliders(true);
+        SwitchColliders(true);
     }
 
-    [Command]
-    void CmdSwitchColliders(bool isOn)
+    // Die/Revive already run on every peer (via RPC), so colliders are switched locally.
+    // This used to be a Command, which non-owning clients are not allowed to send.
+    private void SwitchColliders(bool isAlive)
     {
-        RpcSwitchColliders(isOn);
+        _aliveCollider.SetActive(isAlive);
+        _reviveCollider.SetActive(!isAlive);
+    }
+
+    // Health is server-authoritative and reaches clients through the SyncVar. Damage used to be a
+    // ClientRpc that every client applied on its own copy, and enemies sent one every frame.
+    [Server]
+    public void TakeDamage(float damage)
+    {
+        if (_isDead || damage <= 0f) return;
+
+        _currentHealth = Mathf.Max(0f, _currentHealth - damage);
+        if (_currentHealth <= 0f)
+        {
+            _isDead = true;
+            RpcDie();
+        }
     }
 
     [ClientRpc]
-    void RpcSwitchColliders(bool isOn)
+    private void RpcDie()
     {
-        _aliveCollider.SetActive(isOn);
-        _reviveCollider.SetActive(!isOn);
-    }
-    
-    
-    
-    [ClientRpc]
-    public void RpcTakeDamage(float damage)
-    {
-        if (_isDead) return;
-
-        _currentHealth -= damage;
-
-        //Debug.Log(transform.name + " now has " + _currentHealth + " health.");
-
-        if (_currentHealth <= 0) Die();
+        Die();
     }
 
     private void Die()
@@ -225,10 +208,9 @@ public class PlayerManager : NetworkBehaviour
         _rigidbody.collisionDetectionMode = CollisionDetectionMode.Discrete;
         _rigidbody.isKinematic = true;
 
-        CmdSwitchColliders(false);
+        SwitchColliders(false);
         GameManager.DeactivatePlayer(transform.name);
         ChangeCamera(true);
-        isRevived = true;
         
         transform.GetComponent<PlayerEquipment>().getActiveWeapon().transform.GetComponent<Animator>().SetBool("isHidden", false);
         transform.GetComponent<PlayerEquipment>().getActiveWeapon().transform.GetComponent<Animator>().SetBool("isSprinting", false);
@@ -248,10 +230,8 @@ public class PlayerManager : NetworkBehaviour
     
     public void Revive()
     {
-        Debug.Log("reviving shit");
         _rigidbody.isKinematic = false;
         _rigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
-        isRevived = false;
         ChangeCamera(false);
         _playerAnimator.SetBool("revive", true);
         //yield return new WaitForSeconds(GameManager.Instance.MatchSettings.RespawnTime);
@@ -272,10 +252,5 @@ public class PlayerManager : NetworkBehaviour
             transform.GetComponent<PlayerEquipment>().getActiveWeapon().transform.localPosition = new Vector3(0.08f, -0.02f, -0.17f);
             transform.GetComponent<PlayerEquipment>().getActiveWeapon().transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
         }
-    }
-
-    public override void OnDeserialize(NetworkReader reader, bool initialState)
-    {
-        base.OnDeserialize(reader, initialState);
     }
 }

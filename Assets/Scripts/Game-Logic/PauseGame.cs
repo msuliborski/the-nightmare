@@ -1,12 +1,9 @@
 ﻿using UnityEngine;
-using UnityEngine.Networking;
-using UnityEngine.Networking.Match;
 
 public class PauseGame : MonoBehaviour
 {
     public static bool menuActive;
     private GameObject _pauseMenu;
-    private NetworkManager _networkManager;
 //    private GameObject[] _mobileControl = new GameObject[2];
     
     private void Start()
@@ -17,7 +14,6 @@ public class PauseGame : MonoBehaviour
 //        _mobileControl[0].SetActive(false);
 //        _mobileControl[1].SetActive(false);
 //#endif
-        _networkManager = NetworkManager.singleton;
         _pauseMenu = GameObject.Find("PauseMenu");
         menuActive = false;
     }
@@ -35,8 +31,7 @@ public class PauseGame : MonoBehaviour
 
     public void Disconnect()
     {
-        MatchInfo info = _networkManager.matchInfo;
-        _networkManager.matchMaker.DropConnection(info.networkId, info.nodeId, 0, _networkManager.OnDropConnection);
-        _networkManager.StopHost();
+        menuActive = false;
+        if (CustomNetworkManager.Instance != null) CustomNetworkManager.Instance.Leave();
     }
 }

@@ -1,11 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
-using UnityEngine.Networking;
 using UnityEngine.UI;
 
-public class CapturedRooms : NetworkBehaviour
+public class CapturedRooms : MonoBehaviour
 {
     private List<Room> rooms = new List<Room>();
     private List<Image> heads = new List<Image>();
@@ -40,7 +38,6 @@ public class CapturedRooms : NetworkBehaviour
             }
         }
 
-        //CmdTurnHeads(roomsToDisable);
 
         if (check)
         {
@@ -48,22 +45,4 @@ public class CapturedRooms : NetworkBehaviour
         }
     }
 
-    /*[Command]
-    void CmdTurnHeads(int roomsToDisable)
-    {
-        RpcTurnHeads(roomsToDisable);
-    }
-    
-    [ClientRpc]
-    void RpcTurnHeads(int roomsToDisable)
-    {
-        for (int i = 0; i < roomsToDisable; i++)
-        {
-            heads[i].enabled = false;
-        }
-        for (int i = roomsToDisable; i < heads.Count; i++)
-        {
-            heads[i].enabled = true;
-        }
-    }*/
 }

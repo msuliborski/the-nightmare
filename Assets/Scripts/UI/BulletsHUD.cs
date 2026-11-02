@@ -13,7 +13,7 @@ public class BulletsHUD : MonoBehaviour {
     }
 
     void Update() {
-        if (playerEnabled)
+        if (playerEnabled && Equipment != null && Equipment.getActiveWeapon() != null)
             if (Equipment.getActiveWeapon().CurrentAmmo < 1000)
                 _text.text = Equipment.getActiveWeapon().CurrentMagAmmo + "/" +
                              (Equipment.getActiveWeapon().CurrentAmmo - Equipment.getActiveWeapon().CurrentMagAmmo);

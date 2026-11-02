@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Networking;
 
-public class GrenadeCollider : NetworkBehaviour
+// Was a NetworkBehaviour although it never used networking; the explosion only acts on the server.
+public class GrenadeCollider : MonoBehaviour
 {
     public bool server = false;
     private float _damage;
+    private readonly ExplosionDamage _explosion = new ExplosionDamage();
+
     void Start()
     {
         _damage = transform.GetComponentInParent<Grenade>()._damage;
@@ -15,22 +14,6 @@ public class GrenadeCollider : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Trigger");
-        if (server)
-        {
-            Debug.Log("Is server");
-            if (other.CompareTag("EnemyLegs") || other.CompareTag("EnemyHead") || other.CompareTag("EnemyBody"))
-            {
-                other.GetComponentInParent<EnemyControllerServer>().CmdTakeDamage(_damage);
-            }
-            else if (other.CompareTag("Player"))
-            {
-                other.GetComponentInParent<PlayerManager>().RpcTakeDamage(45f);
-            }
-            else if (other.CompareTag("Barrel"))
-            {
-                other.GetComponent<Barrel>().Explode();
-            }
-        }
+        if (server) _explosion.Apply(other, _damage);
     }
 }

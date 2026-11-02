@@ -28,6 +28,8 @@ public class WinLoseScreens : MonoBehaviour
 
     public void ReturnToMenu()
     {
-        SceneManager.LoadScene("MainMenu");
+        winLoseActive = false;
+        if (CustomNetworkManager.Instance != null) CustomNetworkManager.Instance.LeaveToMainMenu();
+        else SceneManager.LoadScene("MainMenu");
     }
 }

@@ -1,5 +1,8 @@
 # The Nightmare
 FPS multiplayer game. ZTGK (2019)
+
+[![Build game](https://github.com/msuliborski/the-nightmare/actions/workflows/build.yml/badge.svg)](https://github.com/msuliborski/the-nightmare/actions/workflows/build.yml)
+[![Compile check](https://github.com/msuliborski/the-nightmare/actions/workflows/compile-check.yml/badge.svg)](https://github.com/msuliborski/the-nightmare/actions/workflows/compile-check.yml)
 </br>
 <p align="center">
   <img width="840" src="Images/1.jpg"/>
@@ -15,13 +18,19 @@ The siblings wake up in the nightmare that takes place in the astral version of 
 https://vimeo.com/344669557
 
 ### Download
-All releases of the game are avaliable on the github page in the [releases](https://github.com/msuliborski/the-nightmare/releases) tab. 
+All releases of the game are available on the GitHub page in the [releases](https://github.com/msuliborski/the-nightmare/releases) tab, for Windows, macOS and Linux.
+Fresh test builds can be made with one click: **Actions → Build game → Run workflow** (see [docs/BUILDING.md](docs/BUILDING.md)).
+
+### Multiplayer
+One player hosts (*Create Room*), the others join from the server list (same network) or by typing the host's IP address.
+For internet play the host forwards UDP port 7777 or everyone uses a virtual LAN such as Tailscale/ZeroTier.
+Windows, macOS and Linux players can play together. Details in [docs/BUILDING.md](docs/BUILDING.md#playing-together).
 
 ## Getting Started
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
 ### Prerequisites
-In order to properly build application one might need to install [Unity](https://unity3d.com/get-unity/download).
+[Unity](https://unity.com/releases/editor/archive) **6000.6.7f1** (Unity 6.6) with Windows/Mac/Linux build support. Networking uses [Mirror](https://github.com/MirrorNetworking/Mirror) (included in `Assets/Mirror`).
 
 ### Cloning
 ```
@@ -29,7 +38,10 @@ $ git clone https://github.com/msuliborski/the-nightmare
 ```
 
 ### Building
-Using Unity Game Engine import project and hit play button. It should do everything automatically and let you run the game.
+Open the project in Unity 6000.6.7f1, open `Assets/Scenes/MainMenu.unity` and hit Play, or use the **The Nightmare → Build** menu.
+How the code is organised: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+CI builds, license setup and a Unity-free compile check are described in [docs/BUILDING.md](docs/BUILDING.md).
+Planned improvements: [docs/ROADMAP.md](docs/ROADMAP.md).
 
 ## Built with
 * [Unity](https://unity.com/) - The world’s leading real-time creation platform

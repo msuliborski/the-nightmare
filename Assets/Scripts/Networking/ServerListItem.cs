@@ -1,25 +1,31 @@
 ﻿using TMPro;
 using UnityEngine;
-using UnityEngine.Networking.Match;
 using UnityEngine.UI;
 
 public class ServerListItem : MonoBehaviour
 {
-    public delegate void JoinRoomDelegate(MatchInfoSnapshot match);
-    private JoinRoomDelegate _joinRoomCallback; 
+    public delegate void JoinRoomDelegate(LanDiscovery.LanGame game);
+    private JoinRoomDelegate _joinRoomCallback;
     [SerializeField] private TextMeshProUGUI _roomNameText;
-    private MatchInfoSnapshot _match;
+    private LanDiscovery.LanGame _game;
 
-    public void Setup(MatchInfoSnapshot match, JoinRoomDelegate joinRoomCallback)
+    public void Setup(LanDiscovery.LanGame game, JoinRoomDelegate joinRoomCallback)
     {
-        _match = match;
+        _game = game;
         _joinRoomCallback = joinRoomCallback;
-        
-        _roomNameText.text = _match.name + " (" + _match.currentSize + "/" + _match.maxSize + ")";
+
+        string state = "";
+        if (!game.IsCompatible) state = " - version " + game.Version;
+        else if (game.InProgress) state = " - in progress";
+        else if (game.IsFull) state = " - full";
+        _roomNameText.text = game.Name + " (" + game.Players + "/" + game.MaxPlayers + ")" + state;
+
+        Button button = GetComponent<Button>();
+        if (button != null) button.interactable = game.CanJoin;
     }
 
     public void JoinRoom()
     {
-        _joinRoomCallback.Invoke(_match);
+        if (_game != null && _game.CanJoin) _joinRoomCallback.Invoke(_game);
     }
 }
