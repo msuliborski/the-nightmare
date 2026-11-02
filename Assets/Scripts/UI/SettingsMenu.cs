@@ -2,9 +2,11 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
-// Settings window (IMGUI, so it needs no scene or prefab changes). A "Settings" button shows up in the
-// main menu, the server lobby and the in-game pause menu.
+// Settings window (IMGUI, so it needs no scene or prefab changes). It opens from a SETTINGS button that
+// is added to the main menu at runtime (a copy of the Credits button with Resources/UI/settingsButton),
+// and from a small button in the in-game pause menu.
 public class SettingsMenu : MonoBehaviour
 {
     private const string MAIN_MENU_SCENE = "MainMenu";
@@ -18,6 +20,8 @@ public class SettingsMenu : MonoBehaviour
     private int _resolutionIndex;
     private bool _fullscreen;
     private GUIStyle _buttonStyle;
+    private GUIStyle _windowStyle;
+    private const float MENU_BUTTON_SPACING = 190f;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static void Create()
@@ -25,6 +29,47 @@ public class SettingsMenu : MonoBehaviour
         var go = new GameObject("SettingsMenu");
         DontDestroyOnLoad(go);
         go.AddComponent<SettingsMenu>();
+    }
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        AddMainMenuButton();
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        AddMainMenuButton();
+    }
+
+    // Main menu: Play / Credits / Settings / Quit, in the style of the other buttons.
+    private void AddMainMenuButton()
+    {
+        if (SceneManager.GetActiveScene().name != MAIN_MENU_SCENE) return;
+        GameObject credits = GameObject.Find("CreditsButton");
+        GameObject quit = GameObject.Find("QuitButton");
+        var sprite = Resources.Load<Sprite>("UI/settingsButton");
+        if (credits == null || quit == null || sprite == null || GameObject.Find("SettingsButton") != null) return;
+
+        var quitRect = (RectTransform) quit.transform;
+        GameObject settings = Instantiate(credits, credits.transform.parent, false);
+        settings.name = "SettingsButton";
+        ((RectTransform) settings.transform).anchoredPosition = quitRect.anchoredPosition;
+        quitRect.anchoredPosition += Vector2.down * MENU_BUTTON_SPACING;
+
+        var button = settings.GetComponent<Button>();
+        button.onClick = new Button.ButtonClickedEvent();
+        button.onClick.AddListener(OpenWindow);
+        foreach (Image image in settings.GetComponentsInChildren<Image>(true))
+            if (image.sprite != null && image.sprite.name.ToLowerInvariant().Contains("credit")) image.sprite = sprite;
+        button.image.sprite = sprite;
+        // Swap-sprite transitions would bring the Credits art back on hover.
+        if (button.transition == Selectable.Transition.SpriteSwap) button.transition = Selectable.Transition.ColorTint;
     }
 
     private bool CanOpen
@@ -63,17 +108,36 @@ public class SettingsMenu : MonoBehaviour
     {
         if (!CanOpen) return;
         GUI.depth = -10;
-        if (_buttonStyle == null) _buttonStyle = new GUIStyle(GUI.skin.button) { fontSize = 16 };
+        if (_buttonStyle == null) CreateStyles();
 
         if (!_open)
         {
-            if (GUI.Button(new Rect(10f, Screen.height - 50f, 140f, 40f), "Settings", _buttonStyle)) OpenWindow();
+            // The main menu has its own SETTINGS button; the pause menu gets a small one.
+            if (PauseGame.menuActive && GUI.Button(new Rect(10f, Screen.height - 50f, 140f, 40f), "Settings", _buttonStyle))
+                OpenWindow();
             return;
         }
-        _window = GUILayout.Window(WINDOW_ID, _window, DrawWindow, "Settings");
+        GUI.skin.label.fontSize = 15;
+        _window = GUILayout.Window(WINDOW_ID, _window, DrawWindow, "SETTINGS", _windowStyle);
     }
 
     private string _nameField;
+
+    // Dark, almost opaque panel instead of the default grey IMGUI window, so it reads over the menu art.
+    private void CreateStyles()
+    {
+        _buttonStyle = new GUIStyle(GUI.skin.button) { fontSize = 16 };
+        var background = new Texture2D(1, 1);
+        background.SetPixel(0, 0, new Color(0.11f, 0.09f, 0.08f, 0.96f));
+        background.Apply();
+        _windowStyle = new GUIStyle(GUI.skin.window)
+        {
+            fontSize = 22, fontStyle = FontStyle.Bold, padding = new RectOffset(18, 18, 44, 18)
+        };
+        _windowStyle.normal.background = background;
+        _windowStyle.onNormal.background = background;
+        _windowStyle.normal.textColor = _windowStyle.onNormal.textColor = new Color(0.86f, 0.78f, 0.65f);
+    }
 
     private void DrawWindow(int id)
     {

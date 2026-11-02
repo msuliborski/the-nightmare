@@ -17,9 +17,11 @@ on:
   push:
     tags: ["v*"]
 
+# One build at a time across all branches: every job activates the same Unity Personal license,
+# and parallel activations kill each other's editors. Later runs wait instead of cancelling.
 concurrency:
-  group: build-${{ github.ref }}
-  cancel-in-progress: true
+  group: unity-build
+  cancel-in-progress: false
 
 env:
   BUILD_NAME: TheNightmare
